@@ -6,398 +6,654 @@
       "label": "JavaScript"
     },
     {
-      "id": "n_a1c32f4255",
-      "label": "Trecho inicial truncado no conteúdo fornecido"
+      "id": "n_3d10a7b4c5",
+      "label": "Fundamentals (start from zero)"
     },
     {
-      "id": "n_1cd75f3aac",
+      "id": "n_975ae854be",
+      "label": "Environment and running code"
+    },
+    {
+      "id": "n_6a4915fd07",
+      "label": "Node.js (run scripts)"
+    },
+    {
+      "id": "n_8a2f39dfce",
+      "label": "Browser DevTools (Console)"
+    },
+    {
+      "id": "n_e1983f9db1",
+      "label": "First steps"
+    },
+    {
+      "id": "n_c87aaadd97",
+      "label": "console.log"
+    },
+    {
+      "id": "n_03952df132",
+      "label": "Comments"
+    },
+    {
+      "id": "n_eaf2b0c877",
+      "label": "Common errors and error messages"
+    },
+    {
+      "id": "n_b3755b0169",
+      "label": "Variables and values"
+    },
+    {
+      "id": "n_7293bd0b0f",
+      "label": "let, const, var (basic differences)"
+    },
+    {
+      "id": "n_cf36fad736",
+      "label": "Primitive types (string, number, boolean, null, undefined)"
+    },
+    {
+      "id": "n_b8e63eb0d7",
+      "label": "Basic operators (+, -, *, /, %, **)"
+    },
+    {
+      "id": "n_9eaeba5a37",
+      "label": "Strings and numbers"
+    },
+    {
+      "id": "n_eb9907902f",
+      "label": "Template literals"
+    },
+    {
+      "id": "n_f2791b9196",
+      "label": "Basic conversions (Number, String)"
+    },
+    {
+      "id": "n_68ce14aa60",
+      "label": "Control flow"
+    },
+    {
+      "id": "n_41367d0d7c",
+      "label": "if / else"
+    },
+    {
+      "id": "n_2f12a10eec",
+      "label": "switch"
+    },
+    {
+      "id": "n_cb5fbefc56",
+      "label": "Loops (for, while)"
+    },
+    {
+      "id": "n_9d36f1172d",
+      "label": "Functions"
+    },
+    {
+      "id": "n_aae36bdd75",
+      "label": "Function declarations vs expressions"
+    },
+    {
+      "id": "n_d3a4b6525e",
+      "label": "Arrow functions (=>)"
+    },
+    {
+      "id": "n_dc8e6f6f3d",
+      "label": "Parameters, return"
+    },
+    {
+      "id": "n_5bf4f7bba3",
+      "label": "Basic collections"
+    },
+    {
+      "id": "n_509dc87862",
+      "label": "Arrays (push, pop, map, filter)"
+    },
+    {
+      "id": "n_1e9890d69e",
+      "label": "Objects (keys, values, entries)"
+    },
+    {
+      "id": "n_e769d1d93e",
+      "label": "Comparisons and \"truthiness\""
+    },
+    {
+      "id": "n_6bf88b5fd9",
+      "label": "Truthy vs falsy"
+    },
+    {
+      "id": "n_8f05f6c073",
+      "label": "== vs === (initial view)"
+    },
+    {
+      "id": "n_cdf4d7d867",
+      "label": "Scope and lifetime"
+    },
+    {
+      "id": "n_04082f8350",
+      "label": "Block scope (let/const)"
+    },
+    {
+      "id": "n_6013cb86ea",
+      "label": "Scope chain (intuition)"
+    },
+    {
+      "id": "n_a8856581dd",
+      "label": "Scope, Closures, and References"
+    },
+    {
+      "id": "n_f93ec09649",
       "label": "Hoisting and TDZ"
     },
     {
-      "id": "n_a86bf79bd1",
+      "id": "n_0c704c8259",
       "label": "Closures"
     },
     {
-      "id": "n_d7f6101491",
+      "id": "n_4a5b84e97d",
       "label": "Reference vs Value"
     },
     {
-      "id": "n_5996dfcf49",
+      "id": "n_187819cb83",
       "label": "Shallow vs Deep Copy"
     },
     {
-      "id": "n_b6d801a21a",
+      "id": "n_23a4a67af0",
       "label": "structuredClone"
     },
     {
-      "id": "n_3ccddc2176",
+      "id": "n_687d155b62",
       "label": "Syntax and Types"
     },
     {
-      "id": "n_7c0d5c2abf",
+      "id": "n_5322d9b79b",
       "label": "Strict Equality (===)"
     },
     {
-      "id": "n_f1a1d9a7b7",
+      "id": "n_0927634200",
       "label": "Type Coercion (==)"
     },
     {
-      "id": "n_6275850f44",
+      "id": "n_02d56e64c6",
       "label": "typeof and Array.isArray"
     },
     {
-      "id": "n_062a958ed0",
+      "id": "n_f371c007f0",
       "label": "Increment Operators (x++ vs ++x)"
     },
     {
-      "id": "n_a2e7009597",
+      "id": "n_72e7e6f859",
       "label": "Objects and Functions"
     },
     {
-      "id": "n_9606a59aed",
+      "id": "n_10283e8749",
       "label": "Higher-Order Functions"
     },
     {
-      "id": "n_c74ca50694",
+      "id": "n_10918e4955",
       "label": "Prototype Chain"
     },
     {
-      "id": "n_dd8fa780aa",
+      "id": "n_d86b2b055d",
       "label": "ES6 Modules"
     },
     {
-      "id": "n_e550ece401",
+      "id": "n_0123d6f7f5",
       "label": "Object.hasOwn"
     },
     {
-      "id": "n_701dc30a31",
+      "id": "n_92fbc0ec84",
       "label": "Asynchronous JavaScript"
     },
     {
-      "id": "n_79e211ef72",
+      "id": "n_6eac987208",
       "label": "Runtime Model"
     },
     {
-      "id": "n_873474e44d",
+      "id": "n_597d0d77a9",
       "label": "Single-Threaded Execution"
     },
     {
-      "id": "n_51eff75ece",
+      "id": "n_d40f656225",
       "label": "Event Loop"
     },
     {
-      "id": "n_712cc7fc19",
+      "id": "n_dd353799a8",
       "label": "Call Stack"
     },
     {
-      "id": "n_8cf0c05af5",
+      "id": "n_936dba900f",
       "label": "Callback and Microtask Queues"
     },
     {
-      "id": "n_0b59ba43b4",
+      "id": "n_e4c8fb33c3",
       "label": "Async Patterns"
     },
     {
-      "id": "n_e76c45ff03",
+      "id": "n_535d155bcb",
       "label": "Promises"
     },
     {
-      "id": "n_da611908aa",
+      "id": "n_c3e5c12d5d",
       "label": "Async/Await"
     },
     {
-      "id": "n_4e7dd6b77f",
+      "id": "n_e4e2525aeb",
       "label": "Try/Catch Error Handling"
     },
     {
-      "id": "n_78afd4f52c",
+      "id": "n_430ec14e1b",
       "label": "Data Structures and Algorithms"
     },
     {
-      "id": "n_6b0bd11d43",
+      "id": "n_ebcacddf50",
       "label": "Big-O Complexity"
     },
     {
-      "id": "n_f34b4f9ed1",
+      "id": "n_a3b8bf1811",
       "label": "Two Pointers and Sliding Window"
     },
     {
-      "id": "n_c11a17cbc4",
+      "id": "n_abde994527",
       "label": "BFS and DFS"
     },
     {
-      "id": "n_61431e63a8",
+      "id": "n_e346da514d",
       "label": "Cycle Detection"
     },
     {
-      "id": "n_14e2d24f29",
+      "id": "n_a26a908c95",
       "label": "Dynamic Programming"
     },
     {
-      "id": "n_9ec87aed5e",
+      "id": "n_fbee0d161c",
       "label": "HackerRank Profile and Assessments"
     },
     {
-      "id": "n_ae10305482",
+      "id": "n_d749091b07",
       "label": "Verified Portfolio"
     },
     {
-      "id": "n_1663615e76",
+      "id": "n_aaa1885f85",
       "label": "Problem-Solving Score"
     },
     {
-      "id": "n_db1c96f325",
+      "id": "n_0b3efce6a6",
       "label": "Certifications"
     },
     {
-      "id": "n_c5b9313899",
+      "id": "n_5d08c717f0",
       "label": "Badges"
     },
     {
-      "id": "n_eb1769f32d",
+      "id": "n_ae95252006",
       "label": "Global Ranking"
     },
     {
-      "id": "n_c24b5c70f5",
+      "id": "n_8f5f820408",
       "label": "Practice Methodology"
     },
     {
-      "id": "n_a3e7fb1c94",
+      "id": "n_6f99cc995f",
       "label": "Interview Preparation Kit"
     },
     {
-      "id": "n_967f2660f8",
+      "id": "n_e97c870b77",
       "label": "Online Assessments (OA)"
     },
     {
-      "id": "n_72a7b04cb6",
+      "id": "n_7f10408c18",
       "label": "Implementation Focus"
     },
     {
-      "id": "n_625efaf2bd",
+      "id": "n_216e781479",
       "label": "Test Case Handling"
     },
     {
-      "id": "n_286f9ea3a7",
+      "id": "n_31a0b5a231",
       "label": "Technical Interview Preparation"
     },
     {
-      "id": "n_ce835a2471",
+      "id": "n_58dd40db47",
       "label": "System Design (Scalability, CAP Theorem)"
     },
     {
-      "id": "n_e5a6ec5c67",
+      "id": "n_11aa16cec6",
       "label": "Behavioral (STAR Method)"
     },
     {
-      "id": "n_6795edc948",
+      "id": "n_364fb97f2b",
       "label": "Communication and Clarifying Questions"
     },
     {
-      "id": "n_1637dfa862",
+      "id": "n_e145183567",
       "label": "Code Quality and Maintainability"
     },
     {
-      "id": "n_2702757284",
+      "id": "n_c2c0d23ae5",
       "label": "Iterative Optimization"
     }
   ],
   "edges": [
     {
       "from": "n_87c0f70ade",
-      "to": "n_a1c32f4255"
+      "to": "n_3d10a7b4c5"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_1cd75f3aac"
+      "from": "n_3d10a7b4c5",
+      "to": "n_975ae854be"
     },
     {
-      "from": "n_1cd75f3aac",
-      "to": "n_a86bf79bd1"
+      "from": "n_975ae854be",
+      "to": "n_6a4915fd07"
     },
     {
-      "from": "n_1cd75f3aac",
-      "to": "n_d7f6101491"
+      "from": "n_6a4915fd07",
+      "to": "n_8a2f39dfce"
     },
     {
-      "from": "n_1cd75f3aac",
-      "to": "n_5996dfcf49"
+      "from": "n_975ae854be",
+      "to": "n_e1983f9db1"
     },
     {
-      "from": "n_1cd75f3aac",
-      "to": "n_b6d801a21a"
+      "from": "n_e1983f9db1",
+      "to": "n_c87aaadd97"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_3ccddc2176"
+      "from": "n_e1983f9db1",
+      "to": "n_03952df132"
     },
     {
-      "from": "n_3ccddc2176",
-      "to": "n_7c0d5c2abf"
+      "from": "n_e1983f9db1",
+      "to": "n_eaf2b0c877"
     },
     {
-      "from": "n_3ccddc2176",
-      "to": "n_f1a1d9a7b7"
+      "from": "n_975ae854be",
+      "to": "n_b3755b0169"
     },
     {
-      "from": "n_3ccddc2176",
-      "to": "n_6275850f44"
+      "from": "n_b3755b0169",
+      "to": "n_7293bd0b0f"
     },
     {
-      "from": "n_3ccddc2176",
-      "to": "n_062a958ed0"
+      "from": "n_b3755b0169",
+      "to": "n_cf36fad736"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_a2e7009597"
+      "from": "n_b3755b0169",
+      "to": "n_b8e63eb0d7"
     },
     {
-      "from": "n_a2e7009597",
-      "to": "n_9606a59aed"
+      "from": "n_975ae854be",
+      "to": "n_9eaeba5a37"
     },
     {
-      "from": "n_a2e7009597",
-      "to": "n_c74ca50694"
+      "from": "n_9eaeba5a37",
+      "to": "n_eb9907902f"
     },
     {
-      "from": "n_a2e7009597",
-      "to": "n_dd8fa780aa"
+      "from": "n_9eaeba5a37",
+      "to": "n_f2791b9196"
     },
     {
-      "from": "n_a2e7009597",
-      "to": "n_e550ece401"
+      "from": "n_975ae854be",
+      "to": "n_68ce14aa60"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_701dc30a31"
+      "from": "n_68ce14aa60",
+      "to": "n_41367d0d7c"
     },
     {
-      "from": "n_701dc30a31",
-      "to": "n_79e211ef72"
+      "from": "n_68ce14aa60",
+      "to": "n_2f12a10eec"
     },
     {
-      "from": "n_79e211ef72",
-      "to": "n_873474e44d"
+      "from": "n_68ce14aa60",
+      "to": "n_cb5fbefc56"
     },
     {
-      "from": "n_79e211ef72",
-      "to": "n_51eff75ece"
+      "from": "n_975ae854be",
+      "to": "n_9d36f1172d"
     },
     {
-      "from": "n_79e211ef72",
-      "to": "n_712cc7fc19"
+      "from": "n_9d36f1172d",
+      "to": "n_aae36bdd75"
     },
     {
-      "from": "n_79e211ef72",
-      "to": "n_8cf0c05af5"
+      "from": "n_9d36f1172d",
+      "to": "n_d3a4b6525e"
     },
     {
-      "from": "n_701dc30a31",
-      "to": "n_0b59ba43b4"
+      "from": "n_9d36f1172d",
+      "to": "n_dc8e6f6f3d"
     },
     {
-      "from": "n_0b59ba43b4",
-      "to": "n_e76c45ff03"
+      "from": "n_975ae854be",
+      "to": "n_5bf4f7bba3"
     },
     {
-      "from": "n_0b59ba43b4",
-      "to": "n_da611908aa"
+      "from": "n_5bf4f7bba3",
+      "to": "n_509dc87862"
     },
     {
-      "from": "n_0b59ba43b4",
-      "to": "n_4e7dd6b77f"
+      "from": "n_5bf4f7bba3",
+      "to": "n_1e9890d69e"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_78afd4f52c"
+      "from": "n_975ae854be",
+      "to": "n_e769d1d93e"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_6b0bd11d43"
+      "from": "n_e769d1d93e",
+      "to": "n_6bf88b5fd9"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_f34b4f9ed1"
+      "from": "n_e769d1d93e",
+      "to": "n_8f05f6c073"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_c11a17cbc4"
+      "from": "n_975ae854be",
+      "to": "n_cdf4d7d867"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_61431e63a8"
+      "from": "n_cdf4d7d867",
+      "to": "n_04082f8350"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_14e2d24f29"
+      "from": "n_cdf4d7d867",
+      "to": "n_6013cb86ea"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_9ec87aed5e"
+      "from": "n_3d10a7b4c5",
+      "to": "n_a8856581dd"
     },
     {
-      "from": "n_9ec87aed5e",
-      "to": "n_ae10305482"
+      "from": "n_a8856581dd",
+      "to": "n_f93ec09649"
     },
     {
-      "from": "n_ae10305482",
-      "to": "n_1663615e76"
+      "from": "n_a8856581dd",
+      "to": "n_0c704c8259"
     },
     {
-      "from": "n_ae10305482",
-      "to": "n_db1c96f325"
+      "from": "n_a8856581dd",
+      "to": "n_4a5b84e97d"
     },
     {
-      "from": "n_ae10305482",
-      "to": "n_c5b9313899"
+      "from": "n_a8856581dd",
+      "to": "n_187819cb83"
     },
     {
-      "from": "n_ae10305482",
-      "to": "n_eb1769f32d"
+      "from": "n_a8856581dd",
+      "to": "n_23a4a67af0"
     },
     {
-      "from": "n_9ec87aed5e",
-      "to": "n_c24b5c70f5"
+      "from": "n_3d10a7b4c5",
+      "to": "n_687d155b62"
     },
     {
-      "from": "n_c24b5c70f5",
-      "to": "n_a3e7fb1c94"
+      "from": "n_687d155b62",
+      "to": "n_5322d9b79b"
     },
     {
-      "from": "n_c24b5c70f5",
-      "to": "n_967f2660f8"
+      "from": "n_687d155b62",
+      "to": "n_0927634200"
     },
     {
-      "from": "n_c24b5c70f5",
-      "to": "n_72a7b04cb6"
+      "from": "n_687d155b62",
+      "to": "n_02d56e64c6"
     },
     {
-      "from": "n_c24b5c70f5",
-      "to": "n_625efaf2bd"
+      "from": "n_687d155b62",
+      "to": "n_f371c007f0"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_286f9ea3a7"
+      "from": "n_3d10a7b4c5",
+      "to": "n_72e7e6f859"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_ce835a2471"
+      "from": "n_72e7e6f859",
+      "to": "n_10283e8749"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_e5a6ec5c67"
+      "from": "n_72e7e6f859",
+      "to": "n_10918e4955"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_6795edc948"
+      "from": "n_72e7e6f859",
+      "to": "n_d86b2b055d"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_1637dfa862"
+      "from": "n_72e7e6f859",
+      "to": "n_0123d6f7f5"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_2702757284"
+      "from": "n_3d10a7b4c5",
+      "to": "n_92fbc0ec84"
+    },
+    {
+      "from": "n_92fbc0ec84",
+      "to": "n_6eac987208"
+    },
+    {
+      "from": "n_6eac987208",
+      "to": "n_597d0d77a9"
+    },
+    {
+      "from": "n_6eac987208",
+      "to": "n_d40f656225"
+    },
+    {
+      "from": "n_6eac987208",
+      "to": "n_dd353799a8"
+    },
+    {
+      "from": "n_6eac987208",
+      "to": "n_936dba900f"
+    },
+    {
+      "from": "n_92fbc0ec84",
+      "to": "n_e4c8fb33c3"
+    },
+    {
+      "from": "n_e4c8fb33c3",
+      "to": "n_535d155bcb"
+    },
+    {
+      "from": "n_e4c8fb33c3",
+      "to": "n_c3e5c12d5d"
+    },
+    {
+      "from": "n_e4c8fb33c3",
+      "to": "n_e4e2525aeb"
+    },
+    {
+      "from": "n_3d10a7b4c5",
+      "to": "n_430ec14e1b"
+    },
+    {
+      "from": "n_430ec14e1b",
+      "to": "n_ebcacddf50"
+    },
+    {
+      "from": "n_430ec14e1b",
+      "to": "n_a3b8bf1811"
+    },
+    {
+      "from": "n_430ec14e1b",
+      "to": "n_abde994527"
+    },
+    {
+      "from": "n_430ec14e1b",
+      "to": "n_e346da514d"
+    },
+    {
+      "from": "n_430ec14e1b",
+      "to": "n_a26a908c95"
+    },
+    {
+      "from": "n_3d10a7b4c5",
+      "to": "n_fbee0d161c"
+    },
+    {
+      "from": "n_fbee0d161c",
+      "to": "n_d749091b07"
+    },
+    {
+      "from": "n_d749091b07",
+      "to": "n_aaa1885f85"
+    },
+    {
+      "from": "n_d749091b07",
+      "to": "n_0b3efce6a6"
+    },
+    {
+      "from": "n_d749091b07",
+      "to": "n_5d08c717f0"
+    },
+    {
+      "from": "n_d749091b07",
+      "to": "n_ae95252006"
+    },
+    {
+      "from": "n_fbee0d161c",
+      "to": "n_8f5f820408"
+    },
+    {
+      "from": "n_8f5f820408",
+      "to": "n_6f99cc995f"
+    },
+    {
+      "from": "n_8f5f820408",
+      "to": "n_e97c870b77"
+    },
+    {
+      "from": "n_8f5f820408",
+      "to": "n_7f10408c18"
+    },
+    {
+      "from": "n_8f5f820408",
+      "to": "n_216e781479"
+    },
+    {
+      "from": "n_3d10a7b4c5",
+      "to": "n_31a0b5a231"
+    },
+    {
+      "from": "n_31a0b5a231",
+      "to": "n_58dd40db47"
+    },
+    {
+      "from": "n_31a0b5a231",
+      "to": "n_11aa16cec6"
+    },
+    {
+      "from": "n_31a0b5a231",
+      "to": "n_364fb97f2b"
+    },
+    {
+      "from": "n_31a0b5a231",
+      "to": "n_e145183567"
+    },
+    {
+      "from": "n_31a0b5a231",
+      "to": "n_c2c0d23ae5"
     }
   ]
 }

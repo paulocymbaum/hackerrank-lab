@@ -1,0 +1,66 @@
+---
+description: Course/Lesson markdown contract + stack-first lesson focus
+globs: course/**/*.md
+alwaysApply: false
+---
+
+# Course + Lesson content contract (Hackerrank Study)
+
+## Non-negotiables (keep consistent)
+
+- Preserve any top-of-file markers already used in this repo (e.g. `<!-- cursor:teacher:add-explanation (deterministic) -->`, `<!-- marker:... -->`).
+- Prefer **predict-first** learning: prompt the learner to predict output/behavior before showing the explanation.
+- Use **checklists** and **acceptance criteria** to make success measurable.
+- Prioritize correctness, explicitness, and mental models over “tips”.
+
+## What a “Course / Module” README must contain
+
+- **One-sentence purpose**: what capability the learner gains.
+- **Scope boundaries**: what’s in / out (avoid surprise topics).
+- **Tiered path** (when applicable): beginner → intermediate → advanced.
+- For each tier:
+  - **Core rule(s) of thumb**
+  - **Key terms**
+  - **Predict-first snippet(s)**
+  - **Why this matters** (real bug class it prevents)
+  - **Checklist** (observable skills)
+- **Common pitfalls** (short list).
+- **Self-test**: at least one prompt per tier.
+
+## What a “Lesson” must look like (order matters)
+
+### 1) Stack-first explanation (must be first main focus)
+
+Start every lesson by teaching the stack with a deep, clear, detailed explanation of:
+
+- **What** the stack is in this context
+  - A **LIFO** structure holding **stack frames** for active function calls.
+  - What a frame represents (parameters, local bindings, “where to return”, etc.).
+- **How** it behaves step-by-step
+  - What causes **push** (entering a call) and **pop** (return/throw).
+  - Show a short **trace table** (call → push frame, return → pop frame).
+  - Explicitly explain how errors relate to stack traces (why the trace is ordered the way it is).
+- **Why** it behaves this way / why we model it this way
+  - Connect to the guarantee: “the current function finishes (or throws) before the caller continues”.
+  - Tie to common outcomes: recursion limits / “Maximum call stack size exceeded”, re-entrancy misconceptions, debugging stack traces.
+
+Constraints for this section:
+- No shortcuts like “it just works” or “JS is single-threaded” without unpacking what that implies for the stack.
+- Prefer one tight example over many shallow ones; narrate each push/pop.
+- If the lesson touches async, clarify that **the call stack only holds currently executing synchronous frames**, and separate stack behavior from task/microtask scheduling (don’t conflate them).
+
+### 2) Mental model summary (1 screen)
+
+- 3–7 bullets that restate the stack behavior in learner language.
+
+### 3) Predict-first exercises
+
+- At least 2 prompts where the learner predicts:
+  - output order
+  - when a function returns vs when another begins
+  - what the stack looks like at a chosen line
+
+### 4) Implementation / practice tasks (if applicable)
+
+- If it’s a project/exercise lesson, follow the repo’s PBL contract: context, goal, functional + non-functional requirements, constraints, acceptance criteria, example data, suggested plan (no solution), deliverables.
+

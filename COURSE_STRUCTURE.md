@@ -100,6 +100,10 @@ Cada pasta de módulo em `course/<NN-nome-do-modulo>/` deve conter:
   - **`projects/README.md`**: visão geral dos projetos do módulo e como executar.
   - Subpastas por **tópico**: `01-...`, `02-...`, etc.
   - Dentro de cada tópico, projetos numerados: `001-...`, `002-...`, etc.
+- **`quiz/`** (opcional, recomendado): atividades de quiz por lição.
+  - Um arquivo JSON por lição: `NN-nome.quiz.json` (espelha `examples/NN-nome.md`) ou `00-module-overview.quiz.json` para o `README.md` do módulo.
+  - Cada arquivo contém **5–10** atividades alinhadas à estrutura da lição (stack-first, predict-first, tiers).
+  - Gerar com a skill `.cursor/skills/generate-lesson-quiz/` e a ferramenta `add-lesson-quiz.js`.
 
 ## Padrão PBL para cada exercício (`projects/.../<NNN-nome>/README.md`)
 

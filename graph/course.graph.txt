@@ -1,6 +1,38 @@
 mindmap
   root((JavaScript))
-    Trecho inicial truncado no conteúdo fornecido
+    Fundamentals (start from zero)
+      Environment and running code
+        Node.js (run scripts)
+        Browser DevTools (Console)
+      First steps
+        console.log
+        Comments
+        Common errors and error messages
+      Variables and values
+        let, const, var (basic differences)
+        Primitive types (string, number, boolean, null, undefined)
+        Basic operators (+, -, *, /, %, **)
+      Strings and numbers
+        Template literals
+        Basic conversions (Number, String)
+      Control flow
+        if / else
+        switch
+        Loops (for, while)
+      Functions
+        Function declarations vs expressions
+        Arrow functions (=>)
+        Parameters, return
+      Basic collections
+        Arrays (push, pop, map, filter)
+        Objects (keys, values, entries)
+      Comparisons and "truthiness"
+        Truthy vs falsy
+        == vs === (initial view)
+      Scope and lifetime
+        Block scope (let/const)
+        Scope chain (intuition)
+    Scope, Closures, and References
       Hoisting and TDZ
       Closures
       Reference vs Value
