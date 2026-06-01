@@ -1,14 +1,17 @@
 import { useEffect } from "react";
 import { useCourseCatalogStore } from "../../application/stores/courseCatalogStore";
-import { Accordion } from "../design-system/components/Accordion";
+import { useNavigationStore } from "../../application/stores/navigationStore";
+import { Card } from "../design-system/components/Card";
 import { Icon } from "../design-system/icons/Icon";
-import { BookOpenText } from "lucide-react";
+import { BookOpenText, ChevronRight } from "lucide-react";
+import { Button } from "../design-system/components/Button";
 
 export function CourseCatalogRoute() {
   const status = useCourseCatalogStore((s) => s.status);
   const courses = useCourseCatalogStore((s) => s.courses);
   const error = useCourseCatalogStore((s) => s.error);
   const load = useCourseCatalogStore((s) => s.load);
+  const goCourse = useNavigationStore((s) => s.goCourse);
 
   useEffect(() => {
     void load();
@@ -43,26 +46,27 @@ export function CourseCatalogRoute() {
 
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {courses.map((course) => (
-          <Accordion
-            key={course.id}
-            title={
+          <Card key={course.id} variant="panel" className="p-4">
+            <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <span className="truncate text-[14px] font-semibold">{course.title}</span>
+                <div className="truncate text-[14px] font-semibold text-text0">{course.title}</div>
+                <div className="mt-2 flex flex-wrap items-center gap-3 text-[12px] text-text1">
+                  <span>{course.lessons.length} examples</span>
+                  <span>{course.projects.length} projects</span>
+                </div>
               </div>
-            }
-          >
-            {course.lessons.length === 0 ? (
-              <p className="m-0 text-[13px] text-text1">No lessons found in `examples/`.</p>
-            ) : (
-              <ol className="m-0 grid gap-2 pl-5">
-                {course.lessons.map((lesson) => (
-                  <li key={lesson.path}>
-                    <span className="text-[14px] font-medium text-text0">{lesson.title}</span>
-                  </li>
-                ))}
-              </ol>
-            )}
-          </Accordion>
+
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => goCourse(course.id)}
+                title="Open immersive course view"
+              >
+                See course
+                <Icon icon={ChevronRight} />
+              </Button>
+            </div>
+          </Card>
         ))}
       </div>
     </section>
