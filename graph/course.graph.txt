@@ -1,0 +1,52 @@
+mindmap
+  root((JavaScript))
+    Trecho inicial truncado no conteúdo fornecido
+      Hoisting and TDZ
+      Closures
+      Reference vs Value
+      Shallow vs Deep Copy
+      structuredClone
+    Syntax and Types
+      Strict Equality (===)
+      Type Coercion (==)
+      typeof and Array.isArray
+      Increment Operators (x++ vs ++x)
+    Objects and Functions
+      Higher-Order Functions
+      Prototype Chain
+      ES6 Modules
+      Object.hasOwn
+    Asynchronous JavaScript
+      Runtime Model
+        Single-Threaded Execution
+        Event Loop
+        Call Stack
+        Callback and Microtask Queues
+      Async Patterns
+        Promises
+        Async/Await
+        Try/Catch Error Handling
+    Data Structures and Algorithms
+      Big-O Complexity
+      Two Pointers and Sliding Window
+      BFS and DFS
+      Cycle Detection
+      Dynamic Programming
+    HackerRank Profile and Assessments
+      Verified Portfolio
+        Problem-Solving Score
+        Certifications
+        Badges
+        Global Ranking
+      Practice Methodology
+        Interview Preparation Kit
+        Online Assessments (OA)
+        Implementation Focus
+        Test Case Handling
+    Technical Interview Preparation
+      System Design (Scalability, CAP Theorem)
+      Behavioral (STAR Method)
+      Communication and Clarifying Questions
+      Code Quality and Maintainability
+      Iterative Optimization
+
