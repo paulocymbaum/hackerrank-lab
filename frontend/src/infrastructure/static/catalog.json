@@ -1,0 +1,58 @@
+{
+  "courses": [
+    {
+      "id": "01-javascript-fundamentals",
+      "title": "01 — Javascript Fundamentals",
+      "lessons": [
+        {
+          "title": "01. Truthy Falsy",
+          "path": "course/01-javascript-fundamentals/examples/01-truthy-falsy.md"
+        },
+        {
+          "title": "02. Equality And Coercion",
+          "path": "course/01-javascript-fundamentals/examples/02-equality-and-coercion.md"
+        },
+        {
+          "title": "03. Null Undefined And Operators",
+          "path": "course/01-javascript-fundamentals/examples/03-null-undefined-and-operators.md"
+        }
+      ]
+    },
+    {
+      "id": "02-objects-references-and-copying",
+      "title": "02 — Objects References And Copying",
+      "lessons": [
+        {
+          "title": "01. Reference Vs Value",
+          "path": "course/02-objects-references-and-copying/examples/01-reference-vs-value.md"
+        },
+        {
+          "title": "02. Shallow Copy Pitfalls",
+          "path": "course/02-objects-references-and-copying/examples/02-shallow-copy-pitfalls.md"
+        },
+        {
+          "title": "03. Deep Copy And Structuredclone",
+          "path": "course/02-objects-references-and-copying/examples/03-deep-copy-and-structuredclone.md"
+        }
+      ]
+    },
+    {
+      "id": "03-asynchronous-javascript-runtime-model-event-loop",
+      "title": "03 — Asynchronous Javascript Runtime Model Event Loop",
+      "lessons": [
+        {
+          "title": "01. Sync Vs Async Trace",
+          "path": "course/03-asynchronous-javascript-runtime-model-event-loop/examples/01-sync-vs-async-trace.md"
+        },
+        {
+          "title": "02. Event Loop Microtasks Vs Tasks",
+          "path": "course/03-asynchronous-javascript-runtime-model-event-loop/examples/02-event-loop-microtasks-vs-tasks.md"
+        },
+        {
+          "title": "03. Promises Async Await And Error Flow",
+          "path": "course/03-asynchronous-javascript-runtime-model-event-loop/examples/03-promises-async-await-and-error-flow.md"
+        }
+      ]
+    }
+  ]
+}
