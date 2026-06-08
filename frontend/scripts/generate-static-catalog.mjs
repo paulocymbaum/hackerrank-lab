@@ -67,6 +67,34 @@ function humanizeProjectTitle(folderName) {
   return n ? `${n}. ${title}` : title;
 }
 
+function humanizeQuizTitle(fileName) {
+  const n = leadingNumberPrefix(fileName);
+  const title = fileName
+    .replace(/^\d{2}-/, "")
+    .replace(/\.json$/i, "")
+    .split("-")
+    .filter(Boolean)
+    .map((w) => w[0]?.toUpperCase() + w.slice(1))
+    .join(" ");
+  return n ? `${n}. ${title}` : title;
+}
+
+function isValidQuizPayload(value) {
+  if (!value || typeof value !== "object") return false;
+  if (typeof value.id !== "string" || typeof value.title !== "string") return false;
+  if (!Array.isArray(value.questions) || value.questions.length === 0) return false;
+  return value.questions.every(
+    (q) =>
+      q &&
+      typeof q.id === "string" &&
+      typeof q.prompt === "string" &&
+      typeof q.correctOptionId === "string" &&
+      Array.isArray(q.options) &&
+      q.options.length >= 2 &&
+      q.options.every((o) => o && typeof o.id === "string" && typeof o.text === "string"),
+  );
+}
+
 async function listDirSafe(dir) {
   try {
     return await fs.readdir(dir, { withFileTypes: true });
@@ -135,6 +163,39 @@ async function walkProjectRoot(absRootDir) {
     return a.path.localeCompare(b.path);
   });
   return entries;
+}
+
+async function loadQuizzes(courseFolder) {
+  const quizDir = path.join(courseDir, courseFolder, "quiz");
+  const quizEntries = await listDirSafe(quizDir);
+  const quizzes = [];
+
+  for (const ent of quizEntries.filter((e) => e.isFile() && e.name.toLowerCase().endsWith(".json"))) {
+    const absPath = path.join(quizDir, ent.name);
+    const raw = await readTextSafe(absPath);
+    if (!raw.trim()) continue;
+
+    try {
+      const parsed = JSON.parse(raw);
+      if (!isValidQuizPayload(parsed)) {
+        console.warn(`Skipping invalid quiz: ${absPath}`);
+        continue;
+      }
+
+      quizzes.push({
+        id: parsed.id,
+        title: parsed.title || humanizeQuizTitle(ent.name),
+        description: typeof parsed.description === "string" ? parsed.description : "",
+        path: path.posix.join("course", courseFolder, "quiz", ent.name),
+        questions: parsed.questions,
+      });
+    } catch {
+      console.warn(`Skipping unreadable quiz JSON: ${absPath}`);
+    }
+  }
+
+  quizzes.sort((a, b) => a.path.localeCompare(b.path));
+  return quizzes;
 }
 
 async function main() {
@@ -212,6 +273,8 @@ async function main() {
 
     projects.sort((a, b) => a.readmePath.localeCompare(b.readmePath));
 
+    const quizzes = await loadQuizzes(courseFolder);
+
     courses.push({
       id: courseFolder,
       title: humanizeCourseTitle(courseFolder),
@@ -219,6 +282,7 @@ async function main() {
       readmeMarkdown: courseReadmeMarkdown,
       lessons,
       projects,
+      quizzes,
     });
   }
 
@@ -237,6 +301,7 @@ async function main() {
   console.log(`Courses: ${courses.length}`);
   console.log(`Lessons: ${courses.reduce((sum, c) => sum + c.lessons.length, 0)}`);
   console.log(`Projects: ${courses.reduce((sum, c) => sum + c.projects.length, 0)}`);
+  console.log(`Quizzes: ${courses.reduce((sum, c) => sum + c.quizzes.length, 0)}`);
 }
 
 main().catch((err) => {

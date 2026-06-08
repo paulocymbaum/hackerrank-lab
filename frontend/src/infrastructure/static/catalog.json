@@ -36,14 +36,6 @@
               "readmeMarkdown": "# CLI Input Validator\n\n## Problem context\nYou’re building a tiny CLI tool that receives user input as **strings** (like in HackerRank). Your team keeps shipping bugs because checks rely on truthiness/coercion instead of explicit validation.\n\n## Goal\nBuild a CLI program that reads 3 values and prints either a normalized result or an error message. The exercise is about **explicit conversion** and **defensive checks**.\n\n## Functional requirements\n- [ ] Read input from `stdin` (3 lines):\n  - [ ] `age` (expected integer, may be `0`)\n  - [ ] `score` (expected number, may be `0` or decimals)\n  - [ ] `isActive` (expected string: `true` or `false`, case-insensitive)\n- [ ] Convert values explicitly:\n  - [ ] Use `Number()` for numeric parsing (no implicit coercion).\n  - [ ] Reject non-finite numbers with `Number.isFinite(...)`.\n- [ ] Output:\n  - [ ] If valid, print a single JSON line with `{ age, score, isActive }` using correct types.\n  - [ ] If invalid, print `ERROR: <message>` (single line).\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages (tell which field is invalid and why)\n- [ ] No unexpected truthiness checks for numeric fields (don’t treat `0` as missing)\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use `parseInt` / `parseFloat` for the numeric fields (use `Number()`)\n\n## Acceptance criteria\n- [ ] `age = 0` is accepted as valid input.\n- [ ] Empty strings are rejected for all fields.\n- [ ] `score` rejects `NaN`, `Infinity`, `-Infinity`.\n- [ ] `isActive` accepts `true/false` in any casing (e.g. `TRUE`, `False`).\n\n## Example data\n\n### Valid input\nInput:\n- `0`\n- `10.5`\n- `TRUE`\n\nOutput:\n- `{\"age\":0,\"score\":10.5,\"isActive\":true}`\n\n### Invalid input\nInput:\n- ``\n- `10`\n- `true`\n\nOutput:\n- `ERROR: age is required`\n\n## Suggested plan (no solution)\n1. Read `stdin` lines and trim safely.\n2. Validate emptiness explicitly (check `line.length === 0`).\n3. Convert using `Number(...)`, validate with `Number.isFinite`.\n4. Normalize `isActive` with `toLowerCase()` and compare to `\"true\"` / `\"false\"`.\n5. Print output in the required format.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept `isActive` values like `1/0` and `yes/no` (explicit mapping only).\n- [ ] Support optional whitespace lines in the input.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
-              "path": "starter",
-              "kind": "dir"
-            },
-            {
               "path": "README.md",
               "kind": "file",
               "content": "# CLI Input Validator\n\n## Problem context\nYou’re building a tiny CLI tool that receives user input as **strings** (like in HackerRank). Your team keeps shipping bugs because checks rely on truthiness/coercion instead of explicit validation.\n\n## Goal\nBuild a CLI program that reads 3 values and prints either a normalized result or an error message. The exercise is about **explicit conversion** and **defensive checks**.\n\n## Functional requirements\n- [ ] Read input from `stdin` (3 lines):\n  - [ ] `age` (expected integer, may be `0`)\n  - [ ] `score` (expected number, may be `0` or decimals)\n  - [ ] `isActive` (expected string: `true` or `false`, case-insensitive)\n- [ ] Convert values explicitly:\n  - [ ] Use `Number()` for numeric parsing (no implicit coercion).\n  - [ ] Reject non-finite numbers with `Number.isFinite(...)`.\n- [ ] Output:\n  - [ ] If valid, print a single JSON line with `{ age, score, isActive }` using correct types.\n  - [ ] If invalid, print `ERROR: <message>` (single line).\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages (tell which field is invalid and why)\n- [ ] No unexpected truthiness checks for numeric fields (don’t treat `0` as missing)\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use `parseInt` / `parseFloat` for the numeric fields (use `Number()`)\n\n## Acceptance criteria\n- [ ] `age = 0` is accepted as valid input.\n- [ ] Empty strings are rejected for all fields.\n- [ ] `score` rejects `NaN`, `Infinity`, `-Infinity`.\n- [ ] `isActive` accepts `true/false` in any casing (e.g. `TRUE`, `False`).\n\n## Example data\n\n### Valid input\nInput:\n- `0`\n- `10.5`\n- `TRUE`\n\nOutput:\n- `{\"age\":0,\"score\":10.5,\"isActive\":true}`\n\n### Invalid input\nInput:\n- ``\n- `10`\n- `true`\n\nOutput:\n- `ERROR: age is required`\n\n## Suggested plan (no solution)\n1. Read `stdin` lines and trim safely.\n2. Validate emptiness explicitly (check `line.length === 0`).\n3. Convert using `Number(...)`, validate with `Number.isFinite`.\n4. Normalize `isActive` with `toLowerCase()` and compare to `\"true\"` / `\"false\"`.\n5. Print output in the required format.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept `isActive` values like `1/0` and `yes/no` (explicit mapping only).\n- [ ] Support optional whitespace lines in the input.\n"
@@ -61,14 +53,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Data Normalizer\n\n## Problem context\nYou receive user records from multiple sources. Some fields come as numbers, some as strings, and missing values are inconsistent (`null`, `undefined`, empty string).\n\n## Goal\nWrite a function that **normalizes** a record into a consistent shape, using explicit conversions and predictable rules.\n\n## Functional requirements\n- [ ] Implement `normalizeRecord(record)` that returns a new object (do not mutate input).\n- [ ] Inputs may contain:\n  - [ ] `id`: string or number (required)\n  - [ ] `age`: string/number/null/undefined (optional; may be `0`)\n  - [ ] `email`: string/null/undefined (optional)\n  - [ ] `isActive`: boolean/string/null/undefined (optional)\n- [ ] Normalization rules:\n  - [ ] `id`: convert to `String(id)` and trim.\n  - [ ] `age`: if nullish -> `null`; otherwise convert via `Number(...)` and if not finite -> error.\n  - [ ] `email`: if nullish -> `null`; otherwise trim; if empty after trim -> `null`.\n  - [ ] `isActive`: accept `true/false` booleans, or strings `\"true\"`/`\"false\"` (case-insensitive). Nullish -> `null`. Anything else -> error.\n\n## Non-functional requirements\n- [ ] Clear errors (include which field failed)\n- [ ] No reliance on loose equality for correctness\n\n## Constraints\n- [ ] No external libraries\n- [ ] Use `Number.isFinite` and `Number.isNaN` as needed\n\n## Acceptance criteria\n- [ ] `age: 0` remains `0` (not treated as missing)\n- [ ] `email: \"   \"` becomes `null`\n- [ ] `isActive: \"FALSE\"` becomes `false`\n- [ ] Bad numeric values produce an error (e.g. `\"abc\"` for age)\n\n## Example data\n\nInput:\n\n```js\nnormalizeRecord({ id: 10, age: \"0\", email: \"  a@b.com \", isActive: \"TRUE\" })\n```\n\nOutput:\n\n```js\n{ id: \"10\", age: 0, email: \"a@b.com\", isActive: true }\n```\n\n## Suggested plan (no solution)\n1. Decide which fields are allowed to become `null` vs must throw.\n2. Normalize each field with explicit checks: nullish (`== null`) vs empty string.\n3. Return a brand-new object.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `normalizeMany(records)` that returns `{ ok: normalized[], errors: [...] }` without throwing.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
-              "path": "starter",
-              "kind": "dir"
             },
             {
               "path": "README.md",
@@ -90,17 +74,99 @@
               "readmeMarkdown": "# Record Filter\n\n## Problem context\nYou’re filtering records coming from an API. Some fields are missing (`null`/`undefined`), some are empty strings, and some numeric fields may be `0`. A previous implementation used truthiness checks and silently dropped valid records.\n\n## Goal\nImplement a filter function with **explicit rules** and **strict comparisons** so behavior is predictable.\n\n## Functional requirements\n- [ ] Implement `filterRecords(records, options)` returning a new array.\n- [ ] Each record may contain:\n  - [ ] `name` (string, optional; may be empty)\n  - [ ] `score` (number or string, optional; may be `0`)\n  - [ ] `tag` (string|null|undefined)\n- [ ] `options` supports:\n  - [ ] `minScore` (number, default `0`)\n  - [ ] `requireName` (boolean, default `false`)\n  - [ ] `tag` (string|null, default `null`) meaning: if non-null, only keep records with that exact tag\n- [ ] Rules (be explicit):\n  - [ ] Convert `score` using `Number(...)`. If result is not finite, treat record score as missing.\n  - [ ] A record passes `minScore` if it has a finite score AND `score >= minScore`.\n  - [ ] If `requireName` is true, keep only records where `name` is a non-empty string after trim.\n  - [ ] If `options.tag` is not null, keep only records where `record.tag === options.tag`.\n\n## Non-functional requirements\n- [ ] No loose equality comparisons for filtering logic\n- [ ] Clear, readable conditions (prefer helper functions)\n\n## Constraints\n- [ ] No external libraries\n\n## Acceptance criteria\n- [ ] A record with score `0` is not dropped if `minScore` is `0`.\n- [ ] A record with `name: \\\"   \\\"` fails `requireName`.\n- [ ] Tag filtering uses strict equality.\n\n## Example data\n\nInput:\n\n```js\nconst records = [\n  { name: \"Ana\", score: \"0\", tag: \"A\" },\n  { name: \"\", score: 10, tag: \"A\" },\n  { name: \"Bob\", score: \"x\", tag: \"B\" },\n  { name: \"Cara\", score: 5, tag: null },\n];\n\nfilterRecords(records, { minScore: 0, requireName: true, tag: \"A\" });\n```\n\nExpected output:\n\n```js\n[{ name: \"Ana\", score: \"0\", tag: \"A\" }]\n```\n\n## Suggested plan (no solution)\n1. Normalize `options` defaults.\n2. Write small helpers: `isNonEmptyString`, `toFiniteNumberOrNull`.\n3. Apply each rule as an explicit boolean check.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `debug` option that returns `{ kept, dropped, reasons }`.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
-              "path": "starter",
-              "kind": "dir"
-            },
-            {
               "path": "README.md",
               "kind": "file",
               "content": "# Record Filter\n\n## Problem context\nYou’re filtering records coming from an API. Some fields are missing (`null`/`undefined`), some are empty strings, and some numeric fields may be `0`. A previous implementation used truthiness checks and silently dropped valid records.\n\n## Goal\nImplement a filter function with **explicit rules** and **strict comparisons** so behavior is predictable.\n\n## Functional requirements\n- [ ] Implement `filterRecords(records, options)` returning a new array.\n- [ ] Each record may contain:\n  - [ ] `name` (string, optional; may be empty)\n  - [ ] `score` (number or string, optional; may be `0`)\n  - [ ] `tag` (string|null|undefined)\n- [ ] `options` supports:\n  - [ ] `minScore` (number, default `0`)\n  - [ ] `requireName` (boolean, default `false`)\n  - [ ] `tag` (string|null, default `null`) meaning: if non-null, only keep records with that exact tag\n- [ ] Rules (be explicit):\n  - [ ] Convert `score` using `Number(...)`. If result is not finite, treat record score as missing.\n  - [ ] A record passes `minScore` if it has a finite score AND `score >= minScore`.\n  - [ ] If `requireName` is true, keep only records where `name` is a non-empty string after trim.\n  - [ ] If `options.tag` is not null, keep only records where `record.tag === options.tag`.\n\n## Non-functional requirements\n- [ ] No loose equality comparisons for filtering logic\n- [ ] Clear, readable conditions (prefer helper functions)\n\n## Constraints\n- [ ] No external libraries\n\n## Acceptance criteria\n- [ ] A record with score `0` is not dropped if `minScore` is `0`.\n- [ ] A record with `name: \\\"   \\\"` fails `requireName`.\n- [ ] Tag filtering uses strict equality.\n\n## Example data\n\nInput:\n\n```js\nconst records = [\n  { name: \"Ana\", score: \"0\", tag: \"A\" },\n  { name: \"\", score: 10, tag: \"A\" },\n  { name: \"Bob\", score: \"x\", tag: \"B\" },\n  { name: \"Cara\", score: 5, tag: null },\n];\n\nfilterRecords(records, { minScore: 0, requireName: true, tag: \"A\" });\n```\n\nExpected output:\n\n```js\n[{ name: \"Ana\", score: \"0\", tag: \"A\" }]\n```\n\n## Suggested plan (no solution)\n1. Normalize `options` defaults.\n2. Write small helpers: `isNonEmptyString`, `toFiniteNumberOrNull`.\n3. Apply each rule as an explicit boolean check.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `debug` option that returns `{ kept, dropped, reasons }`.\n"
+            }
+          ]
+        }
+      ],
+      "quizzes": [
+        {
+          "id": "01-fundamentals-check",
+          "title": "Fundamentals Check",
+          "description": "Truthy/falsy, equality, and basic operators.",
+          "path": "course/01-javascript-fundamentals/quiz/01-fundamentals-check.json",
+          "questions": [
+            {
+              "id": "q1",
+              "prompt": "Which values are **falsy** in JavaScript?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "0, '', null, undefined, NaN, false"
+                },
+                {
+                  "id": "b",
+                  "text": "0, '0', null, undefined, false"
+                },
+                {
+                  "id": "c",
+                  "text": "Only null and undefined"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "The classic falsy set is: false, 0, -0, 0n, '', null, undefined, and NaN. The string '0' is truthy."
+            },
+            {
+              "id": "q2",
+              "prompt": "What is the result of `null == undefined`?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "true"
+                },
+                {
+                  "id": "b",
+                  "text": "false"
+                },
+                {
+                  "id": "c",
+                  "text": "TypeError"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Loose equality treats null and undefined as equal. Strict equality (`===`) would be false."
+            },
+            {
+              "id": "q3",
+              "prompt": "What does `typeof null` return?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "'null'"
+                },
+                {
+                  "id": "b",
+                  "text": "'object'"
+                },
+                {
+                  "id": "c",
+                  "text": "'undefined'"
+                }
+              ],
+              "correctOptionId": "b",
+              "explanation": "This is a long-standing JavaScript quirk: typeof null is 'object'. Prefer `value === null` for null checks."
+            },
+            {
+              "id": "q4",
+              "prompt": "Which expression coerces a value to boolean without changing the original?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "!!value"
+                },
+                {
+                  "id": "b",
+                  "text": "value + 0"
+                },
+                {
+                  "id": "c",
+                  "text": "String(value)"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Double negation (`!!`) converts to boolean. The other options change type or value."
             }
           ]
         }
@@ -166,6 +232,156 @@
             }
           ]
         }
+      ],
+      "quizzes": [
+        {
+          "id": "01-references-check",
+          "title": "References & Copying Check",
+          "description": "Reference vs value, shallow copy pitfalls, and deep copy.",
+          "path": "course/02-objects-references-and-copying/quiz/01-references-check.json",
+          "questions": [
+            {
+              "id": "q1",
+              "prompt": "What prints?\n\n```js\nlet a = 10;\nlet b = a;\nb = 20;\nconsole.log(a, b);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "10 20"
+                },
+                {
+                  "id": "b",
+                  "text": "20 20"
+                },
+                {
+                  "id": "c",
+                  "text": "10 10"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Primitives copy by value. Reassigning `b` does not change `a`."
+            },
+            {
+              "id": "q2",
+              "prompt": "What prints?\n\n```js\nconst a = { n: 10 };\nconst b = a;\nb.n = 20;\nconsole.log(a.n, b.n);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "20 20"
+                },
+                {
+                  "id": "b",
+                  "text": "10 20"
+                },
+                {
+                  "id": "c",
+                  "text": "10 10"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`b = a` creates an alias. Mutating through `b` changes the same object that `a` references."
+            },
+            {
+              "id": "q3",
+              "prompt": "What prints?\n\n```js\nconst user = { name: \"Ana\", address: { city: \"SP\" } };\nconst copy = { ...user };\ncopy.address.city = \"RJ\";\nconsole.log(user.address.city);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "\"RJ\""
+                },
+                {
+                  "id": "b",
+                  "text": "\"SP\""
+                },
+                {
+                  "id": "c",
+                  "text": "undefined"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Object spread is shallow: `copy` is new, but `copy.address` and `user.address` still point to the same nested object."
+            },
+            {
+              "id": "q4",
+              "prompt": "What prints?\n\n```js\nconst a = [{ x: 1 }];\nconst b = [...a];\nb[0].x = 99;\nconsole.log(a[0].x);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "99"
+                },
+                {
+                  "id": "b",
+                  "text": "1"
+                },
+                {
+                  "id": "c",
+                  "text": "undefined"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Array spread is also shallow. The outer array is new, but elements inside are still shared references."
+            },
+            {
+              "id": "q5",
+              "prompt": "What prints?\n\n```js\nconst a = { n: 1 };\nlet b = a;\nb = { n: 999 };\na.n = 2;\nconsole.log(a.n, b.n);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "2 999"
+                },
+                {
+                  "id": "b",
+                  "text": "2 2"
+                },
+                {
+                  "id": "c",
+                  "text": "999 999"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`b = { n: 999 }` is reassignment (new object), not mutation. `a.n = 2` mutates the original object only."
+            },
+            {
+              "id": "q6",
+              "prompt": "After this JSON clone, what is `typeof y.when`?\n\n```js\nconst x = { when: new Date(), n: 1 };\nconst y = JSON.parse(JSON.stringify(x));\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "\"string\""
+                },
+                {
+                  "id": "b",
+                  "text": "\"object\" (still a Date)"
+                },
+                {
+                  "id": "c",
+                  "text": "\"undefined\""
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "JSON serialization turns `Date` into an ISO string. JSON cloning is lossy for many types."
+            },
+            {
+              "id": "q7",
+              "prompt": "What prints?\n\n```js\nconst a = { n: 1n };\ntry {\n  JSON.stringify(a);\n  console.log(\"ok\");\n} catch (e) {\n  console.log(\"error\");\n}\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "error"
+                },
+                {
+                  "id": "b",
+                  "text": "ok"
+                },
+                {
+                  "id": "c",
+                  "text": "undefined"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`JSON.stringify` throws on `BigInt`. That is another reason JSON cloning is not a universal deep-copy solution."
+            }
+          ]
+        }
       ]
     },
     {
@@ -204,14 +420,6 @@
               "readmeMarkdown": "# Output Order Predictor\n\n## Problem context\nYour team keeps getting “mystery” output orders when mixing synchronous code, timers, and promises. You want a repeatable way to practice reasoning about the event loop.\n\n## Goal\nBuild a small program that reads code snippets (predefined) and prints the expected output order, along with a short explanation referencing **call stack**, **microtasks**, and **tasks**.\n\n## Functional requirements\n- [ ] Provide at least 6 predefined snippets (as strings) that include:\n  - [ ] sync logs\n  - [ ] `setTimeout(..., 0)`\n  - [ ] `Promise.resolve().then(...)`\n  - [ ] `async/await` (at least one)\n- [ ] For each snippet, print:\n  - [ ] the snippet name\n  - [ ] the expected output order (one line)\n  - [ ] a 3–6 line explanation of *why* (microtasks vs tasks)\n- [ ] Include one “trick” snippet that demonstrates microtasks running before timers.\n\n## Non-functional requirements\n- [ ] Readable structure (helpers like `explain(snippet)` are encouraged)\n- [ ] Explanations must use consistent vocabulary: call stack, microtask queue, task queue\n\n## Constraints\n- [ ] No external libraries\n- [ ] Do not execute the snippets with `eval` (this is reasoning practice)\n\n## Acceptance criteria\n- [ ] At least one snippet includes both microtasks and timers and is explained correctly.\n- [ ] The output order is deterministic and matches the event loop model taught in the module.\n\n## Example data\nSnippet:\n\n```js\nconsole.log(\"A\");\nPromise.resolve().then(() => console.log(\"micro\"));\nsetTimeout(() => console.log(\"timer\"), 0);\nconsole.log(\"B\");\n```\n\nExpected order:\n- `A B micro timer`\n\n## Suggested plan (no solution)\n1. Write down the rule: run sync → drain microtasks → run one task.\n2. For each snippet, mark each log as sync/microtask/task.\n3. Assemble the final order and explanation.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a “quiz mode” that hides the answer until the user presses Enter.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
-              "path": "starter",
-              "kind": "dir"
-            },
-            {
               "path": "README.md",
               "kind": "file",
               "content": "# Output Order Predictor\n\n## Problem context\nYour team keeps getting “mystery” output orders when mixing synchronous code, timers, and promises. You want a repeatable way to practice reasoning about the event loop.\n\n## Goal\nBuild a small program that reads code snippets (predefined) and prints the expected output order, along with a short explanation referencing **call stack**, **microtasks**, and **tasks**.\n\n## Functional requirements\n- [ ] Provide at least 6 predefined snippets (as strings) that include:\n  - [ ] sync logs\n  - [ ] `setTimeout(..., 0)`\n  - [ ] `Promise.resolve().then(...)`\n  - [ ] `async/await` (at least one)\n- [ ] For each snippet, print:\n  - [ ] the snippet name\n  - [ ] the expected output order (one line)\n  - [ ] a 3–6 line explanation of *why* (microtasks vs tasks)\n- [ ] Include one “trick” snippet that demonstrates microtasks running before timers.\n\n## Non-functional requirements\n- [ ] Readable structure (helpers like `explain(snippet)` are encouraged)\n- [ ] Explanations must use consistent vocabulary: call stack, microtask queue, task queue\n\n## Constraints\n- [ ] No external libraries\n- [ ] Do not execute the snippets with `eval` (this is reasoning practice)\n\n## Acceptance criteria\n- [ ] At least one snippet includes both microtasks and timers and is explained correctly.\n- [ ] The output order is deterministic and matches the event loop model taught in the module.\n\n## Example data\nSnippet:\n\n```js\nconsole.log(\"A\");\nPromise.resolve().then(() => console.log(\"micro\"));\nsetTimeout(() => console.log(\"timer\"), 0);\nconsole.log(\"B\");\n```\n\nExpected order:\n- `A B micro timer`\n\n## Suggested plan (no solution)\n1. Write down the rule: run sync → drain microtasks → run one task.\n2. For each snippet, mark each log as sync/microtask/task.\n3. Assemble the final order and explanation.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a “quiz mode” that hides the answer until the user presses Enter.\n"
@@ -229,14 +437,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Retry With Backoff\n\n## Problem context\nYour application calls an unreliable API. Sometimes it fails due to transient errors. You want retries, but you also want to avoid hammering the server.\n\n## Goal\nImplement a `retry` utility that retries an async function with **exponential backoff** and clear error rules.\n\n## Functional requirements\n- [ ] Implement `retry(fn, options)` where:\n  - [ ] `fn` is a function returning a promise\n  - [ ] `options.retries` (default `3`)\n  - [ ] `options.baseDelayMs` (default `100`)\n  - [ ] `options.factor` (default `2`)\n  - [ ] `options.shouldRetry(error)` (optional predicate)\n- [ ] Behavior:\n  - [ ] Call `fn` until it succeeds OR retries are exhausted.\n  - [ ] Between attempts, wait `baseDelayMs * factor^(attempt-1)` milliseconds.\n  - [ ] If `shouldRetry` returns false, fail immediately.\n- [ ] Return the successful value, or throw the last error.\n\n## Non-functional requirements\n- [ ] Readable implementation (small helpers like `sleep(ms)` allowed)\n- [ ] Deterministic tests/examples (use predictable fake failures)\n\n## Constraints\n- [ ] No external libraries\n\n## Acceptance criteria\n- [ ] Retries happen with increasing delay.\n- [ ] `shouldRetry` can stop retries early.\n- [ ] Errors propagate correctly when retries are exhausted.\n\n## Example data\n\n```js\nlet count = 0;\nconst fn = async () => {\n  count++;\n  if (count < 3) throw new Error(\"temporary\");\n  return \"ok\";\n};\n\nconst result = await retry(fn, { retries: 5, baseDelayMs: 10 });\nconsole.log(result); // ok\n```\n\n## Suggested plan (no solution)\n1. Define `sleep(ms)` returning a promise.\n2. Loop attempts, using `try/catch` around `await fn()`.\n3. Decide when to stop (retries exhausted or `shouldRetry` false).\n4. Await the computed delay before the next attempt.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add jitter to the delay.\n- [ ] Add a max delay cap.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
-              "path": "starter",
-              "kind": "dir"
             },
             {
               "path": "README.md",
@@ -258,17 +458,99 @@
               "readmeMarkdown": "# Concurrency Limiter\n\n## Problem context\nYou have many async tasks (e.g. HTTP requests). Running them all at once may overload the server or hit rate limits. You need **bounded concurrency**: only N tasks in flight at a time.\n\n## Goal\nImplement a concurrency limiter that schedules promise-returning functions with a maximum number of in-flight operations.\n\n## Functional requirements\n- [ ] Implement `createLimiter(limit)` that returns a function `run(taskFn)`.\n  - [ ] `limit` is a positive integer.\n  - [ ] `taskFn` is `() => Promise<T>`.\n- [ ] Behavior:\n  - [ ] At most `limit` tasks are running concurrently.\n  - [ ] Tasks beyond the limit wait in a queue.\n  - [ ] `run(taskFn)` returns a promise that resolves/rejects with the same result as `taskFn`.\n- [ ] Provide a demo that schedules at least 10 tasks with `limit = 2` and logs when tasks start/end.\n\n## Non-functional requirements\n- [ ] Clear invariants (documented via variable naming and structure)\n- [ ] No starvation: tasks should start in FIFO order\n\n## Constraints\n- [ ] No external libraries\n\n## Acceptance criteria\n- [ ] Concurrency never exceeds the limit (even under rejections).\n- [ ] Rejections propagate to the caller of `run(taskFn)`.\n- [ ] Queue continues working after a rejection (does not get stuck).\n\n## Example data\n\n```js\nconst limit = createLimiter(2);\n\nconst tasks = Array.from({ length: 5 }, (_, i) => () => new Promise((res) => {\n  setTimeout(() => res(i), 50);\n}));\n\nconst results = await Promise.all(tasks.map(t => limit(t)));\nconsole.log(results); // [0,1,2,3,4]\n```\n\n## Suggested plan (no solution)\n1. Track `activeCount` and a queue of pending resolvers.\n2. When a task finishes, decrement `activeCount` and start the next queued task.\n3. Ensure the “start next” step runs in `finally` so failures don’t freeze the queue.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `onStart/onFinish` hooks for instrumentation.\n- [ ] Add cancellation support using `AbortController`.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
-              "path": "starter",
-              "kind": "dir"
-            },
-            {
               "path": "README.md",
               "kind": "file",
               "content": "# Concurrency Limiter\n\n## Problem context\nYou have many async tasks (e.g. HTTP requests). Running them all at once may overload the server or hit rate limits. You need **bounded concurrency**: only N tasks in flight at a time.\n\n## Goal\nImplement a concurrency limiter that schedules promise-returning functions with a maximum number of in-flight operations.\n\n## Functional requirements\n- [ ] Implement `createLimiter(limit)` that returns a function `run(taskFn)`.\n  - [ ] `limit` is a positive integer.\n  - [ ] `taskFn` is `() => Promise<T>`.\n- [ ] Behavior:\n  - [ ] At most `limit` tasks are running concurrently.\n  - [ ] Tasks beyond the limit wait in a queue.\n  - [ ] `run(taskFn)` returns a promise that resolves/rejects with the same result as `taskFn`.\n- [ ] Provide a demo that schedules at least 10 tasks with `limit = 2` and logs when tasks start/end.\n\n## Non-functional requirements\n- [ ] Clear invariants (documented via variable naming and structure)\n- [ ] No starvation: tasks should start in FIFO order\n\n## Constraints\n- [ ] No external libraries\n\n## Acceptance criteria\n- [ ] Concurrency never exceeds the limit (even under rejections).\n- [ ] Rejections propagate to the caller of `run(taskFn)`.\n- [ ] Queue continues working after a rejection (does not get stuck).\n\n## Example data\n\n```js\nconst limit = createLimiter(2);\n\nconst tasks = Array.from({ length: 5 }, (_, i) => () => new Promise((res) => {\n  setTimeout(() => res(i), 50);\n}));\n\nconst results = await Promise.all(tasks.map(t => limit(t)));\nconsole.log(results); // [0,1,2,3,4]\n```\n\n## Suggested plan (no solution)\n1. Track `activeCount` and a queue of pending resolvers.\n2. When a task finishes, decrement `activeCount` and start the next queued task.\n3. Ensure the “start next” step runs in `finally` so failures don’t freeze the queue.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `onStart/onFinish` hooks for instrumentation.\n- [ ] Add cancellation support using `AbortController`.\n"
+            }
+          ]
+        }
+      ],
+      "quizzes": [
+        {
+          "id": "01-async-check",
+          "title": "Async & Event Loop Check",
+          "description": "Sync vs async, microtasks, promises, and async/await.",
+          "path": "course/03-asynchronous-javascript-runtime-model-event-loop/quiz/01-async-check.json",
+          "questions": [
+            {
+              "id": "q1",
+              "prompt": "Which queue runs **before** the next macrotask after the call stack is empty?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "Microtask queue (e.g. promise callbacks)"
+                },
+                {
+                  "id": "b",
+                  "text": "Macrotask queue (e.g. setTimeout)"
+                },
+                {
+                  "id": "c",
+                  "text": "Render queue always runs first"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "After synchronous code, the engine drains the microtask queue completely before taking the next macrotask."
+            },
+            {
+              "id": "q2",
+              "prompt": "What does `await` do inside an async function?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "Pauses that function and resumes when the promise settles"
+                },
+                {
+                  "id": "b",
+                  "text": "Blocks the entire JavaScript thread globally"
+                },
+                {
+                  "id": "c",
+                  "text": "Always runs the awaited code on a worker thread"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "await suspends the async function, not the whole runtime. Other tasks can still run via the event loop."
+            },
+            {
+              "id": "q3",
+              "prompt": "A rejected promise without `.catch()` or try/catch around await becomes…",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "An unhandled rejection (and should be handled in production code)"
+                },
+                {
+                  "id": "b",
+                  "text": "Silently ignored always"
+                },
+                {
+                  "id": "c",
+                  "text": "Automatically retried by the engine"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Unhandled rejections are a common production bug. Always handle errors on async boundaries."
+            },
+            {
+              "id": "q4",
+              "prompt": "`setTimeout(fn, 0)` schedules `fn` as a…",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "Macrotask (timer task)"
+                },
+                {
+                  "id": "b",
+                  "text": "Microtask"
+                },
+                {
+                  "id": "c",
+                  "text": "Synchronous callback after current line"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Even with 0ms delay, setTimeout callbacks are macrotasks and run after microtasks."
             }
           ]
         }

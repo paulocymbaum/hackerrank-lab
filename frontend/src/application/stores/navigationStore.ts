@@ -1,8 +1,6 @@
 import { create } from "zustand";
-
-export type Route =
-  | { name: "catalog" }
-  | { name: "course"; courseId: string };
+import type { Route } from "../../domain/types/navigation";
+import { closeReaderBeforeNavigate } from "../usecases/navigateWithCleanup";
 
 type NavigationState = {
   route: Route;
@@ -12,7 +10,12 @@ type NavigationState = {
 
 export const useNavigationStore = create<NavigationState>((set) => ({
   route: { name: "catalog" },
-  goCatalog: () => set({ route: { name: "catalog" } }),
-  goCourse: (courseId) => set({ route: { name: "course", courseId } }),
+  goCatalog: () => {
+    closeReaderBeforeNavigate();
+    set({ route: { name: "catalog" } });
+  },
+  goCourse: (courseId) => {
+    closeReaderBeforeNavigate();
+    set({ route: { name: "course", courseId } });
+  },
 }));
-

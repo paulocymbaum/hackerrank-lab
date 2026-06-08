@@ -1,176 +1,166 @@
 # Design (Apple-like, tinted glass UI)
 
-This frontend aims for an **Apple-like UI**: calm typography, strong hierarchy, generous whitespace, subtle depth, and **tinted “colored glass” surfaces** that stay readable (not “clear glassmorphism” where content behind harms contrast).
+Calm typography, strong hierarchy, generous whitespace, and **tinted glass surfaces** with stable contrast (not clear glassmorphism).
 
 ## Design goals
-- **Clarity first**: content is primary; decoration is secondary.
-- **Soft depth**: layered surfaces with subtle blur + shadow, not heavy skeuomorphism.
-- **High legibility**: tinted glass panels with stable contrast in light/dark.
-- **Fast scanning**: consistent spacing, section headers, and progressive disclosure (accordions).
+- **Clarity first**: content is primary.
+- **Soft depth**: tinted fill + blur + hairline borders.
+- **High legibility**: opaque enough panels for WCAG-friendly contrast.
+- **Fast scanning**: consistent spacing and progressive disclosure.
 
-## UX choices for the web interface
-- **Information architecture**
-  - Left-to-right reading with a single primary column (max width).
-  - Course list as **accordion**: “overview first, details on demand”.
-- **Navigation**
-  - Start simple: one screen (Catalog).
-  - Add later: course detail view, lesson reader, search.
-- **Interaction patterns**
-  - Large hit targets (minimum 44px).
-  - Visible focus rings and keyboard navigation.
-  - Motion is optional and subtle (short, low-distance transitions).
-- **Accessibility**
-  - Maintain WCAG-friendly contrast on all surfaces.
-  - Prefer `prefers-reduced-motion` safe animations.
+## Information architecture
 
----
+- **Catalog**: card grid per module (title, example/project/quiz counts, “See course”). Cards are fully clickable for faster entry.
+- **Course**: README / Examples / Projects / **Quiz** tabs (Radix Tabs, URL-synced via `?tab=`).
+- **Reader**: overlay dialog (Radix Dialog) with Explanation / Folders (projects only) / Files.
+- **Quiz**: list → session (`?tab=quiz&quiz=:id`) → results; progress stored in localStorage.
 
-## Visual language: “Colored glass” (not clear glass)
+## Interaction
+- Hit targets **≥ 44px** on primary controls (`Button` md, tab triggers).
+- Visible focus rings; keyboard: Escape closes reader; skip link in shell.
+- Motion respects `prefers-reduced-motion`.
 
-**Rule**: glass panels must be **tinted and sufficiently opaque** so text is readable regardless of what’s behind.
+## Visual language: colored glass
 
-Recommended surface recipe:
-- **Background**: soft gradient “wallpaper” layer (low frequency, no high-contrast noise).
-- **Panels**: tinted fill + blur + hairline border + soft shadow.
-- **Controls**: slightly more opaque than panels; clear hover/pressed states.
-
-Guidance:
-- Use blur as a **secondary** effect; tint/opacity does the heavy lifting for readability.
-- Prefer **one** accent color per surface family (e.g., indigo/cyan) rather than rainbow gradients.
+- **Background**: soft indigo gradient wallpaper (`foundation/base.css`, pseudo-element — no `background-attachment: fixed` on mobile).
+- **Panels**: `--surface-panel` (tinted fill + blur + border + shadow).
+- **Controls**: `--surface-control` (more opaque than panels).
+- **Feedback** (quiz): dedicated success/danger tints — never raw `#10b981` / `#e11d48` fills at full opacity on glass.
 
 ---
 
 ## Design tokens
 
-Tokens are listed as **CSS custom properties** for portability (works with plain CSS, Tailwind, or any CSS-in-JS).
+CSS custom properties live under `presentation/design-system/tokens/`:
 
-### Color (semantic-first)
-Light mode (example values):
-- `--bg-0`: `#0B1020` (deep “wallpaper” base when using dark-first backgrounds) **or** `#F5F6F8` for light-first.
-- `--text-0`: `#0B1220`
-- `--text-1`: `#3B4457`
-- `--border-0`: `rgba(255,255,255,0.35)` (hairline)
-- `--shadow-ink`: `rgba(8, 12, 20, 0.18)`
-- `--glass-tint`: `rgba(99, 102, 241, 0.18)` (indigo tint)
-- `--glass-fill`: `rgba(255, 255, 255, 0.55)` (panel base opacity)
-- `--glass-fill-strong`: `rgba(255, 255, 255, 0.72)` (controls)
-- `--accent-0`: `#6366F1` (indigo)
-- `--accent-1`: `#22D3EE` (cyan highlight, sparingly)
-- `--danger-0`: `#E11D48`
-- `--success-0`: `#10B981`
+| File | Contents |
+|------|----------|
+| `colors.css` | `--bg-0`, `--text-*`, `--accent-*`, glass fills, **feedback palette** |
+| `typography.css` | `--fs-0`…`--fs-4`, line heights, font stack |
+| `spacing.css` | `--space-1`…`--space-6` |
+| `radius.css` | `--r-1`, `--r-2`, `--r-pill` |
+| `effects.css` | blur, shadows |
+| `semantic.css` | surfaces + **quiz feedback aliases** |
 
-Dark mode: keep text bright and **increase panel opacity slightly**:
-- `--text-0`: `rgba(255,255,255,0.92)`
-- `--text-1`: `rgba(255,255,255,0.72)`
-- `--glass-fill`: `rgba(12, 16, 28, 0.62)`
-- `--glass-fill-strong`: `rgba(12, 16, 28, 0.78)`
-- `--border-0`: `rgba(255,255,255,0.14)`
+### Feedback tokens (quiz + status)
 
-### Typography
-- **Font stack** (Apple-like, no licensing issues):
-  - `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Inter, Roboto, Arial, sans-serif`
-- **Sizes**
-  - `--fs-0`: 12px (meta)
-  - `--fs-1`: 14px (body)
-  - `--fs-2`: 16px (body+)
-  - `--fs-3`: 18px (section)
-  - `--fs-4`: 22px (page title)
-- **Line heights**
-  - `--lh-tight`: 1.25
-  - `--lh-body`: 1.5
+Base colors in `colors.css` (per theme):
 
-### Spacing
-Use an 8px base scale:
-- `--space-1`: 4px
-- `--space-2`: 8px
-- `--space-3`: 12px
-- `--space-4`: 16px
-- `--space-5`: 24px
-- `--space-6`: 32px
+| Token | Purpose |
+|-------|---------|
+| `--success-border` | Hairline on correct option / success panel |
+| `--success-fill` | Tinted glass background (correct) |
+| `--success-text` | Headline / label on success surfaces |
+| `--success-icon` | Check icon accent |
+| `--danger-border` | Hairline on wrong selection |
+| `--danger-fill` | Tinted glass background (incorrect) |
+| `--danger-text` | Headline / label on error surfaces |
+| `--danger-icon` | X icon accent |
+| `--neutral-muted-fill` | Unselected options after check |
 
-### Radius
-Apple-like rounding: moderate, consistent.
-- `--r-1`: 10px (cards/panels)
-- `--r-2`: 14px (modals/sheets)
-- `--r-pill`: 999px (chips)
+Semantic aliases in `semantic.css`:
 
-### Blur
-Tinted blur (avoid extreme blur values):
-- `--blur-1`: 10px
-- `--blur-2`: 16px
+| Alias | Maps to |
+|-------|---------|
+| `--surface-success` | `--success-fill` |
+| `--surface-danger` | `--danger-fill` |
+| `--surface-muted` | `--neutral-muted-fill` |
+| `--border-success` | `--success-border` |
+| `--border-danger` | `--danger-border` |
+| `--text-on-success` | `--success-text` |
+| `--text-on-danger` | `--danger-text` |
 
-### Shadows
-Soft, wide, low-opacity.
-- `--shadow-1`: `0 10px 30px rgba(8,12,20,0.18)`
-- `--shadow-2`: `0 16px 50px rgba(8,12,20,0.22)`
-
-### Borders / hairlines
-- 1px hairline with subtle alpha; avoid thick outlines.
-- Hover uses slightly stronger border alpha rather than changing layout.
+Tailwind utilities: `bg-successFill`, `border-successBorder`, `text-successText`, `text-successIcon`, and the matching `danger*` set. **Use these in quiz UI** — not `bg-success0/10` or ad-hoc opacity on `--success-0`.
 
 ---
 
-## Core components (and how they should feel)
+## Quiz feedback (correct / incorrect)
 
-### Layout
-- **Page container**: max-width 900–1024px, centered.
-- **Section headings**: small, calm, consistent spacing above/below.
+Feedback appears **after** the student clicks **Check answer**. Color carries meaning; icons reinforce state for color-blind users.
 
-### Surfaces
-- `Card / Panel`: tinted glass with hairline border + shadow.
-- `Toolbar`: stronger fill, sticky optional later.
+### Option states
 
-### Controls
-- `Button`: subtle gradient optional; clear hover/pressed; focus ring.
-- `Input`: strong fill; placeholder de-emphasized.
-- `Accordion`: summary row is the “button”; chevron on the right; smooth open/close optional.
+| State | When | Border | Fill | Badge | Notes |
+|-------|------|--------|------|-------|-------|
+| **Default** | Before check, not selected | `--border-0` | `--surface-panel` | Option letter (`a`, `b`, …) | Hover: slight brightness |
+| **Selected** | Before check, picked | `--accent-0` @ 50% | `--surface-control` | Letter | Primary focus ring |
+| **Correct** | After check | `--border-success` | `--surface-success` | ✓ (Lucide `CheckCircle2`) | Always shown on the right answer |
+| **Incorrect** | After check, wrong pick | `--border-danger` | `--surface-danger` | ✗ (Lucide `XCircle`) | Only the student’s wrong choice |
+| **Muted** | After check, other options | `--border-0` | `--surface-muted` | Letter, reduced opacity | Not distracting |
 
-### States
-- `Loading`: lightweight skeletons or single-line “Loading…”.
-- `Empty`: friendly empty-state copy with next step.
-- `Error`: compact error panel (no huge stack traces by default).
+Rules:
+- On a **wrong** answer, highlight **both** the incorrect selection and the **correct** option (student sees the right answer).
+- Do not animate option colors; keep transitions subtle (`prefers-reduced-motion` safe).
+- Explanation block mirrors outcome: success tint + “Correct” or danger tint + “Not quite — review the explanation”.
+
+### Explanation panel
+
+| Outcome | Classes (Tailwind) | Copy |
+|---------|-------------------|------|
+| Correct | `border-successBorder bg-successFill`, `text-successText` | “Correct” |
+| Incorrect | `border-dangerBorder bg-dangerFill`, `text-dangerText` | “Not quite — review the explanation” |
+
+Body text inside the panel uses normal `MarkdownView` styling (`text-text0` on tinted fill).
+
+### Results screen (end of quiz)
+
+Score tier drives panel tint (not binary pass/fail only):
+
+| Score | Tier | Panel treatment |
+|-------|------|-----------------|
+| ≥ 80% | Success | `--surface-success` / `--border-success`, trophy icon `--icon-success` |
+| 50–79% | Neutral | `--surface-panel`, accent icon |
+| &lt; 50% | Danger | `--surface-danger` / `--border-danger`, trophy icon `--icon-danger` |
 
 ---
 
-## Recommended libraries (when you choose to integrate)
+## Design system layout
 
-You can keep the current hand-rolled UI, but when you want consistency + accessibility:
+```text
+design-system/
+  tokens/           # CSS variables
+  foundation/       # base.css (body, wallpaper, focus)
+  components/       # Button, Card, Accordion, Tabs, Dialog, Icon
+  patterns/         # LoadingState, EmptyState, ErrorPanel
+  index.ts          # barrel exports
+  index.css         # entry (imported once in main.tsx)
+```
 
-- **Component primitives**: Radix UI (`@radix-ui/react-*`)
-  - Best-in-class accessibility primitives (dialog, dropdown, accordion, etc.)
-- **Styling**
-  - **Option A**: Tailwind CSS (fast iteration, token mapping via `theme.extend`)
-  - **Option B**: CSS variables + vanilla CSS (simple, explicit)
-- **Utility**: `clsx` (conditional class names) if using utility classes
-- **Animation** (optional): Framer Motion (keep transitions subtle)
+Rules:
+- Design system components are **stateless** (props only).
+- Use **Lucide** icons via `Icon` wrapper.
+- **Radix UI** for Dialog and Tabs (accessibility).
 
 ---
 
-## Icon library
+## Core components
 
-Preferred:
-- **Lucide** (`lucide-react`): clean, consistent stroke icons.
+| Component | Role |
+|-----------|------|
+| `Card` | Tinted glass panel |
+| `Button` | primary / secondary / ghost; sm (36px) for dense UI, md (44px) default |
+| `Tabs` | Course and reader tab bars |
+| `Dialog` | Content reader overlay |
+| `Accordion` | Progressive disclosure inside courses (optional grouping) |
+| `LoadingState` | Skeleton + calm copy |
+| `EmptyState` | Friendly empty + optional CTA |
+| `ErrorPanel` | Compact error + retry (`text-danger0` for system errors, not quiz answers) |
 
-Alternatives:
-- **Heroicons**: good set, slightly different visual voice.
-- Avoid bundling Apple SF Symbols directly unless you’re sure your usage/licensing matches your distribution needs; for a web app, Lucide is the simplest.
+Quiz-specific UI lives in `features/quiz/` and **must** use feedback tokens above.
 
 ---
 
 ## Public assets
 
-- **Favicon/app icons**
-  - `public/favicon.svg` (simple mark)
-  - `public/apple-touch-icon.png`
-  - `public/site.webmanifest`
-- **Background**
-  - Subtle gradient background in CSS (preferred) instead of heavy images.
-  - If using images, keep them low-contrast and optimized (webp/avif).
+- `public/favicon.svg`
+- `public/site.webmanifest`
 
 ---
 
-## Implementation notes (to keep the look consistent)
-- Prefer **semantic tokens** (e.g., `--surface-panel`) over raw colors in components.
-- One component = one surface style; do not invent new shadows/radii per component.
-- Keep microcopy short and calm (“Loading catalog…”, “No lessons yet.”).
+## Implementation notes
+- Prefer semantic tokens (`surface-panel`, `surface-success`) over raw colors in components.
+- One accent family (indigo) on wallpaper; cyan only as link/highlight in markdown.
+- **Quiz success/danger** use the feedback token set — separate from `ErrorPanel` (load failures) and `danger0` text in alerts.
+- Microcopy: short and calm (“Loading catalog…”, “Pick a file to preview.”).
 
+See [`ARCHITECTURE-FRONT.md`](./ARCHITECTURE-FRONT.md) for navigation flows.

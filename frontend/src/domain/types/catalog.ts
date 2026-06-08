@@ -1,3 +1,5 @@
+import type { Quiz } from "./quiz";
+
 export type Catalog = {
   courses: Course[];
 };
@@ -9,6 +11,7 @@ export type Course = {
   readmeMarkdown: string;
   lessons: Lesson[];
   projects: Project[];
+  quizzes: Quiz[];
 };
 
 export type Lesson = {

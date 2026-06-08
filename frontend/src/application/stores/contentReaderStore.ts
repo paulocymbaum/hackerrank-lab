@@ -1,29 +1,5 @@
 import { create } from "zustand";
-
-export type ReaderItemKind = "lesson" | "project";
-
-export type ReaderTab = "folders" | "explanation" | "files";
-
-export type ReaderEntry = {
-  /** Path relative to the item's root ("" means root dir). */
-  path: string;
-  kind: "dir" | "file";
-  readmeMarkdown?: string;
-  content?: string;
-};
-
-export type ReaderItem = {
-  kind: ReaderItemKind;
-  title: string;
-  /** For lessons: markdown file path. For projects: root README path. */
-  path: string;
-  /** The top-level README / lesson markdown. */
-  markdown: string;
-  /** For projects: root folder path. For lessons: same as dirname(path). */
-  rootPath?: string;
-  /** For projects: folder/file manifest. For lessons: optional single-file manifest. */
-  entries?: ReaderEntry[];
-};
+import type { ReaderItem, ReaderTab } from "../../domain/types/reader";
 
 type ContentReaderState = {
   isOpen: boolean;
@@ -31,7 +7,7 @@ type ContentReaderState = {
   tab: ReaderTab;
   cwd: string;
   selectedFilePath: string | null;
-  open: (item: ReaderItem) => void;
+  open: (item: ReaderItem, options?: { tab?: ReaderTab }) => void;
   close: () => void;
   setTab: (tab: ReaderTab) => void;
   setCwd: (cwd: string) => void;
@@ -44,11 +20,11 @@ export const useContentReaderStore = create<ContentReaderState>((set) => ({
   tab: "explanation",
   cwd: "",
   selectedFilePath: null,
-  open: (item) =>
+  open: (item, options) =>
     set({
       isOpen: true,
       item,
-      tab: "explanation",
+      tab: options?.tab ?? "explanation",
       cwd: "",
       selectedFilePath: null,
     }),
@@ -61,7 +37,6 @@ export const useContentReaderStore = create<ContentReaderState>((set) => ({
       selectedFilePath: null,
     }),
   setTab: (tab) => set({ tab }),
-  setCwd: (cwd) => set({ cwd }),
+  setCwd: (cwd) => set({ cwd, selectedFilePath: null }),
   selectFile: (filePath) => set({ selectedFilePath: filePath, tab: "files" }),
 }));
-
