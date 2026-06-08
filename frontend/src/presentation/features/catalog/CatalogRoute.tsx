@@ -46,7 +46,9 @@ export function CatalogRoute() {
             totalPoints={catalogPoints.totalPoints}
             totalMax={catalogPoints.totalMax}
             quizPoints={catalogPoints.quizPoints}
+            quizMax={catalogPoints.quizMax}
             projectPoints={catalogPoints.projectPoints}
+            projectMax={catalogPoints.projectMax}
           />
           <div className="flex items-center gap-2 text-meta text-text1">
             <Icon icon={BookOpenText} />

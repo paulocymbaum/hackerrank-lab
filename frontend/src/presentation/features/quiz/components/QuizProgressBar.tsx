@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { ProgressBar } from "../../../design-system";
 
 export function QuizProgressBar(props: {
   current: number;
@@ -15,18 +16,12 @@ export function QuizProgressBar(props: {
         </span>
         <span>{pct}%</span>
       </div>
-      <div
-        className="h-2 overflow-hidden rounded-pill border border-border0 bg-surfacePanel"
-        role="progressbar"
-        aria-valuenow={props.current + 1}
-        aria-valuemin={1}
-        aria-valuemax={props.total}
-      >
-        <div
-          className="h-full rounded-pill bg-accent0 transition-[width]"
-          style={{ width: `${pct}%` }}
-        />
-      </div>
+      <ProgressBar
+        value={props.current + 1}
+        max={props.total}
+        size="md"
+        aria-label={`Question ${Math.min(props.current + 1, props.total)} of ${props.total}`}
+      />
     </div>
   );
 }

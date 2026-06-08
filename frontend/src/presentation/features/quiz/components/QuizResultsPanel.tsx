@@ -3,6 +3,7 @@ import { Trophy, RotateCcw } from "lucide-react";
 import type { QuizAttempt } from "../../../../domain/types/quiz";
 import type { CoursePointsWithMax } from "../../../../domain/types/quizScore";
 import { Card, Button, Icon } from "../../../design-system";
+import { ScoreProgressRow } from "../../../shared/score";
 
 function scoreTier(pct: number): "success" | "neutral" | "danger" {
   if (pct >= 80) return "success";
@@ -63,20 +64,18 @@ export function QuizResultsPanel(props: {
           </div>
         </div>
 
-        <div className="mt-4 rounded-panel border border-border0 bg-surfaceControl px-3 py-2 text-meta text-text1">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <span>Course score</span>
-            <span className="font-semibold text-text0">
-              {props.coursePoints.totalPoints}
-              {props.coursePoints.totalMax > 0 ? ` / ${props.coursePoints.totalMax}` : ""} pts
-            </span>
-          </div>
+        <div className="mt-4 rounded-panel border border-border0 bg-surfaceControl px-3 py-2">
+          <ScoreProgressRow
+            label="Course score"
+            metric={{ value: props.coursePoints.totalPoints, max: props.coursePoints.totalMax }}
+            size="xs"
+          />
           {props.quizPointsDelta > 0 ? (
-            <p className="m-0 mt-1 text-successText">
+            <p className="m-0 mt-2 text-meta text-successText">
               +{props.quizPointsDelta} quiz pts added to your course total
             </p>
           ) : (
-            <p className="m-0 mt-1">
+            <p className="m-0 mt-2 text-meta text-text1">
               Your quiz total did not change — beat your previous best to earn more points.
             </p>
           )}

@@ -11,6 +11,9 @@ export default {
         border0: "var(--border-0)",
         accent0: "var(--accent-0)",
         accent1: "var(--accent-1)",
+        accentFill: "var(--accent-fill)",
+        accentFillHover: "var(--accent-fill-hover)",
+        textOnAccent: "var(--text-on-accent)",
         danger0: "var(--danger-0)",
         success0: "var(--success-0)",
         successBorder: "var(--border-success)",
@@ -29,6 +32,7 @@ export default {
         surfacePanel: "var(--surface-panel)",
         surfaceControl: "var(--surface-control)",
         surfaceModal: "var(--surface-modal)",
+        surfaceAccent: "var(--surface-accent)",
       },
       fontSize: {
         meta: ["var(--fs-0)", { lineHeight: "var(--lh-body)" }],
