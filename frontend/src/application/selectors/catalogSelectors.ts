@@ -23,6 +23,7 @@ export function projectToReaderItem(project: Project): ReaderItem {
     path: project.readmePath,
     markdown: project.readmeMarkdown,
     rootPath: project.rootPath,
+    projectId: project.id,
     entries: project.entries,
   };
 }

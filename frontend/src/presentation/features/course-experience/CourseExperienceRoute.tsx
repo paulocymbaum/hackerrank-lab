@@ -14,8 +14,10 @@ import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
 import { useCourseExperienceStore } from "../../../application/stores/courseExperienceStore";
 import { useContentReaderStore } from "../../../application/stores/contentReaderStore";
 import { useQuizSessionStore, useQuizProgressStore } from "../../../application/stores/quizSessionStore";
+import { loadCourseScores } from "../../../application/usecases/courseScores";
 import { Button, ErrorPanel, Icon, LoadingState } from "../../design-system";
 import { CourseTabBar } from "./components/CourseTabBar";
+import { CourseScoreSummary } from "./components/CourseScoreSummary";
 import { CourseReadmePanel } from "./components/CourseReadmePanel";
 import { LessonList } from "./components/LessonList";
 import { ProjectList } from "./components/ProjectList";
@@ -38,6 +40,11 @@ export function CourseExperienceRoute() {
   useEffect(() => {
     if (status === "idle") void load();
   }, [status, load]);
+
+  useEffect(() => {
+    if (!courseId || status !== "ready") return;
+    void loadCourseScores(courseId);
+  }, [courseId, status]);
 
   useEffect(() => {
     const readerPath = searchParams.get("reader");
@@ -114,6 +121,8 @@ export function CourseExperienceRoute() {
         <CourseTabBar value={tab} onValueChange={(next) => setTab(courseId, next)} />
       </div>
 
+      <CourseScoreSummary courseId={courseId} course={course} variant="compact" />
+
       {tab === "readme" ? <CourseReadmePanel course={course} /> : null}
       {tab === "examples" ? (
         <LessonList
@@ -123,6 +132,7 @@ export function CourseExperienceRoute() {
       ) : null}
       {tab === "projects" ? (
         <ProjectList
+          courseId={courseId}
           projects={course.projects}
           onOpenProject={(project) =>
             openReader(courseId, projectToReaderItem(project), "projects")
@@ -133,6 +143,7 @@ export function CourseExperienceRoute() {
         activeQuiz ? (
           <QuizSessionPanel
             courseId={courseId}
+            course={course}
             quiz={activeQuiz}
             onBackToList={closeQuiz}
           />

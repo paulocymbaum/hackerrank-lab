@@ -39,10 +39,12 @@ export function QuizList(props: {
                       <span>{quiz.questions.length} questions</span>
                       {progress ? (
                         <span>
-                          Best: {progress.bestScore}/{progress.bestTotal}
+                          Best: {progress.bestScore}/{progress.bestTotal} pts
                           {progress.attempts > 1 ? ` · ${progress.attempts} attempts` : ""}
                         </span>
-                      ) : null}
+                      ) : (
+                        <span>Up to {quiz.questions.length} pts</span>
+                      )}
                     </div>
                   </div>
                   <Button variant="secondary" size="md" onClick={() => props.onStart(quiz)}>

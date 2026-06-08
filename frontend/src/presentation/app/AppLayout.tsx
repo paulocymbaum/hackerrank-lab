@@ -1,6 +1,7 @@
 import { Outlet, useParams, useSearchParams, useLocation } from "react-router-dom";
 import { useMemo } from "react";
 import { ContentReaderDialog } from "../features/content-reader/ContentReaderDialog";
+import { CourseScoreBadge } from "../features/course-experience/components/CourseScoreSummary";
 import { AppShell } from "../features/shell/AppShell";
 import { Breadcrumb } from "../shared/Breadcrumb";
 import { useCatalog } from "../../application/hooks/useCatalog";
@@ -41,7 +42,15 @@ export function AppLayout() {
     : [{ label: "Catalog" }];
 
   return (
-    <AppShell title="Hackerrank Study" breadcrumb={<Breadcrumb segments={breadcrumbSegments} />}>
+    <AppShell
+      title="Hackerrank Study"
+      breadcrumb={<Breadcrumb segments={breadcrumbSegments} />}
+      right={
+        isCourseRoute && course ? (
+          <CourseScoreBadge courseId={course.id} course={course} />
+        ) : null
+      }
+    >
       <Outlet />
       <ContentReaderDialog />
     </AppShell>

@@ -171,6 +171,7 @@ async function loadQuizzes(courseFolder) {
   const quizzes = [];
 
   for (const ent of quizEntries.filter((e) => e.isFile() && e.name.toLowerCase().endsWith(".json"))) {
+    if (ent.name.toLowerCase() === "score.json") continue;
     const absPath = path.join(quizDir, ent.name);
     const raw = await readTextSafe(absPath);
     if (!raw.trim()) continue;

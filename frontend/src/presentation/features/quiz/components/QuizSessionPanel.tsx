@@ -1,13 +1,16 @@
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import type { Quiz } from "../../../../domain/types/quiz";
+import { useCoursePoints } from "../../../../application/hooks/useCoursePoints";
 import { useQuizSessionStore } from "../../../../application/stores/quizSessionStore";
 import { Button, Icon } from "../../../design-system";
 import { QuizProgressBar } from "./QuizProgressBar";
 import { QuizQuestionView } from "./QuizQuestionView";
 import { QuizResultsPanel } from "./QuizResultsPanel";
+import type { Course } from "../../../../domain/types/catalog";
 
 export function QuizSessionPanel(props: {
   courseId: string;
+  course: Course;
   quiz: Quiz;
   onBackToList: () => void;
 }) {
@@ -16,6 +19,8 @@ export function QuizSessionPanel(props: {
   const checkedQuestions = useQuizSessionStore((s) => s.checkedQuestions);
   const isComplete = useQuizSessionStore((s) => s.isComplete);
   const lastAttempt = useQuizSessionStore((s) => s.lastAttempt);
+  const lastQuizPointsDelta = useQuizSessionStore((s) => s.lastQuizPointsDelta);
+  const coursePoints = useCoursePoints(props.courseId, props.course);
   const selectAnswer = useQuizSessionStore((s) => s.selectAnswer);
   const checkCurrent = useQuizSessionStore((s) => s.checkCurrent);
   const goNext = useQuizSessionStore((s) => s.goNext);
@@ -34,6 +39,8 @@ export function QuizSessionPanel(props: {
       <QuizResultsPanel
         attempt={lastAttempt}
         quizTitle={props.quiz.title}
+        coursePoints={coursePoints}
+        quizPointsDelta={lastQuizPointsDelta}
         onRetry={() => start(props.quiz.id)}
         onBackToList={props.onBackToList}
       />

@@ -1,7 +1,9 @@
 import { useMemo } from "react";
+import { useParams } from "react-router-dom";
 import type { ReaderEntry, ReaderItem } from "../../../domain/types/reader";
 import { useContentReader } from "../../../application/hooks/useContentReader";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
+import { useProjectProgressStore } from "../../../application/stores/projectProgressStore";
 import { parentPath, humanPathSegments, basename } from "../../shared/utils/pathUtils";
 import { Dialog, Button } from "../../design-system";
 import { MarkdownView } from "../../shared/MarkdownView";
@@ -9,6 +11,7 @@ import { ReaderHeader } from "./components/ReaderHeader";
 import { ReaderTabBar } from "./components/ReaderTabBar";
 import { FolderBrowser } from "./components/FolderBrowser";
 import { FilePreview } from "./components/FilePreview";
+import { ProjectStatusControl } from "../course-experience/components/ProjectStatusControl";
 
 function getExplanationMarkdown(item: ReaderItem, entries: ReaderEntry[], cwd: string): string {
   if (item.kind === "lesson") return item.markdown;
@@ -18,9 +21,12 @@ function getExplanationMarkdown(item: ReaderItem, entries: ReaderEntry[], cwd: s
 }
 
 export function ContentReaderDialog() {
+  const { courseId = "" } = useParams();
   const { isOpen, item, tab, cwd, selectedFilePath, close, setTab, setCwd, selectFile } =
     useContentReader();
   const { closeReader, setReaderTab } = useAppNavigation();
+  const getProjectStatus = useProjectProgressStore((s) => s.getStatus);
+  const setProjectStatus = useProjectProgressStore((s) => s.setStatus);
 
   const entries = item?.entries ?? [];
 
@@ -74,9 +80,18 @@ export function ContentReaderDialog() {
               onValueChange={handleTabChange}
               showFolders={showFolders}
             />
-            <Button variant="ghost" size="md" onClick={handleClose}>
-              Close
-            </Button>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              {item.kind === "project" && item.projectId ? (
+                <ProjectStatusControl
+                  value={getProjectStatus(courseId, item.projectId)}
+                  showPoints
+                  onChange={(status) => setProjectStatus(courseId, item.projectId!, status)}
+                />
+              ) : null}
+              <Button variant="ghost" size="md" onClick={handleClose}>
+                Close
+              </Button>
+            </div>
           </div>
         </>
       }

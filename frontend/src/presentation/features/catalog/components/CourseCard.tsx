@@ -2,8 +2,9 @@ import type { Course } from "../../../../domain/types/catalog";
 import { Button, Card, Icon } from "../../../design-system";
 import { ChevronRight } from "lucide-react";
 import type { MouseEvent } from "react";
+import { CourseScoreBadge } from "../../course-experience/components/CourseScoreSummary";
 
-export function CourseCard(props: { course: Course; onOpen: () => void }) {
+export function CourseCard(props: { course: Course; courseId: string; onOpen: () => void }) {
   const { course } = props;
 
   return (
@@ -19,6 +20,7 @@ export function CourseCard(props: { course: Course; onOpen: () => void }) {
             <span>{course.lessons.length} examples</span>
             <span>{course.projects.length} projects</span>
             <span>{course.quizzes.length} quizzes</span>
+            <CourseScoreBadge courseId={props.courseId} course={course} />
           </div>
         </div>
         <Button

@@ -1,11 +1,17 @@
 import type { Project } from "../../../../domain/types/catalog";
 import { Card, EmptyState, Icon } from "../../../design-system";
 import { ClipboardList } from "lucide-react";
+import { useProjectProgressStore } from "../../../../application/stores/projectProgressStore";
+import { ProjectStatusControl } from "./ProjectStatusControl";
 
 export function ProjectList(props: {
+  courseId: string;
   projects: Project[];
   onOpenProject: (project: Project) => void;
 }) {
+  const getStatus = useProjectProgressStore((s) => s.getStatus);
+  const setStatus = useProjectProgressStore((s) => s.setStatus);
+
   return (
     <Card variant="panel" className="p-4">
       <div className="mb-3 flex items-center justify-between gap-3">
@@ -19,18 +25,31 @@ export function ProjectList(props: {
       {props.projects.length === 0 ? (
         <EmptyState title="No projects yet." description="This module has no PBL exercises." />
       ) : (
-        <ol className="m-0 grid gap-2 pl-5">
-          {props.projects.map((project) => (
-            <li key={project.readmePath}>
-              <button
-                type="button"
-                className="min-h-11 text-left text-body font-medium text-text0 underline decoration-border0 underline-offset-4 hover:decoration-text1"
-                onClick={() => props.onOpenProject(project)}
+        <ol className="m-0 grid gap-3 pl-0">
+          {props.projects.map((project) => {
+            const status = getStatus(props.courseId, project.id);
+            return (
+              <li
+                key={project.readmePath}
+                className="rounded-panel border border-border0 bg-surfaceControl p-3"
               >
-                {project.title}
-              </button>
-            </li>
-          ))}
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                  <button
+                    type="button"
+                    className="min-h-11 text-left text-body font-medium text-text0 underline decoration-border0 underline-offset-4 hover:decoration-text1"
+                    onClick={() => props.onOpenProject(project)}
+                  >
+                    {project.title}
+                  </button>
+                  <ProjectStatusControl
+                    value={status}
+                    showPoints
+                    onChange={(next) => setStatus(props.courseId, project.id, next)}
+                  />
+                </div>
+              </li>
+            );
+          })}
         </ol>
       )}
     </Card>
