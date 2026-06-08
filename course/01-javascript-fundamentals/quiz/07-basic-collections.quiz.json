@@ -1,0 +1,82 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/examples/07-basic-collections.md",
+  "title": "Basic Collections — Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "stack_trace",
+      "tier": 2,
+      "prompt": "During [1,2,3].map(double), how many times is double pushed?",
+      "choices": [
+        "3",
+        "1",
+        "0"
+      ],
+      "answer": "3",
+      "explanation": "One call per element."
+    },
+    {
+      "id": "q02",
+      "type": "true_false",
+      "tier": 1,
+      "prompt": "filter mutates the original array by default.",
+      "answer": false,
+      "explanation": "filter returns a new array; map/filter do not mutate unless you mutate inside."
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "Object.keys returns?",
+      "choices": [
+        "Array of keys",
+        "Array of values",
+        "Entries pairs"
+      ],
+      "answer": "Array of keys",
+      "explanation": "keys() lists property names."
+    },
+    {
+      "id": "q04",
+      "type": "predict_output",
+      "tier": 2,
+      "prompt": "Result length?",
+      "code": "const r=[1,2,3].filter(n=>n>1); console.log(r.length);",
+      "choices": [
+        "2",
+        "3",
+        "1"
+      ],
+      "answer": "2",
+      "explanation": "Elements 2 and 3 pass n>1."
+    },
+    {
+      "id": "q05",
+      "type": "spot_bug",
+      "tier": 2,
+      "prompt": "Expecting sync map but used async callback incorrectly — lesson focus: map calls sync.",
+      "code": "[1].map(x => x * 2);",
+      "choices": [
+        "Runs synchronously",
+        "Always parallel",
+        "Never calls callback"
+      ],
+      "answer": "Runs synchronously",
+      "explanation": "map invokes callback immediately per item."
+    },
+    {
+      "id": "q06",
+      "type": "match_terms",
+      "tier": 1,
+      "prompt": "Match method to behavior.",
+      "answer": {
+        "push": "add to end",
+        "pop": "remove from end",
+        "map": "transform to new array"
+      },
+      "explanation": "Core array operations for this module."
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/examples/04-strings-and-numbers.md",
+  "title": "Strings and Numbers — Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "predict_output",
+      "tier": 1,
+      "prompt": "Output?",
+      "code": "console.log(`${1 + 2}`);",
+      "choices": [
+        "3",
+        "12",
+        "undefined"
+      ],
+      "answer": "3",
+      "explanation": "Expression inside ${} is evaluated first."
+    },
+    {
+      "id": "q02",
+      "type": "predict_output",
+      "tier": 2,
+      "prompt": "Number('')?",
+      "code": "console.log(Number(''));",
+      "choices": [
+        "0",
+        "NaN",
+        ""
+      ],
+      "answer": "0",
+      "explanation": "Empty string converts to 0."
+    },
+    {
+      "id": "q03",
+      "type": "stack_trace",
+      "tier": 2,
+      "prompt": "formatPrice(9.5) does what to the stack?",
+      "choices": [
+        "Pushes formatPrice frame",
+        "Pushes event loop task",
+        "No frames"
+      ],
+      "answer": "Pushes formatPrice frame",
+      "explanation": "Function call pushes a frame synchronously."
+    },
+    {
+      "id": "q04",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "Safe string from number 42?",
+      "choices": [
+        "String(42)",
+        "42.toString only",
+        "JSON only"
+      ],
+      "answer": "String(42)",
+      "explanation": "String() explicitly converts."
+    },
+    {
+      "id": "q05",
+      "type": "spot_bug",
+      "tier": 2,
+      "prompt": "n is undefined. Risk?",
+      "code": "function f(n){ return `Price: ${n}`; }\nf();",
+      "choices": [
+        "Prints Price: undefined",
+        "SyntaxError",
+        "Never returns"
+      ],
+      "answer": "Prints Price: undefined",
+      "explanation": "Template still runs; missing argument is undefined."
+    },
+    {
+      "id": "q06",
+      "type": "true_false",
+      "tier": 1,
+      "prompt": "Number('12px') is NaN.",
+      "answer": true,
+      "explanation": "Partial numeric strings fail conversion."
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/examples/01-environment-and-running-code.md",
+  "title": "Environment and Running Code — Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "order_output",
+      "tier": 1,
+      "prompt": "What is the print order?",
+      "code": "console.log('start');\nfunction greet() { console.log('mid'); }\ngreet();\nconsole.log('end');",
+      "choices": [
+        "start",
+        "mid",
+        "end"
+      ],
+      "answer": [
+        "start",
+        "mid",
+        "end"
+      ],
+      "explanation": "Synchronous top-level, then greet's body, then top-level again."
+    },
+    {
+      "id": "q02",
+      "type": "stack_trace",
+      "tier": 1,
+      "prompt": "While inside greet(), which frame is on top?",
+      "code": "function greet() { console.log('hi'); }\ngreet();",
+      "choices": [
+        "greet",
+        "(module)",
+        "console"
+      ],
+      "answer": "greet",
+      "explanation": "The called function's frame sits above the module frame."
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "How do you run script.js with Node?",
+      "choices": [
+        "node script.js",
+        "run script.js",
+        "js script.js"
+      ],
+      "answer": "node script.js",
+      "explanation": "Node executes the file as the program entry."
+    },
+    {
+      "id": "q04",
+      "type": "true_false",
+      "tier": 1,
+      "prompt": "The first line of a stack trace is usually the innermost (most recent) frame.",
+      "answer": true,
+      "explanation": "Errors report where execution failed — inside the deepest active call."
+    },
+    {
+      "id": "q05",
+      "type": "spot_bug",
+      "tier": 2,
+      "prompt": "The script never runs. You typed `node hello.js` but the file is in a subfolder. Best fix?",
+      "code": "// cwd: project root; file at ./starter/hello.js",
+      "choices": [
+        "Use node starter/hello.js or cd into the folder",
+        "Rename Node to nodejs",
+        "Add async"
+      ],
+      "answer": "Use node starter/hello.js or cd into the folder",
+      "explanation": "Wrong path/cwd is an environment issue, not a JS syntax issue."
+    },
+    {
+      "id": "q06",
+      "type": "predict_output",
+      "tier": 2,
+      "prompt": "If greet throws before returning, does 'end' print?",
+      "code": "function greet() { throw new Error('boom'); }\nconsole.log('start');\ngreet();\nconsole.log('end');",
+      "choices": [
+        "No",
+        "Yes",
+        "Only in browser"
+      ],
+      "answer": "No",
+      "explanation": "An unhandled throw aborts the current run before reaching the next line."
+    }
+  ]
+}

@@ -1,9 +1,9 @@
-const { dfs } = require("../../../scripts/graph/utils/dfs");
-const { loadGraph, normalize } = require("./_loadGraph");
+const { loadGraph, findTopic } = require("./_loadGraph");
 
 function usage() {
   return [
     "Usage: node .cursor/tools/graph/find-topic-dfs.js <label>",
+    "Matches exact labels first, then case-insensitive substring.",
     'Example: node .cursor/tools/graph/find-topic-dfs.js "Promises"',
   ].join("\n");
 }
@@ -15,24 +15,16 @@ function main() {
     process.exit(2);
   }
 
-  const target = normalize(targetRaw);
   const graph = loadGraph();
+  const result = findTopic(graph, targetRaw, { order: "dfs" });
 
-  let found = null;
-  dfs(graph, graph.rootId, {
-    visit: (node) => {
-      if (!found && normalize(node.label) === target) found = node;
-    },
-  });
-
-  if (!found) {
+  if (!result) {
     process.stdout.write(`NOT_FOUND: ${targetRaw}\n`);
     process.exitCode = 1;
     return;
   }
 
-  process.stdout.write(JSON.stringify(found, null, 2) + "\n");
+  process.stdout.write(JSON.stringify(result, null, 2) + "\n");
 }
 
 if (require.main === module) main();
-

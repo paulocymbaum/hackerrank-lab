@@ -54,10 +54,16 @@ Graph JSON shape:
 
 ## Finding topics (use the tools)
 
+Label lookup is **case-insensitive**. It tries an **exact** label match first, then **substring** matches (`"Fundamentals"` matches `"Fundamentals (start from zero)"`).
+
+- One match → `{ id, label, matchType }`
+- Several substring matches → `{ matchType, query, matches: [...] }`
+
 - **BFS find** (prefer higher-level matches first):
 
 ```bash
 node .cursor/tools/graph/find-topic-bfs.js "Closures"
+node .cursor/tools/graph/find-topic-bfs.js "Fundamentals"
 ```
 
 - **DFS find** (good when you’re already exploring a branch):

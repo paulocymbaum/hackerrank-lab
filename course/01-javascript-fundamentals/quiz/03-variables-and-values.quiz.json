@@ -1,0 +1,83 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/examples/03-variables-and-values.md",
+  "title": "Variables and Values — Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "predict_output",
+      "tier": 1,
+      "prompt": "Output?",
+      "code": "console.log(2 + '2');",
+      "choices": [
+        "22",
+        "4",
+        "NaN"
+      ],
+      "answer": "22",
+      "explanation": "Number + string coerces to string concatenation."
+    },
+    {
+      "id": "q02",
+      "type": "stack_trace",
+      "tier": 1,
+      "prompt": "Inside demo(), where do a and b live?",
+      "code": "function demo(){const a=1; let b=2;}\ndemo();",
+      "choices": [
+        "demo frame",
+        "global only",
+        "heap only"
+      ],
+      "answer": "demo frame",
+      "explanation": "Locals belong to the function's frame environment."
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "Best for a constant PI?",
+      "choices": [
+        "const",
+        "let",
+        "var"
+      ],
+      "answer": "const",
+      "explanation": "PI should not be rebound."
+    },
+    {
+      "id": "q04",
+      "type": "true_false",
+      "tier": 2,
+      "prompt": "undefined is a primitive type.",
+      "answer": true,
+      "explanation": "It is one of the primitive values."
+    },
+    {
+      "id": "q05",
+      "type": "spot_bug",
+      "tier": 2,
+      "prompt": "What fails?",
+      "code": "const x = 1;\nx = 2;",
+      "choices": [
+        "Reassigning const",
+        "Using console",
+        "const syntax"
+      ],
+      "answer": "Reassigning const",
+      "explanation": "const bindings cannot be reassigned."
+    },
+    {
+      "id": "q06",
+      "type": "match_terms",
+      "tier": 1,
+      "prompt": "Match types to examples.",
+      "answer": {
+        "boolean": "true",
+        "number": "42",
+        "string": "\"hi\""
+      },
+      "explanation": "Primitives are stored by value in bindings."
+    }
+  ]
+}

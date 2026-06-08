@@ -1,0 +1,115 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/README.md",
+  "title": "JavaScript Fundamentals — Module Overview Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "order_output",
+      "tier": 1,
+      "prompt": "In what order are these lines printed?",
+      "code": "console.log('A');\nfunction main() { console.log('B'); }\nmain();\nconsole.log('C');",
+      "choices": [
+        "A",
+        "B",
+        "C"
+      ],
+      "answer": [
+        "A",
+        "B",
+        "C"
+      ],
+      "explanation": "Top-level runs first, then main's body, then top-level again — all synchronously in one stack turn."
+    },
+    {
+      "id": "q02",
+      "type": "stack_trace",
+      "tier": 1,
+      "prompt": "Inside greet(), which frame is on top of the stack?",
+      "code": "function greet() { console.log('hi'); }\ngreet();",
+      "choices": [
+        "greet",
+        "(module)",
+        "console.log"
+      ],
+      "answer": "greet",
+      "explanation": "The active function call creates the top frame; console.log runs inside greet's frame."
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "Which declaration should you prefer for a value that never changes?",
+      "choices": [
+        "const",
+        "let",
+        "var"
+      ],
+      "answer": "const",
+      "explanation": "const prevents rebinding; use let only when you must reassign."
+    },
+    {
+      "id": "q04",
+      "type": "predict_output",
+      "tier": 2,
+      "prompt": "What does this print?",
+      "code": "console.log([] == false);\nconsole.log([] === false);",
+      "choices": [
+        "true then false",
+        "false then true",
+        "true then true"
+      ],
+      "answer": "true then false",
+      "explanation": "== coerces types; === does not. An array is not strictly equal to false."
+    },
+    {
+      "id": "q05",
+      "type": "true_false",
+      "tier": 2,
+      "prompt": "Empty string \"\" is falsy in JavaScript.",
+      "answer": true,
+      "explanation": "Falsy values include \"\", 0, false, null, undefined, and NaN."
+    },
+    {
+      "id": "q06",
+      "type": "spot_bug",
+      "tier": 2,
+      "prompt": "This comparison is meant to check strict equality. What is wrong?",
+      "code": "if (userInput == expected) { /* ... */ }",
+      "choices": [
+        "Use === instead of ==",
+        "Use = instead of ==",
+        "Remove the if"
+      ],
+      "answer": "Use === instead of ==",
+      "explanation": "== allows coercion; === compares without coercing types."
+    },
+    {
+      "id": "q07",
+      "type": "predict_output",
+      "tier": 3,
+      "prompt": "What prints on the last line?",
+      "code": "let x = 1;\nif (true) {\n  let x = 2;\n}\nconsole.log(x);",
+      "choices": [
+        "1",
+        "2",
+        "ReferenceError"
+      ],
+      "answer": "1",
+      "explanation": "Inner let x shadows outer x only inside the block; outer x remains 1."
+    },
+    {
+      "id": "q08",
+      "type": "match_terms",
+      "tier": 1,
+      "prompt": "Match each term to its definition.",
+      "answer": {
+        "Call stack": "LIFO structure of active function frames",
+        "Binding": "Association between a name and a value",
+        "Truthy": "Value that coerces to true in boolean context"
+      },
+      "explanation": "These terms appear throughout the module's stack-first lessons."
+    }
+  ]
+}

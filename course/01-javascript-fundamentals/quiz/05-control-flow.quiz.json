@@ -1,0 +1,84 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/examples/05-control-flow.md",
+  "title": "Control Flow — Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "Does a for loop push a new stack frame each iteration?",
+      "choices": [
+        "No, same function frame",
+        "Yes, one per iteration",
+        "Only in strict mode"
+      ],
+      "answer": "No, same function frame",
+      "explanation": "Loops are not function calls."
+    },
+    {
+      "id": "q02",
+      "type": "predict_output",
+      "tier": 2,
+      "prompt": "classify(3) returns?",
+      "code": "function classify(n){if(n<0)return 'neg';for(let i=0;i<1;i++)return 'loop';return 'pos';}\nclassify(3);",
+      "choices": [
+        "loop",
+        "pos",
+        "neg"
+      ],
+      "answer": "loop",
+      "explanation": "for runs once; return inside loop exits function."
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "How many times does the for body run?",
+      "code": "for(let i=0;i<3;i++){console.log(i);}",
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "answer": "3",
+      "explanation": "i = 0,1,2 — three iterations."
+    },
+    {
+      "id": "q04",
+      "type": "true_false",
+      "tier": 2,
+      "prompt": "return inside a loop can exit the whole function.",
+      "answer": true,
+      "explanation": "return pops the current function frame."
+    },
+    {
+      "id": "q05",
+      "type": "stack_trace",
+      "tier": 2,
+      "prompt": "During classify(3) at the for return, top frame?",
+      "choices": [
+        "classify",
+        "for",
+        "global"
+      ],
+      "answer": "classify",
+      "explanation": "for has no separate frame."
+    },
+    {
+      "id": "q06",
+      "type": "spot_bug",
+      "tier": 3,
+      "prompt": "switch missing break on case 1 causes?",
+      "choices": [
+        "Fall-through to next case",
+        "SyntaxError",
+        "Stack overflow"
+      ],
+      "answer": "Fall-through to next case",
+      "explanation": "Execution continues into the next case without break."
+    }
+  ]
+}

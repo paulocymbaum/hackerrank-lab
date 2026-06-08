@@ -1,0 +1,79 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/examples/06-functions.md",
+  "title": "Functions — Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "stack_trace",
+      "tier": 2,
+      "prompt": "At return inside add, stack top?",
+      "code": "function add(a,b){return a+b;}\nfunction main(){add(2,3);}\nmain();",
+      "choices": [
+        "add",
+        "main",
+        "module"
+      ],
+      "answer": "add",
+      "explanation": "Callee frame is on top until it returns."
+    },
+    {
+      "id": "q02",
+      "type": "predict_output",
+      "tier": 2,
+      "prompt": "main() return value in lesson trace (add then mul by 2)?",
+      "code": "function add(a,b){return a+b;}\nconst mul=(a,b)=>a*b;\nfunction main(){const x=add(2,3);return mul(x,2);}\n",
+      "choices": [
+        "10",
+        "5",
+        "undefined"
+      ],
+      "answer": "10",
+      "explanation": "add→5, mul(5,2)→10."
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "Which is hoisted?",
+      "choices": [
+        "function declaration",
+        "const arrow",
+        "const expression"
+      ],
+      "answer": "function declaration",
+      "explanation": "Declaration name is available before its line in the scope."
+    },
+    {
+      "id": "q04",
+      "type": "true_false",
+      "tier": 1,
+      "prompt": "Every function call pushes a stack frame.",
+      "answer": true,
+      "explanation": "Calls create frames; returns pop them."
+    },
+    {
+      "id": "q05",
+      "type": "spot_bug",
+      "tier": 2,
+      "prompt": "f is undefined when called on line 1.",
+      "code": "f();\nconst f = () => 1;",
+      "choices": [
+        "Temporal dead zone / call before init",
+        "Stack overflow",
+        "Syntax only"
+      ],
+      "answer": "Temporal dead zone / call before init",
+      "explanation": "const is not hoisted like a declaration."
+    },
+    {
+      "id": "q06",
+      "type": "true_false",
+      "tier": 1,
+      "prompt": "Nested call b() must finish before a() continues after calling b.",
+      "answer": true,
+      "explanation": "Callee returns before caller proceeds synchronously."
+    }
+  ]
+}

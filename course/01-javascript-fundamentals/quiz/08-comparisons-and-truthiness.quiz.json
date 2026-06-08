@@ -1,0 +1,84 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/examples/08-comparisons-and-truthiness.md",
+  "title": "Comparisons and Truthiness — Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "predict_output",
+      "tier": 2,
+      "prompt": "Outputs?",
+      "code": "console.log([] == false);\nconsole.log([] === false);",
+      "choices": [
+        "true, false",
+        "false, true",
+        "true, true"
+      ],
+      "answer": "true, false",
+      "explanation": "== coerces; === does not."
+    },
+    {
+      "id": "q02",
+      "type": "true_false",
+      "tier": 1,
+      "prompt": "Empty string is falsy.",
+      "answer": true,
+      "explanation": "Falsy values include \"\"."
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "Default equality for production code?",
+      "choices": [
+        "===",
+        "==",
+        "!="
+      ],
+      "answer": "===",
+      "explanation": "Avoid unintended coercion."
+    },
+    {
+      "id": "q04",
+      "type": "stack_trace",
+      "tier": 2,
+      "prompt": "if (s) runs in which frame for isEmptyString?",
+      "choices": [
+        "isEmptyString",
+        "if",
+        "Boolean"
+      ],
+      "answer": "isEmptyString",
+      "explanation": "if is not a function; no extra frame."
+    },
+    {
+      "id": "q05",
+      "type": "spot_bug",
+      "tier": 2,
+      "prompt": "Check for non-empty array wrongly.",
+      "code": "if (arr) { /* assume length>0 */ }",
+      "choices": [
+        "[] is truthy",
+        "[] is falsy",
+        "arr is always null"
+      ],
+      "answer": "[] is truthy",
+      "explanation": "Empty array is truthy; check length."
+    },
+    {
+      "id": "q06",
+      "type": "predict_output",
+      "tier": 1,
+      "prompt": "Boolean(0)?",
+      "code": "console.log(Boolean(0));",
+      "choices": [
+        "false",
+        "true",
+        "0"
+      ],
+      "answer": "false",
+      "explanation": "0 is falsy."
+    }
+  ]
+}

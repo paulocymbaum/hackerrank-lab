@@ -1,6 +1,6 @@
 const { dfs } = require("../../../scripts/graph/utils/dfs");
 const { bfs } = require("../../../scripts/graph/utils/bfs");
-const { loadGraph, normalize } = require("./_loadGraph");
+const { loadGraph, findTopicNodes, pickTopicMatches } = require("./_loadGraph");
 
 function buildParents(graph) {
   const parents = new Map(); // child -> parent
@@ -24,17 +24,11 @@ function main() {
     process.exit(2);
   }
 
-  const target = normalize(targetRaw);
   const graph = loadGraph();
   const parents = buildParents(graph);
 
-  // DFS to get us to the right branch (candidate topic).
-  let found = null;
-  dfs(graph, graph.rootId, {
-    visit: (node) => {
-      if (!found && normalize(node.label) === target) found = node;
-    },
-  });
+  const picked = pickTopicMatches(findTopicNodes(graph, targetRaw, { order: "dfs" }));
+  const found = picked?.nodes[0] ?? null;
 
   if (!found) {
     process.stdout.write(`NOT_FOUND: ${targetRaw}\n`);

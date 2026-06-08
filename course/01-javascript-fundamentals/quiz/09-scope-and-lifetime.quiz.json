@@ -1,0 +1,84 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/examples/09-scope-and-lifetime.md",
+  "title": "Scope and Lifetime — Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "predict_output",
+      "tier": 3,
+      "prompt": "Last line prints?",
+      "code": "let x=1;\nif(true){let x=2;}\nconsole.log(x);",
+      "choices": [
+        "1",
+        "2",
+        "ReferenceError"
+      ],
+      "answer": "1",
+      "explanation": "Block x shadows only inside the block."
+    },
+    {
+      "id": "q02",
+      "type": "predict_output",
+      "tier": 3,
+      "prompt": "Inner then outer log in demo()?",
+      "code": "function demo(){let x=1;{let x=2;console.log(x);}console.log(x);}\ndemo();",
+      "choices": [
+        "2 then 1",
+        "1 then 2",
+        "2 then 2"
+      ],
+      "answer": "2 then 1",
+      "explanation": "Shadowing: inner x=2, outer x=1."
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "tier": 2,
+      "prompt": "let/const in a block are?",
+      "choices": [
+        "Block-scoped",
+        "Function-scoped only",
+        "Global always"
+      ],
+      "answer": "Block-scoped",
+      "explanation": "Bindings limited to the block."
+    },
+    {
+      "id": "q04",
+      "type": "true_false",
+      "tier": 2,
+      "prompt": "Inner block can read bindings from outer block.",
+      "answer": true,
+      "explanation": "Scope chain walks outward."
+    },
+    {
+      "id": "q05",
+      "type": "stack_trace",
+      "tier": 3,
+      "prompt": "Nested blocks in demo() add extra function frames?",
+      "choices": [
+        "No, one demo frame",
+        "Yes, one per block",
+        "Yes, one per let"
+      ],
+      "answer": "No, one demo frame",
+      "explanation": "Blocks share the function's execution context."
+    },
+    {
+      "id": "q06",
+      "type": "spot_bug",
+      "tier": 2,
+      "prompt": "ReferenceError cause?",
+      "code": "function f(){console.log(innerOnly);}\nf();",
+      "choices": [
+        "innerOnly never declared in scope chain",
+        "Stack overflow",
+        "Syntax"
+      ],
+      "answer": "innerOnly never declared in scope chain",
+      "explanation": "Name lookup fails on the chain."
+    }
+  ]
+}

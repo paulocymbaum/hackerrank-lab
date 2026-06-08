@@ -1,0 +1,87 @@
+{
+  "marker": "cursor:teacher:add-lesson-quiz",
+  "moduleId": "01-javascript-fundamentals",
+  "lessonPath": "course/01-javascript-fundamentals/examples/02-first-steps.md",
+  "title": "First Steps — Quiz",
+  "activities": [
+    {
+      "id": "q01",
+      "type": "order_output",
+      "tier": 1,
+      "prompt": "Print order?",
+      "code": "function s(l){console.log(l);}\ns('A');\ns('B');",
+      "choices": [
+        "A",
+        "B"
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "Each call completes before the next starts."
+    },
+    {
+      "id": "q02",
+      "type": "stack_trace",
+      "tier": 1,
+      "prompt": "Inside s(), top frame?",
+      "code": "function s(l){console.log(l);}\ns('x');",
+      "choices": [
+        "s",
+        "(module)"
+      ],
+      "answer": "s",
+      "explanation": "Active function frame is on top."
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "tier": 1,
+      "prompt": "Code never runs. Likely error type?",
+      "code": "console.log( ;",
+      "choices": [
+        "SyntaxError",
+        "ReferenceError",
+        "TypeError"
+      ],
+      "answer": "SyntaxError",
+      "explanation": "Invalid syntax fails before execution."
+    },
+    {
+      "id": "q04",
+      "type": "true_false",
+      "tier": 2,
+      "prompt": "Comments affect the call stack at runtime.",
+      "answer": false,
+      "explanation": "Comments are removed before execution."
+    },
+    {
+      "id": "q05",
+      "type": "spot_bug",
+      "tier": 2,
+      "prompt": "Fix the error.",
+      "code": "console.log(notDefined);",
+      "choices": [
+        "Declare notDefined before use",
+        "Add async",
+        "Remove console"
+      ],
+      "answer": "Declare notDefined before use",
+      "explanation": "ReferenceError: name missing from scope chain."
+    },
+    {
+      "id": "q06",
+      "type": "predict_output",
+      "tier": 1,
+      "prompt": "What prints?",
+      "code": "console.log(1 + 1);",
+      "choices": [
+        "2",
+        "11",
+        "undefined"
+      ],
+      "answer": "2",
+      "explanation": "Both operands are numbers."
+    }
+  ]
+}
