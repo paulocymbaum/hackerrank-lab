@@ -4,6 +4,7 @@ import { useCatalog } from "../../../application/hooks/useCatalog";
 import { useCatalogPoints } from "../../../application/hooks/useCatalogPoints";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
 import { loadAllCourseScores } from "../../../application/usecases/loadAllCourseScores";
+import { migrateProgressKeysFromCatalog } from "../../../application/usecases/migrateProgressKeys";
 import { ErrorPanel, Icon, LoadingState } from "../../design-system";
 import { CatalogScoreSummary } from "../course-experience/components/CourseScoreSummary";
 import { CourseCard } from "./components/CourseCard";
@@ -20,6 +21,7 @@ export function CatalogRoute() {
 
   useEffect(() => {
     if (status !== "ready" || courses.length === 0) return;
+    migrateProgressKeysFromCatalog({ courses });
     void loadAllCourseScores(courses);
   }, [status, courses]);
 

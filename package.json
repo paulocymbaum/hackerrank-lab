@@ -6,6 +6,10 @@
     "test:graph": "node --test tests/graph/*.test.mjs",
     "test:validate": "node --test tests/validate/*.test.mjs",
     "test:catalog": "node --test tests/catalog/*.test.mjs",
-    "test:integration": "node --test tests/integration/*.test.mjs"
+    "test:integration": "node --test tests/integration/*.test.mjs",
+    "test:plugins": "node --test tests/plugins/*.test.mjs",
+    "test:migrate": "node --test tests/migrate/*.test.mjs",
+    "test:selectors": "node --test tests/selectors/*.test.mjs",
+    "test:navigation": "node --test tests/navigation/*.test.mjs"
   }
 }

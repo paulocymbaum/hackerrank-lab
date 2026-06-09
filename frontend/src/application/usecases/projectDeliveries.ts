@@ -14,10 +14,11 @@ function syncProjectStatusFromDeliveries(
   courseId: string,
   projectId: string,
   deliveries: ProjectDeliveryEntry[],
+  lessonId?: string,
 ): void {
   const latest = deliveries[deliveries.length - 1];
   if (latest?.review && passesDeliveryReview(latest.review.score)) {
-    useProjectProgressStore.getState().markProjectDone(courseId, projectId);
+    useProjectProgressStore.getState().markProjectDone(courseId, projectId, lessonId);
   }
 }
 
@@ -25,22 +26,28 @@ export async function loadProjectDeliveries(
   courseId: string,
   projectId: string,
   rootPath: string,
+  lessonId?: string,
 ): Promise<void> {
   if (!repository) return;
 
-  useProjectDeliveryStore.getState().setLoading(courseId, projectId, true);
-  useProjectDeliveryStore.getState().setError(courseId, projectId, null);
+  useProjectDeliveryStore.getState().setLoading(courseId, projectId, true, lessonId);
+  useProjectDeliveryStore.getState().setError(courseId, projectId, null, lessonId);
 
   try {
     const file = await repository.load(courseId, projectId, rootPath);
     if (file) {
-      useProjectDeliveryStore.getState().hydrate(courseId, projectId, file.deliveries);
-      syncProjectStatusFromDeliveries(courseId, projectId, file.deliveries);
+      useProjectDeliveryStore.getState().hydrate(courseId, projectId, file.deliveries, lessonId);
+      syncProjectStatusFromDeliveries(courseId, projectId, file.deliveries, lessonId);
     }
   } catch {
-    useProjectDeliveryStore.getState().setError(courseId, projectId, "Failed to load deliveries");
+    useProjectDeliveryStore.getState().setError(
+      courseId,
+      projectId,
+      "Failed to load deliveries",
+      lessonId,
+    );
   } finally {
-    useProjectDeliveryStore.getState().setLoading(courseId, projectId, false);
+    useProjectDeliveryStore.getState().setLoading(courseId, projectId, false, lessonId);
   }
 }
 
@@ -54,7 +61,10 @@ export async function persistProjectDelivery(
 
   try {
     const file = await repository.appendDelivery(courseId, projectId, rootPath, content);
-    useProjectDeliveryStore.getState().hydrate(courseId, projectId, file.deliveries);
+    const lessonId = rootPath.includes("/lessons/")
+      ? rootPath.split("/lessons/")[1]?.split("/")[0]
+      : undefined;
+    useProjectDeliveryStore.getState().hydrate(courseId, projectId, file.deliveries, lessonId);
     return true;
   } catch {
     return false;

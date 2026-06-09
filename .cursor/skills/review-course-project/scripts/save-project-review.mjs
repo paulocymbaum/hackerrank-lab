@@ -43,18 +43,32 @@ function resolveProjectPath(inputPath) {
 
   const parts = rel.split(path.sep);
   const courseIdx = parts.indexOf("course");
-  if (courseIdx < 0 || parts.length < courseIdx + 5) return null;
-  if (parts[courseIdx + 2] !== "projects") return null;
+  if (courseIdx < 0) return null;
+
+  const projectsIdx = parts.indexOf("projects");
+  if (projectsIdx < 0 || projectsIdx >= parts.length - 1) return null;
+
+  const courseId = parts[courseIdx + 1];
+  const projectId = parts[parts.length - 1];
+  let lessonId = null;
+  const lessonsIdx = parts.indexOf("lessons");
+  if (lessonsIdx >= 0 && lessonsIdx < projectsIdx) {
+    lessonId = parts[lessonsIdx + 1] ?? null;
+  }
+
+  const storageKey = lessonId ? `${lessonId}/${projectId}` : projectId;
 
   return {
     abs,
     rel,
-    courseId: parts[courseIdx + 1],
-    projectId: parts[parts.length - 1],
+    courseId,
+    projectId,
+    lessonId,
+    storageKey,
   };
 }
 
-async function setProjectDoneInScoreFile(courseId, projectId) {
+async function setProjectDoneInScoreFile(courseId, storageKey) {
   const scorePath = path.join(repoRoot, "course", courseId, "quiz", "score.json");
   let file = {
     version: SCORE_FILE_VERSION,
@@ -85,8 +99,8 @@ async function setProjectDoneInScoreFile(courseId, projectId) {
   file.updatedAt = new Date().toISOString();
   file.projects = {
     ...file.projects,
-    [projectId]: {
-      projectId,
+    [storageKey]: {
+      projectId: storageKey,
       status: "done",
       points: PROJECT_POINTS_WEIGHT,
       updatedAt: file.updatedAt,
@@ -162,7 +176,7 @@ async function main() {
 
   let statusUpdated = false;
   if (passesReview(Math.round(args.score))) {
-    await setProjectDoneInScoreFile(resolved.courseId, resolved.projectId);
+    await setProjectDoneInScoreFile(resolved.courseId, resolved.storageKey);
     statusUpdated = true;
   }
 

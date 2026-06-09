@@ -23,11 +23,13 @@ function humanizeSlug(slug: string): string {
 
 function parseProjectPath(rootPath: string) {
   const parts = rootPath.split("/").filter(Boolean);
-  const topicSlug = parts[parts.length - 2] ?? "";
+  const projectsIdx = parts.indexOf("projects");
+  const lessonSlug =
+    projectsIdx > 0 ? (parts[projectsIdx - 1] ?? "") : (parts[parts.length - 2] ?? "");
   const projectSlug = parts[parts.length - 1] ?? "";
   return {
-    topicSlug,
-    topicTitle: humanizeSlug(topicSlug),
+    topicSlug: lessonSlug,
+    topicTitle: humanizeSlug(lessonSlug),
     projectSlug,
   };
 }

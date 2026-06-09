@@ -26,7 +26,7 @@ export function ProjectList(props: {
       ) : (
         <ol className="m-0 grid gap-3 pl-0">
           {props.projects.map((project) => {
-            const status = getStatus(props.courseId, project.id);
+            const status = getStatus(props.courseId, project.id, project.lessonId);
             return (
               <li
                 key={project.readmePath}

@@ -1,7 +1,11 @@
 import type { CourseScoreRepository } from "../../domain/repositories/quizScoreRepository";
 import type { QuizAttempt } from "../../domain/types/quiz";
 import type { ProjectStatus } from "../../domain/types/quizScore";
-import { normalizeCourseScoreFile } from "../../domain/types/quizScore";
+import {
+  normalizeCourseScoreFile,
+  scoreStorageKeyForProject,
+  scoreStorageKeyForQuiz,
+} from "../../domain/types/quizScore";
 
 const API_PREFIX = "/api/quiz-scores/";
 
@@ -18,13 +22,14 @@ export const httpCourseScoreRepository: CourseScoreRepository = {
     }
   },
 
-  async recordQuizAttempt(courseId, quizId, attempt) {
+  async recordQuizAttempt(courseId, quizId, attempt, lessonId) {
+    const storageKey = scoreStorageKeyForQuiz(quizId, lessonId);
     const res = await fetch(`${API_PREFIX}${encodeURIComponent(courseId)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         kind: "quiz",
-        quizId,
+        quizId: storageKey,
         attempt,
       } satisfies RecordQuizAttemptBody),
     });
@@ -33,13 +38,14 @@ export const httpCourseScoreRepository: CourseScoreRepository = {
     }
   },
 
-  async setProjectStatus(courseId, projectId, status) {
+  async setProjectStatus(courseId, projectId, status, lessonId) {
+    const storageKey = scoreStorageKeyForProject(projectId, lessonId);
     const res = await fetch(`${API_PREFIX}${encodeURIComponent(courseId)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         kind: "project",
-        projectId,
+        projectId: storageKey,
         status,
       } satisfies RecordProjectStatusBody),
     });

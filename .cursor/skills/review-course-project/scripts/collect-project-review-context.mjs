@@ -90,14 +90,21 @@ function resolveProjectPath(inputPath) {
 
   const parts = rel.split(path.sep);
   const courseIdx = parts.indexOf("course");
-  if (courseIdx < 0 || parts.length < courseIdx + 5) return null;
-  if (parts[courseIdx + 2] !== "projects") return null;
+  if (courseIdx < 0) return null;
+
+  const projectsIdx = parts.indexOf("projects");
+  if (projectsIdx < 0 || projectsIdx >= parts.length - 1) return null;
 
   const courseId = parts[courseIdx + 1];
   const projectId = parts[parts.length - 1];
   const rootPath = parts.slice(courseIdx, parts.length).join("/");
+  let lessonId = null;
+  const lessonsIdx = parts.indexOf("lessons");
+  if (lessonsIdx >= 0 && lessonsIdx < projectsIdx) {
+    lessonId = parts[lessonsIdx + 1] ?? null;
+  }
 
-  return { abs, rel, courseId, projectId, rootPath };
+  return { abs, rel, courseId, projectId, lessonId, rootPath };
 }
 
 async function collectContext(projectPathInput) {

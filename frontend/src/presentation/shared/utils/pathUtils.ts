@@ -15,3 +15,10 @@ export function humanPathSegments(cwd: string): string[] {
   if (!cwd) return ["Root"];
   return cwd.split("/").filter(Boolean);
 }
+
+export function lessonIdFromRootPath(rootPath: string): string | undefined {
+  const parts = rootPath.split("/").filter(Boolean);
+  const lessonsIdx = parts.indexOf("lessons");
+  if (lessonsIdx < 0 || lessonsIdx >= parts.length - 1) return undefined;
+  return parts[lessonsIdx + 1];
+}

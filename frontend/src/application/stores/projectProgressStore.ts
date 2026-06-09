@@ -7,14 +7,15 @@ import {
   projectProgressKey,
 } from "../../domain/types/quizScore";
 import { persistProjectStatus } from "../usecases/courseScores";
+import { resolveProjectProgressKey } from "../usecases/migrateProgressKeys";
 
 type ProjectProgressState = {
   byKey: Record<string, ProjectProgress>;
-  getStatus: (courseId: string, projectId: string) => ProjectStatus;
-  getProgress: (courseId: string, projectId: string) => ProjectProgress | null;
-  setStatus: (courseId: string, projectId: string, status: ProjectStatus) => void;
-  markProjectDoing: (courseId: string, projectId: string) => void;
-  markProjectDone: (courseId: string, projectId: string) => void;
+  getStatus: (courseId: string, projectId: string, lessonId?: string) => ProjectStatus;
+  getProgress: (courseId: string, projectId: string, lessonId?: string) => ProjectProgress | null;
+  setStatus: (courseId: string, projectId: string, status: ProjectStatus, lessonId?: string) => void;
+  markProjectDoing: (courseId: string, projectId: string, lessonId?: string) => void;
+  markProjectDone: (courseId: string, projectId: string, lessonId?: string) => void;
   hydrateCourseScores: (courseId: string, file: CourseScoreFile) => void;
 };
 
@@ -22,16 +23,16 @@ export const useProjectProgressStore = create<ProjectProgressState>()(
   persist(
     (set, get) => ({
       byKey: {},
-      getStatus: (courseId, projectId) => {
-        const key = projectProgressKey(courseId, projectId);
+      getStatus: (courseId, projectId, lessonId) => {
+        const key = resolveProjectProgressKey(courseId, projectId, lessonId, get().byKey);
         return get().byKey[key]?.status ?? "pending";
       },
-      getProgress: (courseId, projectId) => {
-        const key = projectProgressKey(courseId, projectId);
+      getProgress: (courseId, projectId, lessonId) => {
+        const key = resolveProjectProgressKey(courseId, projectId, lessonId, get().byKey);
         return get().byKey[key] ?? null;
       },
-      setStatus: (courseId, projectId, status) => {
-        const key = projectProgressKey(courseId, projectId);
+      setStatus: (courseId, projectId, status, lessonId) => {
+        const key = projectProgressKey(courseId, projectId, lessonId);
         const updatedAt = new Date().toISOString();
         set((state) => ({
           byKey: {
@@ -43,17 +44,17 @@ export const useProjectProgressStore = create<ProjectProgressState>()(
             },
           },
         }));
-        void persistProjectStatus(courseId, projectId, status);
+        void persistProjectStatus(courseId, projectId, status, lessonId);
       },
-      markProjectDoing: (courseId, projectId) => {
-        const current = get().getStatus(courseId, projectId);
+      markProjectDoing: (courseId, projectId, lessonId) => {
+        const current = get().getStatus(courseId, projectId, lessonId);
         if (current !== "pending") return;
-        get().setStatus(courseId, projectId, "doing");
+        get().setStatus(courseId, projectId, "doing", lessonId);
       },
-      markProjectDone: (courseId, projectId) => {
-        const current = get().getStatus(courseId, projectId);
+      markProjectDone: (courseId, projectId, lessonId) => {
+        const current = get().getStatus(courseId, projectId, lessonId);
         if (current === "done") return;
-        get().setStatus(courseId, projectId, "done");
+        get().setStatus(courseId, projectId, "done", lessonId);
       },
       hydrateCourseScores: (courseId, file) => {
         set((state) => ({

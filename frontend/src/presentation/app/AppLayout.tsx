@@ -1,11 +1,16 @@
-import { Outlet, useParams, useSearchParams, useLocation } from "react-router-dom";
+import { Outlet, useParams, useSearchParams, useLocation, matchPath } from "react-router-dom";
 import { useMemo } from "react";
 import { ContentReaderDialog } from "../features/content-reader/ContentReaderDialog";
 import { CourseScoreBadge } from "../features/course-experience/components/CourseScoreSummary";
 import { AppShell } from "../features/shell/AppShell";
 import { Breadcrumb } from "../shared/Breadcrumb";
 import { useCatalog } from "../../application/hooks/useCatalog";
-import { getCourseById } from "../../application/selectors/catalogSelectors";
+import {
+  getCourseById,
+  getLessonById,
+  getModuleById,
+  isHierarchyCourse,
+} from "../../application/selectors/catalogSelectors";
 import { useAppNavigation } from "../../application/hooks/useAppNavigation";
 import type { CourseTab } from "../../domain/types/navigation";
 
@@ -21,9 +26,11 @@ export function AppLayout() {
   const params = useParams();
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const { goCatalog, parseCourseTab } = useAppNavigation();
+  const { goCatalog, goCourse, goModule, goLesson, parseCourseTab } = useAppNavigation();
 
   const courseId = params.courseId;
+  const moduleId = params.moduleId;
+  const lessonId = params.lessonId;
   const isCourseRoute = location.pathname.startsWith("/course/");
 
   const course = useMemo(
@@ -31,15 +38,66 @@ export function AppLayout() {
     [courses, courseId],
   );
 
-  const tab = courseId ? parseCourseTab(searchParams.get("tab")) : null;
+  const mod = useMemo(
+    () => (course && moduleId ? getModuleById(course, moduleId) : null),
+    [course, moduleId],
+  );
 
-  const breadcrumbSegments = isCourseRoute && course
-    ? [
-        { label: "Catalog", onClick: goCatalog },
-        { label: course.title },
-        ...(tab && tab !== "readme" ? [{ label: TAB_LABELS[tab] }] : []),
-      ]
-    : [{ label: "Catalog" }];
+  const lesson = useMemo(
+    () => (course && moduleId && lessonId ? getLessonById(course, moduleId, lessonId) : null),
+    [course, moduleId, lessonId],
+  );
+
+  const tab = courseId ? parseCourseTab(searchParams.get("tab")) : null;
+  const lessonMatch = matchPath(
+    "/course/:courseId/module/:moduleId/lesson/:lessonId",
+    location.pathname,
+  );
+
+  const breadcrumbSegments = useMemo(() => {
+    if (!isCourseRoute || !course) return [{ label: "Catalog" }];
+
+    const segments: { label: string; onClick?: () => void }[] = [
+      { label: "Catalog", onClick: goCatalog },
+      { label: course.title, onClick: () => goCourse(course.id) },
+    ];
+
+    if (mod) {
+      segments.push({ label: mod.title, onClick: () => goModule(course.id, mod.id) });
+    }
+
+    if (lesson && moduleId) {
+      segments.push({
+        label: lesson.title,
+        onClick: () => goLesson(course.id, moduleId, lesson.id),
+      });
+    }
+
+    if (!isHierarchyCourse(course) && tab && tab !== "readme") {
+      segments.push({ label: TAB_LABELS[tab] });
+    }
+
+    if (lessonMatch && searchParams.get("drawer")) {
+      const drawer = searchParams.get("drawer");
+      if (drawer === "quiz") segments.push({ label: "Quiz" });
+      if (drawer === "project") segments.push({ label: "Project" });
+    }
+
+    return segments;
+  }, [
+    isCourseRoute,
+    course,
+    mod,
+    lesson,
+    moduleId,
+    tab,
+    lessonMatch,
+    searchParams,
+    goCatalog,
+    goCourse,
+    goModule,
+    goLesson,
+  ]);
 
   return (
     <AppShell

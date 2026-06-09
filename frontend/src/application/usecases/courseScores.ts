@@ -30,11 +30,12 @@ export async function persistQuizScore(
   courseId: string,
   quizId: string,
   attempt: QuizAttempt,
+  lessonId?: string,
 ): Promise<void> {
   if (!repository) return;
 
   try {
-    await repository.recordQuizAttempt(courseId, quizId, attempt);
+    await repository.recordQuizAttempt(courseId, quizId, attempt, lessonId);
   } catch {
     // Dev server may be unavailable; localStorage progress still works.
   }
@@ -44,11 +45,12 @@ export async function persistProjectStatus(
   courseId: string,
   projectId: string,
   status: ProjectStatus,
+  lessonId?: string,
 ): Promise<void> {
   if (!repository) return;
 
   try {
-    await repository.setProjectStatus(courseId, projectId, status);
+    await repository.setProjectStatus(courseId, projectId, status, lessonId);
   } catch {
     // Dev server may be unavailable; localStorage progress still works.
   }

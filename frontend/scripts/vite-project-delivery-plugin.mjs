@@ -8,8 +8,7 @@ import {
   passesReview,
   setDeliveryReview,
 } from "./project-delivery-lib.mjs";
-
-const COURSE_ID_PATTERN = /^\d{2}-[\w-]+$/;
+import { isValidCourseId, isValidProjectRootPath } from "./api-validation.mjs";
 
 /**
  * Dev-only Vite plugin: persists project deliveries to
@@ -191,13 +190,9 @@ async function setProjectDoneInScoreFile(repoRoot, courseId, projectId) {
 }
 
 function isValidRequest(courseId, projectId, rootPath) {
-  if (typeof courseId !== "string" || !COURSE_ID_PATTERN.test(courseId)) return false;
+  if (!isValidCourseId(courseId)) return false;
   if (typeof projectId !== "string" || !projectId.trim()) return false;
-  if (typeof rootPath !== "string" || !rootPath.trim()) return false;
-  const expectedPrefix = `course/${courseId}/projects/`;
-  if (!rootPath.startsWith(expectedPrefix)) return false;
-  if (rootPath.includes("..")) return false;
-  return true;
+  return isValidProjectRootPath(courseId, rootPath);
 }
 
 function resolveDeliveryPath(repoRoot, rootPath) {

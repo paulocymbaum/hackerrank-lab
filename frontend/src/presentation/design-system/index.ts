@@ -4,6 +4,7 @@ export { Card, type CardVariant } from "./components/Card";
 export { Accordion } from "./components/Accordion";
 export { Tabs, type TabItem } from "./components/Tabs";
 export { Dialog } from "./components/Dialog";
+export { Drawer } from "./components/Drawer";
 export { ProgressBar, type ProgressBarSize } from "./components/ProgressBar";
 export { Icon } from "./icons/Icon";
 export { LoadingState } from "./patterns/LoadingState";

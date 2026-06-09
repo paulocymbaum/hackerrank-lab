@@ -7,7 +7,7 @@ import { useCourse } from "../../../application/hooks/useCourse";
 import { useProjectProgressStore } from "../../../application/stores/projectProgressStore";
 import { parentPath, humanPathSegments } from "../../shared/utils/pathUtils";
 import { Dialog, Button } from "../../design-system";
-import { MarkdownView } from "../../shared/MarkdownView";
+import { LessonExplanationPanel } from "../lesson-workspace/components/LessonExplanationPanel";
 import { ReaderHeader } from "./components/ReaderHeader";
 import { ReaderTabBar } from "./components/ReaderTabBar";
 import { FolderBrowser } from "./components/FolderBrowser";
@@ -50,8 +50,8 @@ export function ContentReaderDialog() {
 
   useEffect(() => {
     if (tab !== "delivery" || !showDelivery || !item?.projectId) return;
-    markProjectDoing(courseId, item.projectId);
-  }, [tab, showDelivery, item?.projectId, courseId, markProjectDoing]);
+    markProjectDoing(courseId, item.projectId, item.lessonId);
+  }, [tab, showDelivery, item?.projectId, item?.lessonId, courseId, markProjectDoing]);
 
   const breadcrumbSegments = useMemo(() => {
     if (!item) return [];
@@ -93,7 +93,7 @@ export function ContentReaderDialog() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               {item.kind === "project" && item.projectId ? (
                 <ProjectStatusBadge
-                  value={getProjectStatus(courseId, item.projectId)}
+                  value={getProjectStatus(courseId, item.projectId, item.lessonId)}
                   showPoints
                   size="md"
                 />
@@ -107,8 +107,8 @@ export function ContentReaderDialog() {
       }
     >
       {tab === "explanation" ? (
-        <div className="overflow-auto p-4" style={{ maxHeight: "70vh" }}>
-          <MarkdownView markdown={explanationMarkdown} />
+        <div style={{ maxHeight: "70vh" }}>
+          <LessonExplanationPanel title={item.title} markdown={explanationMarkdown} />
         </div>
       ) : null}
 

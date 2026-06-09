@@ -3,10 +3,12 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import type { CourseTab } from "../../../domain/types/navigation";
 import {
+  isHierarchyCourse,
   lessonToReaderItem,
   projectToReaderItem,
   findReaderItemByPath,
 } from "../../../application/selectors/catalogSelectors";
+import { CourseOverviewRoute } from "../course-overview/CourseOverviewRoute";
 import { getQuizById } from "../../../application/selectors/quizSelectors";
 import { useCatalog } from "../../../application/hooks/useCatalog";
 import { useCourse } from "../../../application/hooks/useCourse";
@@ -109,6 +111,10 @@ export function CourseExperienceRoute() {
     );
   }
 
+  if (isHierarchyCourse(course) && !searchParams.has("tab")) {
+    return <CourseOverviewRoute courseId={courseId} course={course} />;
+  }
+
   const activeQuiz = activeQuizId ? getQuizById(course, activeQuizId) : null;
 
   return (
@@ -150,7 +156,10 @@ export function CourseExperienceRoute() {
         ) : (
           <QuizList
             quizzes={course.quizzes}
-            getProgress={(quizId) => getProgress(courseId, quizId)}
+            getProgress={(quizId) => {
+              const quiz = getQuizById(course, quizId);
+              return getProgress(courseId, quizId, quiz?.lessonId);
+            }}
             onStart={(quiz) => openQuiz(courseId, quiz.id)}
           />
         )

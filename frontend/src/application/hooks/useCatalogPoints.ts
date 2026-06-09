@@ -17,10 +17,13 @@ export function useCatalogPoints(courses: Course[]) {
 
     for (const course of courses) {
       const quizBestScores = course.quizzes.map(
-        (quiz) => quizByKey[quizProgressKey(course.id, quiz.id)]?.bestScore ?? 0,
+        (quiz) =>
+          quizByKey[quizProgressKey(course.id, quiz.id, quiz.lessonId)]?.bestScore ?? 0,
       );
       const projectStatuses = course.projects.map(
-        (project) => projectByKey[projectProgressKey(course.id, project.id)]?.status ?? "pending",
+        (project) =>
+          projectByKey[projectProgressKey(course.id, project.id, project.lessonId)]?.status ??
+          "pending",
       );
       const points = computeCoursePoints({ quizBestScores, projectStatuses });
       quizPoints += points.quizPoints;

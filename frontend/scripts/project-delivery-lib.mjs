@@ -39,14 +39,14 @@ export function normalizeProjectDeliveryFile(value, courseId, projectId) {
   }
   if (typeof value.courseId !== "string") return null;
   if (typeof value.projectId !== "string") return null;
-  if (courseId && value.courseId !== courseId) return null;
   if (projectId && value.projectId !== projectId) return null;
+  const resolvedCourseId = courseId && value.courseId !== courseId ? courseId : value.courseId;
   if (!Array.isArray(value.deliveries)) return null;
   if (!value.deliveries.every(isValidProjectDeliveryEntry)) return null;
 
   return {
     version: PROJECT_DELIVERY_FILE_VERSION,
-    courseId: value.courseId,
+    courseId: resolvedCourseId,
     projectId: value.projectId,
     updatedAt: typeof value.updatedAt === "string" ? value.updatedAt : new Date().toISOString(),
     deliveries: value.deliveries,

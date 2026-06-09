@@ -17,16 +17,22 @@ type ProjectDeliveryMeta = {
 type ProjectDeliveryState = {
   deliveriesByKey: Record<string, ProjectDeliveryEntry[]>;
   metaByKey: Record<string, ProjectDeliveryMeta>;
-  getDeliveries: (courseId: string, projectId: string) => ProjectDeliveryEntry[];
-  getMeta: (courseId: string, projectId: string) => ProjectDeliveryMeta;
-  setLoading: (courseId: string, projectId: string, loading: boolean) => void;
-  setError: (courseId: string, projectId: string, error: string | null) => void;
-  hydrate: (courseId: string, projectId: string, deliveries: ProjectDeliveryEntry[]) => void;
+  getDeliveries: (courseId: string, projectId: string, lessonId?: string) => ProjectDeliveryEntry[];
+  getMeta: (courseId: string, projectId: string, lessonId?: string) => ProjectDeliveryMeta;
+  setLoading: (courseId: string, projectId: string, loading: boolean, lessonId?: string) => void;
+  setError: (courseId: string, projectId: string, error: string | null, lessonId?: string) => void;
+  hydrate: (
+    courseId: string,
+    projectId: string,
+    deliveries: ProjectDeliveryEntry[],
+    lessonId?: string,
+  ) => void;
   submitDelivery: (
     courseId: string,
     projectId: string,
     rootPath: string,
     content: string,
+    lessonId?: string,
   ) => Promise<boolean>;
 };
 
@@ -40,18 +46,18 @@ export const useProjectDeliveryStore = create<ProjectDeliveryState>()(
       deliveriesByKey: {},
       metaByKey: {},
 
-      getDeliveries: (courseId, projectId) => {
-        const key = projectProgressKey(courseId, projectId);
+      getDeliveries: (courseId, projectId, lessonId) => {
+        const key = projectProgressKey(courseId, projectId, lessonId);
         return get().deliveriesByKey[key] ?? [];
       },
 
-      getMeta: (courseId, projectId) => {
-        const key = projectProgressKey(courseId, projectId);
+      getMeta: (courseId, projectId, lessonId) => {
+        const key = projectProgressKey(courseId, projectId, lessonId);
         return get().metaByKey[key] ?? defaultMeta();
       },
 
-      setLoading: (courseId, projectId, loading) => {
-        const key = projectProgressKey(courseId, projectId);
+      setLoading: (courseId, projectId, loading, lessonId) => {
+        const key = projectProgressKey(courseId, projectId, lessonId);
         set((state) => ({
           metaByKey: {
             ...state.metaByKey,
@@ -60,8 +66,8 @@ export const useProjectDeliveryStore = create<ProjectDeliveryState>()(
         }));
       },
 
-      setError: (courseId, projectId, error) => {
-        const key = projectProgressKey(courseId, projectId);
+      setError: (courseId, projectId, error, lessonId) => {
+        const key = projectProgressKey(courseId, projectId, lessonId);
         set((state) => ({
           metaByKey: {
             ...state.metaByKey,
@@ -70,20 +76,21 @@ export const useProjectDeliveryStore = create<ProjectDeliveryState>()(
         }));
       },
 
-      hydrate: (courseId, projectId, deliveries) => {
-        const key = projectProgressKey(courseId, projectId);
+      hydrate: (courseId, projectId, deliveries, lessonId) => {
+        const key = projectProgressKey(courseId, projectId, lessonId);
         set((state) => ({
           deliveriesByKey: mergeDeliveryFileIntoStore(
             courseId,
             projectId,
             { ...emptyProjectDeliveryFile({ courseId, projectId }), deliveries },
             state.deliveriesByKey,
+            lessonId,
           ),
         }));
       },
 
-      submitDelivery: async (courseId, projectId, rootPath, content) => {
-        const key = projectProgressKey(courseId, projectId);
+      submitDelivery: async (courseId, projectId, rootPath, content, lessonId) => {
+        const key = projectProgressKey(courseId, projectId, lessonId);
         const trimmed = content.trim();
         if (!trimmed) return false;
 

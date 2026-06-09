@@ -1,96 +1,35 @@
-# Frontend Architecture (React + Zustand, 3 layers)
+# Frontend architecture
 
-This folder is the **study UI** for the repo. It loads course content from a **static catalog** (`catalog.json`) generated from `course/`. No backend or auth for now; the structure supports swapping the data source later.
+## Route hierarchy
 
-## Goal
-- Render modules, examples, and PBL projects with **fluid navigation** (catalog → course → reader).
-- Keep **layer boundaries** so UI, state, and IO evolve independently.
+| Route | Component | Purpose |
+|-------|-----------|---------|
+| `/` | `CatalogRoute` | Course list |
+| `/course/:courseId` | `CourseExperienceRoute` | Legacy tab UI or hierarchy overview |
+| `/course/:courseId/module/:moduleId` | `ModuleExperienceRoute` | Module README + lesson list |
+| `/course/:courseId/module/:moduleId/lesson/:lessonId` | `LessonWorkspaceRoute` | Lesson explanation + drawer |
 
-## Non-goals (for now)
-- Server-side API integration.
-- Filesystem reads in the browser.
-- Deployment assumptions.
+### Lesson workspace drawer (URL state)
 
----
+- `?drawer=quiz&quiz=<id>` — quiz session in right drawer
+- `?drawer=project&project=<id>` — project workspace in drawer
+- `?drawerTab=files|delivery` — project drawer tab
 
-## The 3 layers
+Legacy courses (`structure: "legacy"`) keep the flat tab layout and `ContentReaderDialog` modal.
 
-### 1) Presentation (`src/presentation/`)
-**Responsibility**: Display data and capture user intent.
+## Score and deliverables
 
-```text
-presentation/
-  app/                    # App.tsx, AppRouter, AppLayout
-  features/               # Feature modules (catalog, course-experience, content-reader, shell)
-  shared/                 # MarkdownView, Breadcrumb, path utils
-  design-system/          # Tokens, primitives, patterns (no stores)
-```
+- Score file: `course/<courseSlug>/quiz/score.json` (one file per course)
+- Progress keys (localStorage): `${courseId}:quiz:${lessonId|_}:${quizId}` and `${courseId}:project:${lessonId|_}:${projectId}`
+- Score file storage keys use `${lessonId}/${id}` when scoped to a lesson
+- Dev API plugins validate course slugs (`javascript`) and hierarchy `rootPath` values
 
-Rules:
-- Components import from `application/` hooks/stores and `domain/` types only — **never** `infrastructure/`.
-- Feature routes are thin orchestrators; subcomponents receive props when possible.
+## Manual checklist (lesson workspace)
 
-### 2) Application (`src/application/`)
-**Responsibility**: Orchestrate flows, client state, selectors, use-cases.
-
-```text
-application/
-  stores/                 # Zustand: navigation, catalog, course experience, content reader
-  usecases/               # loadCatalog, navigateWithCleanup
-  selectors/              # getCourseById, lessonToReaderItem, …
-  hooks/                  # useCatalog, useCourse, useAppNavigation, …
-```
-
-### 3) Infrastructure (`src/infrastructure/`)
-**Responsibility**: Concrete IO (static JSON today; API later).
-
-```text
-infrastructure/
-  repositories/
-    staticCatalogRepository.ts
-  static/
-    catalog.json          # generated — run npm run catalog:generate
-```
-
-### Domain (`src/domain/`)
-Stable types and repository interfaces:
-
-```text
-domain/
-  types/                  # catalog, navigation, reader
-  repositories/           # CatalogRepository interface
-```
-
----
-
-## Feature modules
-
-| Module | Route | Store(s) |
-|--------|-------|----------|
-| **Shell** | layout wrapper | — |
-| **Catalog** | `/` | `courseCatalogStore` |
-| **Course experience** | `/course/:courseId?tab=` | `courseExperienceStore` |
-| **Content reader** | query `?reader=&readerTab=` | `contentReaderStore` |
-
-Navigation uses **React Router** with URL-synced tabs and reader state. `navigateWithCleanup` closes the reader when leaving a course or returning to the catalog.
-
----
-
-## Static catalog pipeline
-
-```text
-course/  →  npm run catalog:generate  →  catalog.json  →  staticCatalogRepository  →  courseCatalogStore
-```
-
-Regenerate after editing content under `course/`.
-
----
-
-## Checklist
-- [x] UI never imports from `infrastructure/` directly.
-- [x] Stores never import from `presentation/`.
-- [x] Infrastructure never imports stores or UI.
-- [x] Design system has no Zustand or feature imports.
-- [x] Reader closes on top-level navigation changes.
-
-See also: [`ARCHITECTURE-FRONT.md`](./ARCHITECTURE-FRONT.md) (student journey), [`DESIGN.md`](./DESIGN.md) (visual system).
+1. Open `/course/javascript` — module cards appear
+2. Open a module — lesson cards with progress bars
+3. Open a lesson — explanation visible in main pane
+4. Click a project — drawer opens; explanation remains visible; scroll position preserved
+5. Switch drawer tabs (Files, Delivery) — main pane unchanged
+6. Complete quiz in drawer — results shown; explanation still visible
+7. Reload page — drawer state restored from URL; progress syncs from `score.json`

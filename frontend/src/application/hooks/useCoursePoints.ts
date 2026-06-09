@@ -16,10 +16,13 @@ export function useCoursePoints(courseId: string, course: Course): CoursePointsW
 
   return useMemo(() => {
     const quizBestScores = course.quizzes.map(
-      (quiz) => quizByKey[quizProgressKey(courseId, quiz.id)]?.bestScore ?? 0,
+      (quiz) =>
+        quizByKey[quizProgressKey(courseId, quiz.id, quiz.lessonId)]?.bestScore ?? 0,
     );
     const projectStatuses = course.projects.map(
-      (project) => projectByKey[projectProgressKey(courseId, project.id)]?.status ?? "pending",
+      (project) =>
+        projectByKey[projectProgressKey(courseId, project.id, project.lessonId)]?.status ??
+        "pending",
     );
     return withCourseMaxPoints(course, computeCoursePoints({ quizBestScores, projectStatuses }));
   }, [course, courseId, projectByKey, quizByKey]);

@@ -13,6 +13,7 @@ export function QuizSessionPanel(props: {
   course: Course;
   quiz: Quiz;
   onBackToList: () => void;
+  compact?: boolean;
 }) {
   const currentIndex = useQuizSessionStore((s) => s.currentIndex);
   const answers = useQuizSessionStore((s) => s.answers);
@@ -51,13 +52,17 @@ export function QuizSessionPanel(props: {
 
   return (
     <section className="grid gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Button variant="ghost" size="md" onClick={props.onBackToList}>
-          <Icon icon={ArrowLeft} />
-          All quizzes
-        </Button>
-        <div className="text-meta text-text1">{props.quiz.title}</div>
-      </div>
+      {!props.compact ? (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Button variant="ghost" size="md" onClick={props.onBackToList}>
+            <Icon icon={ArrowLeft} />
+            All quizzes
+          </Button>
+          <div className="text-meta text-text1">{props.quiz.title}</div>
+        </div>
+      ) : (
+        <div className="text-meta font-semibold text-text0">{props.quiz.title}</div>
+      )}
 
       <QuizProgressBar current={currentIndex} total={total} />
 
