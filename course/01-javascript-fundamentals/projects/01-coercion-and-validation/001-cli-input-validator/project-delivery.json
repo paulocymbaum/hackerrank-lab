@@ -2,7 +2,7 @@
   "version": 2,
   "courseId": "01-javascript-fundamentals",
   "projectId": "001-cli-input-validator",
-  "updatedAt": "2026-06-09T00:22:38.284Z",
+  "updatedAt": "2026-06-09T00:26:56.649Z",
   "deliveries": [
     {
       "id": "2026-06-09T00:00:11.449Z",
@@ -25,8 +25,8 @@
       "submittedAt": "2026-06-09T00:22:08.951Z",
       "review": {
         "score": 10,
-        "comment": "**Module focus:** explicit conversion and defensive validation — avoid truthiness traps and implicit coercion on CLI input.\n\n**Code:** Still no `starter/index.js`. Nothing runnable to check against the README.\n\n**Latest delivery:** The snippet is unrelated to this exercise (variable assignment / `log(a,i)`). It does not read three stdin lines, validate emptiness, parse `age`/`score` with `Number()` + `Number.isFinite()`, or normalize `isActive`.\n\n**Gaps vs acceptance criteria:**\n- No implementation that rejects empty strings with `ERROR: <field> is required` (or equivalent).\n- Cannot verify valid `age = 0`, finite decimal `score`, or case-insensitive `true`/`false`.\n- Output format (single JSON line or single `ERROR:` line) is not implemented.\n\n**Next step:** Create `starter/index.js` following the README plan: read 3 trimmed lines, validate length explicitly, parse numbers without `parseInt`/`parseFloat`, map `isActive` with explicit string comparison, then print the required JSON or error line.",
-        "reviewedAt": "2026-06-09T00:22:38.284Z"
+        "comment": "No starter/index.js to evaluate. Deliveries are placeholders only. Next: read three stdin lines, reject empty input, parse with Number.isFinite, normalize isActive, print JSON or ERROR.",
+        "reviewedAt": "2026-06-09T00:26:56.649Z"
       }
     }
   ]

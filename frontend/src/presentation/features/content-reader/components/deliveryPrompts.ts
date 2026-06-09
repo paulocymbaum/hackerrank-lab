@@ -20,7 +20,7 @@ export function buildReviewCursorPrompt(ctx: DeliveryPromptContext): string {
     "",
     "Review my latest delivery using my last 3 submissions (chronological order), this project's README acceptance criteria, and starter/ code.",
     "Grade only the exercise: module lesson concepts, project acceptance criteria, and starter/ code. Do not comment on the study app UI, delivery workflow, project-delivery.json, or repo architecture.",
-    "Save a score from 0 to 100 and a comment on the latest delivery.",
+    "Save a score from 0 to 100 and a short comment (max 480 chars, 2-4 plain sentences, no markdown headers) on the latest delivery.",
   ].join("\n");
 }
 

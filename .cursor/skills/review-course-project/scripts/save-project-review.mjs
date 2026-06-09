@@ -17,6 +17,7 @@ import {
   passesReview,
   setDeliveryReview,
 } from "../../../../frontend/scripts/project-delivery-lib.mjs";
+import { validateReviewComment } from "./review-comment.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(scriptDir, "..", "..", "..", "..");
@@ -111,6 +112,21 @@ async function main() {
     process.exit(2);
   }
 
+  const commentCheck = validateReviewComment(args.comment);
+  for (const warning of commentCheck.warnings) {
+    process.stderr.write(`WARN: ${warning}\n`);
+  }
+  if (!commentCheck.ok) {
+    process.stderr.write("Invalid review comment:\n");
+    for (const error of commentCheck.errors) {
+      process.stderr.write(`- ${error}\n`);
+    }
+    process.stderr.write(
+      '\nUse 2–4 plain sentences. Example: "No starter/index.js yet. Next: read three stdin lines, validate emptiness, parse with Number.isFinite, print JSON or ERROR."\n',
+    );
+    process.exit(1);
+  }
+
   const resolved = resolveProjectPath(args.projectPath);
   if (!resolved) {
     process.stderr.write("Invalid project path.\n");
@@ -134,7 +150,7 @@ async function main() {
 
   const next = setDeliveryReview(file, deliveryId, {
     score: Math.round(args.score),
-    comment: args.comment,
+    comment: args.comment.trim(),
   });
 
   if (!next) {

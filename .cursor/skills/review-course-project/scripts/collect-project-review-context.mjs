@@ -15,6 +15,12 @@ import {
   getLastDeliveries,
   normalizeProjectDeliveryFile,
 } from "../../../../frontend/scripts/project-delivery-lib.mjs";
+import {
+  COMMENT_EXAMPLES,
+  COMMENT_TEMPLATE,
+  MAX_REVIEW_COMMENT_LENGTH,
+  MAX_REVIEW_COMMENT_LINES,
+} from "./review-comment.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(scriptDir, "..", "..", "..", "..");
@@ -157,6 +163,12 @@ async function collectContext(projectPathInput) {
         "Using the delivery feature correctly",
         "Repo tooling and skills (never mention in student comment)",
       ],
+      commentRules: {
+        maxChars: MAX_REVIEW_COMMENT_LENGTH,
+        maxLines: MAX_REVIEW_COMMENT_LINES,
+        format: COMMENT_TEMPLATE,
+        examples: COMMENT_EXAMPLES,
+      },
     },
   };
 }
@@ -183,6 +195,20 @@ function formatMarkdown(ctx) {
     "- Pass: **score > 80** → project marked done in course progress",
     "- Compare work against **Acceptance criteria** and **Functional requirements** in the project README",
     "- Tie feedback to **module concepts** below when relevant",
+    "",
+    "## Comment format (STRICT — shown in Delivery tab)",
+    "",
+    `- **Max ${MAX_REVIEW_COMMENT_LENGTH} characters**, **max ${MAX_REVIEW_COMMENT_LINES} lines**`,
+    "- Plain sentences only — no `**Section:**` headers or long bullet lists",
+    `- Template: ${COMMENT_TEMPLATE}`,
+    "",
+    "**Good pass example:**",
+    "",
+    `"${COMMENT_EXAMPLES.pass}"`,
+    "",
+    "**Good fail example:**",
+    "",
+    `"${COMMENT_EXAMPLES.failNoCode}"`,
     "",
     "## Module lesson context",
     "",
@@ -236,11 +262,12 @@ function formatMarkdown(ctx) {
     }
   }
 
-  lines.push("## Save review", "", "```bash");
+  lines.push("## Save review", "", "Write a **short** comment first, then run:", "", "```bash");
   lines.push(
-    `node .cursor/skills/review-course-project/scripts/save-project-review.mjs ${ctx.projectPath} --score <0-100> --comment "<feedback>"`,
+    `node .cursor/skills/review-course-project/scripts/save-project-review.mjs ${ctx.projectPath} --score <0-100> --comment "<2-4 sentences>"`,
   );
   lines.push("```", "");
+  lines.push("_Script rejects comments over 480 chars, over 5 lines, or with banned platform/tooling phrases._", "");
 
   return lines.join("\n");
 }
