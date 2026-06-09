@@ -28,5 +28,58 @@ function normalize(s) {
   return String(s ?? "").trim().toLowerCase();
 }
 
-module.exports = { loadGraph, normalize };
+const INDEX_PREFIX_RE = /^(\d+(?:\.\d+)*)\s+(.*)$/;
+
+function extractIndexPath(label) {
+  const m = String(label ?? "")
+    .trim()
+    .match(/^(\d+(?:\.\d+)*)(?:\s|$)/);
+  return m ? m[1] : null;
+}
+
+function stripIndexPrefix(label) {
+  const m = String(label ?? "").trim().match(INDEX_PREFIX_RE);
+  return m ? m[2].trim() : String(label ?? "").trim();
+}
+
+function normalizeLabelText(label) {
+  return normalize(stripIndexPrefix(label));
+}
+
+function normalizeIndexPath(raw) {
+  const parts = String(raw ?? "")
+    .trim()
+    .split(".")
+    .filter(Boolean);
+  if (!parts.length) return null;
+
+  const normalized = [];
+  for (let i = 0; i < parts.length; i += 1) {
+    const n = Number(parts[i]);
+    if (!Number.isFinite(n) || n < 1 || !Number.isInteger(n)) return null;
+    normalized.push(i === 0 ? String(n).padStart(2, "0") : String(n));
+  }
+  return normalized.join(".");
+}
+
+function indexPathsEqual(a, b) {
+  const left = normalizeIndexPath(a);
+  const right = normalizeIndexPath(b);
+  return left != null && right != null && left === right;
+}
+
+function labelsMatch(nodeLabel, query) {
+  return normalizeLabelText(nodeLabel) === normalizeLabelText(query);
+}
+
+module.exports = {
+  loadGraph,
+  normalize,
+  extractIndexPath,
+  stripIndexPrefix,
+  normalizeLabelText,
+  normalizeIndexPath,
+  indexPathsEqual,
+  labelsMatch,
+};
 
