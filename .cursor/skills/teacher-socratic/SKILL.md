@@ -95,7 +95,10 @@ Typical commands:
 ```bash
 node .cursor/tools/graph/find-topic-bfs.js "Topic"
 node .cursor/tools/graph/find-topic-dfs.js "Topic"
+node .cursor/tools/graph/find-node-by-index.js "01.2.1"
 ```
+
+Label-based commands ignore numeric prefixes (e.g. `"Closures"` matches `"04.2 Closures"`). Use `find-node-by-index.js` when you already have the module path (e.g. `01`, `03.2.1`).
 
 ## What NOT to do
 
