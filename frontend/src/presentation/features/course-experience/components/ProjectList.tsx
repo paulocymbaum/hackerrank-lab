@@ -2,7 +2,7 @@ import type { Project } from "../../../../domain/types/catalog";
 import { Card, EmptyState, Icon } from "../../../design-system";
 import { ClipboardList } from "lucide-react";
 import { useProjectProgressStore } from "../../../../application/stores/projectProgressStore";
-import { ProjectStatusControl } from "./ProjectStatusControl";
+import { ProjectStatusBadge } from "./ProjectStatusBadge";
 
 export function ProjectList(props: {
   courseId: string;
@@ -10,7 +10,6 @@ export function ProjectList(props: {
   onOpenProject: (project: Project) => void;
 }) {
   const getStatus = useProjectProgressStore((s) => s.getStatus);
-  const setStatus = useProjectProgressStore((s) => s.setStatus);
 
   return (
     <Card variant="panel" className="p-4">
@@ -41,11 +40,7 @@ export function ProjectList(props: {
                   >
                     {project.title}
                   </button>
-                  <ProjectStatusControl
-                    value={status}
-                    showPoints
-                    onChange={(next) => setStatus(props.courseId, project.id, next)}
-                  />
+                  <ProjectStatusBadge value={status} showPoints />
                 </div>
               </li>
             );

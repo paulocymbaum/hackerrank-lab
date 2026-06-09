@@ -1,4 +1,5 @@
 export { Button, type ButtonVariant, type ButtonSize } from "./components/Button";
+export { Textarea } from "./components/Textarea";
 export { Card, type CardVariant } from "./components/Card";
 export { Accordion } from "./components/Accordion";
 export { Tabs, type TabItem } from "./components/Tabs";

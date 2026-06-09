@@ -13,6 +13,8 @@ type ProjectProgressState = {
   getStatus: (courseId: string, projectId: string) => ProjectStatus;
   getProgress: (courseId: string, projectId: string) => ProjectProgress | null;
   setStatus: (courseId: string, projectId: string, status: ProjectStatus) => void;
+  markProjectDoing: (courseId: string, projectId: string) => void;
+  markProjectDone: (courseId: string, projectId: string) => void;
   hydrateCourseScores: (courseId: string, file: CourseScoreFile) => void;
 };
 
@@ -42,6 +44,16 @@ export const useProjectProgressStore = create<ProjectProgressState>()(
           },
         }));
         void persistProjectStatus(courseId, projectId, status);
+      },
+      markProjectDoing: (courseId, projectId) => {
+        const current = get().getStatus(courseId, projectId);
+        if (current !== "pending") return;
+        get().setStatus(courseId, projectId, "doing");
+      },
+      markProjectDone: (courseId, projectId) => {
+        const current = get().getStatus(courseId, projectId);
+        if (current === "done") return;
+        get().setStatus(courseId, projectId, "done");
       },
       hydrateCourseScores: (courseId, file) => {
         set((state) => ({

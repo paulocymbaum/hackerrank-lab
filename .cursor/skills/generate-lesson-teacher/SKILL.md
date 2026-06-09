@@ -76,7 +76,16 @@ Use when you want to add a new practice exercise under `projects/` following the
 node .cursor/tools/teacher/add-project-idea.js 01-fundamentos-de-javascript 1 "Sintaxe e Estruturas" 1 "Calculadora CLI"
 ```
 
-Hard rule: when generating a new module, you must use `add-project-idea.js` at least once to populate the `projects/<NN-topic>/<NNN-project>/` structure (folders + template README) so the module has a complete, runnable practice track.
+Hard rule: when generating a new module, you must use `add-project-idea.js` at least once to populate the `projects/<NN-topic>/<NNN-project>/` structure (folders + template README + `starter/index.js` stub) so the module has a complete, runnable practice track.
+
+For authoring and validating PBL content, use the **create-course-project** skill:
+
+```bash
+node .cursor/skills/create-course-project/scripts/collect-project-context.mjs <course-id>
+node .cursor/skills/create-course-project/scripts/validate-project.mjs course/<course-id>
+```
+
+See `.cursor/skills/create-course-project/SKILL.md` and `reference.md`.
 
 ## When to choose BFS/DFS vs these tools
 

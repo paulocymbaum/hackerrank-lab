@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const { execFileSync } = require("child_process");
+const { projectReadmeSkeleton, starterIndexStub } = require("./project-templates");
 
 function kebabCase(s) {
   return String(s ?? "")
@@ -116,44 +117,16 @@ function main() {
     process.exit(4);
   }
 
-  const md = [
-    `# ${projectTitleRaw}`,
-    "",
-    "## Problem context",
-    "",
-    "## Goal",
-    "",
-    "## Functional requirements",
-    "- [ ]",
-    "",
-    "## Non-functional requirements",
-    "- [ ] Readability and maintainability",
-    "- [ ] Error handling",
-    "- [ ] Performance (when applicable)",
-    "",
-    "## Constraints",
-    "- [ ]",
-    "",
-    "## Acceptance criteria",
-    "- [ ]",
-    "",
-    "## Example data (if applicable)",
-    "",
-    "## Suggested plan (no solution)",
-    "1.",
-    "",
-    "## Deliverables",
-    "- [ ] Code in `starter/`",
-    "- [ ] (Optional) reference in `solution/`",
-    "",
-    "## Extensions (optional)",
-    "- [ ]",
-    "",
-  ].join("\n");
+  const md = projectReadmeSkeleton(projectTitleRaw);
 
   execFileSync("node", [injectTool, "README.md", projectPath, md], {
     stdio: ["ignore", "ignore", "inherit"],
   });
+
+  const starterPath = path.join(projectPath, "starter", "index.js");
+  if (!fs.existsSync(starterPath)) {
+    fs.writeFileSync(starterPath, starterIndexStub(projectTitleRaw), "utf8");
+  }
 
   process.stdout.write(
     JSON.stringify(
