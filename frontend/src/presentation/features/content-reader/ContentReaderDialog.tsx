@@ -1,17 +1,19 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import type { ReaderEntry, ReaderItem } from "../../../domain/types/reader";
 import { useContentReader } from "../../../application/hooks/useContentReader";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
+import { useCourse } from "../../../application/hooks/useCourse";
 import { useProjectProgressStore } from "../../../application/stores/projectProgressStore";
-import { parentPath, humanPathSegments, basename } from "../../shared/utils/pathUtils";
+import { parentPath, humanPathSegments } from "../../shared/utils/pathUtils";
 import { Dialog, Button } from "../../design-system";
 import { MarkdownView } from "../../shared/MarkdownView";
 import { ReaderHeader } from "./components/ReaderHeader";
 import { ReaderTabBar } from "./components/ReaderTabBar";
 import { FolderBrowser } from "./components/FolderBrowser";
 import { FilePreview } from "./components/FilePreview";
-import { ProjectStatusControl } from "../course-experience/components/ProjectStatusControl";
+import { ProjectDeliveryPanel } from "./components/ProjectDeliveryPanel";
+import { ProjectStatusBadge } from "../course-experience/components/ProjectStatusBadge";
 
 function getExplanationMarkdown(item: ReaderItem, entries: ReaderEntry[], cwd: string): string {
   if (item.kind === "lesson") return item.markdown;
@@ -22,11 +24,12 @@ function getExplanationMarkdown(item: ReaderItem, entries: ReaderEntry[], cwd: s
 
 export function ContentReaderDialog() {
   const { courseId = "" } = useParams();
+  const { course } = useCourse(courseId);
   const { isOpen, item, tab, cwd, selectedFilePath, close, setTab, setCwd, selectFile } =
     useContentReader();
   const { closeReader, setReaderTab } = useAppNavigation();
   const getProjectStatus = useProjectProgressStore((s) => s.getStatus);
-  const setProjectStatus = useProjectProgressStore((s) => s.setStatus);
+  const markProjectDoing = useProjectProgressStore((s) => s.markProjectDoing);
 
   const entries = item?.entries ?? [];
 
@@ -43,6 +46,12 @@ export function ContentReaderDialog() {
 
   const filesInCwd = children.filter((c) => c.kind === "file");
   const showFolders = item?.kind === "project";
+  const showDelivery = item?.kind === "project";
+
+  useEffect(() => {
+    if (tab !== "delivery" || !showDelivery || !item?.projectId) return;
+    markProjectDoing(courseId, item.projectId);
+  }, [tab, showDelivery, item?.projectId, courseId, markProjectDoing]);
 
   const breadcrumbSegments = useMemo(() => {
     if (!item) return [];
@@ -79,13 +88,14 @@ export function ContentReaderDialog() {
               value={tab}
               onValueChange={handleTabChange}
               showFolders={showFolders}
+              showDelivery={showDelivery}
             />
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               {item.kind === "project" && item.projectId ? (
-                <ProjectStatusControl
+                <ProjectStatusBadge
                   value={getProjectStatus(courseId, item.projectId)}
                   showPoints
-                  onChange={(status) => setProjectStatus(courseId, item.projectId!, status)}
+                  size="md"
                 />
               ) : null}
               <Button variant="ghost" size="md" onClick={handleClose}>
@@ -120,6 +130,17 @@ export function ContentReaderDialog() {
           showUp={item.kind === "project"}
           onCwdChange={setCwd}
           onSelectFile={selectFile}
+        />
+      ) : null}
+
+      {tab === "delivery" && showDelivery && item.projectId && item.rootPath ? (
+        <ProjectDeliveryPanel
+          courseId={courseId}
+          courseTitle={course?.title ?? ""}
+          projectTitle={item.title}
+          projectId={item.projectId}
+          rootPath={item.rootPath}
+          enabled={tab === "delivery"}
         />
       ) : null}
     </Dialog>

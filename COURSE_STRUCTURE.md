@@ -103,20 +103,37 @@ Cada pasta de módulo em `course/<NN-nome-do-modulo>/` deve conter:
 
 ## Padrão PBL para cada exercício (`projects/.../<NNN-nome>/README.md`)
 
-O `README.md` de cada projeto deve seguir (no mínimo) esta estrutura:
+O `README.md` de cada projeto deve seguir (no mínimo) esta estrutura.  
+**Contrato canônico em inglês** (usado pelo frontend e pelas skills): ver [`.cursor/skills/create-course-project/reference.md`](.cursor/skills/create-course-project/reference.md).
 
-- **Contexto do problema**: cenário realista (ex.: “um time precisa padronizar validação de inputs”).
-- **Objetivo**: o que deve ser construído.
-- **Requisitos funcionais**: lista objetiva do comportamento esperado.
-- **Requisitos não-funcionais**: qualidade, legibilidade, performance, segurança, manutenibilidade.
-- **Restrições**: bibliotecas permitidas/proibidas, limite de tempo, formato de I/O, etc.
-- **Critérios de aceite**: itens verificáveis (checklist).
-- **Dados de exemplo** (se aplicável): entradas e saídas esperadas.
-- **Plano sugerido**: passos recomendados (sem entregar a solução).
-- **Entregáveis**:
-  - Código em `starter/` (base inicial) e/ou implementação final
+- **Problem context** / Contexto do problema: cenário realista (ex.: “um time precisa padronizar validação de inputs”).
+- **Goal** / Objetivo: o que deve ser construído.
+- **Functional requirements** / Requisitos funcionais: lista objetiva do comportamento esperado.
+- **Non-functional requirements** / Requisitos não-funcionais: qualidade, legibilidade, performance, segurança, manutenibilidade.
+- **Constraints** / Restrições: bibliotecas permitidas/proibidas, limite de tempo, formato de I/O, etc.
+- **Acceptance criteria** / Critérios de aceite: itens verificáveis (checklist).
+- **Example data (if applicable)** / Dados de exemplo: entradas e saídas esperadas.
+- **Suggested plan (no solution)** / Plano sugerido: passos recomendados (sem entregar a solução).
+- **Deliverables** / Entregáveis:
+  - Código em `starter/index.js` (entrypoint: `node starter/index.js`)
   - (Opcional) `solution/` para referência
-- **Extensões** (opcional): desafios extras para ir além.
+  - (Opcional) `project-delivery.json` — histórico de entregas escritas pelo aluno na aba **Delivery** do frontend
+- **Extensions (optional)** / Extensões: desafios extras para ir além.
+
+### Numeração de projetos (`NNN`)
+
+Os ids `001`, `002`, `003`… são **sequenciais no módulo inteiro**, não reiniciam em cada pasta de tópico.  
+Exemplo válido: `projects/02-comparisons-and-rules/003-record-filter/` após `001` e `002` em outro tópico.
+
+### Visão do módulo (`projects/README.md`)
+
+Cada módulo deve ter `projects/README.md` com:
+- convenções de pastas (`NN-` tópico, `NNN-` projeto)
+- workflow (UI + `node starter/index.js` + aba Delivery)
+- catálogo por tópico (lista de projetos com one-liner)
+- checklist do contrato PBL
+
+Template: [`.cursor/skills/create-course-project/templates/module-projects-readme.md`](.cursor/skills/create-course-project/templates/module-projects-readme.md)
 
 ## Convenções de nomenclatura
 

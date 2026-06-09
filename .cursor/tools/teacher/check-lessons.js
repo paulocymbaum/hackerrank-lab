@@ -20,6 +20,29 @@ function listDirs(p) {
   }
 }
 
+function countProjects(modulePath) {
+  const projectsRoot = path.join(modulePath, "projects");
+  if (!isDir(projectsRoot)) return { topics: 0, projects: 0, withReadme: 0 };
+
+  let topics = 0;
+  let projects = 0;
+  let withReadme = 0;
+
+  for (const topic of listDirs(projectsRoot)) {
+    topics += 1;
+    const topicPath = path.join(projectsRoot, topic);
+    for (const project of listDirs(topicPath)) {
+      projects += 1;
+      if (fs.existsSync(path.join(topicPath, project, "README.md"))) {
+        const raw = fs.readFileSync(path.join(topicPath, project, "README.md"), "utf8");
+        if (raw.trim()) withReadme += 1;
+      }
+    }
+  }
+
+  return { topics, projects, withReadme };
+}
+
 function usage() {
   return [
     "Usage: node .cursor/tools/teacher/check-lessons.js [courseRoot=course]",
@@ -27,6 +50,10 @@ function usage() {
     "What it does:",
     "- Scans the repo for modules under course/",
     "- Reports module folders and whether required files exist (README.md, projects/README.md).",
+    "- Summarizes project folders (total vs render-ready README).",
+    "",
+    "For PBL validation, run:",
+    "  node .cursor/skills/create-course-project/scripts/validate-project.mjs --all",
     "",
     "Exit codes:",
     "- 0: scan succeeded",
@@ -52,6 +79,7 @@ function main() {
     const readmePath = path.join(modulePath, "README.md");
     const projectsReadmePath = path.join(modulePath, "projects", "README.md");
     const examplesPath = path.join(modulePath, "examples");
+    const projectCounts = countProjects(modulePath);
     return {
       moduleDir: dir,
       modulePath: path.relative(process.cwd(), modulePath),
@@ -60,6 +88,7 @@ function main() {
         projectsReadme: fs.existsSync(projectsReadmePath),
         examplesDir: isDir(examplesPath),
       },
+      projects: projectCounts,
     };
   });
 

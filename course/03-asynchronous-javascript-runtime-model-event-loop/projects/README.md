@@ -2,27 +2,32 @@
 
 ## How to use
 - Each topic lives in a folder `NN-.../`.
-- Each exercise lives in a folder `NNN-.../` with:
-  - `README.md` (problem statement + acceptance criteria)
-  - `starter/` (your implementation)
-  - `solution/` (optional reference)
+- Each exercise lives in a folder `NNN-.../` with `README.md`, `starter/`, and (optionally) `solution/`.
+- Project numbers (`001`, `002`, …) are **sequential across the whole module**, not reset per topic.
 
 ## Recommended workflow
-1. Open the project `README.md`.
-2. Implement your solution in `starter/`.
-3. Run with Node:
+1. Open the project in the study UI (course → **Projects** tab → open project).
+2. Read **Explanation**, browse **Folders/Files**, implement in `starter/`.
+3. Run locally:
 
 ```bash
 node starter/index.js
 ```
 
-If a project doesn’t include `starter/index.js` yet, create it as your entrypoint.
+4. When done, use the **Delivery** tab to save your write-up (persisted as `project-delivery.json` in the project folder).
 
-## What each topic trains
+If `starter/index.js` doesn't exist yet, create it as your entrypoint.
+
+## What you should practice in this module
+- Predicting **output order** using the runtime model (call stack → microtasks → tasks).
+- Building async utilities with clear invariants, retries, and backpressure.
+- Separating scheduling from the call stack (no conflating stack with task queues).
+
+## Topic catalog
 
 ### `01-event-loop-basics/`
 - Focus: **predicting output order** using the runtime model (call stack → microtasks → tasks).
-- Project:
+- Projects:
   - `001-output-order-predictor/`: build a small “predict-first” trainer that explains ordering without using `eval`.
 
 ### `02-promises-and-async/`
@@ -30,3 +35,18 @@ If a project doesn’t include `starter/index.js` yet, create it as your entrypo
 - Projects:
   - `002-retry-with-backoff/`: retry an async operation with exponential backoff and stop conditions.
   - `003-concurrency-limiter/`: limit the number of in-flight async tasks (FIFO queue, no deadlocks).
+
+## Project structure (PBL contract)
+Each project `README.md` must include (minimum):
+- **Problem context**
+- **Goal**
+- **Functional requirements**
+- **Non-functional requirements**
+- **Constraints**
+- **Acceptance criteria**
+- **Example data** (if applicable)
+- **Suggested plan (no solution)**
+- **Deliverables** (`starter/` and optionally `solution/`)
+- **Extensions** (optional)
+
+See `.cursor/skills/create-course-project/reference.md` and `COURSE_STRUCTURE.md`.

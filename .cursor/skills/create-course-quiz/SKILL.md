@@ -83,4 +83,5 @@ File base name should match quiz `id` (e.g. `01-fundamentals-check.json` → `"i
 - Full schema and design rules: [reference.md](reference.md)
 - Command examples: [examples.md](examples.md)
 - Repo quiz UI types: `frontend/src/domain/types/quiz.ts`
+- PBL projects (parallel skill): `.cursor/skills/create-course-project/SKILL.md`
 - Content contract for modules/lessons: `.cursor/rules/course-and-lesson-content.mdc`

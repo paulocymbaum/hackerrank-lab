@@ -141,6 +141,8 @@ async function walkProjectRoot(absRootDir) {
 
       if (!ent.isFile()) continue;
 
+      if (ent.name.toLowerCase() === "project-delivery.json") continue;
+
       const ext = path.extname(ent.name).toLowerCase();
       if (!TEXT_EXTENSIONS.has(ext)) {
         entries.push({ path: relFromRoot, kind: "file" });

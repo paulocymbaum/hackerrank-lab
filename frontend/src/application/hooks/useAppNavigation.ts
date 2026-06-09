@@ -8,7 +8,7 @@ import { useCourseExperienceStore } from "../stores/courseExperienceStore";
 import { useQuizSessionStore } from "../stores/quizSessionStore";
 
 const VALID_TABS: CourseTab[] = ["readme", "examples", "projects", "quiz"];
-const VALID_READER_TABS: ReaderTab[] = ["folders", "explanation", "files"];
+const VALID_READER_TABS: ReaderTab[] = ["folders", "explanation", "files", "delivery"];
 
 function parseCourseTab(value: string | null): CourseTab {
   if (value && VALID_TABS.includes(value as CourseTab)) return value as CourseTab;

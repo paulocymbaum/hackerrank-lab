@@ -1,4 +1,4 @@
-# Projects — Objects, References, and Copying
+# Projects — {{MODULE_TITLE}}
 
 ## How to use
 - Each topic lives in a folder `NN-.../`.
@@ -22,14 +22,10 @@ If `starter/index.js` doesn't exist yet, create it as your entrypoint.
 - Applying the concepts from the module `README.md` in small, testable problems.
 - Writing explicit validation and error handling.
 - Keeping code readable: small functions, clear invariants, predictable inputs/outputs.
-- Proving **non-mutation** and copy semantics with clear data flow.
 
 ## Topic catalog
 
-### `01-data-shaping-and-safety/`
-- Focus: **normalization without mutating input**, nested object safety.
-- Projects:
-  - `001-safe-normalizer/`: normalize nested user records; reject invalid input; never mutate the original object.
+<!-- One ### `NN-topic-slug/` section per topic group; list each NNN-project with a one-line blurb. -->
 
 ## Project structure (PBL contract)
 Each project `README.md` must include (minimum):
