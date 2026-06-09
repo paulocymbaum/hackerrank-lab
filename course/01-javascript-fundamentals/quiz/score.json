@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "courseId": "01-javascript-fundamentals",
+  "updatedAt": "2026-06-09T00:06:45.486Z",
+  "quizzes": {},
+  "projects": {
+    "001-cli-input-validator": {
+      "projectId": "001-cli-input-validator",
+      "status": "doing",
+      "points": 0,
+      "updatedAt": "2026-06-09T12:00:00.000Z"
+    },
+    "003-record-filter": {
+      "projectId": "003-record-filter",
+      "status": "doing",
+      "points": 0,
+      "updatedAt": "2026-06-08T23:54:41.523Z"
+    },
+    "002-data-normalizer": {
+      "projectId": "002-data-normalizer",
+      "status": "doing",
+      "points": 0,
+      "updatedAt": "2026-06-09T00:01:01.129Z"
+    }
+  }
+}
