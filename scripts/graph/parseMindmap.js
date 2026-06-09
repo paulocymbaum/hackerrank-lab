@@ -66,8 +66,10 @@ function parseMindmapText(text) {
     const label = normalizeLabel(labelRaw);
     if (!label) continue;
 
-    // Ensure stack length == depth (parent at depth-1)
+    // Ensure stack length == depth (parent at depth-1).
+    // Siblings share the same depth: pop the previous node at this level.
     while (stack.length > depth) stack.pop();
+    if (stack.length === depth && depth > 0) stack.pop();
 
     const parentId = stack.length ? stack[stack.length - 1] : null;
     const id = stableId(label, parentId);

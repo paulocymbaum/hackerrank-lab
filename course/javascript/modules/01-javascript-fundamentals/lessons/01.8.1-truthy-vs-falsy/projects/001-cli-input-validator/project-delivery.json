@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "courseId": "01-javascript-fundamentals",
+  "projectId": "001-cli-input-validator",
+  "updatedAt": "2026-06-09T00:26:56.649Z",
+  "deliveries": [
+    {
+      "id": "2026-06-09T00:00:11.449Z",
+      "content": "ALALALALALALLALLA",
+      "submittedAt": "2026-06-09T00:00:11.449Z"
+    },
+    {
+      "id": "2026-06-09T00:00:19.245Z",
+      "content": "AAAAAA",
+      "submittedAt": "2026-06-09T00:00:19.245Z",
+      "review": {
+        "score": 12,
+        "comment": "**Module focus:** explicit conversion and defensive validation (no truthiness/coercion traps).\n\n**Code:** No implementation in `starter/` — the CLI cannot be evaluated against the README.\n\n**Gaps vs acceptance criteria:**\n- Cannot verify reading 3 stdin lines or rejecting empty strings with a clear `ERROR: …` message.\n- Cannot verify `Number()` + `Number.isFinite()` for `age` and `score`, including valid `age = 0` and decimal scores.\n- Cannot verify case-insensitive `true`/`false` parsing for `isActive`.\n\n**Next step:** In `starter/index.js`, read and trim three lines, validate emptiness explicitly, parse numbers with `Number()` and `Number.isFinite()`, normalize `isActive`, and print one JSON line or a single error line as specified in the README.",
+        "reviewedAt": "2026-06-09T00:13:32.321Z"
+      }
+    },
+    {
+      "id": "2026-06-09T00:22:08.951Z",
+      "content": "const i = 10\nconst a = i\na=20\n\nlog(a,i)",
+      "submittedAt": "2026-06-09T00:22:08.951Z",
+      "review": {
+        "score": 10,
+        "comment": "No starter/index.js to evaluate. Deliveries are placeholders only. Next: read three stdin lines, reject empty input, parse with Number.isFinite, normalize isActive, print JSON or ERROR.",
+        "reviewedAt": "2026-06-09T00:26:56.649Z"
+      }
+    }
+  ]
+}

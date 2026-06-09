@@ -1,94 +1,71 @@
 ---
 name: generate-lesson-teacher
-description: Generates a complete course module lesson (folder + README content) following COURSE_STRUCTURE.md. Use when the user asks to create a new lesson/module in `course/`, check existing lessons, scaffold boilerplate, or append detailed markdown explanations deterministically.
+description: Generates lesson content (explanation + projects) following COURSE_STRUCTURE.md hierarchy. Use when creating or updating a single lesson under course/<course>/modules/<module>/lessons/.
 disable-model-invocation: true
 ---
 
-# Generate One Lesson (Module) — Teacher Workflow
+# Generate Lesson Content — Teacher Workflow
 
-This skill focuses on generating **one module lesson** under `course/` following `COURSE_STRUCTURE.md`.
+This skill focuses on generating **one lesson** (graph leaf) under the hierarchy in `COURSE_STRUCTURE.md`.
 
-## Repo contract (from `COURSE_STRUCTURE.md`)
+## Hierarchy
 
-- Root folder is `course/`
-- Each module folder is `NN-kebab-case-title/` (or `00-welcome/`)
-- Each module contains:
-  - `README.md` (detailed explanation)
-  - `examples/` (recommended)
-  - `projects/README.md` (projects overview — must be complete)
-
-## Tools (runnable)
-
-All tools live in `.cursor/tools/teacher/`.
-
-### Shared building blocks
-
-Note: `create-lesson-folder.js` may **not** create `examples/` automatically. When you need `examples/`, create that folder explicitly (e.g. via `mkdir -p course/<module>/examples`) *before* generating example files with `add-explanation.js`.
-
-Also: use the teacher tools below to keep module generation deterministic and consistent with `COURSE_STRUCTURE.md`.
-
-### 1) Check previous lessons
-
-Use when you need to avoid duplicate modules, confirm numbering, or find what already exists.
-
-```bash
-node .cursor/tools/teacher/check-lessons.js
+```
+course/<course>/modules/<module>/lessons/<graphIndex>-<slug>/
+  README.md          # explanation
+  lesson.meta.json
+  projects/          # optional
+  quiz/              # optional
 ```
 
-### 2) Generate folder boilerplate (deterministic)
+## Tools
 
-Use when starting a new lesson/module. This creates the required structure and a marker file.
+All tools live in `.cursor/tools/teacher/` and `scripts/graph/`.
 
-```bash
-node .cursor/tools/teacher/create-lesson-folder.js 1 "Fundamentos de JavaScript"
-```
-
-Notes:
-- The boilerplate tool must create a **render-ready** `projects/README.md` following the `COURSE_STRUCTURE.md` contract:
-  - how to run projects
-  - folder conventions
-  - what each project README must contain (PBL sections)
- - The boilerplate tool may not create `examples/` yet. If your module needs examples (recommended), create `course/<module>/examples/` before step 3.
-
-### 3) Append explanation markdown (ONLY if created by the tool)
-
-Use when you already created the module folder with the boilerplate tool and you want to write the complete lesson content into `course/<module>/README.md`.
-
-The tool reads a multi-line markdown string from stdin and appends it.
+### 1) Find topic in graph
 
 ```bash
-cat explanation.md | node .cursor/tools/teacher/add-explanation.js 01-fundamentos-de-javascript
+node .cursor/tools/graph/find-node-by-index.js "01.8.1"
+node scripts/graph/generate-content-map.mjs   # check exists vs planned
 ```
 
-You may also use this tool to generate render-ready markdown files under the module (e.g. `examples/...`) by passing a `targetFile`:
+### 2) Scaffold lesson folder
 
 ```bash
-cat example.md | node .cursor/tools/teacher/add-explanation.js 01-fundamentos-de-javascript course examples/01-some-example.md
+node scripts/graph/scaffold-from-graph.mjs "01.8.1"
+# or:
+node .cursor/tools/teacher/create-lesson-folder.js "01.8.1"
 ```
 
-Hard rule: **never write explanations with the tool unless `course/<module>/.cursor-created.json` exists**.
-
-### 4) Add one PBL project idea (folder + template)
-
-Use when you want to add a new practice exercise under `projects/` following the PBL README structure in `COURSE_STRUCTURE.md`.
+### 3) Append explanation markdown
 
 ```bash
-node .cursor/tools/teacher/add-project-idea.js 01-fundamentos-de-javascript 1 "Sintaxe e Estruturas" 1 "Calculadora CLI"
+cat explanation.md | node .cursor/tools/teacher/add-explanation.js javascript 01-javascript-fundamentals 01.8.1-truthy-vs-falsy
 ```
 
-Hard rule: when generating a new module, you must use `add-project-idea.js` at least once to populate the `projects/<NN-topic>/<NNN-project>/` structure (folders + template README + `starter/index.js` stub) so the module has a complete, runnable practice track.
+Hard rule: **never write unless `.cursor-created.json` exists** in the lesson folder.
 
-For authoring and validating PBL content, use the **create-course-project** skill:
+### 4) Add PBL project (lesson-scoped)
 
 ```bash
-node .cursor/skills/create-course-project/scripts/collect-project-context.mjs <course-id>
-node .cursor/skills/create-course-project/scripts/validate-project.mjs course/<course-id>
+node .cursor/tools/teacher/add-project-idea.js javascript 01-javascript-fundamentals 01.8.1-truthy-vs-falsy 1 "CLI Input Validator"
 ```
 
-See `.cursor/skills/create-course-project/SKILL.md` and `reference.md`.
+For authoring and validation, use **create-course-project** skill with `--lesson`:
 
-## When to choose BFS/DFS vs these tools
+```bash
+node .cursor/skills/create-course-project/scripts/collect-project-context.mjs --course javascript --module 01-javascript-fundamentals --lesson 01.8.1-truthy-vs-falsy
+node .cursor/skills/create-course-project/scripts/validate-project.mjs course/javascript/modules/01-javascript-fundamentals/lessons/01.8.1-truthy-vs-falsy/projects
+```
 
-- Use the **teacher tools** when the task is about **creating lesson files/folders**.
-- Use the **graph tools** when the task is about **finding topics inside the mindmap graph**.
+### 5) Validate and catalog
 
+```bash
+node scripts/validate-lesson.mjs --lesson course/javascript/modules/01-javascript-fundamentals/lessons/01.8.1-truthy-vs-falsy
+cd frontend && npm run catalog:generate
+```
+
+## When to choose graph vs teacher tools
+
+- **Graph tools** — find topics, scaffold folders from `graphIndex`
+- **Teacher tools** — write explanation markdown and add projects

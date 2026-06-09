@@ -63,24 +63,54 @@ async function readTextSafe(filePath) {
 }
 
 function parseArgs(argv) {
-  const args = { list: false, format: "markdown", out: null, stripMarkers: true, courseId: null };
+  const args = { list: false, format: "markdown", out: null, stripMarkers: true, courseId: null, lesson: null, module: null, course: null };
   for (let i = 2; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === "--list") args.list = true;
     else if (arg === "--format") args.format = argv[++i] ?? "markdown";
     else if (arg === "--out") args.out = argv[++i] ?? null;
     else if (arg === "--keep-markers") args.stripMarkers = false;
+    else if (arg === "--lesson") args.lesson = argv[++i];
+    else if (arg === "--module") args.module = argv[++i];
+    else if (arg === "--course") args.course = argv[++i];
     else if (!arg.startsWith("-")) args.courseId = arg.replace(/^course\//, "").replace(/\/$/, "");
   }
   return args;
 }
 
 async function listCourses() {
-  const entries = await listDirSafe(courseDir);
-  return entries
+  const legacy = (await listDirSafe(courseDir))
     .filter((e) => e.isDirectory() && /^\d{2}-/.test(e.name))
-    .map((e) => e.name)
-    .sort((a, b) => a.localeCompare(b, "en"));
+    .map((e) => e.name);
+  const hierarchy = [];
+  for (const courseEnt of (await listDirSafe(courseDir)).filter((e) => e.isDirectory())) {
+    const modulesPath = path.join(courseDir, courseEnt.name, "modules");
+    for (const modEnt of (await listDirSafe(modulesPath)).filter((e) => e.isDirectory())) {
+      hierarchy.push(`${courseEnt.name}/${modEnt.name}`);
+    }
+  }
+  return [...new Set([...legacy, ...hierarchy])].sort((a, b) => a.localeCompare(b, "en"));
+}
+
+async function discoverLessonProjects(lessonPath, relBase) {
+  const projectsRoot = path.join(lessonPath, "projects");
+  const projects = [];
+  for (const project of (await listDirSafe(projectsRoot)).filter((e) => e.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const projectPath = path.join(projectsRoot, project.name);
+    const readmePath = path.join(projectPath, "README.md");
+    const readme = await readTextSafe(readmePath);
+    if (!readme.trim() && !(await fileExists(path.join(projectPath, "starter", "index.js")))) continue;
+    projects.push({
+      id: project.name,
+      title: humanizeTitle(project.name),
+      lessonId: path.basename(lessonPath),
+      rootPath: path.posix.join(relBase, "projects", project.name),
+      readmePath: path.relative(repoRoot, readmePath),
+      hasReadme: Boolean(readme.trim()),
+      validation: validateProjectReadme(readme),
+    });
+  }
+  return projects;
 }
 
 async function discoverProjects(modulePath, courseId) {
@@ -234,6 +264,24 @@ function formatMarkdown(ctx) {
   return lines.join("\n");
 }
 
+async function collectLesson(courseSlug, moduleId, lessonId, stripMarkers) {
+  const lessonPath = path.join(courseDir, courseSlug, "modules", moduleId, "lessons", lessonId);
+  const relBase = path.posix.join("course", courseSlug, "modules", moduleId, "lessons", lessonId);
+  const lessonReadme = await readTextSafe(path.join(lessonPath, "README.md"));
+  const moduleReadme = await readTextSafe(path.join(courseDir, courseSlug, "modules", moduleId, "README.md"));
+  const projects = await discoverLessonProjects(lessonPath, relBase);
+  const clean = (text) => (stripMarkers ? stripCursorMarkers(text) : text.trim());
+  return {
+    courseSlug,
+    moduleId,
+    lessonId,
+    lessonReadme: clean(lessonReadme),
+    moduleReadme: clean(moduleReadme),
+    projects,
+    contract: { tree: PROJECT_TREE, pblSections: PBL_README_SECTIONS },
+  };
+}
+
 async function main() {
   const args = parseArgs(process.argv);
 
@@ -243,8 +291,16 @@ async function main() {
     return;
   }
 
+  if (args.lesson && args.module && args.course) {
+    const ctx = await collectLesson(args.course, args.module, args.lesson, args.stripMarkers);
+    const output = args.format === "json" ? JSON.stringify(ctx, null, 2) : formatMarkdown({ courseId: `${args.course}/${args.module}/${args.lesson}`, ...ctx, topics: [{ topicDir: "lesson", title: args.lesson, projects: ctx.projects }], moduleReadme: ctx.moduleReadme, projectsReadme: "", projectsReadmeValidation: { errors: [], warnings: [] } });
+    if (args.out) await fs.writeFile(path.resolve(args.out), output, "utf8");
+    else process.stdout.write(`${output}\n`);
+    return;
+  }
+
   if (!args.courseId) {
-    process.stderr.write("Usage: node collect-project-context.mjs <course-id> | --list\n");
+    process.stderr.write("Usage: node collect-project-context.mjs <course-id> | --course <slug> --module <id> --lesson <id> | --list\n");
     process.exit(2);
   }
 

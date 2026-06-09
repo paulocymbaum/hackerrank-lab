@@ -1,0 +1,9 @@
+{
+  "createdBy": "cursor-tool",
+  "tool": "scripts/graph/scaffold-from-graph.mjs",
+  "createdAt": "2026-06-09T01:10:35.398Z",
+  "kind": "lesson",
+  "lessonId": "03.1.4-callback-and-microtask-queues",
+  "moduleId": "03-asynchronous-javascript",
+  "graphIndex": "03.1.4"
+}

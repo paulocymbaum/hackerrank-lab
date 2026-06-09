@@ -1,0 +1,9 @@
+{
+  "createdBy": "cursor-tool",
+  "tool": "scripts/graph/scaffold-from-graph.mjs",
+  "createdAt": "2026-06-09T01:10:31.965Z",
+  "kind": "lesson",
+  "lessonId": "02.3-structuredclone",
+  "moduleId": "02-objects-references-and-copying",
+  "graphIndex": "02.3"
+}

@@ -54,11 +54,19 @@ function parseArgs(argv) {
 }
 
 async function listModules() {
-  const entries = await listDirSafe(courseDir);
-  return entries
+  const legacy = (await listDirSafe(courseDir))
     .filter((e) => e.isDirectory() && /^\d{2}-/.test(e.name))
-    .map((e) => e.name)
-    .sort((a, b) => a.localeCompare(b, "en"));
+    .map((e) => ({ id: e.name, path: path.join(courseDir, e.name), kind: "legacy" }));
+
+  const hierarchy = [];
+  for (const courseEnt of (await listDirSafe(courseDir)).filter((e) => e.isDirectory())) {
+    const modulesPath = path.join(courseDir, courseEnt.name, "modules");
+    for (const modEnt of (await listDirSafe(modulesPath)).filter((e) => e.isDirectory())) {
+      hierarchy.push({ id: modEnt.name, path: path.join(modulesPath, modEnt.name), kind: "hierarchy" });
+    }
+  }
+
+  return [...hierarchy, ...legacy].sort((a, b) => a.id.localeCompare(b.id, "en"));
 }
 
 async function validateModuleProjectsReadmeFile(modulePath, relBase) {
@@ -108,18 +116,41 @@ async function validateSingleProject(projectPath) {
   return findings;
 }
 
-async function validateModule(moduleId) {
-  const modulePath = path.join(courseDir, moduleId);
-  const findings = await validateModuleProjectsReadmeFile(modulePath, moduleId);
+async function validateProjectsInRoot(projectsRoot) {
+  const findings = [];
+  const entries = (await listDirSafe(projectsRoot)).filter((e) => e.isDirectory());
 
-  const projectsRoot = path.join(modulePath, "projects");
-  const topics = (await listDirSafe(projectsRoot)).filter((e) => e.isDirectory());
+  for (const entry of entries) {
+    const entryPath = path.join(projectsRoot, entry.name);
+    const starter = path.join(entryPath, "starter", "index.js");
+    if (await fileExists(path.join(entryPath, "README.md")) || (await fileExists(starter))) {
+      findings.push(...(await validateSingleProject(entryPath)));
+      continue;
+    }
+    const nested = (await listDirSafe(entryPath)).filter((e) => e.isDirectory());
+    for (const project of nested) {
+      findings.push(...(await validateSingleProject(path.join(entryPath, project.name))));
+    }
+  }
+  return findings;
+}
 
-  for (const topic of topics) {
-    const topicPath = path.join(projectsRoot, topic.name);
-    const projects = (await listDirSafe(topicPath)).filter((e) => e.isDirectory());
-    for (const project of projects) {
-      findings.push(...(await validateSingleProject(path.join(topicPath, project.name))));
+async function validateModule(moduleRef) {
+  const modulePath = typeof moduleRef === "string" ? path.join(courseDir, moduleRef) : moduleRef.path;
+  const moduleId = typeof moduleRef === "string" ? moduleRef : moduleRef.id;
+  const findings = [];
+
+  const moduleProjectsReadme = path.join(modulePath, "projects", "README.md");
+  if (await fileExists(moduleProjectsReadme)) {
+    findings.push(...(await validateModuleProjectsReadmeFile(modulePath, moduleId)));
+    findings.push(...(await validateProjectsInRoot(path.join(modulePath, "projects"))));
+  }
+
+  const lessonsPath = path.join(modulePath, "lessons");
+  for (const lessonEnt of (await listDirSafe(lessonsPath)).filter((e) => e.isDirectory())) {
+    const lessonProjects = path.join(lessonsPath, lessonEnt.name, "projects");
+    if (await fileExists(lessonProjects)) {
+      findings.push(...(await validateProjectsInRoot(lessonProjects)));
     }
   }
 
@@ -140,6 +171,13 @@ async function resolveTarget(target) {
   if (parts.length === 2 && parts[1] === "projects") {
     return { kind: "module", moduleId: parts[0] };
   }
+  if (parts.includes("lessons") && parts.includes("projects")) {
+    const projectsIdx = parts.lastIndexOf("projects");
+    if (projectsIdx < parts.length - 1) {
+      return { kind: "project", projectPath: abs };
+    }
+    return { kind: "lesson-projects", projectPath: abs };
+  }
   return null;
 }
 
@@ -148,8 +186,8 @@ async function main() {
   const findings = [];
 
   if (args.all) {
-    for (const moduleId of await listModules()) {
-      findings.push(...(await validateModule(moduleId)));
+    for (const moduleRef of await listModules()) {
+      findings.push(...(await validateModule(moduleRef)));
     }
   } else if (args.targets.length === 0) {
     process.stderr.write(
@@ -165,6 +203,8 @@ async function main() {
       }
       if (resolved.kind === "module") {
         findings.push(...(await validateModule(resolved.moduleId)));
+      } else if (resolved.kind === "lesson-projects") {
+        findings.push(...(await validateProjectsInRoot(resolved.projectPath)));
       } else {
         findings.push(...(await validateSingleProject(resolved.projectPath)));
       }

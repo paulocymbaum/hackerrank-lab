@@ -1,0 +1,9 @@
+{
+  "createdBy": "cursor-tool",
+  "tool": "scripts/graph/scaffold-from-graph.mjs",
+  "createdAt": "2026-06-09T01:10:19.243Z",
+  "kind": "lesson",
+  "lessonId": "01.8.1-truthy-vs-falsy",
+  "moduleId": "01-javascript-fundamentals",
+  "graphIndex": "01.8.1"
+}

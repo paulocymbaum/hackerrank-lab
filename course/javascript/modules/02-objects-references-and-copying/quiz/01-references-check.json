@@ -1,0 +1,84 @@
+{
+  "id": "01-references-check",
+  "title": "References & Copying Check",
+  "description": "Reference vs value, shallow copy pitfalls, and deep copy.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What prints?\n\n```js\nlet a = 10;\nlet b = a;\nb = 20;\nconsole.log(a, b);\n```",
+      "options": [
+        { "id": "a", "text": "10 20" },
+        { "id": "b", "text": "20 20" },
+        { "id": "c", "text": "10 10" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Primitives copy by value. Reassigning `b` does not change `a`."
+    },
+    {
+      "id": "q2",
+      "prompt": "What prints?\n\n```js\nconst a = { n: 10 };\nconst b = a;\nb.n = 20;\nconsole.log(a.n, b.n);\n```",
+      "options": [
+        { "id": "a", "text": "20 20" },
+        { "id": "b", "text": "10 20" },
+        { "id": "c", "text": "10 10" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`b = a` creates an alias. Mutating through `b` changes the same object that `a` references."
+    },
+    {
+      "id": "q3",
+      "prompt": "What prints?\n\n```js\nconst user = { name: \"Ana\", address: { city: \"SP\" } };\nconst copy = { ...user };\ncopy.address.city = \"RJ\";\nconsole.log(user.address.city);\n```",
+      "options": [
+        { "id": "a", "text": "\"RJ\"" },
+        { "id": "b", "text": "\"SP\"" },
+        { "id": "c", "text": "undefined" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Object spread is shallow: `copy` is new, but `copy.address` and `user.address` still point to the same nested object."
+    },
+    {
+      "id": "q4",
+      "prompt": "What prints?\n\n```js\nconst a = [{ x: 1 }];\nconst b = [...a];\nb[0].x = 99;\nconsole.log(a[0].x);\n```",
+      "options": [
+        { "id": "a", "text": "99" },
+        { "id": "b", "text": "1" },
+        { "id": "c", "text": "undefined" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Array spread is also shallow. The outer array is new, but elements inside are still shared references."
+    },
+    {
+      "id": "q5",
+      "prompt": "What prints?\n\n```js\nconst a = { n: 1 };\nlet b = a;\nb = { n: 999 };\na.n = 2;\nconsole.log(a.n, b.n);\n```",
+      "options": [
+        { "id": "a", "text": "2 999" },
+        { "id": "b", "text": "2 2" },
+        { "id": "c", "text": "999 999" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`b = { n: 999 }` is reassignment (new object), not mutation. `a.n = 2` mutates the original object only."
+    },
+    {
+      "id": "q6",
+      "prompt": "After this JSON clone, what is `typeof y.when`?\n\n```js\nconst x = { when: new Date(), n: 1 };\nconst y = JSON.parse(JSON.stringify(x));\n```",
+      "options": [
+        { "id": "a", "text": "\"string\"" },
+        { "id": "b", "text": "\"object\" (still a Date)" },
+        { "id": "c", "text": "\"undefined\"" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "JSON serialization turns `Date` into an ISO string. JSON cloning is lossy for many types."
+    },
+    {
+      "id": "q7",
+      "prompt": "What prints?\n\n```js\nconst a = { n: 1n };\ntry {\n  JSON.stringify(a);\n  console.log(\"ok\");\n} catch (e) {\n  console.log(\"error\");\n}\n```",
+      "options": [
+        { "id": "a", "text": "error" },
+        { "id": "b", "text": "ok" },
+        { "id": "c", "text": "undefined" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`JSON.stringify` throws on `BigInt`. That is another reason JSON cloning is not a universal deep-copy solution."
+    }
+  ]
+}

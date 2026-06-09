@@ -1,31 +1,30 @@
 ---
 name: create-course-quiz
 description: >-
-  Creates and validates JSON quizzes for Hackerrank Study course modules under
-  course/<module>/quiz/. Collects module README and example lessons as context,
-  writes schema-compliant quiz files, and runs validation plus catalog:generate.
-  Use when the user asks to create, add, or update a course quiz, quiz questions,
-  or assessment content for a module.
+  Creates and validates JSON quizzes for Hackerrank Study lessons under
+  course/<course>/modules/<module>/lessons/<lesson>/quiz/. Collects lesson README
+  as context, writes schema-compliant quiz files, and runs validation plus catalog:generate.
+  Use when the user asks to create, add, or update a lesson quiz or assessment content.
 ---
 
-# Create Course Quiz
+# Create Lesson Quiz
 
 ## Quick start
 
 1. **Collect source material** (always run first):
 
 ```bash
-node .cursor/skills/create-course-quiz/scripts/collect-course-context.mjs <course-id>
+node .cursor/skills/create-course-quiz/scripts/collect-lesson-context.mjs 01.8.1-truthy-vs-falsy --course javascript --module 01-javascript-fundamentals
 ```
 
-Use `--list` to see course ids. Example id: `01-javascript-fundamentals`.
+Use `--list` to see lesson ids.
 
-2. **Draft the quiz JSON** from README + examples (see [reference.md](reference.md)).
-3. **Write the file** to `course/<course-id>/quiz/<NN-slug>.json`.
+2. **Draft the quiz JSON** from lesson README (see [reference.md](reference.md)).
+3. **Write the file** to `course/javascript/modules/<module>/lessons/<lesson>/quiz/quiz.json`.
 4. **Validate**:
 
 ```bash
-node .cursor/skills/create-course-quiz/scripts/validate-quiz.mjs course/<course-id>/quiz/<NN-slug>.json
+node .cursor/skills/create-course-quiz/scripts/validate-quiz.mjs course/javascript/modules/01-javascript-fundamentals/lessons/01.8.1-truthy-vs-falsy/quiz/quiz.json
 ```
 
 5. **Regenerate catalog**:
@@ -37,51 +36,39 @@ cd frontend && npm run catalog:generate
 ## Workflow checklist
 
 ```
-- [ ] collect-course-context.mjs run for target module
-- [ ] No duplicate quiz id (check Existing quizzes section)
-- [ ] Questions cover module checklist / example topics
+- [ ] collect-lesson-context.mjs run for target lesson
+- [ ] No duplicate quiz id
+- [ ] Questions cover lesson predict-first / pitfalls only
 - [ ] Each question has explanation
+- [ ] quiz JSON includes lessonId and graphIndex
 - [ ] validate-quiz.mjs passes
-- [ ] catalog:generate run (report quiz count)
+- [ ] catalog:generate run
 ```
 
 ## Question quality
 
-- Source truth: module **README** (terms, pitfalls, checklist) and **examples/** (predict-first exercises).
-- Distractors = realistic mistakes documented in the module.
-- Prompts may use Markdown and inline `` `code` `` (same renderer as lessons).
-- Do **not** invent topics outside the module scope.
+- Source truth: lesson **README.md** only (not whole module).
+- Distractors = realistic mistakes from the lesson.
+- Do **not** invent topics outside the lesson graph node.
 
 ## Scripts
 
 | Script | Purpose |
 |--------|---------|
-| [scripts/collect-course-context.mjs](scripts/collect-course-context.mjs) | README + examples + existing quizzes |
+| [scripts/collect-lesson-context.mjs](scripts/collect-lesson-context.mjs) | Lesson README + prerequisites + existing quizzes |
+| [scripts/collect-course-context.mjs](scripts/collect-course-context.mjs) | Legacy module-level context |
 | [scripts/validate-quiz.mjs](scripts/validate-quiz.mjs) | Schema validation |
 
-### collect-course-context.mjs flags
-
-- `--list` — print course folder ids
-- `--format json|markdown` (default: markdown)
-- `--out <path>` — write to file instead of stdout
-- `--keep-markers` — retain `<!-- cursor:... -->` HTML comments
-
-### validate-quiz.mjs
-
-Accepts one or more quiz file paths. Exit code `1` on failure.
-
-## Output location
+## Output location (canonical)
 
 ```text
-course/<NN-module-slug>/quiz/<NN-quiz-slug>.json
+course/<course>/modules/<module>/lessons/<lesson>/quiz/quiz.json
 ```
 
-File base name should match quiz `id` (e.g. `01-fundamentals-check.json` → `"id": "01-fundamentals-check"`).
+Legacy module quizzes remain at `course/<NN-module>/quiz/*.json` until migrated.
 
 ## Additional resources
 
-- Full schema and design rules: [reference.md](reference.md)
-- Command examples: [examples.md](examples.md)
-- Repo quiz UI types: `frontend/src/domain/types/quiz.ts`
-- PBL projects (parallel skill): `.cursor/skills/create-course-project/SKILL.md`
-- Content contract for modules/lessons: `.cursor/rules/course-and-lesson-content.mdc`
+- Full schema: [reference.md](reference.md)
+- Examples: [examples.md](examples.md)
+- Hierarchy contract: `.cursor/rules/course-hierarchy.mdc`

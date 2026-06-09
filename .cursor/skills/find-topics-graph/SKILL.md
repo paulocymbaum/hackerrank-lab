@@ -129,3 +129,22 @@ node .cursor/tools/graph/bfs-then-dfs-list-subtree.js "Asynchronous JavaScript"
 node .cursor/tools/graph/dfs-then-bfs-nearby.js "Promises" 1
 ```
 
+## Content map (disk status)
+
+After finding a topic, check whether content already exists on disk:
+
+```bash
+node scripts/graph/generate-content-map.mjs
+```
+
+Read `graph/content-map.json` for each `graphIndex`:
+- `exists` — lesson folder already created
+- `planned` — in graph but no disk folder yet
+- `orphan` — disk folder without matching graph leaf
+
+Suggest scaffolding the next `planned` leaf in the same module:
+
+```bash
+node scripts/graph/scaffold-from-graph.mjs "<graphIndex>"
+```
+

@@ -1,0 +1,9 @@
+{
+  "createdBy": "cursor-tool",
+  "tool": "scripts/graph/scaffold-from-graph.mjs",
+  "createdAt": "2026-06-09T01:10:36.238Z",
+  "kind": "lesson",
+  "lessonId": "03.2.3-try-catch-error-handling",
+  "moduleId": "03-asynchronous-javascript",
+  "graphIndex": "03.2.3"
+}

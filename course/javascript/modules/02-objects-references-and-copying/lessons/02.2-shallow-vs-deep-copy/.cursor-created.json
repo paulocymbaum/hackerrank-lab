@@ -1,0 +1,9 @@
+{
+  "createdBy": "cursor-tool",
+  "tool": "scripts/graph/scaffold-from-graph.mjs",
+  "createdAt": "2026-06-09T01:10:31.111Z",
+  "kind": "lesson",
+  "lessonId": "02.2-shallow-vs-deep-copy",
+  "moduleId": "02-objects-references-and-copying",
+  "graphIndex": "02.2"
+}

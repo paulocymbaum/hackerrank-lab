@@ -1,0 +1,51 @@
+{
+  "id": "01-fundamentals-check",
+  "title": "Fundamentals Check",
+  "description": "Truthy/falsy, equality, and basic operators.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which values are **falsy** in JavaScript?",
+      "options": [
+        { "id": "a", "text": "0, '', null, undefined, NaN, false" },
+        { "id": "b", "text": "0, '0', null, undefined, false" },
+        { "id": "c", "text": "Only null and undefined" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "The classic falsy set is: false, 0, -0, 0n, '', null, undefined, and NaN. The string '0' is truthy."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is the result of `null == undefined`?",
+      "options": [
+        { "id": "a", "text": "true" },
+        { "id": "b", "text": "false" },
+        { "id": "c", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Loose equality treats null and undefined as equal. Strict equality (`===`) would be false."
+    },
+    {
+      "id": "q3",
+      "prompt": "What does `typeof null` return?",
+      "options": [
+        { "id": "a", "text": "'null'" },
+        { "id": "b", "text": "'object'" },
+        { "id": "c", "text": "'undefined'" }
+      ],
+      "correctOptionId": "b",
+      "explanation": "This is a long-standing JavaScript quirk: typeof null is 'object'. Prefer `value === null` for null checks."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which expression coerces a value to boolean without changing the original?",
+      "options": [
+        { "id": "a", "text": "!!value" },
+        { "id": "b", "text": "value + 0" },
+        { "id": "c", "text": "String(value)" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Double negation (`!!`) converts to boolean. The other options change type or value."
+    }
+  ]
+}

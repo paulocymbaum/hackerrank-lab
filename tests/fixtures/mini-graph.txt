@@ -1,0 +1,8 @@
+mindmap
+  root((TestLang))
+    01 Test Fundamentals
+      01.1 Getting Started
+        01.1.1 Running Code
+        01.1.2 Output Basics
+      01.2 Variables
+        01.2.1 let and const

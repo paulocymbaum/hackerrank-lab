@@ -1,161 +1,107 @@
 # Estrutura do ambiente de aprendizado (JavaScript)
 
-Este documento descreve uma **estrutura de arquivos** cujo ponto de partida é a pasta `course/`.  
-O objetivo é organizar o conteúdo em **módulos**, com **explicações detalhadas** em Markdown e **projetos práticos** (PBL) em uma pasta `projects/` por módulo, separados por tópicos e com **numeração sequencial**.
+Este documento descreve a **hierarquia canônica** de conteúdo sob `course/`.
+
+```
+Course > Module > Lesson > (explanation, projects, quiz)
+```
+
+O grafo em `graph/course.graph.txt` é a fonte de verdade para taxonomia. Cada entidade no disco deve ter `graphIndex` em seu `*.meta.json`.
+
+Schemas detalhados: [docs/meta-schemas.md](docs/meta-schemas.md)
 
 ## Visão geral
 
-- **`course/`**: raiz do curso.
-- **Um módulo por pasta**: cada módulo possui conteúdo teórico (em Markdown) e um conjunto de exercícios práticos (PBL).
-- **PBL (Project/Problem-Based Learning)**: cada exercício é escrito como um problema realista, com requisitos, restrições, critérios de aceite e entregáveis.
-- **Numeração**:
-  - Módulos: `01-...`, `02-...`, `03-...`
-  - Tópicos (dentro de `projects/`): `01-...`, `02-...`
-  - Exercícios (dentro de cada tópico): `001-...`, `002-...`, `003-...`
+- **`course/<course-slug>/`**: um curso por root do grafo (ex.: `javascript`)
+- **`modules/<NN-slug>/`**: módulo alinhado a seção do grafo (`01`–`07`)
+- **`lessons/<graphIndex>-<slug>/`**: lesson = folha do grafo (`01.8.1`, `03.1.2`)
+- Cada lesson contém explicação, projetos e quiz opcionais
 
 ## Árvore de diretórios (modelo)
 
 ```text
 course/
-  00-welcome/
+  javascript/
     README.md
-
-  01-fundamentos-de-javascript/
-    README.md
-    examples/
-      01-variaveis-e-tipos.md
-      02-funcoes.md
-      03-controle-de-fluxo.md
-    projects/
-      README.md
-      01-sintaxe-e-estruturas/
-        001-calculadora-cli/
-          README.md
-          starter/
-            index.js
-          solution/
-            index.js
-        002-validador-de-dados/
-          README.md
-          starter/
-          solution/
-      02-funcoes-e-modularizacao/
-        003-biblioteca-de-utilidades/
-          README.md
-          starter/
-          solution/
-
-  02-qualidade-de-codigo-e-boas-praticas/
-    README.md
-    examples/
-      01-clean-code-em-js.md
-      02-validacao-e-erros.md
-      03-lint-format-test.md
-    projects/
-      README.md
-      01-lint-format/
-        001-configurar-eslint-prettier/
-          README.md
-          starter/
-          solution/
-      02-testes/
-        002-testes-unitarios-com-jest/
-          README.md
-          starter/
-          solution/
-
-  03-design-e-arquitetura/
-    README.md
-    examples/
-      01-solid-em-js.md
-      02-camadas-e-dependencias.md
-      03-injecao-de-dependencias.md
-    projects/
-      README.md
-      01-solid/
-        001-refatorar-servico-de-pedidos/
-          README.md
-          starter/
-          solution/
+    course.meta.json
+    modules/
+      01-javascript-fundamentals/
+        README.md
+        module.meta.json
+        lessons/
+          01.8.1-truthy-vs-falsy/
+            README.md              # explicação (predict-first)
+            lesson.meta.json
+            .cursor-created.json
+            projects/
+              README.md
+              001-cli-input-validator/
+                README.md
+                starter/index.js
+                solution/
+            quiz/
+              quiz.json
+      02-objects-references-and-copying/
+        ...
 ```
 
-## Contrato de cada módulo
+## Contrato por entidade
 
-Cada pasta de módulo em `course/<NN-nome-do-modulo>/` deve conter:
+### Curso (`course/<slug>/`)
 
-- **`README.md`**: explicação **descritiva e detalhada** do conceito de engenharia de software aplicado ao JavaScript.
-  - Deve incluir:
-    - Motivação (por que isso importa na prática)
-    - Definições e termos
-    - Anti-padrões comuns e como evitá-los
-    - Boas práticas e trade-offs
-    - Checklist do que o aluno deve dominar
-- **`examples/`** (opcional, recomendado): exemplos práticos em Markdown.
-  - Cada arquivo `.md` deve conter:
-    - Contexto do exemplo
-    - Código (trechos pequenos e focados)
-    - “O que observar” / pitfalls
-    - Exercício rápido (mini-desafio)
-- **`projects/`**: trilha de prática baseada em problemas.
-  - **`projects/README.md`**: visão geral dos projetos do módulo e como executar.
-  - Subpastas por **tópico**: `01-...`, `02-...`, etc.
-  - Dentro de cada tópico, projetos numerados: `001-...`, `002-...`, etc.
+- `README.md` — visão geral do curso
+- `course.meta.json` — `{ id, graphRootLabel, title }`
 
-## Padrão PBL para cada exercício (`projects/.../<NNN-nome>/README.md`)
+### Módulo (`modules/<NN-slug>/`)
 
-O `README.md` de cada projeto deve seguir (no mínimo) esta estrutura.  
-**Contrato canônico em inglês** (usado pelo frontend e pelas skills): ver [`.cursor/skills/create-course-project/reference.md`](.cursor/skills/create-course-project/reference.md).
+- `README.md` — motivação, mapa de lessons, checklist agregado
+- `module.meta.json` — `{ id, graphIndex, graphNodeId, title }`
+- `lessons/` — pastas de lesson (folhas do grafo)
+- `quiz/` (opcional) — quiz de módulo (fallback legado)
 
-- **Problem context** / Contexto do problema: cenário realista (ex.: “um time precisa padronizar validação de inputs”).
-- **Goal** / Objetivo: o que deve ser construído.
-- **Functional requirements** / Requisitos funcionais: lista objetiva do comportamento esperado.
-- **Non-functional requirements** / Requisitos não-funcionais: qualidade, legibilidade, performance, segurança, manutenibilidade.
-- **Constraints** / Restrições: bibliotecas permitidas/proibidas, limite de tempo, formato de I/O, etc.
-- **Acceptance criteria** / Critérios de aceite: itens verificáveis (checklist).
-- **Example data (if applicable)** / Dados de exemplo: entradas e saídas esperadas.
-- **Suggested plan (no solution)** / Plano sugerido: passos recomendados (sem entregar a solução).
-- **Deliverables** / Entregáveis:
-  - Código em `starter/index.js` (entrypoint: `node starter/index.js`)
-  - (Opcional) `solution/` para referência
-  - (Opcional) `project-delivery.json` — histórico de entregas escritas pelo aluno na aba **Delivery** do frontend
-- **Extensions (optional)** / Extensões: desafios extras para ir além.
+### Lesson (`lessons/<graphIndex>-<slug>/`)
 
-### Numeração de projetos (`NNN`)
+- `README.md` — explicação detalhada (predict-first, pitfalls, mini-desafio)
+- `lesson.meta.json` — `{ id, graphIndex, graphNodeId, title, prerequisites, status }`
+- `projects/` (opcional) — projetos PBL escopados à lesson
+- `quiz/` (opcional) — avaliação da lesson
 
-Os ids `001`, `002`, `003`… são **sequenciais no módulo inteiro**, não reiniciam em cada pasta de tópico.  
-Exemplo válido: `projects/02-comparisons-and-rules/003-record-filter/` após `001` e `002` em outro tópico.
+## Padrão PBL para projetos
 
-### Visão do módulo (`projects/README.md`)
+O `README.md` de cada projeto segue o contrato canônico em inglês: [`.cursor/skills/create-course-project/reference.md`](.cursor/skills/create-course-project/reference.md).
 
-Cada módulo deve ter `projects/README.md` com:
-- convenções de pastas (`NN-` tópico, `NNN-` projeto)
-- workflow (UI + `node starter/index.js` + aba Delivery)
-- catálogo por tópico (lista de projetos com one-liner)
-- checklist do contrato PBL
+Numeração de projetos (`NNN`) é **sequencial dentro da lesson** (`001`, `002`, …).
 
-Template: [`.cursor/skills/create-course-project/templates/module-projects-readme.md`](.cursor/skills/create-course-project/templates/module-projects-readme.md)
+### Visão da lesson (`projects/README.md`)
+
+Template: [`.cursor/skills/create-course-project/templates/lesson-projects-readme.md`](.cursor/skills/create-course-project/templates/lesson-projects-readme.md)
 
 ## Convenções de nomenclatura
 
-- **Kebab-case** para pastas: `02-qualidade-de-codigo-e-boas-praticas/`
-- **Numeração fixa**:
-  - Módulos: sempre 2 dígitos (`01`, `02`, `03`…)
-  - Exercícios: sempre 3 dígitos (`001`, `002`, `003`…)
-- **Títulos**: pastas e nomes devem descrever o resultado, não a tarefa genérica.
-  - Bom: `001-calculadora-cli/`
-  - Melhor: `002-validador-de-dados-de-cadastro/`
+- **Kebab-case** para pastas
+- **Lesson id**: `{graphIndex}-{slug}` → `01.8.1-truthy-vs-falsy`
+- **Módulo**: `NN-kebab-case` → `01-javascript-fundamentals`
+- **Projeto**: `NNN-kebab-case` → `001-cli-input-validator`
 
-## Sugestão de “ambiente JavaScript” (como refletir na estrutura)
+## Estrutura legada (compat)
 
-Opcionalmente, você pode manter um módulo `00-welcome/` com instruções mínimas para execução local:
+Pastas flat `course/NN-*` (sem `modules/lessons/`) ainda são suportadas pelo catálogo via compat layer. Novo conteúdo deve usar a hierarquia canônica.
+
+## Ferramentas de authoring
+
+| Ação | Comando |
+|------|---------|
+| Scaffold do grafo | `node scripts/graph/scaffold-from-graph.mjs "01.8.1"` |
+| Scaffold módulo + folhas | `node scripts/graph/scaffold-from-graph.mjs --module "01"` |
+| Mapa grafo↔disco | `node scripts/graph/generate-content-map.mjs` |
+| Validar lesson | `node scripts/validate-lesson.mjs --lesson <path>` |
+| Validar módulo | `node scripts/validate-module.mjs --module <id>` |
+| Gerar catálogo | `cd frontend && npm run catalog:generate` |
+
+## Ambiente JavaScript
+
+Opcionalmente, manter instruções de execução no README do curso:
 
 - Node.js (LTS)
-- npm/pnpm/yarn (um padrão por curso)
-- Como executar scripts (ex.: `node index.js`)
-- (Opcional) padrão de testes/lint por módulo (ex.: Jest/Vitest, ESLint, Prettier)
-
-Se quiser padronizar execução por projeto, cada pasta `001-.../` pode conter:
-
-- `starter/` com `package.json` local (quando fizer sentido) **ou**
-- um `package.json` central por módulo em `course/<modulo>/` (quando os projetos compartilham dependências)
-
+- `node starter/index.js` por projeto
+- Aba Delivery no frontend para entregas

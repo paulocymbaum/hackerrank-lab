@@ -1,0 +1,51 @@
+{
+  "id": "01-async-check",
+  "title": "Async & Event Loop Check",
+  "description": "Sync vs async, microtasks, promises, and async/await.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which queue runs **before** the next macrotask after the call stack is empty?",
+      "options": [
+        { "id": "a", "text": "Microtask queue (e.g. promise callbacks)" },
+        { "id": "b", "text": "Macrotask queue (e.g. setTimeout)" },
+        { "id": "c", "text": "Render queue always runs first" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "After synchronous code, the engine drains the microtask queue completely before taking the next macrotask."
+    },
+    {
+      "id": "q2",
+      "prompt": "What does `await` do inside an async function?",
+      "options": [
+        { "id": "a", "text": "Pauses that function and resumes when the promise settles" },
+        { "id": "b", "text": "Blocks the entire JavaScript thread globally" },
+        { "id": "c", "text": "Always runs the awaited code on a worker thread" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "await suspends the async function, not the whole runtime. Other tasks can still run via the event loop."
+    },
+    {
+      "id": "q3",
+      "prompt": "A rejected promise without `.catch()` or try/catch around await becomes…",
+      "options": [
+        { "id": "a", "text": "An unhandled rejection (and should be handled in production code)" },
+        { "id": "b", "text": "Silently ignored always" },
+        { "id": "c", "text": "Automatically retried by the engine" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Unhandled rejections are a common production bug. Always handle errors on async boundaries."
+    },
+    {
+      "id": "q4",
+      "prompt": "`setTimeout(fn, 0)` schedules `fn` as a…",
+      "options": [
+        { "id": "a", "text": "Macrotask (timer task)" },
+        { "id": "b", "text": "Microtask" },
+        { "id": "c", "text": "Synchronous callback after current line" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Even with 0ms delay, setTimeout callbacks are macrotasks and run after microtasks."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+---
+description: Course > Module > Lesson hierarchy contract for Hackerrank Study content authoring
+globs:
+  - course/**
+  - graph/**
+  - scripts/graph/**
+  - .cursor/tools/teacher/**
+  - .cursor/skills/**
+---
+
+# Course hierarchy
+
+## Structure
+
+```
+Course > Module > Lesson > (explanation, projects, quiz)
+```
+
+- **Course** — one folder per graph root (`course/javascript/`)
+- **Module** — graph section `01`–`07` (`modules/01-javascript-fundamentals/`)
+- **Lesson** — graph leaf node (`lessons/01.8.1-truthy-vs-falsy/`)
+
+## Rules
+
+1. Always consult `graph/course.graph.txt` (via `find-topics-graph` skill) before creating content.
+2. Every `*.meta.json` must include a valid `graphIndex` matching a node in the graph.
+3. Content scope is limited to the graph node — do not invent topics outside it.
+4. Lesson explanation lives in `lessons/<id>/README.md` (predict-first format).
+5. Projects and quizzes belong to the lesson, not the module.
+6. Use `scaffold-from-graph.mjs` to create folders deterministically.
+7. Never write content without `.cursor-created.json` marker in the target folder.
+
+## Authoring workflow
+
+1. Find topic in graph (`find-node-by-index.js` or BFS)
+2. Scaffold (`scaffold-from-graph.mjs`)
+3. Write explanation (`add-explanation.js`)
+4. Add projects (`add-project-idea.js`) and quiz (`create-course-quiz` skill)
+5. Validate (`validate-lesson.mjs`) and regenerate catalog (`catalog:generate`)
