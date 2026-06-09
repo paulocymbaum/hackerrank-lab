@@ -1,22 +1,43 @@
 mindmap
   root((JavaScript))
-    Trecho inicial truncado no conteúdo fornecido
-      Hoisting and TDZ
-      Closures
+    01 JavaScript Fundamentals
+      Getting Started
+        Running JavaScript (Node.js)
+        console.log and Output
+        Comments
+      Variables
+        let and const
+        Assignment and Reassignment
+      Primitive Types
+        Strings
+        Numbers
+        Booleans
+        undefined and null
+      Operators
+        Arithmetic Operators
+        Comparison Operators
+        Logical Operators (&&, ||, !)
+      Control Flow
+        if and else
+        switch
+      Loops
+        for Loop
+        while Loop
+      Functions
+        Function Declaration
+        Parameters and Return Values
+      Truthiness and Coercion
+        Truthy vs Falsy
+        Strict Equality (===)
+        Type Coercion (==)
+        typeof and Array.isArray
+        null, undefined, == null, ?., ??
+    02 Objects, References and Copying
       Reference vs Value
       Shallow vs Deep Copy
       structuredClone
-    Syntax and Types
-      Strict Equality (===)
-      Type Coercion (==)
-      typeof and Array.isArray
-      Increment Operators (x++ vs ++x)
-    Objects and Functions
-      Higher-Order Functions
-      Prototype Chain
-      ES6 Modules
       Object.hasOwn
-    Asynchronous JavaScript
+    03 Asynchronous JavaScript
       Runtime Model
         Single-Threaded Execution
         Event Loop
@@ -26,6 +47,12 @@ mindmap
         Promises
         Async/Await
         Try/Catch Error Handling
+    Advanced JavaScript
+      Hoisting and TDZ
+      Closures
+      Higher-Order Functions
+      Prototype Chain
+      ES6 Modules
     Data Structures and Algorithms
       Big-O Complexity
       Two Pointers and Sliding Window
@@ -49,4 +76,3 @@ mindmap
       Communication and Clarifying Questions
       Code Quality and Maintainability
       Iterative Optimization
-
