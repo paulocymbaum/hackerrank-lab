@@ -13,6 +13,7 @@ import { useQuizSessionStore, useQuizProgressStore } from "../../../application/
 import { loadCourseScores } from "../../../application/usecases/courseScores";
 import { Card, ErrorPanel, LoadingState } from "../../design-system";
 import { ReadmeContent } from "../../shared/ReadmeContent";
+import { hasDisplayableReadme } from "../../shared/readmeUtils";
 import { LessonCard } from "../lesson-workspace/components/LessonCard";
 import { QuizList } from "../quiz/components/QuizList";
 import { QuizSessionPanel } from "../quiz/components/QuizSessionPanel";
@@ -21,7 +22,7 @@ export function ModuleExperienceRoute() {
   const { courseId = "", moduleId = "" } = useParams();
   const [searchParams] = useSearchParams();
   const { course, status, error, load, reload } = useCourse(courseId);
-  const { goLesson, openModuleQuiz, closeQuiz } = useAppNavigation();
+  const { goLesson, openLessonDrawer, openModuleQuiz, closeQuiz } = useAppNavigation();
   const getProgress = useQuizProgressStore((s) => s.getProgress);
   const activeQuizId = searchParams.get("quiz");
 
@@ -77,14 +78,10 @@ export function ModuleExperienceRoute() {
     );
   }
 
+  const showReadme = hasDisplayableReadme(mod.readmeMarkdown, mod.title);
+
   return (
     <section className="grid gap-4">
-      {mod.readmeMarkdown.trim() ? (
-        <Card variant="panel" className="p-4">
-          <ReadmeContent markdown={mod.readmeMarkdown} />
-        </Card>
-      ) : null}
-
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {mod.lessons.map((lesson) => (
           <LessonCard
@@ -94,9 +91,21 @@ export function ModuleExperienceRoute() {
             quizzes={getQuizzesForLesson(course, moduleId, lesson.id)}
             projects={getProjectsForLesson(course, moduleId, lesson.id)}
             onOpen={() => goLesson(courseId, moduleId, lesson.id)}
+            onOpenQuiz={(quizId) =>
+              openLessonDrawer(courseId, moduleId, lesson.id, "quiz", quizId)
+            }
+            onOpenProject={(projectId) =>
+              openLessonDrawer(courseId, moduleId, lesson.id, "project", projectId, "files")
+            }
           />
         ))}
       </div>
+
+      {showReadme ? (
+        <Card variant="panel" className="p-4">
+          <ReadmeContent markdown={mod.readmeMarkdown} title={mod.title} />
+        </Card>
+      ) : null}
 
       {moduleQuizzes.length > 0 ? (
         <QuizList

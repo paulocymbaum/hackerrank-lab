@@ -12,8 +12,11 @@ import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
 import { useQuizSessionStore } from "../../../application/stores/quizSessionStore";
 import { loadCourseScores } from "../../../application/usecases/courseScores";
 import { Drawer, ErrorPanel, LoadingState } from "../../design-system";
+import {
+  LessonActivitiesPanel,
+  LessonProgressHeader,
+} from "./components/LessonActivitiesPanel";
 import { LessonExplanationPanel } from "./components/LessonExplanationPanel";
-import { LessonActivitiesBar } from "./components/LessonActivitiesBar";
 import { ProjectWorkspacePanel } from "./components/ProjectWorkspacePanel";
 import { QuizDrawerPanel } from "./components/QuizDrawerPanel";
 
@@ -75,6 +78,7 @@ export function LessonWorkspaceRoute() {
 
   const lessonQuizzes = getQuizzesForLesson(course, moduleId, lessonId);
   const lessonProjects = getProjectsForLesson(course, moduleId, lessonId);
+  const hasActivities = lessonQuizzes.length > 0 || lessonProjects.length > 0;
 
   const activeQuiz = activeQuizId ? getQuizById(course, activeQuizId) : null;
   const activeProject = activeProjectId
@@ -89,29 +93,46 @@ export function LessonWorkspaceRoute() {
         ? (activeProject?.title ?? "Project")
         : undefined;
 
+  const openQuiz = (quizId: string) =>
+    openLessonDrawer(courseId, moduleId, lessonId, "quiz", quizId);
+  const openProject = (projectId: string) =>
+    openLessonDrawer(courseId, moduleId, lessonId, "project", projectId, "files");
+
+  const activityPanelProps = {
+    courseId,
+    lessonId,
+    quizzes: lessonQuizzes,
+    projects: lessonProjects,
+    activeQuizId,
+    activeProjectId,
+    onOpenQuiz: openQuiz,
+    onOpenProject: openProject,
+  };
+
   return (
     <section className="flex min-h-[70vh] flex-col gap-0 overflow-hidden rounded-panel border border-border0 lg:flex-row">
       <main className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <LessonExplanationPanel
-          title={lesson.title}
-          markdown={lesson.markdown}
-          showTitle={false}
-        />
-        <LessonActivitiesBar
+        <LessonProgressHeader
           courseId={courseId}
           lessonId={lessonId}
           quizzes={lessonQuizzes}
           projects={lessonProjects}
-          activeQuizId={activeQuizId}
-          activeProjectId={activeProjectId}
-          onOpenQuiz={(quizId) =>
-            openLessonDrawer(courseId, moduleId, lessonId, "quiz", quizId)
-          }
-          onOpenProject={(projectId) =>
-            openLessonDrawer(courseId, moduleId, lessonId, "project", projectId, "files")
-          }
         />
+
+        {hasActivities ? (
+          <div className="border-b border-border0 lg:hidden">
+            <LessonActivitiesPanel {...activityPanelProps} />
+          </div>
+        ) : null}
+
+        <LessonExplanationPanel title={lesson.title} markdown={lesson.markdown} showTitle={false} />
       </main>
+
+      {hasActivities ? (
+        <div className="hidden min-h-0 w-full max-w-sm border-t border-border0 lg:flex lg:w-80 lg:border-l lg:border-t-0">
+          <LessonActivitiesPanel {...activityPanelProps} className="w-full" />
+        </div>
+      ) : null}
 
       <Drawer
         open={drawerOpen}

@@ -1,0 +1,9 @@
+{
+  "createdBy": "cursor-tool",
+  "tool": "scripts/graph/scaffold-from-graph.mjs",
+  "createdAt": "2026-06-09T17:34:15.957Z",
+  "kind": "lesson",
+  "lessonId": "01.4.3-logical-operators",
+  "moduleId": "01-javascript-fundamentals",
+  "graphIndex": "01.4.3"
+}

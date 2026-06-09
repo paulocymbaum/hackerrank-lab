@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Equality and Coercion Check",
+  "description": "Predict `==` vs `===` and common coercion traps.",
+  "lessonId": "01.8.2-strict-equality",
+  "graphIndex": "01.8.2",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is the result of `\"0\" === 0`?",
+      "options": [
+        { "id": "a", "text": "`false`" },
+        { "id": "b", "text": "`true`" },
+        { "id": "c", "text": "`\"0\"`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Strict equality compares type and value. A string is never strictly equal to a number."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is the result of `\"0\" == 0`?",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`\"0\"`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Loose equality coerces the string to a number before comparing, so `\"0\"` and `0` match."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is the result of `[] == 0`?",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`[]` coerces to `\"\"`, then to `0` in numeric comparison. This is why `==` surprises people — prefer `===`."
+    },
+    {
+      "id": "q4",
+      "prompt": "What is the result of `{} == {}`?",
+      "options": [
+        { "id": "a", "text": "`false`" },
+        { "id": "b", "text": "`true`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Objects are compared by reference, not by structure. Two object literals are different references."
+    },
+    {
+      "id": "q5",
+      "prompt": "Which comparison is **`true`**?",
+      "options": [
+        { "id": "a", "text": "`[1] == 1`" },
+        { "id": "b", "text": "`[1] === 1`" },
+        { "id": "c", "text": "`false === 0`" },
+        { "id": "d", "text": "`null === undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`[1]` coerces to `\"1\"` then `1` under `==`. Strict equality does not coerce types, so `[1] === 1` is false."
+    }
+  ]
+}

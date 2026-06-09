@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Strings Check",
+  "description": "Trim, case, template literals, and normalization.",
+  "lessonId": "01.3.1-strings",
+  "graphIndex": "01.3.1",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is `\"hello\".length`?",
+      "options": [
+        { "id": "a", "text": "`5`" },
+        { "id": "b", "text": "`4`" },
+        { "id": "c", "text": "`\"5\"`" },
+        { "id": "d", "text": "`undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`.length` counts characters in the string. `\"hello\"` has five characters."
+    },
+    {
+      "id": "q2",
+      "prompt": "What does `\"  a  b  \".trim()` return?",
+      "options": [
+        { "id": "a", "text": "`\"a  b\"`" },
+        { "id": "b", "text": "`\"ab\"`" },
+        { "id": "c", "text": "`\"  a  b  \"`" },
+        { "id": "d", "text": "`\"a b\"`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`trim()` removes only leading/trailing spaces. Internal double space remains."
+    },
+    {
+      "id": "q3",
+      "prompt": "How do you compare `\"Hello\"` and `\"HELLO\"` case-insensitively?",
+      "options": [
+        { "id": "a", "text": "`a.toLowerCase() === b.toLowerCase()`" },
+        { "id": "b", "text": "`a == b`" },
+        { "id": "c", "text": "`a === b.toUpperCase()`" },
+        { "id": "d", "text": "`typeof a === typeof b`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Normalize both sides to the same case before strict comparison."
+    },
+    {
+      "id": "q4",
+      "prompt": "What does `` `[L${3}] Ana` `` evaluate to?",
+      "options": [
+        { "id": "a", "text": "`\"[L3] Ana\"`" },
+        { "id": "b", "text": "`\"[L${3}] Ana\"`" },
+        { "id": "c", "text": "`\"L3 Ana\"`" },
+        { "id": "d", "text": "SyntaxError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Template literals interpolate `${3}` into the string inside backticks."
+    },
+    {
+      "id": "q5",
+      "prompt": "Given `const handle = \"@AnaS\";`, what is `handle.trim().replace(/^@/, \"\").toLowerCase()`?",
+      "options": [
+        { "id": "a", "text": "`\"anas\"`" },
+        { "id": "b", "text": "`\"@anas\"`" },
+        { "id": "c", "text": "`\"AnaS\"`" },
+        { "id": "d", "text": "`\"@AnaS\"`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Strip optional `@`, then lowercase — a common handle normalization pipeline."
+    }
+  ]
+}

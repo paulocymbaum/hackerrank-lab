@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Booleans Check",
+  "description": "Comparisons, boolean variables, and `Boolean()` conversion.",
+  "lessonId": "01.3.3-booleans",
+  "graphIndex": "01.3.3",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed for `age = 17`?\n\n```js\nconst canVote = age >= 18;\nconst isTeen = age >= 13 && age <= 19;\nconsole.log(canVote);\nconsole.log(isTeen);\n```",
+      "options": [
+        { "id": "a", "text": "`false` then `true`" },
+        { "id": "b", "text": "`true` then `true`" },
+        { "id": "c", "text": "`false` then `false`" },
+        { "id": "d", "text": "`true` then `false`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "17 is not `>= 18`, but it is a teen (13–19 inclusive)."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is printed for `score = 90`?\n\n```js\nconst passed = score >= 60;\nconst perfect = score === 100;\nconst invalid = score < 0 || score > 100;\nconsole.log(passed);\nconsole.log(perfect);\nconsole.log(invalid);\n```",
+      "options": [
+        { "id": "a", "text": "`true`, `false`, `false`" },
+        { "id": "b", "text": "`true`, `true`, `false`" },
+        { "id": "c", "text": "`false`, `false`, `true`" },
+        { "id": "d", "text": "`true`, `false`, `true`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "90 passes, is not perfect, and is in valid range."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is the result of `Boolean(\"\")`?",
+      "options": [
+        { "id": "a", "text": "`false`" },
+        { "id": "b", "text": "`true`" },
+        { "id": "c", "text": "`\"\"`" },
+        { "id": "d", "text": "`undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Empty string is falsy. `Boolean(\"hello\")` would be `true`."
+    },
+    {
+      "id": "q4",
+      "prompt": "What does `score >= 60` return when `score` is `85`?",
+      "options": [
+        { "id": "a", "text": "`true` (a boolean)" },
+        { "id": "b", "text": "`85`" },
+        { "id": "c", "text": "`\"true\"`" },
+        { "id": "d", "text": "`1`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Comparison operators always produce `true` or `false`."
+    },
+    {
+      "id": "q5",
+      "prompt": "For `raw = \"   \"`, what is `isEmpty`?\n\n```js\nconst trimmed = raw.trim();\nconst isEmpty = trimmed.length === 0;\n```",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "`null`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Whitespace-only input trims to empty string, so `length === 0` is `true`."
+    }
+  ]
+}

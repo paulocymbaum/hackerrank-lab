@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Function Declaration Check",
+  "description": "Declaring functions, `return`, and reusable helpers.",
+  "lessonId": "01.7.1-function-declaration",
+  "graphIndex": "01.7.1",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed?\n\n```js\nfunction add(a, b) {\n  return a + b;\n}\nconsole.log(add(2, 3));\nconsole.log(add(10, 1));\n```",
+      "options": [
+        { "id": "a", "text": "`5` then `11`" },
+        { "id": "b", "text": "`23` then `101`" },
+        { "id": "c", "text": "`undefined` then `undefined`" },
+        { "id": "d", "text": "`5` only" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Each call returns the sum of its arguments."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is printed?\n\n```js\nfunction celsiusToFahrenheit(c) {\n  return c * (9 / 5) + 32;\n}\nconsole.log(celsiusToFahrenheit(0));\nconsole.log(celsiusToFahrenheit(100));\n```",
+      "options": [
+        { "id": "a", "text": "`32` then `212`" },
+        { "id": "b", "text": "`0` then `100`" },
+        { "id": "c", "text": "`32` only" },
+        { "id": "d", "text": "`212` then `32`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "0°C is 32°F; 100°C is 212°F."
+    },
+    {
+      "id": "q3",
+      "prompt": "What does a function without `return` give the caller?",
+      "options": [
+        { "id": "a", "text": "`undefined`" },
+        { "id": "b", "text": "`null`" },
+        { "id": "c", "text": "`0`" },
+        { "id": "d", "text": "It throws automatically" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Functions that only `console.log` inside still return `undefined` unless they `return` a value."
+    },
+    {
+      "id": "q4",
+      "prompt": "Why return a value instead of printing inside the helper?",
+      "options": [
+        { "id": "a", "text": "The caller can reuse the result and decide how to output it" },
+        { "id": "b", "text": "`return` is required for every function or Node exits" },
+        { "id": "c", "text": "`console.log` cannot run inside functions" },
+        { "id": "d", "text": "Returned values are always strings" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Separate computation from I/O — return values make functions testable and reusable."
+    },
+    {
+      "id": "q5",
+      "prompt": "What is printed?\n\n```js\nfunction double(n) {\n  return n * 2;\n}\nconst result = double(5);\nconsole.log(result);\n```",
+      "options": [
+        { "id": "a", "text": "`10`" },
+        { "id": "b", "text": "`5`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "`25`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`double(5)` returns `10`, stored in `result` and then printed."
+    }
+  ]
+}

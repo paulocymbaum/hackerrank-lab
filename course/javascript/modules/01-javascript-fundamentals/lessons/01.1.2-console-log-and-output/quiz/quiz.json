@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Output Formatting Check",
+  "description": "Labels, newlines, and readable stdout.",
+  "lessonId": "01.1.2-console-log-and-output",
+  "graphIndex": "01.1.2",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What does `console.log(\"Hi\")` write to stdout?",
+      "options": [
+        { "id": "a", "text": "`Hi` followed by a newline" },
+        { "id": "b", "text": "`Hi` with no newline" },
+        { "id": "c", "text": "`\"Hi\"` with quotes" },
+        { "id": "d", "text": "Nothing — it only works in browsers" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`console.log` prints the value and appends `\\n`, unlike `process.stdout.write`."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is the result of `(12.7).toFixed(2)`?",
+      "options": [
+        { "id": "a", "text": "`\"12.70\"`" },
+        { "id": "b", "text": "`12.7`" },
+        { "id": "c", "text": "`13`" },
+        { "id": "d", "text": "`12.700`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`toFixed(2)` returns a string with exactly two digits after the decimal point."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which line uses a **template literal**?",
+      "options": [
+        { "id": "a", "text": "`Total: $${total.toFixed(2)}`" },
+        { "id": "b", "text": "`'Total: $' + total`" },
+        { "id": "c", "text": "`\"Total: $\" + total.toFixed(2)`" },
+        { "id": "d", "text": "`String(total)`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Template literals use backticks and `${...}` interpolation."
+    },
+    {
+      "id": "q4",
+      "prompt": "Why label output lines like `Item:` and `Qty:` in challenges?",
+      "options": [
+        { "id": "a", "text": "Makes results scannable and matches expected test output" },
+        { "id": "b", "text": "Required for Node.js to parse numbers" },
+        { "id": "c", "text": "Prevents type coercion" },
+        { "id": "d", "text": "Enables optional chaining" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Clear labels help humans and automated graders verify each field independently."
+    },
+    {
+      "id": "q5",
+      "prompt": "Run: `process.stdout.write(\"A\"); console.log(\"B\");` — what appears on stdout?",
+      "options": [
+        { "id": "a", "text": "`AB` on one line, then a newline after `B`" },
+        { "id": "b", "text": "`A` on one line, `B` on the next" },
+        { "id": "c", "text": "`A\\nB\\n`" },
+        { "id": "d", "text": "Only `B`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`stdout.write` does not add a newline, so `A` and `B` sit on the same line; `console.log` adds `\\n` after `B`."
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "version": 2,
   "courseId": "javascript",
-  "updatedAt": "2026-06-09T01:21:15.498Z",
+  "updatedAt": "2026-06-09T18:17:32.060Z",
   "quizzes": {},
   "projects": {
     "01.8.1-truthy-vs-falsy/001-cli-input-validator": {
@@ -21,6 +21,12 @@
       "status": "doing",
       "points": 0,
       "updatedAt": "2026-06-09T00:01:01.129Z"
+    },
+    "01.3.1-strings/007-user-badge-formatter": {
+      "projectId": "01.3.1-strings/007-user-badge-formatter",
+      "status": "doing",
+      "points": 0,
+      "updatedAt": "2026-06-09T18:17:32.060Z"
     }
   }
 }

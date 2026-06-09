@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-06-09T01:13:14.844Z",
+  "generatedAt": "2026-06-09T17:34:21.660Z",
   "courseSlug": "javascript",
   "total": 57,
-  "exists": 16,
-  "planned": 41,
+  "exists": 32,
+  "planned": 25,
   "orphan": 0,
   "entries": [
     {
@@ -25,11 +25,10 @@
     {
       "graphIndex": "01.1.3",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.1.3 Comments"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.1.3-comments",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.1.3-comments",
+      "status": "exists"
     },
     {
       "graphIndex": "01.2.1",
@@ -42,128 +41,114 @@
     {
       "graphIndex": "01.2.2",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.2.2 Assignment and Reassignment"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.2.2-assignment-and-reassignment",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.2.2-assignment-and-reassignment",
+      "status": "exists"
     },
     {
       "graphIndex": "01.3.1",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.3.1 Strings"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.3.1-strings",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.3.1-strings",
+      "status": "exists"
     },
     {
       "graphIndex": "01.3.2",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.3.2 Numbers"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.3.2-numbers",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.3.2-numbers",
+      "status": "exists"
     },
     {
       "graphIndex": "01.3.3",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.3.3 Booleans"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.3.3-booleans",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.3.3-booleans",
+      "status": "exists"
     },
     {
       "graphIndex": "01.3.4",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.3.4 undefined and null"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.3.4-undefined-and-null",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.3.4-undefined-and-null",
+      "status": "exists"
     },
     {
       "graphIndex": "01.4.1",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.4.1 Arithmetic Operators"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.4.1-arithmetic-operators",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.4.1-arithmetic-operators",
+      "status": "exists"
     },
     {
       "graphIndex": "01.4.2",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.4.2 Comparison Operators"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.4.2-comparison-operators",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.4.2-comparison-operators",
+      "status": "exists"
     },
     {
       "graphIndex": "01.4.3",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.4.3 Logical Operators (&&, ||, !)"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.4.3-logical-operators",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.4.3-logical-operators",
+      "status": "exists"
     },
     {
       "graphIndex": "01.5.1",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.5.1 if and else"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.5.1-if-and-else",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.5.1-if-and-else",
+      "status": "exists"
     },
     {
       "graphIndex": "01.5.2",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.5.2 switch"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.5.2-switch",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.5.2-switch",
+      "status": "exists"
     },
     {
       "graphIndex": "01.6.1",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.6.1 for Loop"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.6.1-for-loop",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.6.1-for-loop",
+      "status": "exists"
     },
     {
       "graphIndex": "01.6.2",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.6.2 while Loop"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.6.2-while-loop",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.6.2-while-loop",
+      "status": "exists"
     },
     {
       "graphIndex": "01.7.1",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.7.1 Function Declaration"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.7.1-function-declaration",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.7.1-function-declaration",
+      "status": "exists"
     },
     {
       "graphIndex": "01.7.2",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.7.2 Parameters and Return Values"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.7.2-parameters-and-return-values",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.7.2-parameters-and-return-values",
+      "status": "exists"
     },
     {
       "graphIndex": "01.8.1",
@@ -192,11 +177,10 @@
     {
       "graphIndex": "01.8.4",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "01.8.4 typeof and Array.isArray"
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.8.4-typeof-and-array-isarray",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray",
+      "status": "exists"
     },
     {
       "graphIndex": "01.8.5",

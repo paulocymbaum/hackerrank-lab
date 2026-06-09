@@ -1,0 +1,9 @@
+{
+  "createdBy": "cursor-tool",
+  "tool": "scripts/graph/scaffold-from-graph.mjs",
+  "createdAt": "2026-06-09T17:34:17.435Z",
+  "kind": "lesson",
+  "lessonId": "01.7.2-parameters-and-return-values",
+  "moduleId": "01-javascript-fundamentals",
+  "graphIndex": "01.7.2"
+}

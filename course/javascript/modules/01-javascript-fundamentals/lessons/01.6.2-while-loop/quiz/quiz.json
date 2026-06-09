@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "while Loop Check",
+  "description": "Sentinel patterns, loop updates, and condition-first iteration.",
+  "lessonId": "01.6.2-while-loop",
+  "graphIndex": "01.6.2",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed?\n\n```js\nlet x = 1;\nwhile (x < 8) {\n  console.log(x);\n  x *= 2;\n}\n```",
+      "options": [
+        { "id": "a", "text": "`1`, `2`, `4`" },
+        { "id": "b", "text": "`1`, `2`, `4`, `8`" },
+        { "id": "c", "text": "`2`, `4`, `8`" },
+        { "id": "d", "text": "Infinite loop" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "When `x` becomes `8`, `x < 8` is false before the next print."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is printed?\n\n```js\nlet total = 0;\nlet value = 1;\nwhile (value <= 5) {\n  total += value;\n  value++;\n}\nconsole.log(total);\n```",
+      "options": [
+        { "id": "a", "text": "`15`" },
+        { "id": "b", "text": "`10`" },
+        { "id": "c", "text": "`5`" },
+        { "id": "d", "text": "`0`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "1 + 2 + 3 + 4 + 5 = 15."
+    },
+    {
+      "id": "q3",
+      "prompt": "When does a `while` loop check its condition?",
+      "options": [
+        { "id": "a", "text": "Before each iteration" },
+        { "id": "b", "text": "After each iteration only" },
+        { "id": "c", "text": "Once at the end of the program" },
+        { "id": "d", "text": "Only on the first iteration" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "If the condition starts false, the body never runs (zero iterations)."
+    },
+    {
+      "id": "q4",
+      "prompt": "What causes an infinite `while` loop?",
+      "options": [
+        { "id": "a", "text": "The condition never becomes false because loop variables are not updated" },
+        { "id": "b", "text": "Using `let` instead of `const`" },
+        { "id": "c", "text": "Printing inside the loop body" },
+        { "id": "d", "text": "Reading from `stdin`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Every `while` must move toward making the condition false — update variables in the body."
+    },
+    {
+      "id": "q5",
+      "prompt": "When should you prefer `while` over `for`?",
+      "options": [
+        { "id": "a", "text": "When iteration count depends on runtime data (sentinel input)" },
+        { "id": "b", "text": "When you know the exact index range upfront" },
+        { "id": "c", "text": "Only for summing arrays" },
+        { "id": "d", "text": "Never — `for` is always clearer" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Use `for` for known counts; use `while` when stopping depends on data read at runtime."
+    }
+  ]
+}

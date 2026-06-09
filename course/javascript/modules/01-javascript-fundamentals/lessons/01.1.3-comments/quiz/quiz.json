@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Comments Check",
+  "description": "Single-line, multi-line comments, and which code actually runs.",
+  "lessonId": "01.1.3-comments",
+  "graphIndex": "01.1.3",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which lines **execute** in this snippet?\n\n```js\nconsole.log(\"A\");\n// console.log(\"B\");\n/*\nconsole.log(\"C\");\n*/\nconsole.log(\"D\");\n```",
+      "options": [
+        { "id": "a", "text": "`A` and `D` only" },
+        { "id": "b", "text": "`A`, `B`, and `D`" },
+        { "id": "c", "text": "`A`, `C`, and `D`" },
+        { "id": "d", "text": "All four lines" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`//` comments out one line; `/* */` comments out a block. Only `A` and `D` run."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is printed?\n\n```js\nconst a = 1;\n// const a = 2;\nconst b = a + 3;\nconsole.log(b);\n```",
+      "options": [
+        { "id": "a", "text": "`4`" },
+        { "id": "b", "text": "`5`" },
+        { "id": "c", "text": "`2`" },
+        { "id": "d", "text": "ReferenceError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "The reassignment line is commented out, so `a` stays `1` and `b` is `4`."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which syntax starts a **single-line** comment?",
+      "options": [
+        { "id": "a", "text": "`//`" },
+        { "id": "b", "text": "`/*`" },
+        { "id": "c", "text": "`<!--`" },
+        { "id": "d", "text": "`#`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`//` comments the rest of the line. `/* ... */` is for multi-line blocks."
+    },
+    {
+      "id": "q4",
+      "prompt": "What happens to code on a line after `//`?",
+      "options": [
+        { "id": "a", "text": "The engine ignores it — it does not execute" },
+        { "id": "b", "text": "It runs but output is hidden" },
+        { "id": "c", "text": "It throws a syntax error" },
+        { "id": "d", "text": "It runs only in development mode" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Comments are for humans. The JavaScript engine skips them entirely."
+    },
+    {
+      "id": "q5",
+      "prompt": "When should you prefer `/* ... */` over `//`?",
+      "options": [
+        { "id": "a", "text": "When documenting several lines or a short rule list" },
+        { "id": "b", "text": "Only inside `console.log` calls" },
+        { "id": "c", "text": "Whenever a line ends with a semicolon" },
+        { "id": "d", "text": "Never — `//` always replaces it" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Use `/* */` for multi-line notes or blocks; use `//` for one-line explanations."
+    }
+  ]
+}

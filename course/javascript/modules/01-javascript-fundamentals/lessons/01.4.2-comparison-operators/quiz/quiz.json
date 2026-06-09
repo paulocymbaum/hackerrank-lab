@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Comparison Operators Check",
+  "description": "Strict vs loose equality, relational operators, and inclusive bounds.",
+  "lessonId": "01.4.2-comparison-operators",
+  "graphIndex": "01.4.2",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed?\n\n```js\nconsole.log(10 === 10);\nconsole.log(10 == \"10\");\nconsole.log(10 === \"10\");\nconsole.log(90 >= 90);\n```",
+      "options": [
+        { "id": "a", "text": "`true`, `true`, `false`, `true`" },
+        { "id": "b", "text": "`true`, `false`, `false`, `true`" },
+        { "id": "c", "text": "`true`, `true`, `true`, `false`" },
+        { "id": "d", "text": "`false`, `true`, `false`, `true`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`===` requires same type and value; `==` coerces; `90 >= 90` is inclusive on the lower bound."
+    },
+    {
+      "id": "q2",
+      "prompt": "For `score = 89`, which is `true`?\n\n```js\nconsole.log(score >= 90);\nconsole.log(score >= 80 && score <= 89);\nconsole.log(score === \"89\");\n```",
+      "options": [
+        { "id": "a", "text": "Only `score >= 80 && score <= 89`" },
+        { "id": "b", "text": "Only `score >= 90`" },
+        { "id": "c", "text": "All three" },
+        { "id": "d", "text": "None of them" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "89 is not `>= 90`; strict equality fails against string `\"89\"`; B-range check passes."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which operator should you default to for equality checks?",
+      "options": [
+        { "id": "a", "text": "`===`" },
+        { "id": "b", "text": "`==`" },
+        { "id": "c", "text": "`=`" },
+        { "id": "d", "text": "`!=` without strict form" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Prefer `===` and `!==` to avoid surprise type coercion."
+    },
+    {
+      "id": "q4",
+      "prompt": "What is the result of `89 >= 90`?",
+      "options": [
+        { "id": "a", "text": "`false`" },
+        { "id": "b", "text": "`true`" },
+        { "id": "c", "text": "`89`" },
+        { "id": "d", "text": "`undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "89 is below 90. Off-by-one boundary bugs are common — test edge values like 89 and 90."
+    },
+    {
+      "id": "q5",
+      "prompt": "Why parse numeric stdin before comparing with `<` or `>`?",
+      "options": [
+        { "id": "a", "text": "String comparison uses lexicographic order, not numeric order" },
+        { "id": "b", "text": "Comparisons only work on booleans" },
+        { "id": "c", "text": "`Number` is required or JavaScript throws" },
+        { "id": "d", "text": "stdin is always already a number type" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`\"10\" < \"2\"` is `true` as strings. Convert to numbers for numeric comparisons."
+    }
+  ]
+}

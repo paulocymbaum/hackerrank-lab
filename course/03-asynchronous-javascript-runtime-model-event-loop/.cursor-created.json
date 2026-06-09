@@ -1,8 +1,0 @@
-{
-  "createdBy": "cursor-tool",
-  "tool": ".cursor/tools/teacher/create-lesson-folder.js",
-  "createdAt": "2026-05-28T03:20:51.378Z",
-  "moduleNumber": "03",
-  "moduleTitle": "Asynchronous JavaScript: Runtime Model & Event Loop",
-  "moduleDir": "03-asynchronous-javascript-runtime-model-event-loop"
-}

@@ -2,18 +2,16 @@ import type { Course } from "../../../domain/types/catalog";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
 import { Card } from "../../design-system";
 import { ReadmeContent } from "../../shared/ReadmeContent";
+import { hasDisplayableReadme } from "../../shared/readmeUtils";
 import { ModuleScoreSummary } from "../course-experience/components/ModuleScoreSummary";
 
 export function CourseOverviewRoute(props: { courseId: string; course: Course }) {
   const { goModule } = useAppNavigation();
   const modules = props.course.modules ?? [];
+  const showReadme = hasDisplayableReadme(props.course.readmeMarkdown, props.course.title);
 
   return (
     <section className="grid gap-4">
-      <Card variant="panel" className="p-4">
-        <ReadmeContent markdown={props.course.readmeMarkdown} />
-      </Card>
-
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {modules.map((mod) => (
           <Card key={mod.id} variant="panel" className="p-4">
@@ -32,6 +30,12 @@ export function CourseOverviewRoute(props: { courseId: string; course: Course })
           </Card>
         ))}
       </div>
+
+      {showReadme ? (
+        <Card variant="panel" className="p-4">
+          <ReadmeContent markdown={props.course.readmeMarkdown} title={props.course.title} />
+        </Card>
+      ) : null}
     </section>
   );
 }

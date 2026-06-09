@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Truthy vs Falsy Check",
+  "description": "Predict boolean conversion in `if` and logical contexts.",
+  "lessonId": "01.8.1-truthy-vs-falsy",
+  "graphIndex": "01.8.1",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which value is **falsy** in JavaScript?",
+      "options": [
+        { "id": "a", "text": "`0`" },
+        { "id": "b", "text": "`\"0\"`" },
+        { "id": "c", "text": "`[]`" },
+        { "id": "d", "text": "`{}`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Only `0` is in the falsy set. The string `\"0\"`, arrays, and objects are all truthy."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is the result of `Boolean(\"0\")`?",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`0`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Any non-empty string is truthy, including `\"0\"`. Only the empty string `\"\"` is falsy."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is the result of `Boolean([])`?",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "Depends on array length" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Objects (including arrays) are always truthy, even when empty. Check `arr.length === 0` instead of `if (arr)`."
+    },
+    {
+      "id": "q4",
+      "prompt": "A form field returns numeric `0`. Which check treats `0` as **missing** by mistake?",
+      "options": [
+        { "id": "a", "text": "`if (!value)`" },
+        { "id": "b", "text": "`if (value == null)`" },
+        { "id": "c", "text": "`if (value === \"\")`" },
+        { "id": "d", "text": "`if (!Number.isFinite(value))`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`0` is falsy, so `if (!value)` treats it as missing. Use nullish checks or explicit validation when `0` is valid."
+    },
+    {
+      "id": "q5",
+      "prompt": "What is the result of `Boolean(\" \")` (a string with one space)?",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`null`" },
+        { "id": "d", "text": "SyntaxError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Only the empty string `\"\"` is falsy. A string with whitespace is still non-empty and therefore truthy."
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "typeof and Array.isArray Check",
+  "description": "Runtime type labels without typeof traps.",
+  "lessonId": "01.8.4-typeof-and-array-isarray",
+  "graphIndex": "01.8.4",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What does `typeof null` return?",
+      "options": [
+        { "id": "a", "text": "`\"object\"`" },
+        { "id": "b", "text": "`\"null\"`" },
+        { "id": "c", "text": "`\"undefined\"`" },
+        { "id": "d", "text": "`\"number\"`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "A long-standing quirk — use `value === null` instead of `typeof`."
+    },
+    {
+      "id": "q2",
+      "prompt": "How do you reliably detect an array?",
+      "options": [
+        { "id": "a", "text": "`Array.isArray(value)`" },
+        { "id": "b", "text": "`typeof value === \"array\"`" },
+        { "id": "c", "text": "`value instanceof Object`" },
+        { "id": "d", "text": "`typeof value === \"object\" && value.length`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`typeof []` is `\"object\"`. `Array.isArray` is the correct test."
+    },
+    {
+      "id": "q3",
+      "prompt": "What does `typeof NaN` return?",
+      "options": [
+        { "id": "a", "text": "`\"number\"`" },
+        { "id": "b", "text": "`\"NaN\"`" },
+        { "id": "c", "text": "`\"undefined\"`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "NaN is still the number type. Detect it with `Number.isNaN(x)`."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which check correctly identifies `null`?",
+      "options": [
+        { "id": "a", "text": "`value === null`" },
+        { "id": "b", "text": "`typeof value === \"null\"`" },
+        { "id": "c", "text": "`value == undefined` only" },
+        { "id": "d", "text": "`!value`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Strict null check is explicit. `!value` also treats `0` and `\"\"` as missing."
+    },
+    {
+      "id": "q5",
+      "prompt": "Recommended order when labeling unknown `value`?",
+      "options": [
+        { "id": "a", "text": "`null` → `Array.isArray` → numbers → `typeof`" },
+        { "id": "b", "text": "`typeof` first, then everything else" },
+        { "id": "c", "text": "`== null` then return `\"missing\"`" },
+        { "id": "d", "text": "Always `JSON.stringify`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Handle known quirks before falling back to `typeof`."
+    }
+  ]
+}

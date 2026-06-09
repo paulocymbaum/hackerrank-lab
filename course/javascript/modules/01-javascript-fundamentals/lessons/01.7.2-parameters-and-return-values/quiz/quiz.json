@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Parameters and Return Values Check",
+  "description": "Arguments, early return, and separating computation from output.",
+  "lessonId": "01.7.2-parameters-and-return-values",
+  "graphIndex": "01.7.2",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed?\n\n```js\nfunction max(a, b) {\n  if (a >= b) {\n    return a;\n  }\n  return b;\n}\nconsole.log(max(3, 7));\nconsole.log(max(10, 2));\n```",
+      "options": [
+        { "id": "a", "text": "`7` then `10`" },
+        { "id": "b", "text": "`3` then `2`" },
+        { "id": "c", "text": "`7` only" },
+        { "id": "d", "text": "`undefined` then `undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Each call returns the larger argument via early `return` branches."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is printed?\n\n```js\nfunction clamp(value, min, max) {\n  if (value < min) return min;\n  if (value > max) return max;\n  return value;\n}\nconsole.log(clamp(5, 0, 10));\nconsole.log(clamp(-3, 0, 10));\nconsole.log(clamp(99, 0, 10));\n```",
+      "options": [
+        { "id": "a", "text": "`5`, `0`, `10`" },
+        { "id": "b", "text": "`5`, `-3`, `99`" },
+        { "id": "c", "text": "`0`, `0`, `10`" },
+        { "id": "d", "text": "`5`, `0`, `99`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "5 stays; -3 clamps to min 0; 99 clamps to max 10."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is the result of `add(2)`?\n\n```js\nfunction add(a, b) {\n  return a + b;\n}\n```",
+      "options": [
+        { "id": "a", "text": "`NaN` — `b` is `undefined`" },
+        { "id": "b", "text": "`2`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "Throws immediately" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Missing arguments become `undefined`. `2 + undefined` is `NaN` — validate parameters when required."
+    },
+    {
+      "id": "q4",
+      "prompt": "What is printed?\n\n```js\nfunction classify(score) {\n  if (!Number.isFinite(score)) {\n    return \"ERROR\";\n  }\n  if (score >= 60) {\n    return \"Pass\";\n  }\n  return \"Fail\";\n}\nconsole.log(classify(85));\nconsole.log(classify(\"x\"));\n```",
+      "options": [
+        { "id": "a", "text": "`Pass` then `ERROR`" },
+        { "id": "b", "text": "`Fail` then `ERROR`" },
+        { "id": "c", "text": "`Pass` then `Pass`" },
+        { "id": "d", "text": "`ERROR` then `ERROR`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "85 passes; `\"x\"` is not finite, so early return yields `ERROR`."
+    },
+    {
+      "id": "q5",
+      "prompt": "What happens when `return` runs inside a function?",
+      "options": [
+        { "id": "a", "text": "The function exits immediately — code below does not run" },
+        { "id": "b", "text": "Only the current `if` block ends" },
+        { "id": "c", "text": "The whole program stops" },
+        { "id": "d", "text": "Execution jumps to the next function in the file" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Early `return` is ideal for invalid input — no fall-through to later logic."
+    }
+  ]
+}

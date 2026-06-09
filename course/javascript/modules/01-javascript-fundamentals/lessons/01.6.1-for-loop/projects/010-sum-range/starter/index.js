@@ -1,0 +1,22 @@
+/**
+ * Sum Range
+ * node starter/index.js
+ */
+
+const readline = require("node:readline");
+
+function main() {
+  const lines = [];
+  const rl = readline.createInterface({ input: process.stdin });
+
+  rl.on("line", (line) => {
+    lines.push(line);
+    if (lines.length < 2) return;
+
+    // TODO: sum inclusive range with for loop
+    process.stdout.write("Not implemented yet\n");
+    rl.close();
+  });
+}
+
+main();
