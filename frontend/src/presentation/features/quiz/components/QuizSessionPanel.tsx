@@ -51,7 +51,7 @@ export function QuizSessionPanel(props: {
   if (!question) return null;
 
   return (
-    <section className="grid gap-4">
+    <section className={props.compact ? "grid gap-4 p-4" : "grid gap-4"}>
       {!props.compact ? (
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Button variant="ghost" size="md" onClick={props.onBackToList}>

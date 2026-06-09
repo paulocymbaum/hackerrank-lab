@@ -151,6 +151,16 @@ export function useAppNavigation() {
     setSearchParams(params, { replace: true });
   }, [searchParams, setSearchParams]);
 
+  const openModuleQuiz = useCallback(
+    (courseId: string, moduleId: string, quizId: string) => {
+      useQuizSessionStore.getState().start(quizId);
+      navigate(
+        `/course/${encodeURIComponent(courseId)}/module/${encodeURIComponent(moduleId)}?quiz=${encodeURIComponent(quizId)}`,
+      );
+    },
+    [navigate],
+  );
+
   const openQuiz = useCallback(
     (courseId: string, quizId: string) => {
       closeReaderBeforeNavigate();
@@ -193,6 +203,7 @@ export function useAppNavigation() {
     setTab,
     openReader,
     closeReader,
+    openModuleQuiz,
     openQuiz,
     closeQuiz,
     setReaderTab,

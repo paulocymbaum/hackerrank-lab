@@ -51,10 +51,6 @@ export function LessonCard(props: {
         onClick={props.onOpen}
       >
         <div className="text-body font-medium text-text0">{props.lesson.title}</div>
-        <div className="flex flex-wrap items-center gap-3 text-meta text-text1">
-          <span>{props.quizzes.length} quiz</span>
-          <span>{props.projects.length} projects</span>
-        </div>
         {total > 0 ? (
           <ProgressBar
             value={done}

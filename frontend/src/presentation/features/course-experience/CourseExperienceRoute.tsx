@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import type { CourseTab } from "../../../domain/types/navigation";
 import {
@@ -111,7 +111,10 @@ export function CourseExperienceRoute() {
     );
   }
 
-  if (isHierarchyCourse(course) && !searchParams.has("tab")) {
+  if (isHierarchyCourse(course)) {
+    if (searchParams.has("tab") || searchParams.has("reader")) {
+      return <Navigate to={`/course/${encodeURIComponent(courseId)}`} replace />;
+    }
     return <CourseOverviewRoute courseId={courseId} course={course} />;
   }
 

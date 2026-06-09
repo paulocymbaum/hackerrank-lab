@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { useParams, useSearchParams } from "react-router-dom";
 import {
   getModuleById,
   getProjectsForLesson,
@@ -8,21 +7,23 @@ import {
   getQuizzesForModule,
 } from "../../../application/selectors/catalogSelectors";
 import { getQuizById } from "../../../application/selectors/quizSelectors";
-import { useCatalog } from "../../../application/hooks/useCatalog";
 import { useCourse } from "../../../application/hooks/useCourse";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
-import { useQuizProgressStore } from "../../../application/stores/quizSessionStore";
+import { useQuizSessionStore, useQuizProgressStore } from "../../../application/stores/quizSessionStore";
 import { loadCourseScores } from "../../../application/usecases/courseScores";
-import { Button, Card, ErrorPanel, Icon, LoadingState } from "../../design-system";
-import { MarkdownView } from "../../shared/MarkdownView";
+import { Card, ErrorPanel, LoadingState } from "../../design-system";
+import { ReadmeContent } from "../../shared/ReadmeContent";
 import { LessonCard } from "../lesson-workspace/components/LessonCard";
 import { QuizList } from "../quiz/components/QuizList";
+import { QuizSessionPanel } from "../quiz/components/QuizSessionPanel";
 
 export function ModuleExperienceRoute() {
   const { courseId = "", moduleId = "" } = useParams();
+  const [searchParams] = useSearchParams();
   const { course, status, error, load, reload } = useCourse(courseId);
-  const { goCourse, goLesson, openLessonDrawer } = useAppNavigation();
+  const { goLesson, openModuleQuiz, closeQuiz } = useAppNavigation();
   const getProgress = useQuizProgressStore((s) => s.getProgress);
+  const activeQuizId = searchParams.get("quiz");
 
   useEffect(() => {
     if (status === "idle") void load();
@@ -32,6 +33,12 @@ export function ModuleExperienceRoute() {
     if (!courseId || status !== "ready") return;
     void loadCourseScores(courseId);
   }, [courseId, status]);
+
+  useEffect(() => {
+    if (!activeQuizId || !course) return;
+    const session = useQuizSessionStore.getState();
+    if (session.quizId !== activeQuizId) session.start(activeQuizId);
+  }, [activeQuizId, course]);
 
   if (status === "loading" || status === "idle") {
     return <LoadingState message="Loading module…" />;
@@ -56,48 +63,46 @@ export function ModuleExperienceRoute() {
     return <ErrorPanel title="Module not found." />;
   }
 
-  const moduleQuizzes = getQuizzesForModule(course, moduleId);
+  const moduleQuizzes = getQuizzesForModule(course, moduleId).filter((q) => !q.lessonId);
+  const activeQuiz = activeQuizId ? getQuizById(course, activeQuizId) : null;
+
+  if (activeQuiz && moduleQuizzes.some((q) => q.id === activeQuiz.id)) {
+    return (
+      <QuizSessionPanel
+        courseId={courseId}
+        course={course}
+        quiz={activeQuiz}
+        onBackToList={closeQuiz}
+      />
+    );
+  }
 
   return (
     <section className="grid gap-4">
-      <Button variant="secondary" onClick={() => goCourse(courseId)} title="Back to course">
-        <Icon icon={ArrowLeft} />
-        Back to course
-      </Button>
+      {mod.readmeMarkdown.trim() ? (
+        <Card variant="panel" className="p-4">
+          <ReadmeContent markdown={mod.readmeMarkdown} />
+        </Card>
+      ) : null}
 
-      <Card variant="panel" className="p-4">
-        <h1 className="m-0 mb-3 text-title font-semibold text-text0">{mod.title}</h1>
-        <MarkdownView markdown={mod.readmeMarkdown} />
-      </Card>
-
-      <div className="grid gap-3">
-        <h2 className="m-0 text-body font-semibold text-text0">Lessons</h2>
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-          {mod.lessons.map((lesson) => (
-            <LessonCard
-              key={lesson.id}
-              courseId={courseId}
-              lesson={lesson}
-              quizzes={getQuizzesForLesson(course, moduleId, lesson.id)}
-              projects={getProjectsForLesson(course, moduleId, lesson.id)}
-              onOpen={() => goLesson(courseId, moduleId, lesson.id)}
-            />
-          ))}
-        </div>
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+        {mod.lessons.map((lesson) => (
+          <LessonCard
+            key={lesson.id}
+            courseId={courseId}
+            lesson={lesson}
+            quizzes={getQuizzesForLesson(course, moduleId, lesson.id)}
+            projects={getProjectsForLesson(course, moduleId, lesson.id)}
+            onOpen={() => goLesson(courseId, moduleId, lesson.id)}
+          />
+        ))}
       </div>
 
       {moduleQuizzes.length > 0 ? (
         <QuizList
           quizzes={moduleQuizzes}
-          getProgress={(quizId) => {
-            const quiz = getQuizById(course, quizId);
-            return getProgress(courseId, quizId, quiz?.lessonId);
-          }}
-          onStart={(quiz) => {
-            if (quiz.lessonId) {
-              openLessonDrawer(courseId, moduleId, quiz.lessonId, "quiz", quiz.id);
-            }
-          }}
+          getProgress={(quizId) => getProgress(courseId, quizId)}
+          onStart={(quiz) => openModuleQuiz(courseId, moduleId, quiz.id)}
         />
       ) : null}
     </section>

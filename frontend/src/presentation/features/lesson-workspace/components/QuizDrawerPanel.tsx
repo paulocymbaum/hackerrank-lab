@@ -9,14 +9,12 @@ export function QuizDrawerPanel(props: {
   onClose: () => void;
 }) {
   return (
-    <div className="p-4">
-      <QuizSessionPanel
+    <QuizSessionPanel
         courseId={props.courseId}
         course={props.course}
         quiz={props.quiz}
         onBackToList={props.onClose}
-        compact
-      />
-    </div>
+      compact
+    />
   );
 }

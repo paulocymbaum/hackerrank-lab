@@ -23,8 +23,10 @@ export function ProjectWorkspacePanel(props: {
   project: Project;
   drawerTab: DrawerTab;
   onDrawerTabChange: (tab: DrawerTab) => void;
+  /** In lesson workspace the main pane already shows lesson context — only files + delivery. */
+  embedded?: boolean;
 }) {
-  const { project, courseId, courseTitle, drawerTab, onDrawerTabChange } = props;
+  const { project, courseId, courseTitle, drawerTab, onDrawerTabChange, embedded } = props;
   const entries = project.entries;
   const [cwd, setCwd] = useState("");
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
@@ -51,37 +53,42 @@ export function ProjectWorkspacePanel(props: {
     markProjectDoing(courseId, project.id, project.lessonId);
   }, [drawerTab, courseId, project.id, project.lessonId, markProjectDoing]);
 
-  const tabItems = [
-    { value: "explanation", label: "Explanation" },
-    { value: "files", label: "Files" },
-    { value: "delivery", label: "Delivery" },
-  ];
+  const tabItems = embedded
+    ? [
+        { value: "files", label: "Files" },
+        { value: "delivery", label: "Delivery" },
+      ]
+    : [
+        { value: "explanation", label: "Brief" },
+        { value: "files", label: "Files" },
+        { value: "delivery", label: "Delivery" },
+      ];
+
+  const activeTab =
+    embedded && drawerTab === "explanation" ? "files" : drawerTab;
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b border-border0 px-4 py-3">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <div className="truncate text-meta font-semibold text-text0">{project.title}</div>
-          <ProjectStatusBadge
-            value={getProjectStatus(courseId, project.id, project.lessonId)}
-            showPoints
-            size="md"
-          />
-        </div>
+      <div className="flex items-center justify-between gap-3 border-b border-border0 px-4 py-3">
         <Tabs
-          value={drawerTab}
+          value={activeTab}
           onValueChange={(v) => onDrawerTabChange(v as DrawerTab)}
           items={tabItems}
         />
+        <ProjectStatusBadge
+          value={getProjectStatus(courseId, project.id, project.lessonId)}
+          showPoints
+          size="sm"
+        />
       </div>
 
-      {drawerTab === "explanation" ? (
+      {!embedded && activeTab === "explanation" ? (
         <div className="overflow-auto p-4">
           <MarkdownView markdown={explanationMarkdown} />
         </div>
       ) : null}
 
-      {drawerTab === "files" ? (
+      {activeTab === "files" ? (
         <div className="grid min-h-0 flex-1 grid-rows-[auto_1fr]">
           <FolderBrowser
             entries={entries}
@@ -101,14 +108,14 @@ export function ProjectWorkspacePanel(props: {
         </div>
       ) : null}
 
-      {drawerTab === "delivery" ? (
+      {activeTab === "delivery" ? (
         <ProjectDeliveryPanel
           courseId={courseId}
           courseTitle={courseTitle}
           projectTitle={project.title}
           projectId={project.id}
           rootPath={project.rootPath}
-          enabled={drawerTab === "delivery"}
+          enabled={activeTab === "delivery"}
         />
       ) : null}
     </div>

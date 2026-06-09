@@ -77,12 +77,6 @@ export function AppLayout() {
       segments.push({ label: TAB_LABELS[tab] });
     }
 
-    if (lessonMatch && searchParams.get("drawer")) {
-      const drawer = searchParams.get("drawer");
-      if (drawer === "quiz") segments.push({ label: "Quiz" });
-      if (drawer === "project") segments.push({ label: "Project" });
-    }
-
     return segments;
   }, [
     isCourseRoute,
@@ -110,7 +104,7 @@ export function AppLayout() {
       }
     >
       <Outlet />
-      <ContentReaderDialog />
+      {course && !isHierarchyCourse(course) ? <ContentReaderDialog /> : null}
     </AppShell>
   );
 }
