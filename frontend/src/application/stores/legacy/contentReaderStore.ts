@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ReaderItem, ReaderTab } from "../../domain/types/reader";
+import type { ReaderItem, ReaderTab } from "../../../domain/types/reader";
 
 type ContentReaderState = {
   isOpen: boolean;

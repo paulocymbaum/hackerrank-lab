@@ -1,8 +1,8 @@
 # Arquitetura Frontend — Navegação Fluida para Estudo
 
-Este documento descreve a **arquitetura modular e flexível** do frontend do Hackerrank Study, com foco em oferecer uma **experiência de navegação contínua** para o aluno que percorre módulos, exemplos e projetos práticos.
+Este documento descreve a **arquitetura modular** do frontend do Hackerrank Study, com foco em **como o aluno navega** pelo conteúdo sem perder contexto.
 
-Complementa [`ARCHITECTURE.md`](./ARCHITECTURE.md) (camadas técnicas) e [`DESIGN.md`](./DESIGN.md) (linguagem visual). Aqui o eixo central é **como o aluno se move pelo conteúdo** sem perder contexto.
+Complementa [`ARCHITECTURE.md`](./ARCHITECTURE.md) (rotas e camadas técnicas) e [`DESIGN.md`](./DESIGN.md) (linguagem visual).
 
 ---
 
@@ -10,406 +10,182 @@ Complementa [`ARCHITECTURE.md`](./ARCHITECTURE.md) (camadas técnicas) e [`DESIG
 
 | Objetivo | O que significa na prática |
 |----------|----------------------------|
-| **Continuidade** | O aluno sempre sabe onde está (catálogo → curso → item) e como voltar. |
-| **Progressive disclosure** | Visão geral primeiro; detalhes (README, arquivos, código) sob demanda. |
-| **Zero fricção entre tipos de conteúdo** | Exemplos (lessons) e projetos (PBL) abrem no mesmo leitor, com abas consistentes. |
-| **Modularidade** | Cada bloco (catálogo, experiência do curso, leitor) evolui de forma independente. |
-| **Substituibilidade** | Dados estáticos hoje; API, progresso e busca amanhã — sem reescrever a UI. |
+| **Continuidade** | Breadcrumb e URL refletem catálogo → curso → módulo → lição. |
+| **Progressive disclosure** | Visão geral primeiro; quiz, project e arquivos sob demanda (drawer ou overlay). |
+| **Um padrão por atividade** | `QuizHost`, `ProjectReader` e `ReadmePanel` unificam shells. |
+| **Modularidade** | Features em `presentation/features/` evoluem de forma independente. |
+| **Substituibilidade** | Catálogo estático hoje; API e progresso via repositórios injetados. |
 
 ---
 
-## Jornada do aluno
+## Dois fluxos de estudo
 
-O conteúdo segue a estrutura descrita em [`COURSE_STRUCTURE.md`](../COURSE_STRUCTURE.md):
+O catálogo define `course.structure`:
 
-```text
-course/
-  01-javascript-fundamentals/
-    README.md              ← visão do módulo
-    examples/              ← lições teóricas (.md)
-    projects/              ← exercícios PBL (pastas com starter/solution)
-```
-
-A interface espelha essa hierarquia em **quatro níveis de navegação**:
+| Estrutura | Fluxo | Entrada |
+|-----------|-------|---------|
+| **`hierarchy`** (padrão) | Rotas aninhadas + side drawer | `CourseOverviewRoute` → `ModuleLayoutRoute` |
+| **`legacy`** | Abas flat + overlay | `LegacyCourseRoute` + `ContentReaderDialog` |
 
 ```mermaid
-flowchart LR
-  A[Catálogo de cursos] --> B[Experiência do curso]
-  B --> C[README / Examples / Projects]
-  C --> D[Leitor de conteúdo]
-  D --> E[Explanation / Folders / Files]
+flowchart TD
+  Catalog[CatalogRoute]
+  CE[CourseExperienceRoute]
+  CO[CourseOverviewRoute]
+  ML[ModuleLayoutRoute]
+  LW[LessonWorkspaceRoute]
+  Legacy[LegacyCourseRoute]
+  CRD[ContentReaderDialog]
+
+  Catalog --> CE
+  CE -->|hierarchy| CO
+  CE -->|legacy| Legacy
+  CO --> ML
+  ML --> LW
+  Legacy --> CRD
 ```
-
-### Nível 1 — Catálogo (`catalog`)
-
-- Lista todos os módulos disponíveis.
-- Mostra contagem de exemplos e projetos por curso.
-- Ação principal: **“See course”** → entra na experiência imersiva do módulo.
-
-### Nível 2 — Experiência do curso (`course`)
-
-- Três abas alinhadas ao contrato do repositório:
-  - **README** — visão geral e checklist do módulo.
-  - **Examples** — lista ordenada de lições em Markdown.
-  - **Projects** — lista de exercícios PBL.
-- Ação principal: clicar em um item → abre o **Leitor de conteúdo** (overlay).
-
-### Nível 3 — Leitor de conteúdo (`ContentReaderDialog`)
-
-- Componente global, acionado de qualquer curso.
-- Três modos internos:
-  - **Explanation** — README ou markdown da lição.
-  - **Folders** — navegação em árvore (projetos com `starter/`, `solution/`, etc.).
-  - **Files** — painel split: lista de arquivos + preview (markdown ou código).
-
-### Nível 4 — Contexto dentro do leitor
-
-- `cwd` (current working directory) para pastas aninhadas.
-- Seleção de arquivo persistente na sessão do dialog.
-- Fechar com `Escape` ou backdrop → retorna exatamente à aba do curso onde estava.
 
 ---
 
-## Princípios de navegação fluida
-
-### 1. Um leitor, dois tipos de item
-
-Lessons e projects compartilham o mesmo contrato `ReaderItem`:
-
-```typescript
-type ReaderItem = {
-  kind: "lesson" | "project";
-  title: string;
-  path: string;
-  markdown: string;
-  rootPath?: string;
-  entries?: ReaderEntry[];
-};
-```
-
-Isso evita duplicar UI e garante que o aluno **aprende um padrão de interação** uma vez e reutiliza em todo o curso.
-
-### 2. Estado de rota separado do estado de leitura
-
-| Store | Responsabilidade | Por quê |
-|-------|------------------|---------|
-| `navigationStore` | Rota de alto nível: `catalog` \| `course` | Troca de tela sem perder o catálogo carregado. |
-| `contentReaderStore` | Overlay do leitor: item, aba, pasta, arquivo | Abrir/fechar conteúdo sem desmontar a rota do curso. |
-| `courseCatalogStore` | Dados do catálogo + status de carga | Fonte única de verdade para todos os cursos. |
-
-O leitor é **overlay**, não rota — o aluno fecha e continua na mesma aba (Examples/Projects) do curso.
-
-### 3. Dados pré-carregados, navegação instantânea
-
-O script `scripts/generate-static-catalog.mjs` gera `catalog.json` com markdown e arquivos embutidos. Na sessão de estudo:
-
-- Carregar catálogo **uma vez** (`courseCatalogStore.load()`).
-- Navegar entre cursos, lições e arquivos **sem round-trip de rede**.
-- Transições limitadas a renderização React — sensação de app nativo.
-
-### 4. Hierarquia sempre visível
-
-Cada tela expõe **breadcrumb implícito**:
+## Jornada hierarchy (fluxo primário)
 
 ```text
-Hackerrank Study › [Curso X] › Examples › 02. Equality And Coercion
-                              └─ path no header do leitor
+/                                    → Catálogo
+/course/:courseId                    → Overview do curso (módulos)
+/course/:courseId/module/:moduleId   → README do módulo + drawer de conteúdos
+/course/:courseId/module/:moduleId/lesson/:lessonId → Explanation da lição
+  ?drawer=quiz&quiz=<id>             → Quiz no drawer direito
+  ?drawer=project&project=<id>       → Project no drawer
+  ?drawerTab=files|delivery          → Aba do project no drawer
 ```
 
-Regra: nunca mais de **dois cliques** para voltar ao nível anterior (Back, Escape, ou fechar dialog).
+### Nível 1 — Catálogo
+
+- [`CatalogRoute`](src/presentation/features/catalog/CatalogRoute.tsx)
+- Lista cursos; ação **See course** → `/course/:courseId`
+
+### Nível 2 — Overview do curso
+
+- [`CourseOverviewRoute`](src/presentation/features/course-overview/CourseOverviewRoute.tsx)
+- Cards de módulos com score; README do curso opcional
+
+### Nível 3 — Módulo
+
+- [`ModuleLayoutRoute`](src/presentation/features/module-experience/ModuleLayoutRoute.tsx) — shell com drawer
+- [`ModuleExperienceRoute`](src/presentation/features/module-experience/ModuleExperienceRoute.tsx) — README do módulo
+- [`ModuleContentsDrawer`](src/presentation/features/module-experience/components/ModuleContentsDrawer.tsx) — navegação por seções, lições, quiz e project
+- Quiz de módulo: `?quiz=<id>` substitui o painel principal por [`QuizHost`](src/presentation/features/quiz/components/QuizHost.tsx) (`layout="page"`)
+
+### Nível 4 — Lição
+
+- [`LessonWorkspaceRoute`](src/presentation/features/lesson-workspace/LessonWorkspaceRoute.tsx)
+- Painel central: explanation (`ReadmePanel`) quando drawer fechado
+- Drawer aberto: quiz/project ocupam a coluna principal; explanation oculta
+- Progress bar da lição: rodapé do side drawer (`LessonProgressFooter`)
 
 ---
 
-## Arquitetura modular
+## Jornada legacy (compatibilidade)
 
-### Visão em camadas + módulos funcionais
+Cursos com `structure: "legacy"` (pastas flat sem `modules/` no gerador):
 
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│                    PRESENTATION                              │
-│  AppShell │ CourseCatalogRoute │ CourseExperienceRoute       │
-│  ContentReaderDialog │ MarkdownView │ Design System          │
-├─────────────────────────────────────────────────────────────┤
-│                    APPLICATION                               │
-│  navigationStore │ courseCatalogStore │ contentReaderStore │
-│  (futuro: progressStore, searchStore, preferencesStore)    │
-├─────────────────────────────────────────────────────────────┤
-│                    INFRASTRUCTURE                            │
-│  staticCatalogRepository │ catalog.json (gerado)             │
-│  (futuro: apiCatalogRepository, localStorageProgress)        │
-├─────────────────────────────────────────────────────────────┤
-│                    DOMAIN                                    │
-│  types/catalog.ts — Course, Lesson, Project, Catalog       │
-└─────────────────────────────────────────────────────────────┘
+/course/:courseId?tab=readme|examples|projects|quiz
+/course/:courseId?tab=examples&reader=<path>  → ContentReaderDialog overlay
 ```
 
-### Módulos funcionais (feature modules)
+- [`LegacyCourseRoute`](src/presentation/features/course-legacy/LegacyCourseRoute.tsx) — abas README / Examples / Projects / Quiz
+- [`ContentReaderDialog`](src/presentation/features/course-legacy/ContentReaderDialog.tsx) — overlay global montado em [`AppLayout`](src/presentation/app/AppLayout.tsx) quando `course.structure === "legacy"`
 
-Cada módulo agrupa rota + stores + componentes relacionados. Novos módulos **plugam** via stores e contratos de domínio, não via imports cruzados na UI.
+**Regra:** novas features vão apenas no fluxo hierarchy; legacy recebe apenas correções.
 
-| Módulo | Pasta(s) | Entrada | Saída / efeitos |
-|--------|----------|---------|-----------------|
-| **Shell** | `presentation/core/layout/` | Props de tema e título | Layout consistente em todas as rotas |
-| **Catalog** | `routes/CourseCatalogRoute`, `courseCatalogStore` | Montagem da rota | Lista de cursos; dispara `goCourse(id)` |
-| **Course Experience** | `routes/CourseExperienceRoute` | `courseId` da rota | Abas README/Examples/Projects; dispara `openReader(item)` |
-| **Content Reader** | `ContentReaderDialog`, `contentReaderStore` | `ReaderItem` | Leitura de markdown e arquivos; overlay global |
-| **Navigation** | `navigationStore` | Actions `goCatalog`, `goCourse` | Estado de rota de alto nível |
-| **Catalog Pipeline** | `scripts/generate-static-catalog.mjs` | Árvore `course/` | `infrastructure/static/catalog.json` |
+---
 
-### Estrutura de pastas (atual e recomendada)
+## Estado e stores
+
+| Store / hook | Responsabilidade |
+|--------------|------------------|
+| React Router (`pathname`, `searchParams`) | Rota canônica; URLs compartilháveis |
+| [`useAppNavigation`](src/application/hooks/useAppNavigation.ts) | Facade de navegação; delega para estratégias hierarchy/legacy |
+| [`courseCatalogStore`](src/application/stores/courseCatalogStore.ts) | Catálogo + status de carga |
+| [`quizSessionStore`](src/application/stores/quizSessionStore.ts) | Sessão ativa do quiz |
+| [`quizProgressStore`](src/application/stores/quizProgressStore.ts) | Melhor score e tentativas (localStorage) |
+| [`projectProgressStore`](src/application/stores/projectProgressStore.ts) | Status de entrega de projects |
+| [`contentReaderStore`](src/application/stores/legacy/contentReaderStore.ts) | Overlay legacy: item, aba, cwd, arquivo |
+| [`courseExperienceStore`](src/application/stores/legacy/courseExperienceStore.ts) | Tab persistida (legacy) |
+
+---
+
+## Arquitetura em camadas
 
 ```text
-frontend/src/
-  domain/
-    types/
-      catalog.ts              # contratos estáveis
-  application/
-    stores/
-      navigationStore.ts
-      courseCatalogStore.ts
-      contentReaderStore.ts
-    usecases/                 # (futuro) loadCatalog, openNextLesson, markComplete
-    selectors/                # (futuro) getCourseById, getLessonSequence
-  infrastructure/
-    repositories/
-      staticCatalogRepository.ts
-    static/
-      catalog.json            # gerado — não editar manualmente
-  presentation/
-    App.tsx                   # composição: rota + leitor global
-    routes/
-      CourseCatalogRoute.tsx
-      CourseExperienceRoute.tsx
-    components/
-      ContentReaderDialog.tsx
-      MarkdownView.tsx
-    core/layout/
-      AppShell.tsx
-    design-system/            # tokens, Button, Card, Icon
+presentation/features/     → rotas e UI por domínio
+presentation/shared/         → ReadmePanel, AsyncRouteBoundary, MarkdownView
+application/hooks/           → useCourseRouteData, useQuizSessionFromUrl
+application/navigation/      → estrategiaHierarquia, estrategiaLegacy
+application/stores/        → Zustand (uma responsabilidade por store)
+application/selectors/       → catalogSelectors, lessonProgress, quizSelectors
+application/usecases/        → courseScores, loadCatalog, projectDeliveries
+infrastructure/              → staticCatalogRepository, httpCourseScoreRepository
+domain/types/                → contratos estáveis
 ```
+
+**Regra:** `presentation/` importa apenas `application/` e `domain/`, nunca `infrastructure/` diretamente.
 
 ---
 
-## Fluxos de navegação (sequências)
+## Shells unificados
 
-### Abrir um exemplo
-
-```mermaid
-sequenceDiagram
-  participant A as Aluno
-  participant CE as CourseExperienceRoute
-  participant CR as contentReaderStore
-  participant D as ContentReaderDialog
-
-  A->>CE: Clica em lição na aba Examples
-  CE->>CR: open({ kind: "lesson", ... })
-  CR->>D: isOpen=true, tab="explanation"
-  A->>D: Alterna para Files (opcional)
-  A->>D: Escape / Close
-  CR->>CE: isOpen=false — permanece em Examples
-```
-
-### Explorar um projeto PBL
-
-```mermaid
-sequenceDiagram
-  participant A as Aluno
-  participant CE as CourseExperienceRoute
-  participant CR as contentReaderStore
-  participant D as ContentReaderDialog
-
-  A->>CE: Clica em projeto na aba Projects
-  CE->>CR: open({ kind: "project", entries, ... })
-  A->>D: Explanation — lê README do exercício
-  A->>D: Folders — entra em starter/
-  A->>D: Files — abre index.js
-  A->>D: Close
-  CE-->>A: Retorna à lista de projetos
-```
-
-### Percorrer vários cursos
-
-```mermaid
-sequenceDiagram
-  participant A as Aluno
-  participant NAV as navigationStore
-  participant CAT as CourseCatalogRoute
-  participant CE as CourseExperienceRoute
-
-  A->>CAT: See course (01-fundamentals)
-  CAT->>NAV: goCourse("01-...")
-  NAV->>CE: render courseId
-  A->>CE: Back
-  CE->>NAV: goCatalog()
-  NAV->>CAT: render catálogo (dados já em cache)
-```
+| Shell | Layouts | Usado em |
+|-------|---------|----------|
+| `QuizHost` | `page` \| `drawer` | Module quiz, lesson drawer, legacy tab |
+| `ProjectReader` | `overlay` \| `drawer` | ContentReaderDialog, lesson drawer |
+| `ReadmePanel` | `inline` \| `scroll` \| `card` | Lição, módulo, curso, explanation em projects |
 
 ---
 
-## Contratos entre módulos
-
-### Presentation → Application
-
-- Componentes **só** importam stores e tipos de `application/` e `domain/`.
-- Proibido: `presentation/` importar `infrastructure/` diretamente.
-- Padrão: selector fino + action (`useNavigationStore(s => s.goCourse)`).
-
-### Application → Infrastructure
-
-- Stores recebem dados via repositório (hoje acoplado em `courseCatalogStore`; evolução: injeção no `create()`).
-- Interface alvo:
-
-```typescript
-type CatalogRepository = {
-  getCatalog(): Promise<Catalog>;
-};
-```
-
-### Infrastructure → Domain
-
-- Mapeamento DTO → tipos de domínio centralizado no repositório.
-- `catalog.json` é artefato de build; regenerar com `npm run catalog:generate`.
-
-### Domínio ↔ Repositório de conteúdo
-
-O domínio reflete fielmente [`COURSE_STRUCTURE.md`](../COURSE_STRUCTURE.md):
-
-| Entidade | Origem no repo | Uso na UI |
-|----------|----------------|-----------|
-| `Course` | `course/NN-nome/` | Card no catálogo; container da experiência |
-| `Lesson` | `examples/*.md` | Lista na aba Examples |
-| `Project` | `projects/.../NNN-nome/` | Lista na aba Projects; árvore no leitor |
-| `ProjectEntry` | Arquivos sob o projeto | Abas Folders e Files |
-
----
-
-## Extensibilidade (como evoluir sem quebrar)
-
-### Adicionar nova rota de alto nível
-
-1. Estender `Route` em `navigationStore.ts` (ex.: `{ name: "search" }`).
-2. Criar `SearchRoute.tsx` em `presentation/routes/`.
-3. Registrar no switch de `App.tsx`.
-4. Opcional: store dedicado (`searchStore`) se a lógica for não trivial.
-
-### Adicionar progresso do aluno
-
-1. Novo store `progressStore` com `{ completedLessonIds, lastVisitedPath }`.
-2. Repositório `localStorageProgressRepository` em infrastructure.
-3. UI: checkmarks na lista de Examples/Projects; botão **“Próximo”** no leitor.
-4. **Não** misturar progresso em `courseCatalogStore` — catálogo permanece read-only.
-
-### Adicionar busca global
-
-1. Índice derivado em application (`buildSearchIndex(courses)`).
-2. Rota ou command palette (⌘K) na presentation.
-3. Resultado da busca chama `goCourse` + `openReader` com o item correto — reutiliza módulos existentes.
-
-### Migrar para URL routing (React Router)
-
-Estado atual usa Zustand para rotas internas. Migração incremental:
-
-| Estado Zustand | URL sugerida |
-|----------------|--------------|
-| `{ name: "catalog" }` | `/` |
-| `{ name: "course", courseId }` | `/course/:courseId` |
-| Leitor aberto | `/course/:courseId/:kind/:itemId` ou query `?open=...` |
-
-O `contentReaderStore` pode sincronizar com search params sem reescrever `ContentReaderDialog`.
-
-### Trocar fonte de dados
+## Pipeline de conteúdo
 
 ```text
-StaticCatalogRepository  →  ApiCatalogRepository
-         │                           │
-         └─────── mesma interface CatalogRepository
+course/ → npm run catalog:generate → catalog.json → courseCatalogStore
 ```
 
-Stores e rotas permanecem; apenas a implementação em infrastructure muda.
-
----
-
-## Pipeline de conteúdo estático
-
-```text
-course/ (Markdown + código no repo)
-        │
-        ▼  npm run catalog:generate
-scripts/generate-static-catalog.mjs
-        │
-        ▼
-src/infrastructure/static/catalog.json
-        │
-        ▼  import no build (Vite)
-staticCatalogRepository.getCatalog()
-        │
-        ▼
-courseCatalogStore.courses
-```
-
-**Regra operacional:** após adicionar ou editar conteúdo em `course/`, regenerar o catálogo antes de `dev` ou `build`. Isso mantém a navegação fluida porque **tudo já está na memória** após o primeiro load.
-
-Limites atuais do gerador (relevantes para UX):
-
-- Arquivos de texto até ~200 KB embutidos; maiores aparecem como “binary/empty”.
-- Extensões suportadas: `.md`, `.js`, `.ts`, `.json`, etc. (ver script).
-- Pastas ignoradas: `node_modules`, `dist`, `.git`.
-
----
-
-## Mapa mental: onde cada peça vive hoje
-
-| Peça | Arquivo |
-|------|---------|
-| Composição raiz | `src/presentation/App.tsx` |
-| Rota catálogo | `src/presentation/routes/CourseCatalogRoute.tsx` |
-| Rota curso | `src/presentation/routes/CourseExperienceRoute.tsx` |
-| Leitor overlay | `src/presentation/components/ContentReaderDialog.tsx` |
-| Navegação | `src/application/stores/navigationStore.ts` |
-| Catálogo | `src/application/stores/courseCatalogStore.ts` |
-| Leitor (estado) | `src/application/stores/contentReaderStore.ts` |
-| Tipos | `src/domain/types/catalog.ts` |
-| Repositório | `src/infrastructure/repositories/staticCatalogRepository.ts` |
-| Gerador | `scripts/generate-static-catalog.mjs` |
-
----
-
-## Roadmap sugerido (navegação)
-
-Prioridade orientada à **experiência do aluno**:
-
-1. **URLs compartilháveis** — link direto para curso e item aberto.
-2. **Próximo / Anterior** — sequência automática entre lições e projetos do módulo.
-3. **Progresso local** — marcar item como lido; retomar de onde parou.
-4. **Sidebar persistente** — árvore do curso visível enquanto lê (desktop).
-5. **Busca** — encontrar conceito ou arquivo em todos os módulos.
-6. **Atalhos de teclado** — `j/k` na lista, `?` para ajuda, `Esc` consistente.
-
-Cada item é um **módulo incremental**: novo store ou selector + pequenas mudanças na presentation, sem alterar o contrato `Catalog`.
+Após editar conteúdo em `course/`, regenerar o catálogo antes de `dev` ou `build`.
 
 ---
 
 ## Checklist de conformidade
 
-Ao implementar novas features, validar:
-
-- [ ] A UI importa apenas `application/` e `domain/`, nunca `infrastructure/` diretamente.
-- [ ] Novo estado de navegação tem store dedicado ou estende um existente com responsabilidade clara.
-- [ ] Lessons e projects continuam abrindo via `contentReaderStore.open()`.
-- [ ] Fechar o leitor restaura o contexto do curso (aba Examples/Projects intacta).
-- [ ] Tipos novos estendem `domain/types/` antes de aparecerem na UI.
-- [ ] Conteúdo novo em `course/` passa por `catalog:generate` antes do deploy.
+- [ ] UI importa apenas `application/` e `domain/`
+- [ ] Novo estado tem store ou hook dedicado com responsabilidade clara
+- [ ] Cursos hierarchy: quiz/project via URL + drawer (sem overlay)
+- [ ] Cursos legacy: overlay via `contentReaderStore` até remoção do gerador legacy
+- [ ] Tipos novos em `domain/types/` antes da UI
+- [ ] Conteúdo novo passa por `catalog:generate` antes do deploy
 
 ---
 
-## Resumo
+## Gate de remoção legacy
 
-O frontend organiza o estudo em **módulos funcionais** (catálogo, experiência do curso, leitor) sobre **três camadas técnicas** (presentation, application, infrastructure). A navegação fluida vem de:
+Remover `course-legacy/` somente quando:
 
-1. **Hierarquia espelhada** ao repositório `course/`.
-2. **Leitor único** para exemplos e projetos.
-3. **Estado separado** entre rota, catálogo e overlay de leitura.
-4. **Catálogo estático pré-gerado** para transições instantâneas.
-5. **Contratos estáveis** que permitem evoluir para URLs, progresso e API sem reescrever a experiência do aluno.
+1. `catalog.json` não contiver cursos `structure: "legacy"`
+2. `generate-static-catalog.mjs` não emitir `loadLegacyModule`
+3. Smoke manual do fluxo hierarchy cobrir 100% dos cursos publicados
 
-Para detalhes de implementação das camadas, ver [`ARCHITECTURE.md`](./ARCHITECTURE.md). Para tokens e componentes visuais, ver [`DESIGN.md`](./DESIGN.md).
+---
+
+## Mapa mental de arquivos
+
+| Peça | Arquivo |
+|------|---------|
+| Composição raiz | `src/presentation/app/AppRouter.tsx`, `AppLayout.tsx` |
+| Catálogo | `features/catalog/CatalogRoute.tsx` |
+| Entrada do curso | `features/course-experience/CourseExperienceRoute.tsx` |
+| Hierarchy | `features/course-overview/`, `module-experience/`, `lesson-workspace/` |
+| Legacy | `features/course-legacy/` |
+| Quiz | `features/quiz/QuizHost.tsx`, `QuizSessionPanel.tsx` |
+| Navegação | `application/hooks/useAppNavigation.ts` |
+| Catálogo (dados) | `application/stores/courseCatalogStore.ts` |
+
+Para detalhes de rotas e scores, ver [`ARCHITECTURE.md`](./ARCHITECTURE.md). Para tokens visuais, ver [`DESIGN.md`](./DESIGN.md).

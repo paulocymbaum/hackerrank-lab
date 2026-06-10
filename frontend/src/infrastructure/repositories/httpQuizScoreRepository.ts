@@ -1,6 +1,6 @@
 import type { CourseScoreRepository } from "../../domain/repositories/quizScoreRepository";
 import type { QuizAttempt } from "../../domain/types/quiz";
-import type { ProjectStatus } from "../../domain/types/quizScore";
+import type { CourseScoreFile, ProjectStatus } from "../../domain/types/quizScore";
 import {
   normalizeCourseScoreFile,
   scoreStorageKeyForProject,
@@ -36,6 +36,7 @@ export const httpCourseScoreRepository: CourseScoreRepository = {
     if (!res.ok) {
       throw new Error(`Failed to persist quiz score (${res.status})`);
     }
+    return parseCourseScoreResponse(await res.json(), courseId);
   },
 
   async setProjectStatus(courseId, projectId, status, lessonId) {
@@ -52,11 +53,17 @@ export const httpCourseScoreRepository: CourseScoreRepository = {
     if (!res.ok) {
       throw new Error(`Failed to persist project status (${res.status})`);
     }
+    return parseCourseScoreResponse(await res.json(), courseId);
   },
 };
 
-/** @deprecated Use httpCourseScoreRepository */
-export const httpQuizScoreRepository = httpCourseScoreRepository;
+function parseCourseScoreResponse(data: unknown, courseId: string): CourseScoreFile {
+  const file = normalizeCourseScoreFile(data, courseId);
+  if (!file) {
+    throw new Error("Invalid score file response");
+  }
+  return file;
+}
 
 type RecordQuizAttemptBody = {
   kind: "quiz";

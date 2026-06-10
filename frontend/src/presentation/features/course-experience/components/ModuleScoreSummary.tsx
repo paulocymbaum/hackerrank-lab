@@ -2,7 +2,7 @@ import type { Module } from "../../../../domain/types/catalog";
 import { quizProgressKey } from "../../../../domain/types/quiz";
 import { projectProgressKey } from "../../../../domain/types/quizScore";
 import { useProjectProgressStore } from "../../../../application/stores/projectProgressStore";
-import { useQuizProgressStore } from "../../../../application/stores/quizSessionStore";
+import { useQuizProgressStore } from "../../../../application/stores/quizProgressStore";
 import { ProgressBar } from "../../../design-system";
 
 export function ModuleScoreSummary(props: { courseId: string; module: Module }) {

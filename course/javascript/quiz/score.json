@@ -1,8 +1,31 @@
 {
   "version": 2,
   "courseId": "javascript",
-  "updatedAt": "2026-06-10T15:52:27.838Z",
-  "quizzes": {},
+  "updatedAt": "2026-06-10T16:32:59.121Z",
+  "quizzes": {
+    "01.1.1-running-javascript-node-js/quiz": {
+      "quizId": "01.1.1-running-javascript-node-js/quiz",
+      "bestScore": 5,
+      "bestTotal": 5,
+      "attempts": [
+        {
+          "score": 4,
+          "total": 5,
+          "completedAt": "2026-06-10T12:00:00.000Z"
+        },
+        {
+          "score": 2,
+          "total": 5,
+          "completedAt": "2026-06-10T16:27:46.667Z"
+        },
+        {
+          "score": 5,
+          "total": 5,
+          "completedAt": "2026-06-10T16:32:59.110Z"
+        }
+      ]
+    }
+  },
   "projects": {
     "01.8.1-truthy-vs-falsy/001-cli-input-validator": {
       "projectId": "01.8.1-truthy-vs-falsy/001-cli-input-validator",

@@ -27,9 +27,14 @@ import {
   buildLessonActivityItems,
   type LessonActivityItem,
 } from "../../../../application/selectors/lessonProgress";
+import { computeProgressPercent } from "../../../../domain/scoreProgress";
+import { quizProgressKey } from "../../../../domain/types/quiz";
+import { useProjectDeliveryStore } from "../../../../application/stores/projectDeliveryStore";
 import { useProjectProgressStore } from "../../../../application/stores/projectProgressStore";
-import { useQuizProgressStore } from "../../../../application/stores/quizSessionStore";
+import { useQuizProgressStore } from "../../../../application/stores/quizProgressStore";
 import { Button, Icon } from "../../../design-system";
+import { LastSubmissionScoreBar } from "../../../shared/score";
+import { LessonCardProgress } from "../../lesson-workspace/components/LessonProgressFooter";
 import { ModulePanelHeader } from "./ModulePanelHeader";
 
 export function ModuleContentsDrawer(props: {
@@ -51,8 +56,9 @@ export function ModuleContentsDrawer(props: {
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useQuizProgressStore((s) => s.byKey);
+  const quizByKey = useQuizProgressStore((s) => s.byKey);
   useProjectProgressStore((s) => s.byKey);
+  useProjectDeliveryStore((s) => s.deliveriesByKey);
 
   const lessonSections = useMemo(
     () => groupLessonsBySection(props.module.lessons),
@@ -122,7 +128,9 @@ export function ModuleContentsDrawer(props: {
 
         {moduleQuizzes.length > 0 ? (
           <ModuleQuizzesAccordion
+            courseId={props.courseId}
             quizzes={moduleQuizzes}
+            quizByKey={quizByKey}
             activeQuizId={activeQuizId}
             onOpenQuiz={props.onOpenModuleQuiz}
           />
@@ -212,14 +220,23 @@ function LessonAccordion(props: {
     <details className="group" open={props.defaultOpen}>
       <summary
         className={clsx(
-          "flex min-h-10 cursor-pointer list-none items-center gap-2 rounded-panel px-2 py-1.5",
+          "flex cursor-pointer list-none flex-col gap-1.5 rounded-panel px-2 py-1.5",
           "hover:bg-surfaceControl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent0/60",
           props.isActiveLesson && "bg-surfaceAccent",
         )}
       >
-        <span className="w-12 shrink-0 font-mono text-meta text-text2">{displayIndex}</span>
-        <span className="min-w-0 flex-1 truncate text-meta font-medium text-text0">{props.lesson.title}</span>
-        <Icon icon={ChevronDown} size={14} className="shrink-0 text-text1 transition group-open:rotate-180" />
+        <div className="flex min-h-7 items-center gap-2">
+          <span className="w-12 shrink-0 font-mono text-meta text-text2">{displayIndex}</span>
+          <span className="min-w-0 flex-1 truncate text-meta font-medium text-text0">
+            {props.lesson.title}
+          </span>
+          <Icon
+            icon={ChevronDown}
+            size={14}
+            className="shrink-0 text-text1 transition group-open:rotate-180"
+          />
+        </div>
+        <LessonCardProgress items={props.items} />
       </summary>
 
       <div className="grid gap-0.5 py-1 pl-3">
@@ -244,6 +261,7 @@ function LessonAccordion(props: {
                 : props.activeProjectId === item.id)
             }
             done={item.done}
+            lastSubmissionPercent={item.lastSubmissionPercent}
             onClick={() => {
               if (item.kind === "quiz") props.onOpenQuiz(item.id);
               else props.onOpenProject(item.id);
@@ -256,7 +274,9 @@ function LessonAccordion(props: {
 }
 
 function ModuleQuizzesAccordion(props: {
+  courseId: string;
   quizzes: Quiz[];
+  quizByKey: Record<string, { lastAttempt?: { score: number; total: number } }>;
   activeQuizId: string | null;
   onOpenQuiz: (quizId: string) => void;
 }) {
@@ -273,16 +293,25 @@ function ModuleQuizzesAccordion(props: {
         <Icon icon={ChevronDown} size={14} className="shrink-0 text-text1 transition group-open:rotate-180" />
       </summary>
       <div className="grid gap-0.5 py-1 pl-2">
-        {props.quizzes.map((quiz) => (
-          <NavRow
-            key={quiz.id}
-            icon={HelpCircle}
-            label="Quiz"
-            sublabel={quiz.title}
-            active={props.activeQuizId === quiz.id}
-            onClick={() => props.onOpenQuiz(quiz.id)}
-          />
-        ))}
+        {props.quizzes.map((quiz) => {
+          const lastAttempt = props.quizByKey[quizProgressKey(props.courseId, quiz.id, quiz.lessonId)]
+            ?.lastAttempt;
+          const lastSubmissionPercent = lastAttempt
+            ? computeProgressPercent(lastAttempt.score, lastAttempt.total)
+            : undefined;
+
+          return (
+            <NavRow
+              key={quiz.id}
+              icon={HelpCircle}
+              label="Quiz"
+              sublabel={quiz.title}
+              active={props.activeQuizId === quiz.id}
+              lastSubmissionPercent={lastSubmissionPercent}
+              onClick={() => props.onOpenQuiz(quiz.id)}
+            />
+          );
+        })}
       </div>
     </details>
   );
@@ -294,32 +323,41 @@ function NavRow(props: {
   sublabel: string;
   active?: boolean;
   done?: boolean;
+  lastSubmissionPercent?: number;
   onClick: () => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={props.onClick}
-      className={clsx(
-        "flex w-full items-center gap-2 rounded-panel px-2 py-1.5 text-left transition",
-        "hover:bg-surfaceControl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent0/60",
-        props.active ? "border border-accent0/40 bg-surfaceAccent" : "border border-transparent",
-      )}
-    >
-      <span
+    <div className="grid gap-1.5">
+      <button
+        type="button"
+        onClick={props.onClick}
         className={clsx(
-          "flex h-7 w-7 shrink-0 items-center justify-center rounded-panel border",
-          props.done
-            ? "border-successBorder bg-successFill text-successIcon"
-            : "border-border0 bg-surfaceControl text-text1",
+          "flex w-full items-center gap-2 rounded-panel px-2 py-1.5 text-left transition",
+          "hover:bg-surfaceControl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent0/60",
+          props.active ? "border border-accent0/40 bg-surfaceAccent" : "border border-transparent",
         )}
       >
-        <Icon icon={props.icon} size={14} />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-meta font-medium text-text0">{props.label}</span>
-        <span className="block truncate text-meta text-text2">{props.sublabel}</span>
-      </span>
-    </button>
+        <span
+          className={clsx(
+            "flex h-7 w-7 shrink-0 items-center justify-center rounded-panel border",
+            props.done
+              ? "border-successBorder bg-successFill text-successIcon"
+              : "border-border0 bg-surfaceControl text-text1",
+          )}
+        >
+          <Icon icon={props.icon} size={14} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-meta font-medium text-text0">{props.label}</span>
+          <span className="block truncate text-meta text-text2">{props.sublabel}</span>
+        </span>
+      </button>
+      {props.lastSubmissionPercent !== undefined ? (
+        <LastSubmissionScoreBar
+          percent={props.lastSubmissionPercent}
+          className="px-2 pb-1.5 pl-11"
+        />
+      ) : null}
+    </div>
   );
 }

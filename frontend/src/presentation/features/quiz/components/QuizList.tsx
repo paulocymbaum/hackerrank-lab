@@ -1,6 +1,8 @@
+import { computeProgressPercent } from "../../../../domain/scoreProgress";
 import type { Quiz } from "../../../../domain/types/quiz";
 import type { QuizProgress } from "../../../../domain/types/quiz";
 import { Card, Button, EmptyState, Icon } from "../../../design-system";
+import { LastSubmissionScoreBar } from "../../../shared/score";
 import { Brain, Play } from "lucide-react";
 
 export function QuizList(props: {
@@ -27,30 +29,38 @@ export function QuizList(props: {
         <ul className="m-0 grid gap-3 p-0">
           {props.quizzes.map((quiz) => {
             const progress = props.getProgress(quiz.id);
+            const lastSubmissionPercent = progress?.lastAttempt
+              ? computeProgressPercent(progress.lastAttempt.score, progress.lastAttempt.total)
+              : undefined;
             return (
               <li key={quiz.id} className="list-none">
-                <div className="flex flex-col gap-3 rounded-panel border border-border0 bg-surfacePanel p-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="min-w-0">
-                    <div className="text-body font-semibold text-text0">{quiz.title}</div>
-                    {quiz.description ? (
-                      <p className="m-0 mt-1 text-meta text-text1">{quiz.description}</p>
-                    ) : null}
-                    <div className="mt-2 flex flex-wrap gap-3 text-meta text-text1">
-                      <span>{quiz.questions.length} questions</span>
-                      {progress ? (
-                        <span>
-                          Best: {progress.bestScore}/{progress.bestTotal} pts
-                          {progress.attempts > 1 ? ` · ${progress.attempts} attempts` : ""}
-                        </span>
-                      ) : (
-                        <span>Up to {quiz.questions.length} pts</span>
-                      )}
+                <div className="grid gap-3 rounded-panel border border-border0 bg-surfacePanel p-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
+                      <div className="text-body font-semibold text-text0">{quiz.title}</div>
+                      {quiz.description ? (
+                        <p className="m-0 mt-1 text-meta text-text1">{quiz.description}</p>
+                      ) : null}
+                      <div className="mt-2 flex flex-wrap gap-3 text-meta text-text1">
+                        <span>{quiz.questions.length} questions</span>
+                        {progress ? (
+                          <span>
+                            Best: {progress.bestScore}/{progress.bestTotal} pts
+                            {progress.attempts > 1 ? ` · ${progress.attempts} attempts` : ""}
+                          </span>
+                        ) : (
+                          <span>Up to {quiz.questions.length} pts</span>
+                        )}
+                      </div>
                     </div>
+                    <Button variant="secondary" size="md" onClick={() => props.onStart(quiz)}>
+                      <Icon icon={Play} />
+                      Start
+                    </Button>
                   </div>
-                  <Button variant="secondary" size="md" onClick={() => props.onStart(quiz)}>
-                    <Icon icon={Play} />
-                    Start
-                  </Button>
+                  {lastSubmissionPercent !== undefined ? (
+                    <LastSubmissionScoreBar percent={lastSubmissionPercent} />
+                  ) : null}
                 </div>
               </li>
             );

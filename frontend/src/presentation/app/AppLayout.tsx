@@ -1,6 +1,6 @@
 import { Outlet, useParams, useSearchParams, useLocation, matchPath } from "react-router-dom";
 import { useMemo } from "react";
-import { ContentReaderDialog } from "../features/content-reader/ContentReaderDialog";
+import { ContentReaderDialog } from "../features/course-legacy/ContentReaderDialog";
 import { CourseScoreBadge } from "../features/course-experience/components/CourseScoreSummary";
 import { AppShell } from "../features/shell/AppShell";
 import { Breadcrumb } from "../shared/Breadcrumb";
@@ -104,7 +104,7 @@ export function AppLayout() {
       }
     >
       <Outlet />
-      {course && !isHierarchyCourse(course) ? <ContentReaderDialog /> : null}
+      {course?.structure === "legacy" ? <ContentReaderDialog /> : null}
     </AppShell>
   );
 }

@@ -1,7 +1,9 @@
 import type { Project } from "../../../../domain/types/catalog";
 import { Card, EmptyState, Icon } from "../../../design-system";
 import { ClipboardList } from "lucide-react";
+import { useProjectDeliveryStore } from "../../../../application/stores/projectDeliveryStore";
 import { useProjectProgressStore } from "../../../../application/stores/projectProgressStore";
+import { LastSubmissionScoreBar } from "../../../shared/score";
 import { ProjectStatusBadge } from "./ProjectStatusBadge";
 
 export function ProjectList(props: {
@@ -10,6 +12,7 @@ export function ProjectList(props: {
   onOpenProject: (project: Project) => void;
 }) {
   const getStatus = useProjectProgressStore((s) => s.getStatus);
+  const getDeliveries = useProjectDeliveryStore((s) => s.getDeliveries);
 
   return (
     <Card variant="panel" className="p-4">
@@ -27,10 +30,12 @@ export function ProjectList(props: {
         <ol className="m-0 grid gap-3 pl-0">
           {props.projects.map((project) => {
             const status = getStatus(props.courseId, project.id, project.lessonId);
+            const deliveries = getDeliveries(props.courseId, project.id, project.lessonId);
+            const lastSubmissionPercent = deliveries[deliveries.length - 1]?.review?.score;
             return (
               <li
                 key={project.readmePath}
-                className="rounded-panel border border-border0 bg-surfaceControl p-3"
+                className="grid gap-3 rounded-panel border border-border0 bg-surfaceControl p-3"
               >
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                   <button
@@ -42,6 +47,9 @@ export function ProjectList(props: {
                   </button>
                   <ProjectStatusBadge value={status} showPoints />
                 </div>
+                {lastSubmissionPercent !== undefined ? (
+                  <LastSubmissionScoreBar percent={lastSubmissionPercent} />
+                ) : null}
               </li>
             );
           })}

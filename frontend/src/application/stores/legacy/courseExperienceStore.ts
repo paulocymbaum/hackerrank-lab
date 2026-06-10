@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { CourseTab } from "../../domain/types/navigation";
+import type { CourseTab } from "../../../domain/types/navigation";
 
 type CourseExperienceState = {
   tabByCourseId: Record<string, CourseTab>;

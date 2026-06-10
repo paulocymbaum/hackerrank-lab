@@ -2,7 +2,7 @@ import type { Course } from "../../../domain/types/catalog";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
 import { sortByGraphIndex } from "../../../application/selectors/lessonDisplay";
 import { Card, Icon } from "../../design-system";
-import { ReadmeContent } from "../../shared/ReadmeContent";
+import { ReadmePanel } from "../../shared/ReadmePanel";
 import { hasDisplayableReadme } from "../../shared/readmeUtils";
 import { ModuleScoreSummary } from "../course-experience/components/ModuleScoreSummary";
 import { Box, ChevronRight } from "lucide-react";
@@ -60,7 +60,7 @@ export function CourseOverviewRoute(props: { courseId: string; course: Course })
 
       {showReadme ? (
         <Card variant="panel" className="p-4">
-          <ReadmeContent markdown={props.course.readmeMarkdown} title={props.course.title} />
+          <ReadmePanel markdown={props.course.readmeMarkdown} title={props.course.title} variant="card" />
         </Card>
       ) : null}
     </section>

@@ -27,6 +27,7 @@ export function QuizSessionPanel(props: {
   const goNext = useQuizSessionStore((s) => s.goNext);
   const goPrev = useQuizSessionStore((s) => s.goPrev);
   const finish = useQuizSessionStore((s) => s.finish);
+  const sessionLessonId = useQuizSessionStore((s) => s.lessonId);
   const start = useQuizSessionStore((s) => s.start);
 
   const total = props.quiz.questions.length;
@@ -42,7 +43,9 @@ export function QuizSessionPanel(props: {
         quizTitle={props.quiz.title}
         coursePoints={coursePoints}
         quizPointsDelta={lastQuizPointsDelta}
-        onRetry={() => start(props.quiz.id)}
+        onRetry={() =>
+          start(props.quiz.id, props.quiz.lessonId ?? sessionLessonId ?? undefined)
+        }
         onBackToList={props.onBackToList}
       />
     );

@@ -102,9 +102,6 @@ export function isValidCourseScoreFile(value: unknown): value is CourseScoreFile
   return normalizeCourseScoreFile(value) !== null;
 }
 
-/** @deprecated Use CourseScoreFile */
-export type CourseQuizScoreFile = CourseScoreFile;
-
 export function scoreStorageKeyForQuiz(quizId: string, lessonId?: string): string {
   return lessonId ? `${lessonId}/${quizId}` : quizId;
 }
@@ -189,7 +186,12 @@ export function mergeScoreFileIntoQuizProgress(
     const prev = next[key];
     const lastAttempt = entry.attempts[entry.attempts.length - 1];
 
-    if (!prev || entry.attempts.length >= prev.attempts) {
+    const shouldApply =
+      !prev ||
+      entry.bestScore > prev.bestScore ||
+      (entry.bestScore === prev.bestScore && entry.attempts.length >= prev.attempts);
+
+    if (shouldApply) {
       next[key] = {
         bestScore: entry.bestScore,
         bestTotal: entry.bestTotal,
@@ -263,21 +265,24 @@ export function computeCourseMaxPoints(course: Course): Omit<CoursePointsWithMax
   return { quizMax, projectMax, totalMax: quizMax + projectMax };
 }
 
+export function computeCourseMaxPointsFromItems(
+  quizzes: Array<{ questions: unknown[] }>,
+  projectCount: number,
+): Omit<CoursePointsWithMax, keyof CoursePoints> {
+  const quizMax = quizzes.reduce((sum, quiz) => sum + quiz.questions.length, 0);
+  const projectMax = projectCount * PROJECT_POINTS_WEIGHT;
+  return { quizMax, projectMax, totalMax: quizMax + projectMax };
+}
+
 export function withCourseMaxPoints(course: Course, points: CoursePoints): CoursePointsWithMax {
   return { ...points, ...computeCourseMaxPoints(course) };
 }
 
-/** @deprecated Use mergeScoreFileIntoQuizProgress */
-export const mergeScoreFileIntoProgress = mergeScoreFileIntoQuizProgress;
-
-export function emptyCourseQuizScoreFile(courseId: string): CourseScoreFile {
-  return emptyCourseScoreFile(courseId);
+export function withCourseMaxPointsFromItems(
+  quizzes: Array<{ questions: unknown[] }>,
+  projectCount: number,
+  points: CoursePoints,
+): CoursePointsWithMax {
+  return { ...points, ...computeCourseMaxPointsFromItems(quizzes, projectCount) };
 }
 
-export function courseQuizScoreRelativePath(courseId: string): string {
-  return courseScoreRelativePath(courseId);
-}
-
-export function isValidCourseQuizScoreFile(value: unknown): value is CourseScoreFile {
-  return isValidCourseScoreFile(value);
-}

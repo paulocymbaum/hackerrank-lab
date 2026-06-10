@@ -20,11 +20,6 @@ export function getLessonById(course: Course, moduleId: string, lessonId: string
   return mod?.lessons.find((l) => l.id === lessonId) ?? null;
 }
 
-export function getLessonsForModule(course: Course, moduleId: string): Lesson[] {
-  const lessons = getModuleById(course, moduleId)?.lessons ?? [];
-  return sortByGraphIndex(lessons);
-}
-
 export function getProjectsForLesson(
   course: Course,
   moduleId: string,
@@ -43,6 +38,22 @@ export function getQuizzesForLesson(course: Course, moduleId: string, lessonId: 
 
 export function getQuizzesForModule(course: Course, moduleId: string): Quiz[] {
   return getModuleById(course, moduleId)?.quizzes ?? [];
+}
+
+/** All quizzes for scoring — includes module-scoped items in hierarchy courses. */
+export function getAllQuizzesForCourse(course: Course): Quiz[] {
+  if (isHierarchyCourse(course)) {
+    return (course.modules ?? []).flatMap((mod) => mod.quizzes);
+  }
+  return course.quizzes;
+}
+
+/** All projects for scoring — includes module-scoped items in hierarchy courses. */
+export function getAllProjectsForCourse(course: Course): Project[] {
+  if (isHierarchyCourse(course)) {
+    return (course.modules ?? []).flatMap((mod) => mod.projects);
+  }
+  return course.projects;
 }
 
 export function lessonToReaderItem(lesson: Lesson): ReaderItem {

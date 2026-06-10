@@ -1,39 +1,12 @@
 import { FileText } from "lucide-react";
-import { useParams } from "react-router-dom";
-import { getModuleById } from "../../../application/selectors/catalogSelectors";
-import { getModuleDisplayIndex } from "../../../application/selectors/lessonDisplay";
-import { useCourse } from "../../../application/hooks/useCourse";
-import { ErrorPanel, LoadingState } from "../../design-system";
-import { ReadmeContent } from "../../shared/ReadmeContent";
+import { ReadmePanel } from "../../shared/ReadmePanel";
 import { hasDisplayableReadme } from "../../shared/readmeUtils";
+import { getModuleDisplayIndex } from "../../../application/selectors/lessonDisplay";
 import { ModuleMainPanel } from "./components/ModuleMainPanel";
+import { useModuleLayoutContext } from "./ModuleLayoutContext";
 
 export function ModuleExperienceRoute() {
-  const { courseId = "", moduleId = "" } = useParams();
-  const { course, status, error, reload } = useCourse(courseId);
-
-  if (status === "loading" || status === "idle") {
-    return <LoadingState message="Loading module…" />;
-  }
-
-  if (status === "error") {
-    return (
-      <ErrorPanel
-        title="Failed to load course."
-        message={error ?? undefined}
-        onRetry={() => void reload()}
-      />
-    );
-  }
-
-  if (!course) {
-    return <ErrorPanel title="Course not found." />;
-  }
-
-  const mod = getModuleById(course, moduleId);
-  if (!mod) {
-    return <ErrorPanel title="Module not found." />;
-  }
+  const { module: mod } = useModuleLayoutContext();
 
   const showReadme = hasDisplayableReadme(mod.readmeMarkdown, mod.title);
   const moduleIndex = getModuleDisplayIndex(mod);
@@ -47,7 +20,7 @@ export function ModuleExperienceRoute() {
       icon={FileText}
     >
       {showReadme ? (
-        <ReadmeContent markdown={mod.readmeMarkdown} title={mod.title} />
+        <ReadmePanel markdown={mod.readmeMarkdown} title={mod.title} variant="inline" />
       ) : (
         <p className="m-0 text-body text-text1">
           Select a lesson from the contents drawer to start learning.

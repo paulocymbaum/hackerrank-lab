@@ -8,14 +8,11 @@ export type CourseScoreRepository = {
     quizId: string,
     attempt: QuizAttempt,
     lessonId?: string,
-  ): Promise<void>;
+  ): Promise<CourseScoreFile>;
   setProjectStatus(
     courseId: string,
     projectId: string,
     status: ProjectStatus,
     lessonId?: string,
-  ): Promise<void>;
+  ): Promise<CourseScoreFile>;
 };
-
-/** @deprecated Use CourseScoreRepository */
-export type QuizScoreRepository = CourseScoreRepository;

@@ -1,26 +1,23 @@
-import { useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import { useQuizSessionFromUrl } from "../../../application/hooks/useQuizSessionFromUrl";
 import {
   getLessonById,
-  getModuleById,
   getProjectsForLesson,
   getQuizzesForLesson,
 } from "../../../application/selectors/catalogSelectors";
-import { findQuizInList, quizSessionKey } from "../../../application/selectors/quizSelectors";
-import { useCourse } from "../../../application/hooks/useCourse";
+import { findQuizInList } from "../../../application/selectors/quizSelectors";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
-import { useQuizSessionStore } from "../../../application/stores/quizSessionStore";
-import { loadCourseScores } from "../../../application/usecases/courseScores";
-import { Drawer, ErrorPanel, LoadingState } from "../../design-system";
-import { LessonProgressHeader } from "./components/LessonActivitiesPanel";
+import { Drawer } from "../../design-system";
+import { ErrorPanel } from "../../design-system";
 import { LessonExplanationPanel } from "./components/LessonExplanationPanel";
-import { ProjectWorkspacePanel } from "./components/ProjectWorkspacePanel";
-import { QuizDrawerPanel } from "./components/QuizDrawerPanel";
+import { ProjectReader } from "../content-reader/ProjectReader";
+import { QuizHost } from "../quiz/components/QuizHost";
+import { useModuleLayoutContext } from "../module-experience/ModuleLayoutContext";
 
 export function LessonWorkspaceRoute() {
-  const { courseId = "", moduleId = "", lessonId = "" } = useParams();
+  const { courseId, moduleId, course } = useModuleLayoutContext();
+  const { lessonId = "" } = useParams();
   const [searchParams] = useSearchParams();
-  const { course, status, error, load, reload } = useCourse(courseId);
   const { closeLessonDrawer, setLessonDrawerTab, parseDrawerMode, parseDrawerTab } =
     useAppNavigation();
 
@@ -29,43 +26,14 @@ export function LessonWorkspaceRoute() {
   const activeQuizId = searchParams.get("quiz");
   const activeProjectId = searchParams.get("project");
 
-  useEffect(() => {
-    if (status === "idle") void load();
-  }, [status, load]);
+  useQuizSessionFromUrl({
+    quizId: activeQuizId,
+    lessonId,
+    enabled: drawerMode === "quiz" && Boolean(activeQuizId),
+  });
 
-  useEffect(() => {
-    if (!courseId || status !== "ready") return;
-    void loadCourseScores(courseId);
-  }, [courseId, status]);
-
-  useEffect(() => {
-    if (drawerMode !== "quiz" || !activeQuizId) return;
-    const session = useQuizSessionStore.getState();
-    const nextKey = quizSessionKey(activeQuizId, lessonId);
-    if (session.sessionKey !== nextKey) session.start(activeQuizId, lessonId);
-  }, [drawerMode, activeQuizId, lessonId]);
-
-  if (status === "loading" || status === "idle") {
-    return <LoadingState message="Loading lesson…" />;
-  }
-
-  if (status === "error") {
-    return (
-      <ErrorPanel
-        title="Failed to load course."
-        message={error ?? undefined}
-        onRetry={() => void reload()}
-      />
-    );
-  }
-
-  if (!course) {
-    return <ErrorPanel title="Course not found." />;
-  }
-
-  const mod = getModuleById(course, moduleId);
   const lesson = getLessonById(course, moduleId, lessonId);
-  if (!mod || !lesson) {
+  if (!lesson) {
     return <ErrorPanel title="Lesson not found." />;
   }
 
@@ -93,24 +61,21 @@ export function LessonWorkspaceRoute() {
           : "flex min-h-0 flex-1 flex-col overflow-hidden"
       }
     >
-      <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-        <LessonProgressHeader
-          courseId={courseId}
-          lessonId={lessonId}
-          quizzes={lessonQuizzes}
-          projects={lessonProjects}
-        />
-
-        <LessonExplanationPanel title={lesson.title} markdown={lesson.markdown} showTitle={false} />
-      </main>
+      {!drawerOpen ? (
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+          <LessonExplanationPanel title={lesson.title} markdown={lesson.markdown} showTitle={false} />
+        </main>
+      ) : null}
 
       <Drawer
         open={drawerOpen}
         onClose={() => closeLessonDrawer(courseId, moduleId, lessonId)}
         title={drawerTitle}
+        className={drawerOpen ? "lg:min-w-0 lg:flex-1" : undefined}
       >
         {drawerMode === "quiz" && activeQuiz ? (
-          <QuizDrawerPanel
+          <QuizHost
+            layout="drawer"
             courseId={courseId}
             course={course}
             quiz={activeQuiz}
@@ -118,7 +83,8 @@ export function LessonWorkspaceRoute() {
           />
         ) : null}
         {drawerMode === "project" && activeProject ? (
-          <ProjectWorkspacePanel
+          <ProjectReader
+            layout="drawer"
             courseId={courseId}
             courseTitle={course.title}
             project={activeProject}

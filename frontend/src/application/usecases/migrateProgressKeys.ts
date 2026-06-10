@@ -6,7 +6,7 @@ import {
 } from "../../domain/types/quizScore";
 import { quizProgressKey } from "../../domain/types/quiz";
 import { useProjectProgressStore } from "../stores/projectProgressStore";
-import { useQuizProgressStore } from "../stores/quizSessionStore";
+import { useQuizProgressStore } from "../stores/quizProgressStore";
 
 const MIGRATION_FLAG = "score-migration-v1";
 
