@@ -1,34 +1,61 @@
 import type { Course } from "../../../domain/types/catalog";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
-import { Card } from "../../design-system";
+import { sortByGraphIndex } from "../../../application/selectors/lessonDisplay";
+import { Card, Icon } from "../../design-system";
 import { ReadmeContent } from "../../shared/ReadmeContent";
 import { hasDisplayableReadme } from "../../shared/readmeUtils";
 import { ModuleScoreSummary } from "../course-experience/components/ModuleScoreSummary";
+import { Box, ChevronRight } from "lucide-react";
 
 export function CourseOverviewRoute(props: { courseId: string; course: Course }) {
   const { goModule } = useAppNavigation();
-  const modules = props.course.modules ?? [];
+  const modules = sortByGraphIndex(props.course.modules ?? []);
   const showReadme = hasDisplayableReadme(props.course.readmeMarkdown, props.course.title);
 
   return (
-    <section className="grid gap-4">
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-        {modules.map((mod) => (
-          <Card key={mod.id} variant="panel" className="p-4">
-            <button
-              type="button"
-              className="flex w-full flex-col gap-2 text-left"
-              onClick={() => goModule(props.courseId, mod.id)}
-            >
-              <div className="text-body font-semibold text-text0">{mod.title}</div>
-              <div className="text-meta text-text1">
-                {mod.lessons.length} lessons · {mod.projects.length} projects
-                {mod.quizzes.length > 0 ? ` · ${mod.quizzes.length} module quiz` : ""}
-              </div>
-              <ModuleScoreSummary courseId={props.courseId} module={mod} />
-            </button>
-          </Card>
-        ))}
+    <section className="grid gap-6">
+      <div className="grid gap-4">
+        {modules.map((mod) => {
+          const moduleQuizzes = mod.quizzes.filter((q) => !q.lessonId).length;
+          const lessonQuizzes = mod.quizzes.filter((q) => q.lessonId).length;
+          const moduleIndex = mod.graphIndex ?? mod.id.match(/^(\d+)/)?.[1] ?? "";
+
+          return (
+            <Card key={mod.id} variant="panel" className="overflow-hidden p-0">
+              <button
+                type="button"
+                className="flex w-full items-start gap-4 p-4 text-left transition hover:bg-surfacePanel/60"
+                onClick={() => goModule(props.courseId, mod.id)}
+              >
+                <span
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-panel border border-accent0/25 bg-surfaceAccent text-accent0"
+                  aria-hidden
+                >
+                  <Icon icon={Box} size={20} />
+                </span>
+
+                <span className="min-w-0 flex-1">
+                  <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    {moduleIndex ? (
+                      <span className="rounded-pill border border-border0 bg-surfaceControl px-2 py-0.5 font-mono text-meta font-semibold text-accent0">
+                        {moduleIndex}
+                      </span>
+                    ) : null}
+                    <span className="text-body font-semibold text-text0">{mod.title}</span>
+                  </span>
+                  <span className="mt-2 block text-meta text-text1">
+                    {mod.lessons.length} lessons · {mod.projects.length} projects
+                    {lessonQuizzes > 0 ? ` · ${lessonQuizzes} quizzes` : ""}
+                    {moduleQuizzes > 0 ? ` · ${moduleQuizzes} module quiz` : ""}
+                  </span>
+                  <ModuleScoreSummary courseId={props.courseId} module={mod} />
+                </span>
+
+                <Icon icon={ChevronRight} size={18} className="mt-1 shrink-0 text-text1" />
+              </button>
+            </Card>
+          );
+        })}
       </div>
 
       {showReadme ? (

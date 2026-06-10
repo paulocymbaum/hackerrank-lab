@@ -1,45 +1,16 @@
-import { useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
-import {
-  getModuleById,
-  getProjectsForLesson,
-  getQuizzesForLesson,
-  getQuizzesForModule,
-} from "../../../application/selectors/catalogSelectors";
-import { getQuizById } from "../../../application/selectors/quizSelectors";
+import { FileText } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { getModuleById } from "../../../application/selectors/catalogSelectors";
+import { getModuleDisplayIndex } from "../../../application/selectors/lessonDisplay";
 import { useCourse } from "../../../application/hooks/useCourse";
-import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
-import { useQuizSessionStore, useQuizProgressStore } from "../../../application/stores/quizSessionStore";
-import { loadCourseScores } from "../../../application/usecases/courseScores";
-import { Card, ErrorPanel, LoadingState } from "../../design-system";
+import { ErrorPanel, LoadingState } from "../../design-system";
 import { ReadmeContent } from "../../shared/ReadmeContent";
 import { hasDisplayableReadme } from "../../shared/readmeUtils";
-import { LessonCard } from "../lesson-workspace/components/LessonCard";
-import { QuizList } from "../quiz/components/QuizList";
-import { QuizSessionPanel } from "../quiz/components/QuizSessionPanel";
+import { ModuleMainPanel } from "./components/ModuleMainPanel";
 
 export function ModuleExperienceRoute() {
   const { courseId = "", moduleId = "" } = useParams();
-  const [searchParams] = useSearchParams();
-  const { course, status, error, load, reload } = useCourse(courseId);
-  const { goLesson, openLessonDrawer, openModuleQuiz, closeQuiz } = useAppNavigation();
-  const getProgress = useQuizProgressStore((s) => s.getProgress);
-  const activeQuizId = searchParams.get("quiz");
-
-  useEffect(() => {
-    if (status === "idle") void load();
-  }, [status, load]);
-
-  useEffect(() => {
-    if (!courseId || status !== "ready") return;
-    void loadCourseScores(courseId);
-  }, [courseId, status]);
-
-  useEffect(() => {
-    if (!activeQuizId || !course) return;
-    const session = useQuizSessionStore.getState();
-    if (session.quizId !== activeQuizId) session.start(activeQuizId);
-  }, [activeQuizId, course]);
+  const { course, status, error, reload } = useCourse(courseId);
 
   if (status === "loading" || status === "idle") {
     return <LoadingState message="Loading module…" />;
@@ -64,56 +35,24 @@ export function ModuleExperienceRoute() {
     return <ErrorPanel title="Module not found." />;
   }
 
-  const moduleQuizzes = getQuizzesForModule(course, moduleId).filter((q) => !q.lessonId);
-  const activeQuiz = activeQuizId ? getQuizById(course, activeQuizId) : null;
-
-  if (activeQuiz && moduleQuizzes.some((q) => q.id === activeQuiz.id)) {
-    return (
-      <QuizSessionPanel
-        courseId={courseId}
-        course={course}
-        quiz={activeQuiz}
-        onBackToList={closeQuiz}
-      />
-    );
-  }
-
   const showReadme = hasDisplayableReadme(mod.readmeMarkdown, mod.title);
+  const moduleIndex = getModuleDisplayIndex(mod);
 
   return (
-    <section className="grid gap-4">
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-        {mod.lessons.map((lesson) => (
-          <LessonCard
-            key={lesson.id}
-            courseId={courseId}
-            lesson={lesson}
-            quizzes={getQuizzesForLesson(course, moduleId, lesson.id)}
-            projects={getProjectsForLesson(course, moduleId, lesson.id)}
-            onOpen={() => goLesson(courseId, moduleId, lesson.id)}
-            onOpenQuiz={(quizId) =>
-              openLessonDrawer(courseId, moduleId, lesson.id, "quiz", quizId)
-            }
-            onOpenProject={(projectId) =>
-              openLessonDrawer(courseId, moduleId, lesson.id, "project", projectId, "files")
-            }
-          />
-        ))}
-      </div>
-
+    <ModuleMainPanel
+      meta="Module Context"
+      indexLabel={moduleIndex}
+      title="Module Context"
+      subtitle={mod.title}
+      icon={FileText}
+    >
       {showReadme ? (
-        <Card variant="panel" className="p-4">
-          <ReadmeContent markdown={mod.readmeMarkdown} title={mod.title} />
-        </Card>
-      ) : null}
-
-      {moduleQuizzes.length > 0 ? (
-        <QuizList
-          quizzes={moduleQuizzes}
-          getProgress={(quizId) => getProgress(courseId, quizId)}
-          onStart={(quiz) => openModuleQuiz(courseId, moduleId, quiz.id)}
-        />
-      ) : null}
-    </section>
+        <ReadmeContent markdown={mod.readmeMarkdown} title={mod.title} />
+      ) : (
+        <p className="m-0 text-body text-text1">
+          Select a lesson from the contents drawer to start learning.
+        </p>
+      )}
+    </ModuleMainPanel>
   );
 }

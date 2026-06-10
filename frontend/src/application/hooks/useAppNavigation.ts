@@ -92,7 +92,7 @@ export function useAppNavigation() {
       if (mode === "quiz") params.set("quiz", id);
       if (mode === "project") params.set("project", id);
       if (drawerTab && drawerTab !== "explanation") params.set("drawerTab", drawerTab);
-      if (mode === "quiz") useQuizSessionStore.getState().start(id);
+      if (mode === "quiz") useQuizSessionStore.getState().start(id, lessonId);
       navigate(`${lessonPath(courseId, moduleId, lessonId)}?${params.toString()}`);
     },
     [navigate],

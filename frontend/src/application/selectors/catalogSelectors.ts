@@ -1,6 +1,7 @@
 import type { Course, Lesson, Module, Project } from "../../domain/types/catalog";
 import type { Quiz } from "../../domain/types/quiz";
 import type { ReaderItem } from "../../domain/types/reader";
+import { sortByGraphIndex } from "./lessonDisplay";
 
 export function getCourseById(courses: Course[], courseId: string): Course | null {
   return courses.find((c) => c.id === courseId) ?? null;
@@ -20,7 +21,8 @@ export function getLessonById(course: Course, moduleId: string, lessonId: string
 }
 
 export function getLessonsForModule(course: Course, moduleId: string): Lesson[] {
-  return getModuleById(course, moduleId)?.lessons ?? [];
+  const lessons = getModuleById(course, moduleId)?.lessons ?? [];
+  return sortByGraphIndex(lessons);
 }
 
 export function getProjectsForLesson(

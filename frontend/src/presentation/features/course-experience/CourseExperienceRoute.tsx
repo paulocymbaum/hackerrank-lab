@@ -9,7 +9,7 @@ import {
   findReaderItemByPath,
 } from "../../../application/selectors/catalogSelectors";
 import { CourseOverviewRoute } from "../course-overview/CourseOverviewRoute";
-import { getQuizById } from "../../../application/selectors/quizSelectors";
+import { getQuizById, quizSessionKey } from "../../../application/selectors/quizSelectors";
 import { useCatalog } from "../../../application/hooks/useCatalog";
 import { useCourse } from "../../../application/hooks/useCourse";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
@@ -71,8 +71,9 @@ export function CourseExperienceRoute() {
     const quiz = getQuizById(course, activeQuizId);
     if (!quiz) return;
     const session = useQuizSessionStore.getState();
-    if (session.quizId !== activeQuizId) {
-      session.start(activeQuizId);
+    const nextKey = quizSessionKey(activeQuizId, quiz.lessonId);
+    if (session.sessionKey !== nextKey) {
+      session.start(activeQuizId, quiz.lessonId);
     }
   }, [tab, activeQuizId, course]);
 

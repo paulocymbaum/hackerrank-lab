@@ -6,16 +6,19 @@ import type { CourseScoreFile } from "../../domain/types/quizScore";
 import { mergeScoreFileIntoQuizProgress } from "../../domain/types/quizScore";
 import { persistQuizScore } from "../usecases/courseScores";
 import { resolveQuizProgressKey } from "../usecases/migrateProgressKeys";
+import { quizSessionKey } from "../selectors/quizSelectors";
 
 type QuizSessionState = {
   quizId: string | null;
+  lessonId: string | null;
+  sessionKey: string | null;
   currentIndex: number;
   answers: QuizAnswerMap;
   checkedQuestions: Record<string, boolean>;
   isComplete: boolean;
   lastAttempt: QuizAttempt | null;
   lastQuizPointsDelta: number;
-  start: (quizId: string) => void;
+  start: (quizId: string, lessonId?: string) => void;
   reset: () => void;
   selectAnswer: (questionId: string, optionId: string) => void;
   checkCurrent: (questionId: string) => void;
@@ -26,6 +29,8 @@ type QuizSessionState = {
 
 const initialSession = {
   quizId: null as string | null,
+  lessonId: null as string | null,
+  sessionKey: null as string | null,
   currentIndex: 0,
   answers: {} as QuizAnswerMap,
   checkedQuestions: {} as Record<string, boolean>,
@@ -36,16 +41,20 @@ const initialSession = {
 
 export const useQuizSessionStore = create<QuizSessionState>((set, get) => ({
   ...initialSession,
-  start: (quizId) =>
+  start: (quizId, lessonId) => {
+    const sessionKey = quizSessionKey(quizId, lessonId);
     set({
       quizId,
+      lessonId: lessonId ?? null,
+      sessionKey,
       currentIndex: 0,
       answers: {},
       checkedQuestions: {},
       isComplete: false,
       lastAttempt: null,
       lastQuizPointsDelta: 0,
-    }),
+    });
+  },
   reset: () => set(initialSession),
   selectAnswer: (questionId, optionId) =>
     set((state) => ({
