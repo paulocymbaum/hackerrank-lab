@@ -1,9 +1,0 @@
-{
-  "createdBy": "cursor-tool",
-  "tool": "scripts/graph/scaffold-from-graph.mjs",
-  "createdAt": "2026-06-09T17:34:18.119Z",
-  "kind": "lesson",
-  "lessonId": "01.8.4-typeof-and-array-isarray",
-  "moduleId": "01-javascript-fundamentals",
-  "graphIndex": "01.8.4"
-}

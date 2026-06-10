@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-06-09T17:34:21.660Z",
+  "generatedAt": "2026-06-10T16:55:24.017Z",
   "courseSlug": "javascript",
   "total": 57,
-  "exists": 32,
-  "planned": 25,
+  "exists": 31,
+  "planned": 26,
   "orphan": 0,
   "entries": [
     {
@@ -177,10 +177,11 @@
     {
       "graphIndex": "01.8.4",
       "courseId": "javascript",
-      "moduleId": "01-javascript-fundamentals",
-      "lessonId": "01.8.4-typeof-and-array-isarray",
-      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray",
-      "status": "exists"
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "01.8.4 typeof and Array.isArray"
     },
     {
       "graphIndex": "01.8.5",
