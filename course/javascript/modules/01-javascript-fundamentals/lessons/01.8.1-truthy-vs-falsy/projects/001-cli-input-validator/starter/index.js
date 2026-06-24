@@ -1,25 +1,38 @@
 /**
- * CLI Input Validator
+ * Truthy Classifier
  *
  * Entrypoint: node starter/index.js
- * Implement the behavior described in ../README.md
  */
 
-const readline = require("node:readline");
+const readline = require("readline");
 
-function main() {
-  const linhas = [];
+function classify(value) {
+  return Boolean(value) ? "truthy" : "falsy";
+}
+
+function naiveGate(value) {
+  return !value ? "blocked" : "allowed";
+}
+
+async function main() {
   const rl = readline.createInterface({ input: process.stdin });
-
-  rl.on("line", (line) => {
-    linhas.push(line);
-    if (linhas.length < 3) return;
-
-    // TODO: trim, validar vazio, Number() + Number.isFinite para age/score
-    // TODO: normalizar isActive (toLowerCase) e imprimir JSON ou ERROR: ...
-    process.stdout.write("Not implemented yet\n");
-    rl.close();
-  });
+  for await (const line of rl) {
+    const trimmed = line.trim();
+    if (trimmed === "done") break;
+    let value;
+    try {
+      value = JSON.parse(trimmed);
+    } catch {
+      process.stdout.write("ERROR: invalid JSON\n");
+      continue;
+    }
+    process.stdout.write("classify: " + classify(value) + "\n");
+    if (value === 0) {
+      process.stdout.write("naiveGate: " + naiveGate(value) + "\n");
+      process.stdout.write("note: 0 is valid but falsy\n");
+    }
+  }
+  rl.close();
 }
 
 main();

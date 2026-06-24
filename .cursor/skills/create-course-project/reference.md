@@ -52,6 +52,7 @@ Use template: [`templates/project-readme-skeleton.md`](templates/project-readme-
 | `# Title` | yes | Human-readable project name |
 | Problem context | yes | Realistic scenario |
 | Goal | yes | What to build |
+| Lesson concepts practiced | yes | At least 2 checkboxes tied to lesson Predict first / What to observe |
 | Functional requirements | yes | Checkbox list |
 | Non-functional requirements | yes | Quality, errors, performance |
 | Constraints | yes | Node-only, no libs, I/O format |
@@ -116,8 +117,9 @@ Warnings: missing `starter/index.js`, sparse module overview, optional sections.
 ## Authoring workflow
 
 1. `collect-project-context.mjs <course-id>` — read module + existing projects
-2. Fill PBL sections (use module README + examples as source truth)
-3. Ensure `starter/index.js` exists
-4. Update module `projects/README.md` topic catalog
-5. `validate-project.mjs`
-6. `cd frontend && npm run catalog:generate`
+2. List 3 outcomes from the lesson **Predict first** / **What to observe** sections
+3. Fill PBL sections; map each outcome to an acceptance criterion
+4. Ensure `starter/index.js` exists
+5. Update module `projects/README.md` topic catalog
+6. `validate-project.mjs`
+7. `cd frontend && npm run catalog:generate`

@@ -1,67 +1,57 @@
-# Validation Doc Block
+# Commented Validator
 
 ## Problem context
-A CLI validator script needs a human-readable rule list at the top of the file. Teammates should see validation rules without reading the implementation.
+Maintainable validators document each rule with comments explaining **why**, not just what.
 
 ## Goal
-Read three rule descriptions from `stdin` and print a multi-line comment block that documents them.
+Implement a three-rule name/score validator where each rule has a `//` comment in source code, and one rule is disabled via a commented-out line.
+
+## Lesson concepts practiced
+- [ ] Single-line `//` comments are ignored by the engine
+- [ ] Comments explain why, not obvious code
+- [ ] Commenting out a line disables that check
 
 ## Functional requirements
-- [ ] Read exactly three non-empty lines: `rule1`, `rule2`, `rule3`.
-- [ ] Empty line on any input → `ERROR: rule required` (single line).
-- [ ] Print this shape (exact spacing inside the block):
-
-```
-/*
-  Validation rules:
-  - <rule1>
-  - <rule2>
-  - <rule3>
-*/
-```
-
-- [ ] Each rule appears on its own `- ` line inside the block.
-- [ ] No extra blank lines inside the block.
+- [ ] Read two lines: `name`, `score`.
+- [ ] Validate with three rules in `validate(name, score)`:
+  - [ ] Rule 1 (comment: name must not be empty after trim) — active
+  - [ ] Rule 2 (comment: score must be 0–100) — **disabled** by commenting out the check line
+  - [ ] Rule 3 (comment: name must be at least 2 chars after trim) — active
+- [ ] Each rule check must have an adjacent `//` comment in the source citing the rule.
+- [ ] On failure print `ERROR: <rule message>`; on success `OK`.
+- [ ] With rule 2 disabled, `score` of `200` still prints `OK` if name passes.
 
 ## Non-functional requirements
-- [ ] Comments explain rules for humans — do not execute rule logic here
-- [ ] Readable output for copy-paste into a `.js` file
+- [ ] At least three `//` comments in `validate` tied to rules
+- [ ] One validation line must be commented out with `//`
 
 ## Constraints
 - [ ] Node.js only
-- [ ] Output is a comment block string via `process.stdout.write` (no `console.log` needed)
+- [ ] Comments must appear in `starter/index.js` (not only stdout)
 
 ## Acceptance criteria
-- [ ] Three valid lines produce the block with `- ` prefixes
-- [ ] Any empty line → `ERROR: rule required`
-- [ ] Rules with spaces are preserved verbatim
+- [ ] `Ana`, `200` → `OK` (score rule disabled)
+- [ ] ` `, `50` → `ERROR: name is required`
+- [ ] `A`, `50` → `ERROR: name too short`
+- [ ] Source file contains commented-out score range check
 
 ## Example data
 
 Input:
-- `name must not be empty after trim`
-- `score must be 0–100`
-- `retries must be a positive integer`
+- `Ana`
+- `200`
 
 Output:
-```
-/*
-  Validation rules:
-  - name must not be empty after trim
-  - score must be 0–100
-  - retries must be a positive integer
-*/
-```
+- `OK`
 
 ## Suggested plan (no solution)
-1. Collect three lines with `readline`.
-2. Reject empty trimmed lines early.
-3. Build the block with a template string or concatenation.
-4. Write the block once all three lines are valid.
+1. Write `validate` with three commented rule blocks.
+2. Comment out the score range `if` body or condition.
+3. Wire stdin in `main`.
 
 ## Deliverables
 - [ ] Code in `starter/`
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)
-- [ ] Accept a fourth line `done` to finish early when piping input.
+- [ ] Re-enable rule 2 via config flag instead of comment.

@@ -6,6 +6,11 @@ Service configs merge user overrides with safe defaults. `??` preserves `0` and 
 ## Goal
 Read four optional config fields and print a normalized config object using `??` and `||`.
 
+## Lesson concepts practiced
+- [ ] `??` treats only `null`/`undefined` as missing (preserves `0`)
+- [ ] `||` uses truthiness (empty string falls back)
+- [ ] `== null` matches both `null` and `undefined`
+
 ## Functional requirements
 - [ ] Read four lines: `retries`, `timeout`, `label`, `active`.
 - [ ] Each line may be:

@@ -4,6 +4,11 @@
 A grading service stores boolean flags for each submission before running heavier checks. You need a CLI that computes and reports those flags from a single score.
 
 ## Goal
+## Lesson concepts practiced
+- [ ] Booleans answer yes/no questions: valid, empty, in range, equal.
+- [ ] Name boolean variables clearly: `isValid`, `hasError`, `canSubmit`.
+- [ ] Comparisons (`===`, `<`, `>=`) always return `true` or `false`.
+
 Read one score and print three boolean flags on separate lines.
 
 ## Functional requirements

@@ -4,6 +4,11 @@
 A dashboard shows compact user badges in logs and CLI tools. Names arrive messy (extra spaces, mixed case) and handles must be URL-safe.
 
 ## Goal
+## Lesson concepts practiced
+- [ ] Strings are **immutable** — methods return new strings.
+- [ ] `trim()` only removes leading/trailing whitespace, not spaces in the middle.
+- [ ] Template literals (backticks) embed expressions: `` `Hi ${name}` ``.
+
 Implement `formatUserBadge(user)` that returns a single-line badge string built from string primitives and template literals.
 
 ## Functional requirements

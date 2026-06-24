@@ -6,6 +6,10 @@ Practice exercises for this lesson. Run each project with:
 node starter/index.js
 ```
 
+## What you should practice
+
+<!-- List 2–4 concepts from the lesson README (Predict first / What to observe) -->
+
 ## Folder conventions
 
 - Projects live directly under `projects/` as `NNN-kebab-name/`
@@ -22,6 +26,7 @@ Each project README must include (English headers):
 
 - Problem context
 - Goal
+- Lesson concepts practiced
 - Functional requirements
 - Non-functional requirements
 - Constraints

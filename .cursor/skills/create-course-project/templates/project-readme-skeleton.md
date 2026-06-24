@@ -4,6 +4,9 @@
 
 ## Goal
 
+## Lesson concepts practiced
+- [ ]
+
 ## Functional requirements
 - [ ]
 

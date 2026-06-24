@@ -6,6 +6,11 @@ Before sending data to another subsystem, teams often need an **immutable snapsh
 This project builds a safe snapshot function using `structuredClone` when available, with a JSON fallback for simple data.
 
 ## Goal
+## Lesson concepts practiced
+- [ ] Prefer shallow copy + copy-on-write for most updates.
+- [ ] Deep copy when you need an immutable snapshot boundary.
+- [ ] `structuredClone` is the modern default when supported.
+
 Implement `cloneForSafety(value)` and a CLI that reads one JSON line from stdin, clones it, and prints the clone as one JSON line — without mutating the original parsed value.
 
 ## Functional requirements

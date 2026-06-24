@@ -1,68 +1,58 @@
-# Record Filter
+# Equality Judge
 
 ## Problem context
-You’re filtering records coming from an API. Some fields are missing (`null`/`undefined`), some are empty strings, and some numeric fields may be `0`. A previous implementation used truthiness checks and silently dropped valid records.
+Code review needs side-by-side `==` vs `===` results to justify strict equality in validation code.
 
 ## Goal
-Implement a filter function with **explicit rules** and **strict comparisons** so behavior is predictable.
+Read two JSON values and print loose vs strict comparison results plus a recommendation.
+
+## Lesson concepts practiced
+- [ ] `===` compares type and value without coercion
+- [ ] `==` may coerce (`"" == 0`, `[] == 0`)
+- [ ] `{} == {}` is false (different references)
 
 ## Functional requirements
-- [ ] Implement `filterRecords(records, options)` returning a new array.
-- [ ] Each record may contain:
-  - [ ] `name` (string, optional; may be empty)
-  - [ ] `score` (number or string, optional; may be `0`)
-  - [ ] `tag` (string|null|undefined)
-- [ ] `options` supports:
-  - [ ] `minScore` (number, default `0`)
-  - [ ] `requireName` (boolean, default `false`)
-  - [ ] `tag` (string|null, default `null`) meaning: if non-null, only keep records with that exact tag
-- [ ] Rules (be explicit):
-  - [ ] Convert `score` using `Number(...)`. If result is not finite, treat record score as missing.
-  - [ ] A record passes `minScore` if it has a finite score AND `score >= minScore`.
-  - [ ] If `requireName` is true, keep only records where `name` is a non-empty string after trim.
-  - [ ] If `options.tag` is not null, keep only records where `record.tag === options.tag`.
+- [ ] Read two lines, parse each as JSON → `a`, `b`.
+- [ ] Print `loose: <a == b>`
+- [ ] Print `strict: <a === b>`
+- [ ] Print `prefer: ===` when results differ, else `prefer: either (same result)`
+- [ ] Include hardcoded demo mode: if input lines are `demo`, run lesson pairs:
+  - [ ] `[]` and `0`
+  - [ ] `{}` and `{}` (two separate object literals in code, not from stdin)
 
 ## Non-functional requirements
-- [ ] No loose equality comparisons for filtering logic
-- [ ] Clear, readable conditions (prefer helper functions)
+- [ ] Use actual `==` and `===` operators
+- [ ] Clear labels
 
 ## Constraints
-- [ ] No external libraries
+- [ ] Node.js only
+- [ ] `demo` mode prints at least 2 pairs
 
 ## Acceptance criteria
-- [ ] A record with score `0` is not dropped if `minScore` is `0`.
-- [ ] A record with `name: \"   \"` fails `requireName`.
-- [ ] Tag filtering uses strict equality.
+- [ ] `[]` and `0` → `loose: true`, `strict: false`, `prefer: ===`
+- [ ] `0` and `0` → `loose: true`, `strict: true`, `prefer: either (same result)`
+- [ ] Demo `{}` vs `{}` → `loose: false`, `strict: false`
+- [ ] `null` and `undefined` → `loose: true`, `strict: false`
 
 ## Example data
 
 Input:
+- `[]`
+- `0`
 
-```js
-const records = [
-  { name: "Ana", score: "0", tag: "A" },
-  { name: "", score: 10, tag: "A" },
-  { name: "Bob", score: "x", tag: "B" },
-  { name: "Cara", score: 5, tag: null },
-];
-
-filterRecords(records, { minScore: 0, requireName: true, tag: "A" });
-```
-
-Expected output:
-
-```js
-[{ name: "Ana", score: "0", tag: "A" }]
-```
+Output:
+- `loose: true`
+- `strict: false`
+- `prefer: ===`
 
 ## Suggested plan (no solution)
-1. Normalize `options` defaults.
-2. Write small helpers: `isNonEmptyString`, `toFiniteNumberOrNull`.
-3. Apply each rule as an explicit boolean check.
+1. Parse two JSON values.
+2. Print loose, strict, and preference line.
+3. Optional `demo` branch for `{}` identity case.
 
 ## Deliverables
 - [ ] Code in `starter/`
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)
-- [ ] Add a `debug` option that returns `{ kept, dropped, reasons }`.
+- [ ] Print coercion hint for loose-true strict-false pairs.

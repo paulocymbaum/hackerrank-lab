@@ -4,6 +4,11 @@
 A weather widget needs reusable conversion logic. Extract the formula into a function with a clear return value.
 
 ## Goal
+## Lesson concepts practiced
+- [ ] Name functions by what they do: `toCelsius`, `isValidScore`, `formatTotal`.
+- [ ] One function, one job — easier to debug and reuse.
+- [ ] Call with `name(args)`; define with `function name(params) { ... }`.
+
 Implement `toFahrenheit(celsius)` and a small CLI that reads one number and prints the converted value.
 
 ## Functional requirements

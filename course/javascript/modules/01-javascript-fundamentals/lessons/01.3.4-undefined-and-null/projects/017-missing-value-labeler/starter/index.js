@@ -1,18 +1,35 @@
 /**
- * Missing Value Labeler
- * node starter/index.js
+ * Optional Field Describer
+ *
+ * Entrypoint: node starter/index.js
  */
 
-const readline = require("node:readline");
+const readline = require("readline");
 
-function main() {
+function describeField(value) {
+  if (value === undefined) return "not provided";
+  if (value === null) return "explicitly empty";
+  return "has value: " + String(value);
+}
+
+function parseLine(line) {
+  const trimmed = line.trim();
+  if (trimmed === "undefined") return undefined;
+  return JSON.parse(trimmed);
+}
+
+async function main() {
   const rl = readline.createInterface({ input: process.stdin });
-
-  rl.on("line", (line) => {
-    // TODO: trim token, label as missing / empty / has-value
-    process.stdout.write("Not implemented yet\n");
-    rl.close();
-  });
+  for await (const line of rl) {
+    if (line.trim() === "done") break;
+    try {
+      const value = parseLine(line);
+      process.stdout.write(describeField(value) + "\n");
+    } catch {
+      process.stdout.write("ERROR: invalid input\n");
+    }
+  }
+  rl.close();
 }
 
 main();

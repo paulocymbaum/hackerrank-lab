@@ -5,10 +5,13 @@
 
 export const PROJECT_DELIVERY_FILENAME = "project-delivery.json";
 
+export const LESSON_CONCEPTS_SECTION = "Lesson concepts practiced";
+
 /** English section headers used in all project README.md files. */
 export const PBL_README_SECTIONS = [
   "Problem context",
   "Goal",
+  LESSON_CONCEPTS_SECTION,
   "Functional requirements",
   "Non-functional requirements",
   "Constraints",
@@ -23,6 +26,7 @@ export const PBL_README_SECTIONS = [
 export const REQUIRED_PBL_SECTIONS = [
   "Problem context",
   "Goal",
+  LESSON_CONCEPTS_SECTION,
   "Functional requirements",
   "Non-functional requirements",
   "Constraints",
@@ -58,7 +62,96 @@ export function hasSection(markdown, title) {
   if (title === "Extensions") {
     return /^##\s+Extensions(\s+\(optional\))?/im.test(markdown);
   }
+  if (title === LESSON_CONCEPTS_SECTION) {
+    return /^##\s+Lesson concepts practiced/im.test(markdown);
+  }
   return false;
+}
+
+/**
+ * @param {string} markdown
+ */
+export function isLessonSkeleton(markdown) {
+  const contentLines = markdown
+    .split("\n")
+    .filter((line) => line.trim() && !line.trim().startsWith("<!--"));
+  const bodyLines = contentLines.filter(
+    (line) => !/^#{1,2}\s+/.test(line) && !line.trim().startsWith(">"),
+  );
+  if (bodyLines.length < 2) return true;
+  const sectionCount = contentLines.filter((line) => /^##\s+/.test(line)).length;
+  const hasCode = markdown.includes("```");
+  if (sectionCount >= 3 && bodyLines.length < 3 && !hasCode) return true;
+  return false;
+}
+
+/**
+ * @param {string} markdown
+ */
+export function countLessonConceptItems(markdown) {
+  const section = markdown.match(/^##\s+Lesson concepts practiced\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im);
+  if (!section) return 0;
+  return (section[1].match(/^-\s+\[\s*\]\s+/gm) || []).length;
+}
+
+/**
+ * @param {string} lessonMarkdown
+ */
+export function extractObserveLines(lessonMarkdown) {
+  const block = lessonMarkdown.match(/^##\s+What to observe\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im);
+  if (!block) return [];
+  return block[1]
+    .split("\n")
+    .map((line) => line.replace(/^[-*]\s+/, "").trim())
+    .filter((line) => line.length > 10);
+}
+
+/**
+ * @param {string} lessonMarkdown
+ * @param {string} projectMarkdown
+ */
+export function validateLessonProjectAlignment(lessonMarkdown, projectMarkdown) {
+  const errors = [];
+  const warnings = [];
+
+  if (!lessonMarkdown.trim()) {
+    errors.push("Lesson README.md is missing or empty");
+    return { errors, warnings };
+  }
+
+  if (isLessonSkeleton(lessonMarkdown)) {
+    errors.push("Lesson README is skeleton/empty but project exists");
+  }
+
+  if (!hasSection(projectMarkdown, LESSON_CONCEPTS_SECTION)) {
+    errors.push(`Missing section: ## ${LESSON_CONCEPTS_SECTION}`);
+  } else if (countLessonConceptItems(projectMarkdown) < 2) {
+    errors.push(`${LESSON_CONCEPTS_SECTION} must list at least 2 checkbox items`);
+  }
+
+  const lessonTitle = (lessonMarkdown.match(/^#\s+(.+)/m) || [])[1] || "";
+  const constraints = projectMarkdown.match(/^##\s+Constraints\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im)?.[1] || "";
+  if (/truthy/i.test(lessonTitle) && /no truthiness|forbid.*truthiness|avoid truthiness/i.test(constraints)) {
+    errors.push("Project constraints forbid truthiness on a truthy/falsy lesson");
+  }
+  if (/coercion/i.test(lessonTitle) && /no loose equality|forbid.*==|avoid coercion/i.test(constraints)) {
+    errors.push("Project constraints forbid coercion on a type coercion lesson");
+  }
+
+  const observe = extractObserveLines(lessonMarkdown);
+  const acceptance = projectMarkdown.match(/^##\s+Acceptance criteria\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im)?.[1] || "";
+  if (observe.length > 0 && acceptance.trim()) {
+    const overlap = observe.some((line) => {
+      const words = line.toLowerCase().split(/\W+/).filter((w) => w.length > 4);
+      const acceptLower = acceptance.toLowerCase();
+      return words.some((w) => acceptLower.includes(w));
+    });
+    if (!overlap) {
+      warnings.push("No obvious overlap between lesson What to observe and acceptance criteria");
+    }
+  }
+
+  return { errors, warnings };
 }
 
 /**

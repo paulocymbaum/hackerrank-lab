@@ -1,28 +1,17 @@
+# Try/Catch Error Handling
+
+> Graph index: `03.2.3`
+
 <!-- cursor:teacher:add-explanation (deterministic) -->
-<!-- marker:03-asynchronous-javascript-runtime-model-event-loop:examples/03-promises-async-await-and-error-flow.md -->
+<!-- marker:03-asynchronous-javascript/03.2.3-try-catch-error-handling:README.md -->
 
-# Tier 3 — Promises, Async/Await, and Error Flow
+## Context
 
-## Goal
-Understand what async/await compiles down to conceptually: promise + microtask resumption.
+Async errors propagate as **Promise rejections**. `try/catch` around `await` catches rejections in `async` functions. For APIs that return Promises, you can normalize outcomes into a result object instead of throwing.
 
-## Example: await resumes later
+## Predict first
 
-```js
-async function main() {
-  console.log("A");
-  await null;
-  console.log("B");
-}
-
-main();
-console.log("C");
-```
-
-### Predict
-What is the output order?
-
-## Example: error propagation
+What prints?
 
 ```js
 async function run() {
@@ -36,9 +25,37 @@ async function run() {
 run();
 ```
 
-### What to observe
-- throwing/rejecting inside an async function rejects its returned promise.
-- `try/catch` around `await` catches rejections.
+## Explanation
 
-## Mini-exercise
-Write a function `toResult(promise)` that returns a promise resolving to `{ ok: true, value }` or `{ ok: false, error }`.
+Rejecting inside an async function rejects its returned Promise:
+
+```js
+async function fail() {
+  throw new Error("oops");
+}
+
+fail().catch((e) => console.log(e.message));
+```
+
+The `toResult` pattern wraps a Promise into a success/error object:
+
+```js
+async function toResult(promise) {
+  try {
+    const value = await promise;
+    return { ok: true, value };
+  } catch (error) {
+    return { ok: false, error };
+  }
+}
+```
+
+## What to observe
+
+- Throwing or rejecting inside `async` rejects the returned Promise.
+- `try/catch` around `await` catches rejections without crashing the caller.
+- `toResult` lets callers branch on `{ ok, value }` vs `{ ok: false, error }` without `try/catch`.
+
+## Quick challenge
+
+Implement `toResult(promise)` that returns `{ ok: true, value }` on fulfillment or `{ ok: false, error }` on rejection.

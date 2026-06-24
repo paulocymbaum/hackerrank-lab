@@ -4,6 +4,11 @@
 Form validators must confirm a numeric answer sits inside an inclusive min/max range. Off-by-one bugs at boundaries are common without explicit `>=` and `<=` checks.
 
 ## Goal
+## Lesson concepts practiced
+- [ ] Use `===` and `!==` unless you explicitly need coercion.
+- [ ] Boundary bugs are common: decide whether limits are inclusive (`>=`, `<=`).
+- [ ] Comparisons return booleans — store them in variables like `isValid`.
+
 Read `value`, `min`, and `max` and print whether the value is inside the inclusive range.
 
 ## Functional requirements
