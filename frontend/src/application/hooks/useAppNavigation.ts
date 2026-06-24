@@ -1,14 +1,16 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import type { CourseTab } from "../../domain/types/navigation";
+import type { CourseTab, DrawerMode, DrawerTab } from "../../domain/types/navigation";
 import type { ReaderItem, ReaderTab } from "../../domain/types/reader";
+import { criarEstrategiaHierarquia } from "../navigation/estrategiaHierarquia";
+import { criarEstrategiaLegacy } from "../navigation/estrategiaLegacy";
+import { useCourseExperienceStore } from "../stores/legacy/courseExperienceStore";
 import { closeReaderBeforeNavigate } from "../usecases/navigateWithCleanup";
-import { useContentReaderStore } from "../stores/contentReaderStore";
-import { useCourseExperienceStore } from "../stores/courseExperienceStore";
-import { useQuizSessionStore } from "../stores/quizSessionStore";
 
 const VALID_TABS: CourseTab[] = ["readme", "examples", "projects", "quiz"];
 const VALID_READER_TABS: ReaderTab[] = ["folders", "explanation", "files", "delivery"];
+const VALID_DRAWER_MODES: DrawerMode[] = ["quiz", "project"];
+const VALID_DRAWER_TABS: DrawerTab[] = ["explanation", "files", "delivery"];
 
 function parseCourseTab(value: string | null): CourseTab {
   if (value && VALID_TABS.includes(value as CourseTab)) return value as CourseTab;
@@ -20,10 +22,28 @@ function parseReaderTab(value: string | null): ReaderTab {
   return "explanation";
 }
 
+function parseDrawerMode(value: string | null): DrawerMode | null {
+  if (value && VALID_DRAWER_MODES.includes(value as DrawerMode)) return value as DrawerMode;
+  return null;
+}
+
+function parseDrawerTab(value: string | null): DrawerTab {
+  if (value && VALID_DRAWER_TABS.includes(value as DrawerTab)) return value as DrawerTab;
+  return "explanation";
+}
+
 export function useAppNavigation() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const setCourseTab = useCourseExperienceStore((s) => s.setTab);
+
+  const deps = useMemo(
+    () => ({ navigate, searchParams, setSearchParams, setCourseTab }),
+    [navigate, searchParams, setSearchParams, setCourseTab],
+  );
+
+  const hierarquia = useMemo(() => criarEstrategiaHierarquia(deps), [deps]);
+  const legacy = useMemo(() => criarEstrategiaLegacy(deps), [deps]);
 
   const goCatalog = useCallback(() => {
     closeReaderBeforeNavigate();
@@ -42,82 +62,25 @@ export function useAppNavigation() {
     [navigate, setCourseTab],
   );
 
-  const setTab = useCallback(
-    (courseId: string, tab: CourseTab) => {
-      setCourseTab(courseId, tab);
-      const params = new URLSearchParams(searchParams);
-      if (tab === "readme") params.delete("tab");
-      else params.set("tab", tab);
-      params.delete("reader");
-      params.delete("readerTab");
-      params.delete("quiz");
-      closeReaderBeforeNavigate();
-      setSearchParams(params, { replace: true });
-    },
-    [searchParams, setCourseTab, setSearchParams],
-  );
-
-  const openReader = useCallback(
-    (courseId: string, item: ReaderItem, tab: CourseTab, readerTab?: ReaderTab) => {
-      useContentReaderStore.getState().open(item, { tab: readerTab });
-      const params = new URLSearchParams();
-      if (tab !== "readme") params.set("tab", tab);
-      params.set("reader", item.path);
-      if (readerTab && readerTab !== "explanation") params.set("readerTab", readerTab);
-      navigate(`/course/${encodeURIComponent(courseId)}?${params.toString()}`);
-    },
-    [navigate],
-  );
-
-  const closeReader = useCallback(() => {
-    useContentReaderStore.getState().close();
-    const params = new URLSearchParams(searchParams);
-    params.delete("reader");
-    params.delete("readerTab");
-    setSearchParams(params, { replace: true });
-  }, [searchParams, setSearchParams]);
-
-  const openQuiz = useCallback(
-    (courseId: string, quizId: string) => {
-      closeReaderBeforeNavigate();
-      setCourseTab(courseId, "quiz");
-      useQuizSessionStore.getState().start(quizId);
-      navigate(
-        `/course/${encodeURIComponent(courseId)}?tab=quiz&quiz=${encodeURIComponent(quizId)}`,
-      );
-    },
-    [navigate, setCourseTab],
-  );
-
-  const closeQuiz = useCallback(() => {
-    useQuizSessionStore.getState().reset();
-    const params = new URLSearchParams(searchParams);
-    params.delete("quiz");
-    if (params.get("tab") === "quiz") params.set("tab", "quiz");
-    setSearchParams(params, { replace: true });
-  }, [searchParams, setSearchParams]);
-
-  const setReaderTab = useCallback(
-    (tab: ReaderTab) => {
-      useContentReaderStore.getState().setTab(tab);
-      const params = new URLSearchParams(searchParams);
-      if (tab === "explanation") params.delete("readerTab");
-      else params.set("readerTab", tab);
-      setSearchParams(params, { replace: true });
-    },
-    [searchParams, setSearchParams],
-  );
-
   return {
     goCatalog,
     goCourse,
-    setTab,
-    openReader,
-    closeReader,
-    openQuiz,
-    closeQuiz,
-    setReaderTab,
+    goModule: hierarquia.goModule,
+    goLesson: hierarquia.goLesson,
+    openLessonDrawer: hierarquia.openLessonDrawer,
+    closeLessonDrawer: hierarquia.closeLessonDrawer,
+    setLessonDrawerTab: hierarquia.setLessonDrawerTab,
+    setTab: legacy.setTab,
+    openReader: legacy.openReader,
+    closeReader: legacy.closeReader,
+    openModuleQuiz: hierarquia.openModuleQuiz,
+    openQuiz: legacy.openQuiz,
+    closeQuiz: hierarquia.closeQuiz,
+    closeLegacyQuiz: legacy.closeQuiz,
+    setReaderTab: legacy.setReaderTab,
     parseCourseTab,
     parseReaderTab,
+    parseDrawerMode,
+    parseDrawerTab,
   };
 }

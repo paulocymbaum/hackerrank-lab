@@ -1,0 +1,66 @@
+{
+  "id": "quiz",
+  "title": "Reference vs Value Check",
+  "description": "Predict when variables share objects vs copy primitives.",
+  "lessonId": "02.1-reference-vs-value",
+  "graphIndex": "02.1",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What prints?\n\n```js\nlet a = 10;\nlet b = a;\nb = 20;\nconsole.log(a, b);\n```",
+      "options": [
+        { "id": "a", "text": "10 20" },
+        { "id": "b", "text": "20 20" },
+        { "id": "c", "text": "10 10" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Primitives copy by value. Reassigning `b` does not change `a`."
+    },
+    {
+      "id": "q2",
+      "prompt": "What prints?\n\n```js\nconst a = { n: 10 };\nconst b = a;\nb.n = 20;\nconsole.log(a.n, b.n);\n```",
+      "options": [
+        { "id": "a", "text": "20 20" },
+        { "id": "b", "text": "10 20" },
+        { "id": "c", "text": "10 10" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`b = a` creates an alias. Mutating through `b` changes the same object that `a` references."
+    },
+    {
+      "id": "q3",
+      "prompt": "What prints?\n\n```js\nconst a = { n: 1 };\nlet b = a;\nb = { n: 999 };\na.n = 2;\nconsole.log(a.n, b.n);\n```",
+      "options": [
+        { "id": "a", "text": "2 999" },
+        { "id": "b", "text": "2 2" },
+        { "id": "c", "text": "999 999" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`b = { n: 999 }` is reassignment (new object), not mutation. `a.n = 2` mutates the original object only."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which assignment creates an **alias** (two variables referencing the same object)?",
+      "options": [
+        { "id": "a", "text": "`const b = a` when `a` is an object" },
+        { "id": "b", "text": "`let b = a` when `a` is a number" },
+        { "id": "c", "text": "`const b = { ...a }`" },
+        { "id": "d", "text": "`let b = a + 1` when `a` is a number" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Assigning an object variable to another creates a reference alias. Spread creates a new top-level object (shallow copy), and primitives copy by value."
+    },
+    {
+      "id": "q5",
+      "prompt": "Which of these is **mutation** (changing an existing value in place)?",
+      "options": [
+        { "id": "a", "text": "`obj.n = 2`" },
+        { "id": "b", "text": "`b = { n: 999 }`" },
+        { "id": "c", "text": "`let b = a` when `a` is a number" },
+        { "id": "d", "text": "`const copy = { ...obj }`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Setting a property on an existing object mutates it. Reassignment and spread create new bindings or containers."
+    }
+  ]
+}

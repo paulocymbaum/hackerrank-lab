@@ -1,0 +1,9 @@
+{
+  "createdBy": "cursor-tool",
+  "tool": "scripts/graph/scaffold-from-graph.mjs",
+  "createdAt": "2026-06-09T01:11:45.686Z",
+  "kind": "lesson",
+  "lessonId": "01.2.1-let-and-const",
+  "moduleId": "01-test-fundamentals",
+  "graphIndex": "01.2.1"
+}

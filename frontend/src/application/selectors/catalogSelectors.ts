@@ -1,8 +1,67 @@
-import type { Course, Lesson, Project } from "../../domain/types/catalog";
+import type { Course, Lesson, Module, Project } from "../../domain/types/catalog";
+import type { Quiz } from "../../domain/types/quiz";
 import type { ReaderItem } from "../../domain/types/reader";
+import { sortByGraphIndex } from "./lessonDisplay";
 
 export function getCourseById(courses: Course[], courseId: string): Course | null {
   return courses.find((c) => c.id === courseId) ?? null;
+}
+
+export function isHierarchyCourse(course: Course): boolean {
+  return course.structure === "hierarchy" && Boolean(course.modules?.length);
+}
+
+export function getModuleById(course: Course, moduleId: string): Module | null {
+  return course.modules?.find((m) => m.id === moduleId) ?? null;
+}
+
+export function getLessonById(course: Course, moduleId: string, lessonId: string): Lesson | null {
+  const mod = getModuleById(course, moduleId);
+  return mod?.lessons.find((l) => l.id === lessonId) ?? null;
+}
+
+export function getProjectById(
+  course: Course,
+  moduleId: string,
+  projectId: string,
+): Project | null {
+  return getModuleById(course, moduleId)?.projects.find((p) => p.id === projectId) ?? null;
+}
+
+export function getProjectsForLesson(
+  course: Course,
+  moduleId: string,
+  lessonId: string,
+): Project[] {
+  const mod = getModuleById(course, moduleId);
+  if (!mod) return [];
+  return mod.projects.filter((p) => p.lessonId === lessonId);
+}
+
+export function getQuizzesForLesson(course: Course, moduleId: string, lessonId: string): Quiz[] {
+  const mod = getModuleById(course, moduleId);
+  if (!mod) return [];
+  return mod.quizzes.filter((q) => q.lessonId === lessonId);
+}
+
+export function getQuizzesForModule(course: Course, moduleId: string): Quiz[] {
+  return getModuleById(course, moduleId)?.quizzes ?? [];
+}
+
+/** All quizzes for scoring — includes module-scoped items in hierarchy courses. */
+export function getAllQuizzesForCourse(course: Course): Quiz[] {
+  if (isHierarchyCourse(course)) {
+    return (course.modules ?? []).flatMap((mod) => mod.quizzes);
+  }
+  return course.quizzes;
+}
+
+/** All projects for scoring — includes module-scoped items in hierarchy courses. */
+export function getAllProjectsForCourse(course: Course): Project[] {
+  if (isHierarchyCourse(course)) {
+    return (course.modules ?? []).flatMap((mod) => mod.projects);
+  }
+  return course.projects;
 }
 
 export function lessonToReaderItem(lesson: Lesson): ReaderItem {
@@ -24,6 +83,7 @@ export function projectToReaderItem(project: Project): ReaderItem {
     markdown: project.readmeMarkdown,
     rootPath: project.rootPath,
     projectId: project.id,
+    lessonId: project.lessonId,
     entries: project.entries,
   };
 }
@@ -46,6 +106,23 @@ export function findReaderItemByPath(courses: Course[], path: string): ReaderIte
         return projectToReaderItem(project);
       }
     }
+    for (const mod of course.modules ?? []) {
+      for (const lesson of mod.lessons) {
+        if (lesson.path === path) return lessonToReaderItem(lesson);
+      }
+      for (const project of mod.projects) {
+        if (project.readmePath === path || project.rootPath === path) {
+          return projectToReaderItem(project);
+        }
+      }
+    }
   }
   return null;
+}
+
+export function countCourseLessons(course: Course): number {
+  if (isHierarchyCourse(course)) {
+    return (course.modules ?? []).reduce((sum, mod) => sum + mod.lessons.length, 0);
+  }
+  return course.lessons.length;
 }

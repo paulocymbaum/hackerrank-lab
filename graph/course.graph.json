@@ -6,398 +6,614 @@
       "label": "JavaScript"
     },
     {
-      "id": "n_a1c32f4255",
-      "label": "Trecho inicial truncado no conteúdo fornecido"
+      "id": "n_0b51eea265",
+      "label": "01 JavaScript Fundamentals"
     },
     {
-      "id": "n_1cd75f3aac",
-      "label": "Hoisting and TDZ"
+      "id": "n_b7a38667e7",
+      "label": "01.1 Getting Started"
     },
     {
-      "id": "n_a86bf79bd1",
-      "label": "Closures"
+      "id": "n_65933b074f",
+      "label": "01.1.1 Running JavaScript (Node.js)"
     },
     {
-      "id": "n_d7f6101491",
-      "label": "Reference vs Value"
+      "id": "n_8ec2b7862a",
+      "label": "01.1.2 console.log and Output"
     },
     {
-      "id": "n_5996dfcf49",
-      "label": "Shallow vs Deep Copy"
+      "id": "n_fb935b74e0",
+      "label": "01.1.3 Comments"
     },
     {
-      "id": "n_b6d801a21a",
-      "label": "structuredClone"
+      "id": "n_7602459929",
+      "label": "01.2 Variables"
     },
     {
-      "id": "n_3ccddc2176",
-      "label": "Syntax and Types"
+      "id": "n_9816864ef5",
+      "label": "01.2.1 let and const"
     },
     {
-      "id": "n_7c0d5c2abf",
-      "label": "Strict Equality (===)"
+      "id": "n_68873cb095",
+      "label": "01.2.2 Assignment and Reassignment"
     },
     {
-      "id": "n_f1a1d9a7b7",
-      "label": "Type Coercion (==)"
+      "id": "n_ed4137f9a9",
+      "label": "01.3 Primitive Types"
     },
     {
-      "id": "n_6275850f44",
-      "label": "typeof and Array.isArray"
+      "id": "n_860ad0360b",
+      "label": "01.3.1 Strings"
     },
     {
-      "id": "n_062a958ed0",
-      "label": "Increment Operators (x++ vs ++x)"
+      "id": "n_02a53c5427",
+      "label": "01.3.2 Numbers"
     },
     {
-      "id": "n_a2e7009597",
-      "label": "Objects and Functions"
+      "id": "n_d8eb6a66f2",
+      "label": "01.3.3 Booleans"
     },
     {
-      "id": "n_9606a59aed",
-      "label": "Higher-Order Functions"
+      "id": "n_29a18be0f5",
+      "label": "01.3.4 undefined and null"
     },
     {
-      "id": "n_c74ca50694",
-      "label": "Prototype Chain"
+      "id": "n_52c2073a8e",
+      "label": "01.4 Operators"
     },
     {
-      "id": "n_dd8fa780aa",
-      "label": "ES6 Modules"
+      "id": "n_c62abf5295",
+      "label": "01.4.1 Arithmetic Operators"
     },
     {
-      "id": "n_e550ece401",
-      "label": "Object.hasOwn"
+      "id": "n_f53677d251",
+      "label": "01.4.2 Comparison Operators"
     },
     {
-      "id": "n_701dc30a31",
-      "label": "Asynchronous JavaScript"
+      "id": "n_834c58cba6",
+      "label": "01.4.3 Logical Operators (&&, ||, !)"
     },
     {
-      "id": "n_79e211ef72",
-      "label": "Runtime Model"
+      "id": "n_3134dc58a2",
+      "label": "01.5 Control Flow"
     },
     {
-      "id": "n_873474e44d",
-      "label": "Single-Threaded Execution"
+      "id": "n_8543459868",
+      "label": "01.5.1 if and else"
     },
     {
-      "id": "n_51eff75ece",
-      "label": "Event Loop"
+      "id": "n_0cb7f57ab6",
+      "label": "01.5.2 switch"
     },
     {
-      "id": "n_712cc7fc19",
-      "label": "Call Stack"
+      "id": "n_c9a1e02f54",
+      "label": "01.6 Loops"
     },
     {
-      "id": "n_8cf0c05af5",
-      "label": "Callback and Microtask Queues"
+      "id": "n_d9e6ad9d5c",
+      "label": "01.6.1 for Loop"
     },
     {
-      "id": "n_0b59ba43b4",
-      "label": "Async Patterns"
+      "id": "n_4f61ea0de3",
+      "label": "01.6.2 while Loop"
     },
     {
-      "id": "n_e76c45ff03",
-      "label": "Promises"
+      "id": "n_acabb80b6b",
+      "label": "01.7 Functions"
     },
     {
-      "id": "n_da611908aa",
-      "label": "Async/Await"
+      "id": "n_059098e9f8",
+      "label": "01.7.1 Function Declaration"
     },
     {
-      "id": "n_4e7dd6b77f",
-      "label": "Try/Catch Error Handling"
+      "id": "n_ca15a4738a",
+      "label": "01.7.2 Parameters and Return Values"
     },
     {
-      "id": "n_78afd4f52c",
-      "label": "Data Structures and Algorithms"
+      "id": "n_5b1cae029b",
+      "label": "01.8 Truthiness and Coercion"
     },
     {
-      "id": "n_6b0bd11d43",
-      "label": "Big-O Complexity"
+      "id": "n_08c92665a5",
+      "label": "01.8.1 Truthy vs Falsy"
     },
     {
-      "id": "n_f34b4f9ed1",
-      "label": "Two Pointers and Sliding Window"
+      "id": "n_8d78a4769c",
+      "label": "01.8.2 Strict Equality (===)"
     },
     {
-      "id": "n_c11a17cbc4",
-      "label": "BFS and DFS"
+      "id": "n_152d759257",
+      "label": "01.8.3 Type Coercion (==)"
     },
     {
-      "id": "n_61431e63a8",
-      "label": "Cycle Detection"
+      "id": "n_b0dc9850d7",
+      "label": "01.8.4 typeof and Array.isArray"
     },
     {
-      "id": "n_14e2d24f29",
-      "label": "Dynamic Programming"
+      "id": "n_554dd07466",
+      "label": "01.8.5 null, undefined, == null, ?., ??"
     },
     {
-      "id": "n_9ec87aed5e",
-      "label": "HackerRank Profile and Assessments"
+      "id": "n_6efb347985",
+      "label": "02 Objects, References and Copying"
     },
     {
-      "id": "n_ae10305482",
-      "label": "Verified Portfolio"
+      "id": "n_c143ec0f70",
+      "label": "02.1 Reference vs Value"
     },
     {
-      "id": "n_1663615e76",
-      "label": "Problem-Solving Score"
+      "id": "n_fd5112ba23",
+      "label": "02.2 Shallow vs Deep Copy"
     },
     {
-      "id": "n_db1c96f325",
-      "label": "Certifications"
+      "id": "n_facb83951b",
+      "label": "02.3 structuredClone"
     },
     {
-      "id": "n_c5b9313899",
-      "label": "Badges"
+      "id": "n_472f295537",
+      "label": "02.4 Object.hasOwn"
     },
     {
-      "id": "n_eb1769f32d",
-      "label": "Global Ranking"
+      "id": "n_a377ed445c",
+      "label": "03 Asynchronous JavaScript"
     },
     {
-      "id": "n_c24b5c70f5",
-      "label": "Practice Methodology"
+      "id": "n_e6dfcb0d68",
+      "label": "03.1 Runtime Model"
     },
     {
-      "id": "n_a3e7fb1c94",
-      "label": "Interview Preparation Kit"
+      "id": "n_adf530c28e",
+      "label": "03.1.1 Single-Threaded Execution"
     },
     {
-      "id": "n_967f2660f8",
-      "label": "Online Assessments (OA)"
+      "id": "n_1b9aa7c0e4",
+      "label": "03.1.2 Event Loop"
     },
     {
-      "id": "n_72a7b04cb6",
-      "label": "Implementation Focus"
+      "id": "n_eea8eab80f",
+      "label": "03.1.3 Call Stack"
     },
     {
-      "id": "n_625efaf2bd",
-      "label": "Test Case Handling"
+      "id": "n_60e382f139",
+      "label": "03.1.4 Callback and Microtask Queues"
     },
     {
-      "id": "n_286f9ea3a7",
-      "label": "Technical Interview Preparation"
+      "id": "n_f43751029b",
+      "label": "03.2 Async Patterns"
     },
     {
-      "id": "n_ce835a2471",
-      "label": "System Design (Scalability, CAP Theorem)"
+      "id": "n_5402d86d9f",
+      "label": "03.2.1 Promises"
     },
     {
-      "id": "n_e5a6ec5c67",
-      "label": "Behavioral (STAR Method)"
+      "id": "n_4f2c42793d",
+      "label": "03.2.2 Async/Await"
     },
     {
-      "id": "n_6795edc948",
-      "label": "Communication and Clarifying Questions"
+      "id": "n_ad7f63b66c",
+      "label": "03.2.3 Try/Catch Error Handling"
     },
     {
-      "id": "n_1637dfa862",
-      "label": "Code Quality and Maintainability"
+      "id": "n_d1b97b3fb8",
+      "label": "04 Advanced JavaScript"
     },
     {
-      "id": "n_2702757284",
-      "label": "Iterative Optimization"
+      "id": "n_45533fbf16",
+      "label": "04.1 Hoisting and TDZ"
+    },
+    {
+      "id": "n_5db89c4cb7",
+      "label": "04.2 Closures"
+    },
+    {
+      "id": "n_185304f1d3",
+      "label": "04.3 Higher-Order Functions"
+    },
+    {
+      "id": "n_5b95ee0597",
+      "label": "04.4 Prototype Chain"
+    },
+    {
+      "id": "n_8f59e360e7",
+      "label": "04.5 ES6 Modules"
+    },
+    {
+      "id": "n_8f59c64969",
+      "label": "05 Data Structures and Algorithms"
+    },
+    {
+      "id": "n_156839bd12",
+      "label": "05.1 Big-O Complexity"
+    },
+    {
+      "id": "n_9011eabc43",
+      "label": "05.2 Two Pointers and Sliding Window"
+    },
+    {
+      "id": "n_bad8748d1a",
+      "label": "05.3 BFS and DFS"
+    },
+    {
+      "id": "n_840c63f382",
+      "label": "05.4 Cycle Detection"
+    },
+    {
+      "id": "n_e406820748",
+      "label": "05.5 Dynamic Programming"
+    },
+    {
+      "id": "n_681c741b94",
+      "label": "06 HackerRank Profile and Assessments"
+    },
+    {
+      "id": "n_515484f63f",
+      "label": "06.1 Verified Portfolio"
+    },
+    {
+      "id": "n_b3afe5713a",
+      "label": "06.1.1 Problem-Solving Score"
+    },
+    {
+      "id": "n_3dfc3adaae",
+      "label": "06.1.2 Certifications"
+    },
+    {
+      "id": "n_7270a1fbcb",
+      "label": "06.1.3 Badges"
+    },
+    {
+      "id": "n_1b1dfb5f24",
+      "label": "06.1.4 Global Ranking"
+    },
+    {
+      "id": "n_596a261f1f",
+      "label": "06.2 Practice Methodology"
+    },
+    {
+      "id": "n_98241f4d58",
+      "label": "06.2.1 Interview Preparation Kit"
+    },
+    {
+      "id": "n_cbbc5d5f27",
+      "label": "06.2.2 Online Assessments (OA)"
+    },
+    {
+      "id": "n_3fe5214384",
+      "label": "06.2.3 Implementation Focus"
+    },
+    {
+      "id": "n_a53e3b4c84",
+      "label": "06.2.4 Test Case Handling"
+    },
+    {
+      "id": "n_45c02b7199",
+      "label": "07 Technical Interview Preparation"
+    },
+    {
+      "id": "n_7d91a18a39",
+      "label": "07.1 System Design (Scalability, CAP Theorem)"
+    },
+    {
+      "id": "n_1f96df4ba7",
+      "label": "07.2 Behavioral (STAR Method)"
+    },
+    {
+      "id": "n_e6cfdfa3e5",
+      "label": "07.3 Communication and Clarifying Questions"
+    },
+    {
+      "id": "n_d9916f7481",
+      "label": "07.4 Code Quality and Maintainability"
+    },
+    {
+      "id": "n_e7cdd0f8f1",
+      "label": "07.5 Iterative Optimization"
     }
   ],
   "edges": [
     {
       "from": "n_87c0f70ade",
-      "to": "n_a1c32f4255"
+      "to": "n_0b51eea265"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_1cd75f3aac"
+      "from": "n_0b51eea265",
+      "to": "n_b7a38667e7"
     },
     {
-      "from": "n_1cd75f3aac",
-      "to": "n_a86bf79bd1"
+      "from": "n_b7a38667e7",
+      "to": "n_65933b074f"
     },
     {
-      "from": "n_1cd75f3aac",
-      "to": "n_d7f6101491"
+      "from": "n_b7a38667e7",
+      "to": "n_8ec2b7862a"
     },
     {
-      "from": "n_1cd75f3aac",
-      "to": "n_5996dfcf49"
+      "from": "n_b7a38667e7",
+      "to": "n_fb935b74e0"
     },
     {
-      "from": "n_1cd75f3aac",
-      "to": "n_b6d801a21a"
+      "from": "n_0b51eea265",
+      "to": "n_7602459929"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_3ccddc2176"
+      "from": "n_7602459929",
+      "to": "n_9816864ef5"
     },
     {
-      "from": "n_3ccddc2176",
-      "to": "n_7c0d5c2abf"
+      "from": "n_7602459929",
+      "to": "n_68873cb095"
     },
     {
-      "from": "n_3ccddc2176",
-      "to": "n_f1a1d9a7b7"
+      "from": "n_0b51eea265",
+      "to": "n_ed4137f9a9"
     },
     {
-      "from": "n_3ccddc2176",
-      "to": "n_6275850f44"
+      "from": "n_ed4137f9a9",
+      "to": "n_860ad0360b"
     },
     {
-      "from": "n_3ccddc2176",
-      "to": "n_062a958ed0"
+      "from": "n_ed4137f9a9",
+      "to": "n_02a53c5427"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_a2e7009597"
+      "from": "n_ed4137f9a9",
+      "to": "n_d8eb6a66f2"
     },
     {
-      "from": "n_a2e7009597",
-      "to": "n_9606a59aed"
+      "from": "n_ed4137f9a9",
+      "to": "n_29a18be0f5"
     },
     {
-      "from": "n_a2e7009597",
-      "to": "n_c74ca50694"
+      "from": "n_0b51eea265",
+      "to": "n_52c2073a8e"
     },
     {
-      "from": "n_a2e7009597",
-      "to": "n_dd8fa780aa"
+      "from": "n_52c2073a8e",
+      "to": "n_c62abf5295"
     },
     {
-      "from": "n_a2e7009597",
-      "to": "n_e550ece401"
+      "from": "n_52c2073a8e",
+      "to": "n_f53677d251"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_701dc30a31"
+      "from": "n_52c2073a8e",
+      "to": "n_834c58cba6"
     },
     {
-      "from": "n_701dc30a31",
-      "to": "n_79e211ef72"
+      "from": "n_0b51eea265",
+      "to": "n_3134dc58a2"
     },
     {
-      "from": "n_79e211ef72",
-      "to": "n_873474e44d"
+      "from": "n_3134dc58a2",
+      "to": "n_8543459868"
     },
     {
-      "from": "n_79e211ef72",
-      "to": "n_51eff75ece"
+      "from": "n_3134dc58a2",
+      "to": "n_0cb7f57ab6"
     },
     {
-      "from": "n_79e211ef72",
-      "to": "n_712cc7fc19"
+      "from": "n_0b51eea265",
+      "to": "n_c9a1e02f54"
     },
     {
-      "from": "n_79e211ef72",
-      "to": "n_8cf0c05af5"
+      "from": "n_c9a1e02f54",
+      "to": "n_d9e6ad9d5c"
     },
     {
-      "from": "n_701dc30a31",
-      "to": "n_0b59ba43b4"
+      "from": "n_c9a1e02f54",
+      "to": "n_4f61ea0de3"
     },
     {
-      "from": "n_0b59ba43b4",
-      "to": "n_e76c45ff03"
+      "from": "n_0b51eea265",
+      "to": "n_acabb80b6b"
     },
     {
-      "from": "n_0b59ba43b4",
-      "to": "n_da611908aa"
+      "from": "n_acabb80b6b",
+      "to": "n_059098e9f8"
     },
     {
-      "from": "n_0b59ba43b4",
-      "to": "n_4e7dd6b77f"
+      "from": "n_acabb80b6b",
+      "to": "n_ca15a4738a"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_78afd4f52c"
+      "from": "n_0b51eea265",
+      "to": "n_5b1cae029b"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_6b0bd11d43"
+      "from": "n_5b1cae029b",
+      "to": "n_08c92665a5"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_f34b4f9ed1"
+      "from": "n_5b1cae029b",
+      "to": "n_8d78a4769c"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_c11a17cbc4"
+      "from": "n_5b1cae029b",
+      "to": "n_152d759257"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_61431e63a8"
+      "from": "n_5b1cae029b",
+      "to": "n_b0dc9850d7"
     },
     {
-      "from": "n_78afd4f52c",
-      "to": "n_14e2d24f29"
+      "from": "n_5b1cae029b",
+      "to": "n_554dd07466"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_9ec87aed5e"
+      "from": "n_87c0f70ade",
+      "to": "n_6efb347985"
     },
     {
-      "from": "n_9ec87aed5e",
-      "to": "n_ae10305482"
+      "from": "n_6efb347985",
+      "to": "n_c143ec0f70"
     },
     {
-      "from": "n_ae10305482",
-      "to": "n_1663615e76"
+      "from": "n_6efb347985",
+      "to": "n_fd5112ba23"
     },
     {
-      "from": "n_ae10305482",
-      "to": "n_db1c96f325"
+      "from": "n_6efb347985",
+      "to": "n_facb83951b"
     },
     {
-      "from": "n_ae10305482",
-      "to": "n_c5b9313899"
+      "from": "n_6efb347985",
+      "to": "n_472f295537"
     },
     {
-      "from": "n_ae10305482",
-      "to": "n_eb1769f32d"
+      "from": "n_87c0f70ade",
+      "to": "n_a377ed445c"
     },
     {
-      "from": "n_9ec87aed5e",
-      "to": "n_c24b5c70f5"
+      "from": "n_a377ed445c",
+      "to": "n_e6dfcb0d68"
     },
     {
-      "from": "n_c24b5c70f5",
-      "to": "n_a3e7fb1c94"
+      "from": "n_e6dfcb0d68",
+      "to": "n_adf530c28e"
     },
     {
-      "from": "n_c24b5c70f5",
-      "to": "n_967f2660f8"
+      "from": "n_e6dfcb0d68",
+      "to": "n_1b9aa7c0e4"
     },
     {
-      "from": "n_c24b5c70f5",
-      "to": "n_72a7b04cb6"
+      "from": "n_e6dfcb0d68",
+      "to": "n_eea8eab80f"
     },
     {
-      "from": "n_c24b5c70f5",
-      "to": "n_625efaf2bd"
+      "from": "n_e6dfcb0d68",
+      "to": "n_60e382f139"
     },
     {
-      "from": "n_a1c32f4255",
-      "to": "n_286f9ea3a7"
+      "from": "n_a377ed445c",
+      "to": "n_f43751029b"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_ce835a2471"
+      "from": "n_f43751029b",
+      "to": "n_5402d86d9f"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_e5a6ec5c67"
+      "from": "n_f43751029b",
+      "to": "n_4f2c42793d"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_6795edc948"
+      "from": "n_f43751029b",
+      "to": "n_ad7f63b66c"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_1637dfa862"
+      "from": "n_87c0f70ade",
+      "to": "n_d1b97b3fb8"
     },
     {
-      "from": "n_286f9ea3a7",
-      "to": "n_2702757284"
+      "from": "n_d1b97b3fb8",
+      "to": "n_45533fbf16"
+    },
+    {
+      "from": "n_d1b97b3fb8",
+      "to": "n_5db89c4cb7"
+    },
+    {
+      "from": "n_d1b97b3fb8",
+      "to": "n_185304f1d3"
+    },
+    {
+      "from": "n_d1b97b3fb8",
+      "to": "n_5b95ee0597"
+    },
+    {
+      "from": "n_d1b97b3fb8",
+      "to": "n_8f59e360e7"
+    },
+    {
+      "from": "n_87c0f70ade",
+      "to": "n_8f59c64969"
+    },
+    {
+      "from": "n_8f59c64969",
+      "to": "n_156839bd12"
+    },
+    {
+      "from": "n_8f59c64969",
+      "to": "n_9011eabc43"
+    },
+    {
+      "from": "n_8f59c64969",
+      "to": "n_bad8748d1a"
+    },
+    {
+      "from": "n_8f59c64969",
+      "to": "n_840c63f382"
+    },
+    {
+      "from": "n_8f59c64969",
+      "to": "n_e406820748"
+    },
+    {
+      "from": "n_87c0f70ade",
+      "to": "n_681c741b94"
+    },
+    {
+      "from": "n_681c741b94",
+      "to": "n_515484f63f"
+    },
+    {
+      "from": "n_515484f63f",
+      "to": "n_b3afe5713a"
+    },
+    {
+      "from": "n_515484f63f",
+      "to": "n_3dfc3adaae"
+    },
+    {
+      "from": "n_515484f63f",
+      "to": "n_7270a1fbcb"
+    },
+    {
+      "from": "n_515484f63f",
+      "to": "n_1b1dfb5f24"
+    },
+    {
+      "from": "n_681c741b94",
+      "to": "n_596a261f1f"
+    },
+    {
+      "from": "n_596a261f1f",
+      "to": "n_98241f4d58"
+    },
+    {
+      "from": "n_596a261f1f",
+      "to": "n_cbbc5d5f27"
+    },
+    {
+      "from": "n_596a261f1f",
+      "to": "n_3fe5214384"
+    },
+    {
+      "from": "n_596a261f1f",
+      "to": "n_a53e3b4c84"
+    },
+    {
+      "from": "n_87c0f70ade",
+      "to": "n_45c02b7199"
+    },
+    {
+      "from": "n_45c02b7199",
+      "to": "n_7d91a18a39"
+    },
+    {
+      "from": "n_45c02b7199",
+      "to": "n_1f96df4ba7"
+    },
+    {
+      "from": "n_45c02b7199",
+      "to": "n_e6cfdfa3e5"
+    },
+    {
+      "from": "n_45c02b7199",
+      "to": "n_d9916f7481"
+    },
+    {
+      "from": "n_45c02b7199",
+      "to": "n_e7cdd0f8f1"
     }
   ]
 }

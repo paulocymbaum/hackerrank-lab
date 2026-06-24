@@ -1,11 +1,7 @@
 import type { Course } from "../../../../domain/types/catalog";
-import { Card } from "../../../design-system";
-import { MarkdownView } from "../../../shared/MarkdownView";
+import { ReadmePanel } from "../../../shared/ReadmePanel";
 
+/** @deprecated Use ReadmePanel variant="card" */
 export function CourseReadmePanel(props: { course: Course }) {
-  return (
-    <Card variant="panel" className="p-4">
-      <MarkdownView markdown={props.course.readmeMarkdown} />
-    </Card>
-  );
+  return <ReadmePanel markdown={props.course.readmeMarkdown} variant="card" />;
 }

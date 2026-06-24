@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "let and const Check",
+  "description": "Bindings, reassignment, and const with objects.",
+  "lessonId": "01.2.1-let-and-const",
+  "graphIndex": "01.2.1",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What happens here?\n\n```js\nconst x = 1;\nx = 2;\n```",
+      "options": [
+        { "id": "a", "text": "TypeError — cannot reassign a `const` binding" },
+        { "id": "b", "text": "`x` becomes `2`" },
+        { "id": "c", "text": "`x` becomes `undefined`" },
+        { "id": "d", "text": "SyntaxError at parse time" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`const` locks the variable binding. Reassigning throws at runtime in strict mode (default in modules)."
+    },
+    {
+      "id": "q2",
+      "prompt": "What happens here?\n\n```js\nconst scores = { a: 1 };\nscores.a = 5;\n```",
+      "options": [
+        { "id": "a", "text": "Allowed — `scores.a` is now `5`" },
+        { "id": "b", "text": "TypeError — `const` objects are frozen" },
+        { "id": "c", "text": "`scores` becomes `undefined`" },
+        { "id": "d", "text": "SyntaxError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`const` prevents rebinding the variable, not mutating properties of an object."
+    },
+    {
+      "id": "q3",
+      "prompt": "When should you prefer `let` over `const`?",
+      "options": [
+        { "id": "a", "text": "When the variable will be reassigned later" },
+        { "id": "b", "text": "Whenever the value is a number" },
+        { "id": "c", "text": "Only inside `for` loops with `var`" },
+        { "id": "d", "text": "Never — always use `let`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Default to `const`; use `let` when reassignment is intentional (counters, accumulators)."
+    },
+    {
+      "id": "q4",
+      "prompt": "Given `const original = { n: 1 }; const next = { ...original, n: 2 };` — what is `original.n`?",
+      "options": [
+        { "id": "a", "text": "`1`" },
+        { "id": "b", "text": "`2`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "Throws" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Spread creates a new object. `original` is untouched — a safe immutable-style update."
+    },
+    {
+      "id": "q5",
+      "prompt": "What does `scores[id] ?? 0` mean when `scores[id]` is missing?",
+      "options": [
+        { "id": "a", "text": "Use `0` as the default starting score" },
+        { "id": "b", "text": "Delete the player from `scores`" },
+        { "id": "c", "text": "Throw if the player is unknown" },
+        { "id": "d", "text": "Coerce `id` to a number" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Nullish coalescing returns the right side when the left is `null` or `undefined` — handy for first-time players."
+    }
+  ]
+}

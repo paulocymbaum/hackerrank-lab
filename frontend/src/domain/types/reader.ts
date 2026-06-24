@@ -16,5 +16,6 @@ export type ReaderItem = {
   markdown: string;
   rootPath?: string;
   projectId?: string;
+  lessonId?: string;
   entries?: ReaderEntry[];
 };

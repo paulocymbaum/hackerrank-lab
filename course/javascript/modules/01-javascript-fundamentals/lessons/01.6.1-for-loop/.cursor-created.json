@@ -1,0 +1,9 @@
+{
+  "createdBy": "cursor-tool",
+  "tool": "scripts/graph/scaffold-from-graph.mjs",
+  "createdAt": "2026-06-09T17:34:16.681Z",
+  "kind": "lesson",
+  "lessonId": "01.6.1-for-loop",
+  "moduleId": "01-javascript-fundamentals",
+  "graphIndex": "01.6.1"
+}

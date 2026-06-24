@@ -1,4 +1,5 @@
 import type { Course } from "../../../../domain/types/catalog";
+import { useTranslation } from "../../../../application/hooks/useTranslation";
 import { useCoursePoints } from "../../../../application/hooks/useCoursePoints";
 import { Trophy } from "lucide-react";
 import {
@@ -28,12 +29,13 @@ export function CourseScoreSummary(props: {
   course: Course;
   variant?: "full" | "compact";
 }) {
+  const { t } = useTranslation();
   const points = useCoursePoints(props.courseId, props.course);
 
   return (
     <AggregatedScoreDisplay
       variant={props.variant ?? "full"}
-      title="Course score"
+      title={t("course.score")}
       icon={Trophy}
       metrics={toAggregatedScoreMetrics(points)}
     />

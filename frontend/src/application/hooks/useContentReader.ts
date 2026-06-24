@@ -1,4 +1,4 @@
-import { useContentReaderStore } from "../stores/contentReaderStore";
+import { useContentReaderStore } from "../stores/legacy/contentReaderStore";
 
 export function useContentReader() {
   const isOpen = useContentReaderStore((s) => s.isOpen);

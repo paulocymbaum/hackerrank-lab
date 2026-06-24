@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Logical Operators Check",
+  "description": "`&&`, `||`, `!`, and short-circuit evaluation.",
+  "lessonId": "01.4.3-logical-operators",
+  "graphIndex": "01.4.3",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed?\n\n```js\nconsole.log(true && false);\nconsole.log(true || false);\nconsole.log(!false);\nconsole.log(5 > 3 && 2 > 1);\n```",
+      "options": [
+        { "id": "a", "text": "`false`, `true`, `true`, `true`" },
+        { "id": "b", "text": "`true`, `true`, `false`, `true`" },
+        { "id": "c", "text": "`false`, `false`, `true`, `false`" },
+        { "id": "d", "text": "`false`, `true`, `false`, `true`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`&&` needs all true; `||` needs one true; `!` negates; both comparisons are true."
+    },
+    {
+      "id": "q2",
+      "prompt": "For `score = 105`, what is printed?\n\n```js\nconst valid = score >= 0 && score <= 100;\nconst gradeA = score >= 90 && score <= 100;\nconsole.log(valid);\nconsole.log(gradeA);\n```",
+      "options": [
+        { "id": "a", "text": "`false`, `false`" },
+        { "id": "b", "text": "`true`, `true`" },
+        { "id": "c", "text": "`false`, `true`" },
+        { "id": "d", "text": "`true`, `false`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "105 fails the `<= 100` part of both compound checks."
+    },
+    {
+      "id": "q3",
+      "prompt": "When is `canEnter = age >= 18 && hasId` `true`?",
+      "options": [
+        { "id": "a", "text": "Only when **both** conditions are true" },
+        { "id": "b", "text": "When either age or hasId is true" },
+        { "id": "c", "text": "When age is exactly 18 regardless of hasId" },
+        { "id": "d", "text": "Whenever hasId is false" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`&&` requires every part to be true — classic \"all checks must pass\" validation."
+    },
+    {
+      "id": "q4",
+      "prompt": "What does short-circuit mean for `name.length > 0 && name.trim().length > 0` when `name` is `\"\"`?",
+      "options": [
+        { "id": "a", "text": "The right side is not evaluated because the left is already `false`" },
+        { "id": "b", "text": "Both sides always run" },
+        { "id": "c", "text": "JavaScript throws before evaluating" },
+        { "id": "d", "text": "The expression returns `\"\"`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "With `&&`, if the left is false, the right is skipped — avoiding errors on empty strings."
+    },
+    {
+      "id": "q5",
+      "prompt": "What is the result of `!true`?",
+      "options": [
+        { "id": "a", "text": "`false`" },
+        { "id": "b", "text": "`true`" },
+        { "id": "c", "text": "`0`" },
+        { "id": "d", "text": "`undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`!` negates a boolean. Prefer positive names like `isValid` over `!isInvalid` when possible."
+    }
+  ]
+}

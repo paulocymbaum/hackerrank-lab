@@ -1,6 +1,6 @@
 const { dfs } = require("../../../scripts/graph/utils/dfs");
 const { bfs } = require("../../../scripts/graph/utils/bfs");
-const { loadGraph, normalize } = require("./_loadGraph");
+const { loadGraph, labelsMatch } = require("./_loadGraph");
 
 function buildParents(graph) {
   const parents = new Map(); // child -> parent
@@ -24,7 +24,6 @@ function main() {
     process.exit(2);
   }
 
-  const target = normalize(targetRaw);
   const graph = loadGraph();
   const parents = buildParents(graph);
 
@@ -32,7 +31,7 @@ function main() {
   let found = null;
   dfs(graph, graph.rootId, {
     visit: (node) => {
-      if (!found && normalize(node.label) === target) found = node;
+      if (!found && labelsMatch(node.label, targetRaw)) found = node;
     },
   });
 

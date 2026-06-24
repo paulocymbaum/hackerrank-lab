@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "undefined and null Check",
+  "description": "Missing values, strict checks, and labeling behavior.",
+  "lessonId": "01.3.4-undefined-and-null",
+  "graphIndex": "01.3.4",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed?\n\n```js\nlet a;\nconst b = null;\nconsole.log(a === undefined);\nconsole.log(b === undefined);\nconsole.log(b === null);\n```",
+      "options": [
+        { "id": "a", "text": "`true`, `false`, `true`" },
+        { "id": "b", "text": "`true`, `true`, `true`" },
+        { "id": "c", "text": "`false`, `false`, `true`" },
+        { "id": "d", "text": "`true`, `false`, `false`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Unassigned `let` is `undefined`. `null` is not `undefined`, but `b === null` is `true`."
+    },
+    {
+      "id": "q2",
+      "prompt": "What does `label(\"\")` return?\n\n```js\nfunction label(value) {\n  if (value === undefined) return \"missing\";\n  if (value === null) return \"empty\";\n  return \"has-value\";\n}\n```",
+      "options": [
+        { "id": "a", "text": "`\"has-value\"`" },
+        { "id": "b", "text": "`\"missing\"`" },
+        { "id": "c", "text": "`\"empty\"`" },
+        { "id": "d", "text": "`undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "An empty string is neither `undefined` nor `null` — it is a real value."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is `typeof null` in JavaScript?",
+      "options": [
+        { "id": "a", "text": "`\"object\"` (legacy quirk)" },
+        { "id": "b", "text": "`\"null\"`" },
+        { "id": "c", "text": "`\"undefined\"`" },
+        { "id": "d", "text": "`\"boolean\"`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`typeof null` is `\"object\"` for historical reasons. Use `value === null` to test null."
+    },
+    {
+      "id": "q4",
+      "prompt": "When should you use `null` instead of `undefined`?",
+      "options": [
+        { "id": "a", "text": "When your code intentionally means \"known to be absent\"" },
+        { "id": "b", "text": "Whenever a variable is declared with `let`" },
+        { "id": "c", "text": "Only inside `switch` statements" },
+        { "id": "d", "text": "Never — they are identical in all cases" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`undefined` is the default \"no value yet\"; `null` is an explicit empty marker."
+    },
+    {
+      "id": "q5",
+      "prompt": "What does `describe(null)` return?\n\n```js\nfunction describe(value) {\n  if (value === undefined) return \"not provided\";\n  if (value === null) return \"explicitly empty\";\n  return String(value);\n}\n```",
+      "options": [
+        { "id": "a", "text": "`\"explicitly empty\"`" },
+        { "id": "b", "text": "`\"not provided\"`" },
+        { "id": "c", "text": "`\"null\"`" },
+        { "id": "d", "text": "`undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Use strict `===` checks. `null` matches the second branch, not the `undefined` branch."
+    }
+  ]
+}

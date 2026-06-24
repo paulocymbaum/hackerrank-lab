@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Numbers Check",
+  "description": "Parsing stdin, `NaN`, `Number.isFinite`, and `toFixed`.",
+  "lessonId": "01.3.2-numbers",
+  "graphIndex": "01.3.2",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed?\n\n```js\nconsole.log(Number(\"10\") + 5);\nconsole.log(Number(\"\") + 5);\nconsole.log(Number.isFinite(Number(\"abc\")));\nconsole.log((7 / 2).toFixed(2));\n```",
+      "options": [
+        { "id": "a", "text": "`15`, `5`, `false`, `\"3.50\"`" },
+        { "id": "b", "text": "`105`, `5`, `false`, `3.5`" },
+        { "id": "c", "text": "`15`, `NaN`, `true`, `\"3.50\"`" },
+        { "id": "d", "text": "`15`, `5`, `true`, `\"3.5\"`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`Number(\"10\")` is 15; empty string becomes 0; `abc` is not finite; `toFixed(2)` returns a string."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is printed for `total = 10`, `people = 3`?\n\n```js\nconst share = total / people;\nconsole.log(\"Share: $\" + share.toFixed(2));\n```",
+      "options": [
+        { "id": "a", "text": "`Share: $3.33`" },
+        { "id": "b", "text": "`Share: $3.3`" },
+        { "id": "c", "text": "`Share: $3.333`" },
+        { "id": "d", "text": "`Share: 3.33`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`10 / 3` is `3.333...`; `toFixed(2)` rounds to two decimal places as a string."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is the result of `Number(\"abc\")`?",
+      "options": [
+        { "id": "a", "text": "`NaN`" },
+        { "id": "b", "text": "`0`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "Throws `SyntaxError`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Invalid numeric strings become `NaN`. Always validate with `Number.isFinite` before math."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which check correctly rejects `NaN` and `Infinity`?",
+      "options": [
+        { "id": "a", "text": "`Number.isFinite(value)`" },
+        { "id": "b", "text": "`typeof value === \"number\"` alone" },
+        { "id": "c", "text": "`value == null`" },
+        { "id": "d", "text": "`!value`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`Number.isFinite` is false for `NaN`, `Infinity`, and non-numbers. `typeof NaN` is still `\"number\"`."
+    },
+    {
+      "id": "q5",
+      "prompt": "Why trim stdin before `Number(line)`?",
+      "options": [
+        { "id": "a", "text": "Whitespace around digits can still parse, but empty-after-trim should be validated separately" },
+        { "id": "b", "text": "`Number` cannot parse strings with spaces" },
+        { "id": "c", "text": "Trim converts strings to integers only" },
+        { "id": "d", "text": "Trim is required or Node throws" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`Number(\"  42  \")` works, but `Number(\"\")` is `0` — trim and check emptiness explicitly."
+    }
+  ]
+}

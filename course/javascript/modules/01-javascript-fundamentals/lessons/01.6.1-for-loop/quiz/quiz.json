@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "for Loop Check",
+  "description": "Loop bounds, accumulators, and off-by-one pitfalls.",
+  "lessonId": "01.6.1-for-loop",
+  "graphIndex": "01.6.1",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed?\n\n```js\nlet sum = 0;\nfor (let i = 1; i <= 4; i++) {\n  sum += i;\n}\nconsole.log(sum);\n```",
+      "options": [
+        { "id": "a", "text": "`10`" },
+        { "id": "b", "text": "`6`" },
+        { "id": "c", "text": "`4`" },
+        { "id": "d", "text": "`9`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "1 + 2 + 3 + 4 = 10. `<= 4` includes the end value."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is printed?\n\n```js\nlet sum = 0;\nfor (let n = 2; n <= 6; n++) {\n  sum += n;\n}\nconsole.log(\"Sum:\", sum);\n```",
+      "options": [
+        { "id": "a", "text": "`Sum: 20`" },
+        { "id": "b", "text": "`Sum: 18`" },
+        { "id": "c", "text": "`Sum: 15`" },
+        { "id": "d", "text": "`20`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "2 + 3 + 4 + 5 + 6 = 20 inclusive."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is printed?\n\n```js\nfor (let i = 0; i < 3; i++) {\n  console.log(i);\n}\n```",
+      "options": [
+        { "id": "a", "text": "`0`, `1`, `2`" },
+        { "id": "b", "text": "`0`, `1`, `2`, `3`" },
+        { "id": "c", "text": "`1`, `2`, `3`" },
+        { "id": "d", "text": "`3` only" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`i < 3` stops before 3 — classic off-by-one pattern."
+    },
+    {
+      "id": "q4",
+      "prompt": "Why initialize `sum = 0` before a summing loop?",
+      "options": [
+        { "id": "a", "text": "So the accumulator starts from a known value" },
+        { "id": "b", "text": "Because `let` requires an initial number" },
+        { "id": "c", "text": "To make the loop run faster" },
+        { "id": "d", "text": "Because `for` cannot add without it" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Accumulators need a starting point. Uninitialized `sum` would be `undefined` and break math."
+    },
+    {
+      "id": "q5",
+      "prompt": "What happens here after the loop?\n\n```js\nfor (let i = 0; i < 2; i++) {\n  console.log(i);\n}\nconsole.log(i);\n```",
+      "options": [
+        { "id": "a", "text": "ReferenceError — `i` is block-scoped to the loop" },
+        { "id": "b", "text": "Prints `2`" },
+        { "id": "c", "text": "Prints `1`" },
+        { "id": "d", "text": "Prints `undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`let i` in the `for` header is block-scoped — not visible outside the loop."
+    }
+  ]
+}

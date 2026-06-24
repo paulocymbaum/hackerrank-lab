@@ -1,8 +1,8 @@
 import type { CourseScoreRepository } from "../../domain/repositories/quizScoreRepository";
 import type { QuizAttempt } from "../../domain/types/quiz";
-import type { ProjectStatus } from "../../domain/types/quizScore";
+import type { CourseScoreFile, ProjectStatus } from "../../domain/types/quizScore";
 import { useProjectProgressStore } from "../stores/projectProgressStore";
-import { useQuizProgressStore } from "../stores/quizSessionStore";
+import { useQuizProgressStore } from "../stores/quizProgressStore";
 
 let repository: CourseScoreRepository | null = null;
 
@@ -10,8 +10,10 @@ export function setCourseScoreRepository(next: CourseScoreRepository): void {
   repository = next;
 }
 
-/** @deprecated Use setCourseScoreRepository */
-export const setQuizScoreRepository = setCourseScoreRepository;
+export function hydrateCourseScoresFromFile(courseId: string, file: CourseScoreFile): void {
+  useQuizProgressStore.getState().hydrateCourseScores(courseId, file);
+  useProjectProgressStore.getState().hydrateCourseScores(courseId, file);
+}
 
 export async function loadCourseScores(courseId: string): Promise<void> {
   if (!repository) return;
@@ -19,22 +21,20 @@ export async function loadCourseScores(courseId: string): Promise<void> {
   const file = await repository.load(courseId);
   if (!file) return;
 
-  useQuizProgressStore.getState().hydrateCourseScores(courseId, file);
-  useProjectProgressStore.getState().hydrateCourseScores(courseId, file);
+  hydrateCourseScoresFromFile(courseId, file);
 }
-
-/** @deprecated Use loadCourseScores */
-export const loadCourseQuizScores = loadCourseScores;
 
 export async function persistQuizScore(
   courseId: string,
   quizId: string,
   attempt: QuizAttempt,
+  lessonId?: string,
 ): Promise<void> {
   if (!repository) return;
 
   try {
-    await repository.recordQuizAttempt(courseId, quizId, attempt);
+    const file = await repository.recordQuizAttempt(courseId, quizId, attempt, lessonId);
+    hydrateCourseScoresFromFile(courseId, file);
   } catch {
     // Dev server may be unavailable; localStorage progress still works.
   }
@@ -44,11 +44,13 @@ export async function persistProjectStatus(
   courseId: string,
   projectId: string,
   status: ProjectStatus,
+  lessonId?: string,
 ): Promise<void> {
   if (!repository) return;
 
   try {
-    await repository.setProjectStatus(courseId, projectId, status);
+    const file = await repository.setProjectStatus(courseId, projectId, status, lessonId);
+    hydrateCourseScoresFromFile(courseId, file);
   } catch {
     // Dev server may be unavailable; localStorage progress still works.
   }

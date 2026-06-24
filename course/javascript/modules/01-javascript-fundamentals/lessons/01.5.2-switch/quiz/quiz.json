@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "switch Check",
+  "description": "Case matching, `break`, `default`, and strict equality.",
+  "lessonId": "01.5.2-switch",
+  "graphIndex": "01.5.2",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed for `cmd = \"quit\"`?\n\n```js\nswitch (cmd) {\n  case \"start\":\n    console.log(\"Starting\");\n    break;\n  case \"quit\":\n    console.log(\"Goodbye\");\n    break;\n  default:\n    console.log(\"Unknown command\");\n}\n```",
+      "options": [
+        { "id": "a", "text": "`Goodbye`" },
+        { "id": "b", "text": "`Starting`" },
+        { "id": "c", "text": "`Unknown command`" },
+        { "id": "d", "text": "`Goodbye` then `Unknown command`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "The `\"quit\"` case matches and `break` stops fall-through."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is printed for `option = 2`?\n\n```js\nswitch (option) {\n  case 1: console.log(\"Add\"); break;\n  case 2: console.log(\"Remove\"); break;\n  case 3: console.log(\"List\"); break;\n  default: console.log(\"Invalid\");\n}\n```",
+      "options": [
+        { "id": "a", "text": "`Remove`" },
+        { "id": "b", "text": "`Add`" },
+        { "id": "c", "text": "`List`" },
+        { "id": "d", "text": "`Invalid`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Numeric `2` strictly matches `case 2`."
+    },
+    {
+      "id": "q3",
+      "prompt": "What happens without `break` after a matching `case`?",
+      "options": [
+        { "id": "a", "text": "Execution falls through to the next case" },
+        { "id": "b", "text": "The switch throws immediately" },
+        { "id": "c", "text": "Only `default` runs" },
+        { "id": "d", "text": "The switch restarts from the top" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Missing `break` lets later cases run too — usually a bug unless fall-through is intentional."
+    },
+    {
+      "id": "q4",
+      "prompt": "For `code = \"1\"`, which case runs?\n\n```js\nswitch (code) {\n  case 1: console.log(\"number\"); break;\n  case \"1\": console.log(\"string\"); break;\n}\n```",
+      "options": [
+        { "id": "a", "text": "Prints `string`" },
+        { "id": "b", "text": "Prints `number`" },
+        { "id": "c", "text": "Prints both" },
+        { "id": "d", "text": "Runs `default` only" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`switch` uses strict `===`. String `\"1\"` does not match number `1`."
+    },
+    {
+      "id": "q5",
+      "prompt": "When is `switch` a better fit than `if / else if`?",
+      "options": [
+        { "id": "a", "text": "When one value maps to fixed constant options (menu commands)" },
+        { "id": "b", "text": "When checking numeric ranges like `score >= 90`" },
+        { "id": "c", "text": "When combining multiple unrelated booleans" },
+        { "id": "d", "text": "Never — `if` always replaces `switch`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Use `switch` for discrete constants; use `if / else if` for ranges and complex conditions."
+    }
+  ]
+}

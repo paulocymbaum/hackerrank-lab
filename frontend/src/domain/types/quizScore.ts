@@ -81,7 +81,7 @@ export function normalizeCourseScoreFile(value: unknown, courseId?: string): Cou
   const version = file.version;
   if (version !== SCORE_FILE_VERSION && version !== SCORE_FILE_VERSION_LEGACY) return null;
   if (typeof file.courseId !== "string") return null;
-  if (courseId && file.courseId !== courseId) return null;
+  const resolvedCourseId = courseId && file.courseId !== courseId ? courseId : file.courseId;
   if (!file.quizzes || typeof file.quizzes !== "object") return null;
   if (!Object.values(file.quizzes).every(isValidQuizScoreEntry)) return null;
 
@@ -91,7 +91,7 @@ export function normalizeCourseScoreFile(value: unknown, courseId?: string): Cou
 
   return {
     version: SCORE_FILE_VERSION,
-    courseId: file.courseId,
+    courseId: resolvedCourseId,
     updatedAt: typeof file.updatedAt === "string" ? file.updatedAt : new Date().toISOString(),
     quizzes: file.quizzes,
     projects,
@@ -102,11 +102,25 @@ export function isValidCourseScoreFile(value: unknown): value is CourseScoreFile
   return normalizeCourseScoreFile(value) !== null;
 }
 
-/** @deprecated Use CourseScoreFile */
-export type CourseQuizScoreFile = CourseScoreFile;
+export function scoreStorageKeyForQuiz(quizId: string, lessonId?: string): string {
+  return lessonId ? `${lessonId}/${quizId}` : quizId;
+}
 
-export function projectProgressKey(courseId: string, projectId: string): string {
+export function scoreStorageKeyForProject(projectId: string, lessonId?: string): string {
+  return lessonId ? `${lessonId}/${projectId}` : projectId;
+}
+
+export function projectProgressKey(courseId: string, projectId: string, lessonId?: string): string {
+  return `${courseId}:project:${lessonId ?? "_"}:${projectId}`;
+}
+
+/** Legacy key format before hierarchy migration */
+export function legacyProjectProgressKey(courseId: string, projectId: string): string {
   return `${courseId}:${projectId}`;
+}
+
+export function legacyQuizProgressKey(courseId: string, quizId: string): string {
+  return `${courseId}:${quizId}`;
 }
 
 export function projectPointsForStatus(status: ProjectStatus): number {
@@ -165,11 +179,19 @@ export function mergeScoreFileIntoQuizProgress(
   const next = { ...byKey };
 
   for (const entry of Object.values(file.quizzes)) {
-    const key = quizProgressKey(courseId, entry.quizId);
+    const slash = entry.quizId.indexOf("/");
+    const lessonId = slash > 0 ? entry.quizId.slice(0, slash) : undefined;
+    const quizId = slash > 0 ? entry.quizId.slice(slash + 1) : entry.quizId;
+    const key = quizProgressKey(courseId, quizId, lessonId);
     const prev = next[key];
     const lastAttempt = entry.attempts[entry.attempts.length - 1];
 
-    if (!prev || entry.attempts.length >= prev.attempts) {
+    const shouldApply =
+      !prev ||
+      entry.bestScore > prev.bestScore ||
+      (entry.bestScore === prev.bestScore && entry.attempts.length >= prev.attempts);
+
+    if (shouldApply) {
       next[key] = {
         bestScore: entry.bestScore,
         bestTotal: entry.bestTotal,
@@ -196,7 +218,10 @@ export function mergeScoreFileIntoProjectProgress(
   const next = { ...byKey };
 
   for (const entry of Object.values(file.projects)) {
-    const key = projectProgressKey(courseId, entry.projectId);
+    const slash = entry.projectId.indexOf("/");
+    const lessonId = slash > 0 ? entry.projectId.slice(0, slash) : undefined;
+    const projectId = slash > 0 ? entry.projectId.slice(slash + 1) : entry.projectId;
+    const key = projectProgressKey(courseId, projectId, lessonId);
     const prev = next[key];
     if (!prev || entry.updatedAt >= (prev.updatedAt ?? "")) {
       next[key] = {
@@ -240,21 +265,24 @@ export function computeCourseMaxPoints(course: Course): Omit<CoursePointsWithMax
   return { quizMax, projectMax, totalMax: quizMax + projectMax };
 }
 
+export function computeCourseMaxPointsFromItems(
+  quizzes: Array<{ questions: unknown[] }>,
+  projectCount: number,
+): Omit<CoursePointsWithMax, keyof CoursePoints> {
+  const quizMax = quizzes.reduce((sum, quiz) => sum + quiz.questions.length, 0);
+  const projectMax = projectCount * PROJECT_POINTS_WEIGHT;
+  return { quizMax, projectMax, totalMax: quizMax + projectMax };
+}
+
 export function withCourseMaxPoints(course: Course, points: CoursePoints): CoursePointsWithMax {
   return { ...points, ...computeCourseMaxPoints(course) };
 }
 
-/** @deprecated Use mergeScoreFileIntoQuizProgress */
-export const mergeScoreFileIntoProgress = mergeScoreFileIntoQuizProgress;
-
-export function emptyCourseQuizScoreFile(courseId: string): CourseScoreFile {
-  return emptyCourseScoreFile(courseId);
+export function withCourseMaxPointsFromItems(
+  quizzes: Array<{ questions: unknown[] }>,
+  projectCount: number,
+  points: CoursePoints,
+): CoursePointsWithMax {
+  return { ...points, ...computeCourseMaxPointsFromItems(quizzes, projectCount) };
 }
 
-export function courseQuizScoreRelativePath(courseId: string): string {
-  return courseScoreRelativePath(courseId);
-}
-
-export function isValidCourseQuizScoreFile(value: unknown): value is CourseScoreFile {
-  return isValidCourseScoreFile(value);
-}

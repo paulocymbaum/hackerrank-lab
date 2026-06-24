@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Nullish Operators Check",
+  "description": "`null`, `undefined`, `== null`, `?.`, and `??`.",
+  "lessonId": "01.8.5-null-undefined-null",
+  "graphIndex": "01.8.5",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is the result of `null == undefined`?",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`null`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Loose equality has a special rule: `null` and `undefined` are equal to each other (and only each other)."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is the result of `null === undefined`?",
+      "options": [
+        { "id": "a", "text": "`false`" },
+        { "id": "b", "text": "`true`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Strict equality requires the same type. `null` and `undefined` are different types."
+    },
+    {
+      "id": "q3",
+      "prompt": "Given `const x = 0`, what is `x ?? 10`?",
+      "options": [
+        { "id": "a", "text": "`0`" },
+        { "id": "b", "text": "`10`" },
+        { "id": "c", "text": "`null`" },
+        { "id": "d", "text": "`undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Nullish coalescing (`??`) only replaces `null` or `undefined`. `0` is kept because it is not nullish."
+    },
+    {
+      "id": "q4",
+      "prompt": "Given `const x = 0`, what is `x || 10`?",
+      "options": [
+        { "id": "a", "text": "`10`" },
+        { "id": "b", "text": "`0`" },
+        { "id": "c", "text": "`false`" },
+        { "id": "d", "text": "`null`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`||` uses truthiness. `0` is falsy, so the right-hand side `10` is returned."
+    },
+    {
+      "id": "q5",
+      "prompt": "What does `user?.address?.zip` return when `user` is `null`?",
+      "options": [
+        { "id": "a", "text": "`undefined`" },
+        { "id": "b", "text": "`null`" },
+        { "id": "c", "text": "Throws TypeError" },
+        { "id": "d", "text": "`\"\"`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Optional chaining short-circuits on `null`/`undefined` and yields `undefined` instead of throwing."
+    }
+  ]
+}

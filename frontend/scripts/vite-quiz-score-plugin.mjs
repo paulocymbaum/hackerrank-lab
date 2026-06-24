@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { isValidCourseId } from "./api-validation.mjs";
 
 const SCORE_FILE_VERSION = 2;
 const SCORE_FILE_VERSION_LEGACY = 1;
@@ -19,7 +20,7 @@ export function quizScorePlugin(repoRoot) {
         if (!match) return next();
 
         const courseId = decodeURIComponent(match[1]);
-        if (!/^\d{2}-[\w-]+$/.test(courseId)) {
+        if (!isValidCourseId(courseId)) {
           res.statusCode = 400;
           res.end("Invalid course id");
           return;
@@ -128,7 +129,7 @@ function normalizeCourseScoreFile(value, courseId) {
   const version = value.version;
   if (version !== SCORE_FILE_VERSION && version !== SCORE_FILE_VERSION_LEGACY) return null;
   if (typeof value.courseId !== "string") return null;
-  if (courseId && value.courseId !== courseId) return null;
+  const resolvedCourseId = courseId && value.courseId !== courseId ? courseId : value.courseId;
   if (!value.quizzes || typeof value.quizzes !== "object") return null;
   if (!Object.values(value.quizzes).every(isValidQuizScoreEntry)) return null;
 
@@ -137,7 +138,7 @@ function normalizeCourseScoreFile(value, courseId) {
 
   return {
     version: SCORE_FILE_VERSION,
-    courseId: value.courseId,
+    courseId: resolvedCourseId,
     updatedAt: typeof value.updatedAt === "string" ? value.updatedAt : new Date().toISOString(),
     quizzes: value.quizzes,
     projects,

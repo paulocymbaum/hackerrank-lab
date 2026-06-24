@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Assignment and Reassignment Check",
+  "description": "`=`, compound operators, and `const` rebinding vs mutation.",
+  "lessonId": "01.2.2-assignment-and-reassignment",
+  "graphIndex": "01.2.2",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed?\n\n```js\nlet points = 5;\npoints += 10;\npoints -= 3;\n\nconst player = { score: 0 };\nplayer.score += points;\n\nconsole.log(points);\nconsole.log(player.score);\n```",
+      "options": [
+        { "id": "a", "text": "`12` then `12`" },
+        { "id": "b", "text": "`5` then `12`" },
+        { "id": "c", "text": "`12` then `0`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`points` becomes `12` via `+=` and `-=`. Mutating `player.score` on a `const` object is allowed."
+    },
+    {
+      "id": "q2",
+      "prompt": "What happens here?\n\n```js\nconst maxRetries = 3;\nmaxRetries = 5;\n```",
+      "options": [
+        { "id": "a", "text": "TypeError — cannot reassign a `const` binding" },
+        { "id": "b", "text": "`maxRetries` becomes `5`" },
+        { "id": "c", "text": "`maxRetries` becomes `undefined`" },
+        { "id": "d", "text": "SyntaxError at parse time" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`const` locks the variable binding. Reassigning the variable itself throws."
+    },
+    {
+      "id": "q3",
+      "prompt": "What does `total += 25` mean?",
+      "options": [
+        { "id": "a", "text": "Same as `total = total + 25`" },
+        { "id": "b", "text": "Same as `total === total + 25`" },
+        { "id": "c", "text": "Adds 25 only if `total` is `const`" },
+        { "id": "d", "text": "Creates a new variable named `total25`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Compound assignment updates the variable from its current value. `=` assigns; `===` compares."
+    },
+    {
+      "id": "q4",
+      "prompt": "What is printed?\n\n```js\nlet total = 100;\ntotal += 25;\ntotal -= 10;\ntotal *= 2;\nconsole.log(total);\n```",
+      "options": [
+        { "id": "a", "text": "`230`" },
+        { "id": "b", "text": "`115`" },
+        { "id": "c", "text": "`200`" },
+        { "id": "d", "text": "`125`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "100 + 25 = 125, minus 10 = 115, times 2 = 230."
+    },
+    {
+      "id": "q5",
+      "prompt": "Which line throws?\n\n```js\nlet count = 0;\ncount++;\nconst limits = { min: 0, max: 100 };\nlimits.max = 200;\ncount = 1;\nlimits = { min: 0, max: 50 };\n```",
+      "options": [
+        { "id": "a", "text": "`limits = { min: 0, max: 50 };`" },
+        { "id": "b", "text": "`limits.max = 200;`" },
+        { "id": "c", "text": "`count = 1;`" },
+        { "id": "d", "text": "`count++;`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Changing `limits.max` is fine. Rebinding `limits` to a new object violates `const`."
+    }
+  ]
+}

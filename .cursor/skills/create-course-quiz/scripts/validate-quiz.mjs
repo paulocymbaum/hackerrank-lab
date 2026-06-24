@@ -28,6 +28,12 @@ function isValidQuizPayload(value, fileLabel) {
   if (value.description != null && typeof value.description !== "string") {
     errors.push("`description` must be a string when present.");
   }
+  if (value.lessonId != null && typeof value.lessonId !== "string") {
+    errors.push("`lessonId` must be a string when present.");
+  }
+  if (value.graphIndex != null && typeof value.graphIndex !== "string") {
+    errors.push("`graphIndex` must be a string when present.");
+  }
   if (!Array.isArray(value.questions) || value.questions.length === 0) {
     errors.push("`questions` must be a non-empty array.");
     return errors;

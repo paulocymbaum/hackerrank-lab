@@ -36,16 +36,18 @@ node .cursor/skills/review-course-project/scripts/collect-project-review-context
    - **Last 3 deliveries** — only as a written explanation of the solution (approach, tests, trade-offs); ignore placeholder or non-technical text
    - Solution files are reference only — do not require matching the reference implementation
 
-3. **Save review** on the **latest delivery** (default):
+3. **Save review** on the **latest delivery** (default). Comment must pass validation (short, plain text):
 
 ```bash
 node .cursor/skills/review-course-project/scripts/save-project-review.mjs \
   course/<module>/projects/<topic>/<project> \
   --score 85 \
-  --comment "Clear validation; meets acceptance criteria for age=0 and empty input."
+  --comment "Empty lines rejected; age/score use Number.isFinite. isActive handles any casing. Matches acceptance criteria."
 ```
 
 Optional: `--delivery-id <id>` to attach review to a specific delivery.
+
+If save fails validation, shorten to **2–4 sentences** and remove markdown section headers. See [reference.md](reference.md).
 
 ## Grading rules (STRICT)
 
@@ -56,8 +58,18 @@ Optional: `--delivery-id <id>` to attach review to a specific delivery.
 | **In scope** | Module lesson concepts, project README criteria, `starter/` code, delivery text that explains the **exercise solution** |
 | **Out of scope** | Study app UI, Delivery tab, `project-delivery.json`, `score.json`, catalog/frontend/repo architecture, skills/tooling, whether deliveries were “saved correctly” |
 | Deliveries | Analyze **only the last 3** submissions (chronological); treat delivery body as optional solution write-up, not platform usage |
-| Comment | Feedback on **correctness vs README + lesson** and **code quality** for the exercise; one concrete next step to pass acceptance criteria |
+| **Comment length** | **Max 480 characters**, **max 5 non-empty lines** — enforced by `save-project-review.mjs` |
+| **Comment style** | 2–4 plain sentences: gap/strength → missing criterion → `Next: one fix`. No `**Section:**` headers or bullet essays |
+| Comment scope | README + lesson + `starter/` only — one concrete next step |
 | Tone | Direct, educational — not Socratic (use `teacher-socratic` for questions) |
+
+### Comment template
+
+```text
+[One sentence: strength or main gap vs README.] [One sentence: key bug or missing criterion.] Next: [single fix].
+```
+
+Examples in [reference.md](reference.md). The save script **rejects** comments that are too long or mention banned platform/tooling phrases.
 
 ### Comment must NOT mention
 
@@ -70,11 +82,10 @@ Optional: `--delivery-id <id>` to attach review to a specific delivery.
 
 ```
 - [ ] collect-project-review-context.mjs run
-- [ ] At least one delivery exists
-- [ ] Score 0-100 with justification tied to acceptance criteria
-- [ ] save-project-review.mjs run (comment non-empty)
+- [ ] Score 0-100 tied to README acceptance criteria + starter/ code
+- [ ] Comment is 2-4 sentences, ≤480 chars, no markdown headers
+- [ ] save-project-review.mjs passes validation
 - [ ] If score > 80, confirm statusUpdated: true in script output
-- [ ] Student refreshes Delivery tab to see score + comment
 ```
 
 ## When to use other skills
@@ -90,7 +101,8 @@ Optional: `--delivery-id <id>` to attach review to a specific delivery.
 | Script | Purpose |
 |--------|---------|
 | [scripts/collect-project-review-context.mjs](scripts/collect-project-review-context.mjs) | README + last 3 deliveries + code |
-| [scripts/save-project-review.mjs](scripts/save-project-review.mjs) | Write review + optional done status |
+| [scripts/save-project-review.mjs](scripts/save-project-review.mjs) | Write review + optional done status (validates comment length) |
+| [scripts/review-comment.mjs](scripts/review-comment.mjs) | Comment rules and validation |
 
 ### collect-project-review-context.mjs flags
 

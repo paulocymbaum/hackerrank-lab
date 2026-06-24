@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Type Coercion Check",
+  "description": "Predict loose equality (`==`) outcomes.",
+  "lessonId": "01.8.3-type-coercion",
+  "graphIndex": "01.8.3",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is the result of `\"\" == 0`?",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`\"\"`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Empty string coerces to `0` in numeric loose equality."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is the result of `false == 0`?",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`0`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Boolean `false` coerces to `0` when compared with `==` to a number."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is the result of `[] == false`?",
+      "options": [
+        { "id": "a", "text": "`true`" },
+        { "id": "b", "text": "`false`" },
+        { "id": "c", "text": "`undefined`" },
+        { "id": "d", "text": "TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`[]` coerces through `''` and `0`, matching `false` under loose equality."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which expression is **`false`**?",
+      "options": [
+        { "id": "a", "text": "`null == undefined`" },
+        { "id": "b", "text": "`\"0\" == 0`" },
+        { "id": "c", "text": "`null == 0`" },
+        { "id": "d", "text": "`[1] == 1`" }
+      ],
+      "correctOptionId": "c",
+      "explanation": "`null` only loosely equals `undefined` — not `0` or other values."
+    },
+    {
+      "id": "q5",
+      "prompt": "Best default for comparisons in application code?",
+      "options": [
+        { "id": "a", "text": "Use `===` unless you have a documented reason for `==`" },
+        { "id": "b", "text": "Always use `==` — it is more flexible" },
+        { "id": "c", "text": "Use `typeof` for every comparison" },
+        { "id": "d", "text": "Convert everything with `parseInt` first" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Strict equality avoids accidental coercion. Convert types explicitly when needed."
+    }
+  ]
+}

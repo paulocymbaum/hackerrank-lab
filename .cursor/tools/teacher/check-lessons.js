@@ -20,44 +20,116 @@ function listDirs(p) {
   }
 }
 
-function countProjects(modulePath) {
+function readJsonSafe(p) {
+  try {
+    return JSON.parse(fs.readFileSync(p, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+function countLessonProjects(lessonPath) {
+  const projectsRoot = path.join(lessonPath, "projects");
+  if (!isDir(projectsRoot)) return { projects: 0, withReadme: 0 };
+
+  let projects = 0;
+  let withReadme = 0;
+  for (const project of listDirs(projectsRoot)) {
+    if (project === "node_modules") continue;
+    const projectPath = path.join(projectsRoot, project);
+    if (!isDir(projectPath)) continue;
+    projects += 1;
+    const readme = path.join(projectPath, "README.md");
+    if (fs.existsSync(readme) && fs.readFileSync(readme, "utf8").trim()) withReadme += 1;
+  }
+  return { projects, withReadme };
+}
+
+function countLegacyProjects(modulePath) {
   const projectsRoot = path.join(modulePath, "projects");
   if (!isDir(projectsRoot)) return { topics: 0, projects: 0, withReadme: 0 };
 
   let topics = 0;
   let projects = 0;
   let withReadme = 0;
-
   for (const topic of listDirs(projectsRoot)) {
     topics += 1;
     const topicPath = path.join(projectsRoot, topic);
     for (const project of listDirs(topicPath)) {
       projects += 1;
-      if (fs.existsSync(path.join(topicPath, project, "README.md"))) {
-        const raw = fs.readFileSync(path.join(topicPath, project, "README.md"), "utf8");
-        if (raw.trim()) withReadme += 1;
-      }
+      const readme = path.join(topicPath, project, "README.md");
+      if (fs.existsSync(readme) && fs.readFileSync(readme, "utf8").trim()) withReadme += 1;
     }
   }
-
   return { topics, projects, withReadme };
+}
+
+function scanLesson(lessonPath, lessonDir) {
+  const meta = readJsonSafe(path.join(lessonPath, "lesson.meta.json"));
+  const readmePath = path.join(lessonPath, "README.md");
+  const quizDir = path.join(lessonPath, "quiz");
+  return {
+    lessonDir,
+    lessonPath: path.relative(process.cwd(), lessonPath),
+    graphIndex: meta?.graphIndex ?? null,
+    exists: {
+      readme: fs.existsSync(readmePath) && fs.readFileSync(readmePath, "utf8").trim().length > 0,
+      lessonMeta: !!meta,
+      marker: fs.existsSync(path.join(lessonPath, ".cursor-created.json")),
+      quizDir: isDir(quizDir),
+      projectsDir: isDir(path.join(lessonPath, "projects")),
+    },
+    projects: countLessonProjects(lessonPath),
+  };
+}
+
+function scanModule(modulePath, moduleDir, structure) {
+  const lessonsPath = path.join(modulePath, "lessons");
+  const lessons = isDir(lessonsPath)
+    ? listDirs(lessonsPath).sort().map((d) => scanLesson(path.join(lessonsPath, d), d))
+    : [];
+
+  return {
+    moduleDir,
+    modulePath: path.relative(process.cwd(), modulePath),
+    structure,
+    exists: {
+      readme: fs.existsSync(path.join(modulePath, "README.md")),
+      moduleMeta: fs.existsSync(path.join(modulePath, "module.meta.json")),
+      lessonsDir: isDir(lessonsPath),
+    },
+    lessons,
+    lessonCount: lessons.length,
+    legacyProjects: structure === "legacy" ? countLegacyProjects(modulePath) : null,
+  };
+}
+
+function scanNewHierarchy(courseRoot) {
+  const results = [];
+  for (const courseSlug of listDirs(courseRoot)) {
+    const coursePath = path.join(courseRoot, courseSlug);
+    const modulesPath = path.join(coursePath, "modules");
+    if (!isDir(modulesPath)) continue;
+
+    for (const moduleDir of listDirs(modulesPath).filter((n) => /^\d{2}-/.test(n)).sort()) {
+      results.push(scanModule(path.join(modulesPath, moduleDir), moduleDir, "hierarchy"));
+    }
+  }
+  return results;
+}
+
+function scanLegacy(courseRoot) {
+  return listDirs(courseRoot)
+    .filter((name) => /^\d{2}-/.test(name) || name === "00-welcome")
+    .sort()
+    .map((dir) => scanModule(path.join(courseRoot, dir), dir, "legacy"));
 }
 
 function usage() {
   return [
     "Usage: node .cursor/tools/teacher/check-lessons.js [courseRoot=course]",
     "",
-    "What it does:",
-    "- Scans the repo for modules under course/",
-    "- Reports module folders and whether required files exist (README.md, projects/README.md).",
-    "- Summarizes project folders (total vs render-ready README).",
-    "",
-    "For PBL validation, run:",
-    "  node .cursor/skills/create-course-project/scripts/validate-project.mjs --all",
-    "",
-    "Exit codes:",
-    "- 0: scan succeeded",
-    "- 2: invalid courseRoot",
+    "Scans course/ for modules (new hierarchy and legacy flat) and reports lesson completeness.",
   ].join("\n");
 }
 
@@ -70,40 +142,17 @@ function main() {
     process.exit(2);
   }
 
-  const moduleDirs = listDirs(courseRoot)
-    .filter((name) => /^\d{2}-/.test(name) || name === "00-welcome")
-    .sort((a, b) => a.localeCompare(b, "en"));
-
-  const results = moduleDirs.map((dir) => {
-    const modulePath = path.join(courseRoot, dir);
-    const readmePath = path.join(modulePath, "README.md");
-    const projectsReadmePath = path.join(modulePath, "projects", "README.md");
-    const examplesPath = path.join(modulePath, "examples");
-    const projectCounts = countProjects(modulePath);
-    return {
-      moduleDir: dir,
-      modulePath: path.relative(process.cwd(), modulePath),
-      exists: {
-        readme: fs.existsSync(readmePath),
-        projectsReadme: fs.existsSync(projectsReadmePath),
-        examplesDir: isDir(examplesPath),
-      },
-      projects: projectCounts,
-    };
-  });
+  const hierarchyModules = scanNewHierarchy(courseRoot);
+  const legacyModules = scanLegacy(courseRoot);
 
   process.stdout.write(
-    JSON.stringify(
-      {
-        courseRoot: path.relative(process.cwd(), courseRoot),
-        modulesFound: results.length,
-        modules: results,
-      },
-      null,
-      2
-    ) + "\n"
+    JSON.stringify({
+      courseRoot: path.relative(process.cwd(), courseRoot),
+      hierarchyModules: hierarchyModules.length,
+      legacyModules: legacyModules.length,
+      modules: [...hierarchyModules, ...legacyModules],
+    }, null, 2) + "\n",
   );
 }
 
 if (require.main === module) main();
-

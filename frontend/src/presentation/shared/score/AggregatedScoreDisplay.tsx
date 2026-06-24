@@ -2,6 +2,7 @@ import clsx from "clsx";
 import type { ScoreMetric } from "../../../domain/scoreProgress";
 import { formatScoreLabel } from "../../../domain/scoreProgress";
 import { PROJECT_POINTS_WEIGHT } from "../../../domain/types/quizScore";
+import { useTranslation } from "../../../application/hooks/useTranslation";
 import { Card, Icon, ProgressBar } from "../../design-system";
 import type { LucideIcon } from "lucide-react";
 import { ScoreProgressRow } from "./ScoreProgressRow";
@@ -19,8 +20,9 @@ export function AggregatedScoreDisplay(props: {
   icon?: LucideIcon;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const { metrics, variant } = props;
-  const title = props.title ?? "Course score";
+  const title = props.title ?? t("course.score");
   const hasProgress = metrics.total.max > 0;
 
   if (variant === "badge") {
@@ -47,14 +49,15 @@ export function AggregatedScoreDisplay(props: {
           <span className="font-semibold text-text0">{formatScoreLabel(metrics.total.value, metrics.total.max)}</span>
           <span className="hidden sm:inline">·</span>
           <span className="hidden sm:inline">
-            quiz {metrics.quiz.value} · projects {metrics.projects.value}
+            {t("score.quizInline", { value: metrics.quiz.value })} ·{" "}
+            {t("score.projectsInline", { value: metrics.projects.value })}
           </span>
         </div>
         <ProgressBar
           value={metrics.total.value}
           max={metrics.total.max}
           size="xs"
-          aria-label="Overall catalog progress"
+          aria-label={t("catalog.overallProgress")}
         />
       </div>
     );
@@ -70,7 +73,7 @@ export function AggregatedScoreDisplay(props: {
               value={metrics.total.value}
               max={metrics.total.max}
               size="sm"
-              aria-label={`${title} progress`}
+              aria-label={t("score.progress", { title })}
             />
           ) : null}
           <ScoreBreakdownInline metrics={metrics} />
@@ -93,12 +96,12 @@ export function AggregatedScoreDisplay(props: {
       ) : null}
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         <ScoreBreakdownItem
-          label="Quiz (best answers)"
+          label={t("course.quizBestAnswers")}
           metric={metrics.quiz}
           barSize="xs"
         />
         <ScoreBreakdownItem
-          label={`Projects done (×${PROJECT_POINTS_WEIGHT})`}
+          label={t("course.projectsDone", { weight: PROJECT_POINTS_WEIGHT })}
           metric={metrics.projects}
           barSize="xs"
         />
@@ -112,6 +115,7 @@ function AggregatedScoreBadge(props: {
   icon?: LucideIcon;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const { metrics } = props;
   const hasProgress = metrics.total.max > 0;
 
@@ -131,7 +135,7 @@ function AggregatedScoreBadge(props: {
           value={metrics.total.value}
           max={metrics.total.max}
           size="xs"
-          aria-label="Course score progress"
+          aria-label={t("course.scoreProgress")}
         />
       ) : null}
     </span>
@@ -153,17 +157,19 @@ function ScoreHeader(props: { title: string; icon?: LucideIcon; metric: ScoreMet
 }
 
 function ScoreBreakdownInline(props: { metrics: AggregatedScoreMetrics }) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-wrap gap-x-4 gap-y-1 text-meta text-text1">
       <span>
-        Quiz:{" "}
+        {t("score.quizLabel")}{" "}
         <span className="font-medium text-text0">
           {props.metrics.quiz.value}
           {props.metrics.quiz.max > 0 ? ` / ${props.metrics.quiz.max}` : ""}
         </span>
       </span>
       <span>
-        Projects:{" "}
+        {t("score.projectsLabel")}{" "}
         <span className="font-medium text-text0">
           {props.metrics.projects.value}
           {props.metrics.projects.max > 0 ? ` / ${props.metrics.projects.max}` : ""}

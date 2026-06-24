@@ -1,0 +1,67 @@
+{
+  "id": "quiz",
+  "title": "Deep Copy Check",
+  "description": "JSON clone limits vs structuredClone for snapshots.",
+  "lessonId": "02.3-structuredclone",
+  "graphIndex": "02.3",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "After this JSON clone, what is `typeof y.when`?\n\n```js\nconst x = { when: new Date(), n: 1 };\nconst y = JSON.parse(JSON.stringify(x));\n```",
+      "options": [
+        { "id": "a", "text": "\"string\"" },
+        { "id": "b", "text": "\"object\" (still a Date)" },
+        { "id": "c", "text": "\"undefined\"" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "JSON serialization turns `Date` into an ISO string. JSON cloning is lossy for many types."
+    },
+    {
+      "id": "q2",
+      "prompt": "What prints?\n\n```js\nconst a = { n: 1n };\ntry {\n  JSON.stringify(a);\n  console.log(\"ok\");\n} catch (e) {\n  console.log(\"error\");\n}\n```",
+      "options": [
+        { "id": "a", "text": "error" },
+        { "id": "b", "text": "ok" },
+        { "id": "c", "text": "undefined" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`JSON.stringify` throws on `BigInt`. That is another reason JSON cloning is not a universal deep-copy solution."
+    },
+    {
+      "id": "q3",
+      "prompt": "What happens to `undefined` values in nested objects when using `JSON.parse(JSON.stringify(x))`?",
+      "options": [
+        { "id": "a", "text": "They are dropped (keys removed)" },
+        { "id": "b", "text": "They are preserved as `undefined`" },
+        { "id": "c", "text": "They become `null`" },
+        { "id": "d", "text": "JSON.stringify throws immediately" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "JSON cannot represent `undefined`. During serialization, object properties with `undefined` values are omitted."
+    },
+    {
+      "id": "q4",
+      "prompt": "After `const y = structuredClone(x)` where `x = { when: new Date(), set: new Set([1, 2]) }`, which is true?",
+      "options": [
+        { "id": "a", "text": "`y.when instanceof Date` and `y.set instanceof Set`" },
+        { "id": "b", "text": "`typeof y.when === \"string\"`" },
+        { "id": "c", "text": "`y.set` is a plain array `[1, 2]`" },
+        { "id": "d", "text": "`y === x` (same reference)" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`structuredClone` preserves supported built-in types like `Date` and `Set`, unlike JSON cloning."
+    },
+    {
+      "id": "q5",
+      "prompt": "When should you prefer a deep copy over shallow copy + copy-on-write?",
+      "options": [
+        { "id": "a", "text": "When you need an immutable snapshot boundary and cannot risk shared nested references" },
+        { "id": "b", "text": "For every variable assignment in the program" },
+        { "id": "c", "text": "Only when copying primitive numbers" },
+        { "id": "d", "text": "Never — deep copy is always wrong" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Deep copies are expensive. Use them when you truly need isolation; otherwise prefer targeted copy-on-write updates."
+    }
+  ]
+}

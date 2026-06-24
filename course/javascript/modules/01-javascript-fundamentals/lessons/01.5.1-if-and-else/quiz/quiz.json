@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "if and else Check",
+  "description": "Branching, inclusive boundaries, and early error paths.",
+  "lessonId": "01.5.1-if-and-else",
+  "graphIndex": "01.5.1",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is printed for `score = 90`?\n\n```js\nif (score >= 90) {\n  console.log(\"A\");\n} else if (score >= 80) {\n  console.log(\"B\");\n} else {\n  console.log(\"F\");\n}\n```",
+      "options": [
+        { "id": "a", "text": "`A`" },
+        { "id": "b", "text": "`B`" },
+        { "id": "c", "text": "`F`" },
+        { "id": "d", "text": "`A` and `B`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "The first matching branch wins. `90 >= 90` is true, so `A` prints."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is printed for `score = 89`?\n\n```js\nif (score >= 90) {\n  console.log(\"Grade: A\");\n} else if (score >= 80) {\n  console.log(\"Grade: B\");\n} else if (score >= 70) {\n  console.log(\"Grade: C\");\n} else {\n  console.log(\"Grade: F\");\n}\n```",
+      "options": [
+        { "id": "a", "text": "`Grade: B`" },
+        { "id": "b", "text": "`Grade: A`" },
+        { "id": "c", "text": "`Grade: C`" },
+        { "id": "d", "text": "`Grade: F`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "89 fails the `>= 90` check but passes `>= 80`. Order matters — highest threshold first."
+    },
+    {
+      "id": "q3",
+      "prompt": "Why check invalid input in an early `if` branch?",
+      "options": [
+        { "id": "a", "text": "To print one clear error and avoid falling through to success output" },
+        { "id": "b", "text": "Because `else` cannot handle errors" },
+        { "id": "c", "text": "Because `if` only runs once per program" },
+        { "id": "d", "text": "Invalid input automatically throws before `if` runs" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Validate first, then compute the happy path. Do not print both `ERROR:` and a grade."
+    },
+    {
+      "id": "q4",
+      "prompt": "What is printed for `age = 15`?\n\n```js\nif (age >= 18) {\n  console.log(\"Adult\");\n} else {\n  console.log(\"Minor\");\n}\n```",
+      "options": [
+        { "id": "a", "text": "`Minor`" },
+        { "id": "b", "text": "`Adult`" },
+        { "id": "c", "text": "Nothing" },
+        { "id": "d", "text": "`undefined`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "The condition is false, so the `else` branch runs."
+    },
+    {
+      "id": "q5",
+      "prompt": "For `raw = \"abc\"`, what should happen first?\n\n```js\nconst score = Number(raw);\nif (!Number.isFinite(score)) {\n  console.log(\"ERROR: invalid score\");\n} else if (score < 0 || score > 100) {\n  console.log(\"ERROR: score out of range\");\n} else {\n  console.log(\"Grade: B\");\n}\n```",
+      "options": [
+        { "id": "a", "text": "Print `ERROR: invalid score`" },
+        { "id": "b", "text": "Print `Grade: B`" },
+        { "id": "c", "text": "Print `ERROR: score out of range`" },
+        { "id": "d", "text": "Throw automatically" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`Number(\"abc\")` is `NaN`, which fails `Number.isFinite` — handle before range checks."
+    }
+  ]
+}

@@ -19,6 +19,9 @@ export type Quiz = {
   /** POSIX path to source JSON under course/ */
   path: string;
   questions: QuizQuestion[];
+  lessonId?: string;
+  moduleId?: string;
+  graphIndex?: string;
 };
 
 export type QuizAttempt = {
@@ -48,6 +51,6 @@ export function scoreQuiz(questions: QuizQuestion[], answers: QuizAnswerMap): Qu
   };
 }
 
-export function quizProgressKey(courseId: string, quizId: string): string {
-  return `${courseId}:${quizId}`;
+export function quizProgressKey(courseId: string, quizId: string, lessonId?: string): string {
+  return `${courseId}:quiz:${lessonId ?? "_"}:${quizId}`;
 }

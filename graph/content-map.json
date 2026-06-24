@@ -1,0 +1,490 @@
+{
+  "generatedAt": "2026-06-24T00:50:20.585Z",
+  "courseSlug": "javascript",
+  "total": 57,
+  "exists": 33,
+  "planned": 24,
+  "orphan": 0,
+  "entries": [
+    {
+      "graphIndex": "01.1.1",
+      "courseId": "testlang",
+      "moduleId": "01-test-fundamentals",
+      "lessonId": "01.1.1-running-code",
+      "diskPath": "course/testlang/modules/01-test-fundamentals/lessons/01.1.1-running-code",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.1.2",
+      "courseId": "testlang",
+      "moduleId": "01-test-fundamentals",
+      "lessonId": "01.1.2-output-basics",
+      "diskPath": "course/testlang/modules/01-test-fundamentals/lessons/01.1.2-output-basics",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.1.3",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.1.3-comments",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.1.3-comments",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.2.1",
+      "courseId": "testlang",
+      "moduleId": "01-test-fundamentals",
+      "lessonId": "01.2.1-let-and-const",
+      "diskPath": "course/testlang/modules/01-test-fundamentals/lessons/01.2.1-let-and-const",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.2.2",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.2.2-assignment-and-reassignment",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.2.2-assignment-and-reassignment",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.3.1",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.3.1-strings",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.3.1-strings",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.3.2",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.3.2-numbers",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.3.2-numbers",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.3.3",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.3.3-booleans",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.3.3-booleans",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.3.4",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.3.4-undefined-and-null",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.3.4-undefined-and-null",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.4.1",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.4.1-arithmetic-operators",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.4.1-arithmetic-operators",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.4.2",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.4.2-comparison-operators",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.4.2-comparison-operators",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.4.3",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.4.3-logical-operators",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.4.3-logical-operators",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.5.1",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.5.1-if-and-else",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.5.1-if-and-else",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.5.2",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.5.2-switch",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.5.2-switch",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.6.1",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.6.1-for-loop",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.6.1-for-loop",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.6.2",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.6.2-while-loop",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.6.2-while-loop",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.7.1",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.7.1-function-declaration",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.7.1-function-declaration",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.7.2",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.7.2-parameters-and-return-values",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.7.2-parameters-and-return-values",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.8.1",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.8.1-truthy-vs-falsy",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.1-truthy-vs-falsy",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.8.2",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.8.2-strict-equality",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.2-strict-equality",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.8.3",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.8.3-type-coercion",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.3-type-coercion",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.8.4",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.8.4-typeof-and-array-isarray",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "01.8.5",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.8.5-null-undefined-null",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "02.1",
+      "courseId": "javascript",
+      "moduleId": "02-objects-references-and-copying",
+      "lessonId": "02.1-reference-vs-value",
+      "diskPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.1-reference-vs-value",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "02.2",
+      "courseId": "javascript",
+      "moduleId": "02-objects-references-and-copying",
+      "lessonId": "02.2-shallow-vs-deep-copy",
+      "diskPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.2-shallow-vs-deep-copy",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "02.3",
+      "courseId": "javascript",
+      "moduleId": "02-objects-references-and-copying",
+      "lessonId": "02.3-structuredclone",
+      "diskPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.3-structuredclone",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "02.4",
+      "courseId": "javascript",
+      "moduleId": "02-objects-references-and-copying",
+      "lessonId": "02.4-object-hasown",
+      "diskPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.4-object-hasown",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "03.1.1",
+      "courseId": "javascript",
+      "moduleId": "03-asynchronous-javascript",
+      "lessonId": "03.1.1-single-threaded-execution",
+      "diskPath": "course/javascript/modules/03-asynchronous-javascript/lessons/03.1.1-single-threaded-execution",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "03.1.2",
+      "courseId": "javascript",
+      "moduleId": "03-asynchronous-javascript",
+      "lessonId": "03.1.2-event-loop",
+      "diskPath": "course/javascript/modules/03-asynchronous-javascript/lessons/03.1.2-event-loop",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "03.1.3",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "03.1.3 Call Stack"
+    },
+    {
+      "graphIndex": "03.1.4",
+      "courseId": "javascript",
+      "moduleId": "03-asynchronous-javascript",
+      "lessonId": "03.1.4-callback-and-microtask-queues",
+      "diskPath": "course/javascript/modules/03-asynchronous-javascript/lessons/03.1.4-callback-and-microtask-queues",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "03.2.1",
+      "courseId": "javascript",
+      "moduleId": "03-asynchronous-javascript",
+      "lessonId": "03.2.1-promises",
+      "diskPath": "course/javascript/modules/03-asynchronous-javascript/lessons/03.2.1-promises",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "03.2.2",
+      "courseId": "javascript",
+      "moduleId": "03-asynchronous-javascript",
+      "lessonId": "03.2.2-async-await",
+      "diskPath": "course/javascript/modules/03-asynchronous-javascript/lessons/03.2.2-async-await",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "03.2.3",
+      "courseId": "javascript",
+      "moduleId": "03-asynchronous-javascript",
+      "lessonId": "03.2.3-try-catch-error-handling",
+      "diskPath": "course/javascript/modules/03-asynchronous-javascript/lessons/03.2.3-try-catch-error-handling",
+      "status": "exists"
+    },
+    {
+      "graphIndex": "04.1",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "04.1 Hoisting and TDZ"
+    },
+    {
+      "graphIndex": "04.2",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "04.2 Closures"
+    },
+    {
+      "graphIndex": "04.3",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "04.3 Higher-Order Functions"
+    },
+    {
+      "graphIndex": "04.4",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "04.4 Prototype Chain"
+    },
+    {
+      "graphIndex": "04.5",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "04.5 ES6 Modules"
+    },
+    {
+      "graphIndex": "05.1",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "05.1 Big-O Complexity"
+    },
+    {
+      "graphIndex": "05.2",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "05.2 Two Pointers and Sliding Window"
+    },
+    {
+      "graphIndex": "05.3",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "05.3 BFS and DFS"
+    },
+    {
+      "graphIndex": "05.4",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "05.4 Cycle Detection"
+    },
+    {
+      "graphIndex": "05.5",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "05.5 Dynamic Programming"
+    },
+    {
+      "graphIndex": "06.1.1",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "06.1.1 Problem-Solving Score"
+    },
+    {
+      "graphIndex": "06.1.2",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "06.1.2 Certifications"
+    },
+    {
+      "graphIndex": "06.1.3",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "06.1.3 Badges"
+    },
+    {
+      "graphIndex": "06.1.4",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "06.1.4 Global Ranking"
+    },
+    {
+      "graphIndex": "06.2.1",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "06.2.1 Interview Preparation Kit"
+    },
+    {
+      "graphIndex": "06.2.2",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "06.2.2 Online Assessments (OA)"
+    },
+    {
+      "graphIndex": "06.2.3",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "06.2.3 Implementation Focus"
+    },
+    {
+      "graphIndex": "06.2.4",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "06.2.4 Test Case Handling"
+    },
+    {
+      "graphIndex": "07.1",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "07.1 System Design (Scalability, CAP Theorem)"
+    },
+    {
+      "graphIndex": "07.2",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "07.2 Behavioral (STAR Method)"
+    },
+    {
+      "graphIndex": "07.3",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "07.3 Communication and Clarifying Questions"
+    },
+    {
+      "graphIndex": "07.4",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "07.4 Code Quality and Maintainability"
+    },
+    {
+      "graphIndex": "07.5",
+      "courseId": "javascript",
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "07.5 Iterative Optimization"
+    }
+  ]
+}

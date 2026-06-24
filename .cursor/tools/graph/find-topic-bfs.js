@@ -1,5 +1,5 @@
 const { bfs } = require("../../../scripts/graph/utils/bfs");
-const { loadGraph, normalize } = require("./_loadGraph");
+const { loadGraph, labelsMatch } = require("./_loadGraph");
 
 function usage() {
   return [
@@ -15,13 +15,12 @@ function main() {
     process.exit(2);
   }
 
-  const target = normalize(targetRaw);
   const graph = loadGraph();
 
   let found = null;
   bfs(graph, graph.rootId, {
     visit: (node) => {
-      if (!found && normalize(node.label) === target) found = node;
+      if (!found && labelsMatch(node.label, targetRaw)) found = node;
     },
   });
 

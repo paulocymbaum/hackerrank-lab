@@ -1,6 +1,6 @@
 const { bfs } = require("../../../scripts/graph/utils/bfs");
 const { dfs } = require("../../../scripts/graph/utils/dfs");
-const { loadGraph, normalize } = require("./_loadGraph");
+const { loadGraph, labelsMatch } = require("./_loadGraph");
 
 function usage() {
   return [
@@ -16,13 +16,12 @@ function main() {
     process.exit(2);
   }
 
-  const section = normalize(sectionRaw);
   const graph = loadGraph();
 
   let sectionNode = null;
   bfs(graph, graph.rootId, {
     visit: (node) => {
-      if (!sectionNode && normalize(node.label) === section) sectionNode = node;
+      if (!sectionNode && labelsMatch(node.label, sectionRaw)) sectionNode = node;
     },
   });
 

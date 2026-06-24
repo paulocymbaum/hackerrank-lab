@@ -23,6 +23,12 @@ function moduleProjectsReadme(moduleTitle) {
   });
 }
 
+function lessonProjectsReadme(lessonTitle) {
+  return renderTemplate(loadTemplate("lesson-projects-readme.md"), {
+    LESSON_TITLE: lessonTitle,
+  });
+}
+
 function projectReadmeSkeleton(projectTitle) {
   return renderTemplate(loadTemplate("project-readme-skeleton.md"), {
     PROJECT_TITLE: projectTitle,
@@ -37,6 +43,7 @@ function starterIndexStub(projectTitle) {
 
 module.exports = {
   moduleProjectsReadme,
+  lessonProjectsReadme,
   projectReadmeSkeleton,
   starterIndexStub,
 };

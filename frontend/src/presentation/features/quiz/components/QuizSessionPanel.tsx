@@ -13,6 +13,7 @@ export function QuizSessionPanel(props: {
   course: Course;
   quiz: Quiz;
   onBackToList: () => void;
+  compact?: boolean;
 }) {
   const currentIndex = useQuizSessionStore((s) => s.currentIndex);
   const answers = useQuizSessionStore((s) => s.answers);
@@ -26,6 +27,7 @@ export function QuizSessionPanel(props: {
   const goNext = useQuizSessionStore((s) => s.goNext);
   const goPrev = useQuizSessionStore((s) => s.goPrev);
   const finish = useQuizSessionStore((s) => s.finish);
+  const sessionLessonId = useQuizSessionStore((s) => s.lessonId);
   const start = useQuizSessionStore((s) => s.start);
 
   const total = props.quiz.questions.length;
@@ -41,7 +43,9 @@ export function QuizSessionPanel(props: {
         quizTitle={props.quiz.title}
         coursePoints={coursePoints}
         quizPointsDelta={lastQuizPointsDelta}
-        onRetry={() => start(props.quiz.id)}
+        onRetry={() =>
+          start(props.quiz.id, props.quiz.lessonId ?? sessionLessonId ?? undefined)
+        }
         onBackToList={props.onBackToList}
       />
     );
@@ -50,14 +54,18 @@ export function QuizSessionPanel(props: {
   if (!question) return null;
 
   return (
-    <section className="grid gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Button variant="ghost" size="md" onClick={props.onBackToList}>
-          <Icon icon={ArrowLeft} />
-          All quizzes
-        </Button>
-        <div className="text-meta text-text1">{props.quiz.title}</div>
-      </div>
+    <section className={props.compact ? "grid gap-4 p-4" : "grid gap-4"}>
+      {!props.compact ? (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Button variant="ghost" size="md" onClick={props.onBackToList}>
+            <Icon icon={ArrowLeft} />
+            All quizzes
+          </Button>
+          <div className="text-meta text-text1">{props.quiz.title}</div>
+        </div>
+      ) : (
+        <div className="text-meta font-semibold text-text0">{props.quiz.title}</div>
+      )}
 
       <QuizProgressBar current={currentIndex} total={total} />
 

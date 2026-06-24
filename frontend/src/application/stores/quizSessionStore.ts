@@ -1,20 +1,21 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import type { QuizAnswerMap, QuizAttempt, QuizProgress, Quiz } from "../../domain/types/quiz";
-import { quizProgressKey, scoreQuiz } from "../../domain/types/quiz";
-import type { CourseScoreFile } from "../../domain/types/quizScore";
-import { mergeScoreFileIntoQuizProgress } from "../../domain/types/quizScore";
+import type { QuizAnswerMap, QuizAttempt, Quiz } from "../../domain/types/quiz";
+import { scoreQuiz } from "../../domain/types/quiz";
 import { persistQuizScore } from "../usecases/courseScores";
+import { quizSessionKey } from "../selectors/quizSelectors";
+import { useQuizProgressStore } from "./quizProgressStore";
 
 type QuizSessionState = {
   quizId: string | null;
+  lessonId: string | null;
+  sessionKey: string | null;
   currentIndex: number;
   answers: QuizAnswerMap;
   checkedQuestions: Record<string, boolean>;
   isComplete: boolean;
   lastAttempt: QuizAttempt | null;
   lastQuizPointsDelta: number;
-  start: (quizId: string) => void;
+  start: (quizId: string, lessonId?: string) => void;
   reset: () => void;
   selectAnswer: (questionId: string, optionId: string) => void;
   checkCurrent: (questionId: string) => void;
@@ -25,6 +26,8 @@ type QuizSessionState = {
 
 const initialSession = {
   quizId: null as string | null,
+  lessonId: null as string | null,
+  sessionKey: null as string | null,
   currentIndex: 0,
   answers: {} as QuizAnswerMap,
   checkedQuestions: {} as Record<string, boolean>,
@@ -35,16 +38,20 @@ const initialSession = {
 
 export const useQuizSessionStore = create<QuizSessionState>((set, get) => ({
   ...initialSession,
-  start: (quizId) =>
+  start: (quizId, lessonId) => {
+    const sessionKey = quizSessionKey(quizId, lessonId);
     set({
       quizId,
+      lessonId: lessonId ?? null,
+      sessionKey,
       currentIndex: 0,
       answers: {},
       checkedQuestions: {},
       isComplete: false,
       lastAttempt: null,
       lastQuizPointsDelta: 0,
-    }),
+    });
+  },
   reset: () => set(initialSession),
   selectAnswer: (questionId, optionId) =>
     set((state) => ({
@@ -63,55 +70,14 @@ export const useQuizSessionStore = create<QuizSessionState>((set, get) => ({
       currentIndex: Math.max(state.currentIndex - 1, 0),
     })),
   finish: (quiz, courseId) => {
+    const lessonId = quiz.lessonId ?? get().lessonId ?? undefined;
     const attempt = scoreQuiz(quiz.questions, get().answers);
     const prevBest =
-      useQuizProgressStore.getState().getProgress(courseId, quiz.id)?.bestScore ?? 0;
-    useQuizProgressStore.getState().recordAttempt(courseId, quiz.id, attempt);
-    void persistQuizScore(courseId, quiz.id, attempt);
+      useQuizProgressStore.getState().getProgress(courseId, quiz.id, lessonId)?.bestScore ?? 0;
+    useQuizProgressStore.getState().recordAttempt(courseId, quiz.id, attempt, lessonId);
+    void persistQuizScore(courseId, quiz.id, attempt, lessonId);
     const lastQuizPointsDelta = Math.max(0, attempt.score - prevBest);
     set({ isComplete: true, lastAttempt: attempt, lastQuizPointsDelta });
     return attempt;
   },
 }));
-
-type QuizProgressState = {
-  byKey: Record<string, QuizProgress>;
-  getProgress: (courseId: string, quizId: string) => QuizProgress | null;
-  recordAttempt: (courseId: string, quizId: string, attempt: QuizAttempt) => void;
-  hydrateCourseScores: (courseId: string, file: CourseScoreFile) => void;
-};
-
-export const useQuizProgressStore = create<QuizProgressState>()(
-  persist(
-    (set, get) => ({
-      byKey: {},
-      getProgress: (courseId, quizId) => {
-        const key = quizProgressKey(courseId, quizId);
-        return get().byKey[key] ?? null;
-      },
-      recordAttempt: (courseId, quizId, attempt) => {
-        const key = quizProgressKey(courseId, quizId);
-        set((state) => {
-          const prev = state.byKey[key];
-          return {
-            byKey: {
-              ...state.byKey,
-              [key]: {
-                bestScore: Math.max(prev?.bestScore ?? 0, attempt.score),
-                bestTotal: attempt.total,
-                attempts: (prev?.attempts ?? 0) + 1,
-                lastAttempt: attempt,
-              },
-            },
-          };
-        });
-      },
-      hydrateCourseScores: (courseId, file) => {
-        set((state) => ({
-          byKey: mergeScoreFileIntoQuizProgress(courseId, file, state.byKey),
-        }));
-      },
-    }),
-    { name: "hackerrank-study-quiz-progress" },
-  ),
-);

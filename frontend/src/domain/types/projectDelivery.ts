@@ -1,3 +1,5 @@
+import { projectProgressKey } from "./quizScore";
+
 export const PROJECT_DELIVERY_FILE_VERSION = 2 as const;
 export const PROJECT_DELIVERY_FILE_VERSION_LEGACY = 1 as const;
 export const PROJECT_DELIVERY_FILENAME = "project-delivery.json";
@@ -143,8 +145,9 @@ export function mergeDeliveryFileIntoStore(
   projectId: string,
   file: ProjectDeliveryFile,
   byKey: Record<string, ProjectDeliveryEntry[]>,
+  lessonId?: string,
 ): Record<string, ProjectDeliveryEntry[]> {
-  const key = `${courseId}:${projectId}`;
+  const key = projectProgressKey(courseId, projectId, lessonId);
   const prev = byKey[key] ?? [];
   const merged = mergeDeliveryEntries(prev, file.deliveries);
 

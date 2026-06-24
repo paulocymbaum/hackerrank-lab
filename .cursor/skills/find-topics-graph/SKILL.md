@@ -1,6 +1,6 @@
 ---
 name: find-topics-graph
-description: Finds topics inside the Hackerrank Study course graph by rendering `graph/course.graph.txt` into JSON and traversing it with BFS/DFS. Use when the user asks to locate a topic, list prerequisites/children, or search the mindmap for a label (e.g. "Closures", "Promises", "Dynamic Programming").
+description: Finds topics inside the Hackerrank Study course graph by rendering `graph/course.graph.txt` into JSON and traversing it with BFS/DFS. Use when the user asks to locate a topic, list prerequisites/children, search the mindmap for a label (e.g. "Closures", "Promises"), or resolve a node by hierarchical index (e.g. "01.2.1", "03.2.1").
 disable-model-invocation: true
 ---
 
@@ -33,6 +33,7 @@ These are pre-made commands for common “find topic” workflows:
 
 - **Find a topic (BFS)**: `.cursor/tools/graph/find-topic-bfs.js`
 - **Find a topic (DFS)**: `.cursor/tools/graph/find-topic-dfs.js`
+- **Find a node by index path**: `.cursor/tools/graph/find-node-by-index.js`
 - **BFS → DFS (find section then list subtree)**: `.cursor/tools/graph/bfs-then-dfs-list-subtree.js`
 - **DFS → BFS (find topic then list nearby)**: `.cursor/tools/graph/dfs-then-bfs-nearby.js`
 
@@ -47,10 +48,12 @@ Graph JSON shape:
 ```js
 {
   rootId: "n_...",
-  nodes: [{ id: "n_...", label: "Closures" }],
+  nodes: [{ id: "n_...", label: "04.2 Closures" }],
   edges: [{ from: "n_parent", to: "n_child" }]
 }
 ```
+
+Label-based tools ignore numeric prefixes when matching text (e.g. `"Closures"` matches `"04.2 Closures"`).
 
 ## Finding topics (use the tools)
 
@@ -65,6 +68,16 @@ node .cursor/tools/graph/find-topic-bfs.js "Closures"
 ```bash
 node .cursor/tools/graph/find-topic-dfs.js "Promises"
 ```
+
+- **Find by hierarchical index** (when you already know the module path):
+
+```bash
+node .cursor/tools/graph/find-node-by-index.js "01"
+node .cursor/tools/graph/find-node-by-index.js "01.2.1"
+node .cursor/tools/graph/find-node-by-index.js "3.2.1"
+```
+
+The first segment accepts `1` or `01`; later segments are compared numerically (`3.2.1` = `03.2.1`).
 
 ## When to use BFS vs DFS (topic-finding scenarios)
 
@@ -114,5 +127,24 @@ node .cursor/tools/graph/bfs-then-dfs-list-subtree.js "Asynchronous JavaScript"
 
 ```bash
 node .cursor/tools/graph/dfs-then-bfs-nearby.js "Promises" 1
+```
+
+## Content map (disk status)
+
+After finding a topic, check whether content already exists on disk:
+
+```bash
+node scripts/graph/generate-content-map.mjs
+```
+
+Read `graph/content-map.json` for each `graphIndex`:
+- `exists` — lesson folder already created
+- `planned` — in graph but no disk folder yet
+- `orphan` — disk folder without matching graph leaf
+
+Suggest scaffolding the next `planned` leaf in the same module:
+
+```bash
+node scripts/graph/scaffold-from-graph.mjs "<graphIndex>"
 ```
 

@@ -17,6 +17,7 @@ import {
   passesReview,
   setDeliveryReview,
 } from "../../../../frontend/scripts/project-delivery-lib.mjs";
+import { validateReviewComment } from "./review-comment.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(scriptDir, "..", "..", "..", "..");
@@ -42,18 +43,32 @@ function resolveProjectPath(inputPath) {
 
   const parts = rel.split(path.sep);
   const courseIdx = parts.indexOf("course");
-  if (courseIdx < 0 || parts.length < courseIdx + 5) return null;
-  if (parts[courseIdx + 2] !== "projects") return null;
+  if (courseIdx < 0) return null;
+
+  const projectsIdx = parts.indexOf("projects");
+  if (projectsIdx < 0 || projectsIdx >= parts.length - 1) return null;
+
+  const courseId = parts[courseIdx + 1];
+  const projectId = parts[parts.length - 1];
+  let lessonId = null;
+  const lessonsIdx = parts.indexOf("lessons");
+  if (lessonsIdx >= 0 && lessonsIdx < projectsIdx) {
+    lessonId = parts[lessonsIdx + 1] ?? null;
+  }
+
+  const storageKey = lessonId ? `${lessonId}/${projectId}` : projectId;
 
   return {
     abs,
     rel,
-    courseId: parts[courseIdx + 1],
-    projectId: parts[parts.length - 1],
+    courseId,
+    projectId,
+    lessonId,
+    storageKey,
   };
 }
 
-async function setProjectDoneInScoreFile(courseId, projectId) {
+async function setProjectDoneInScoreFile(courseId, storageKey) {
   const scorePath = path.join(repoRoot, "course", courseId, "quiz", "score.json");
   let file = {
     version: SCORE_FILE_VERSION,
@@ -84,8 +99,8 @@ async function setProjectDoneInScoreFile(courseId, projectId) {
   file.updatedAt = new Date().toISOString();
   file.projects = {
     ...file.projects,
-    [projectId]: {
-      projectId,
+    [storageKey]: {
+      projectId: storageKey,
       status: "done",
       points: PROJECT_POINTS_WEIGHT,
       updatedAt: file.updatedAt,
@@ -111,6 +126,21 @@ async function main() {
     process.exit(2);
   }
 
+  const commentCheck = validateReviewComment(args.comment);
+  for (const warning of commentCheck.warnings) {
+    process.stderr.write(`WARN: ${warning}\n`);
+  }
+  if (!commentCheck.ok) {
+    process.stderr.write("Invalid review comment:\n");
+    for (const error of commentCheck.errors) {
+      process.stderr.write(`- ${error}\n`);
+    }
+    process.stderr.write(
+      '\nUse 2–4 plain sentences. Example: "No starter/index.js yet. Next: read three stdin lines, validate emptiness, parse with Number.isFinite, print JSON or ERROR."\n',
+    );
+    process.exit(1);
+  }
+
   const resolved = resolveProjectPath(args.projectPath);
   if (!resolved) {
     process.stderr.write("Invalid project path.\n");
@@ -134,7 +164,7 @@ async function main() {
 
   const next = setDeliveryReview(file, deliveryId, {
     score: Math.round(args.score),
-    comment: args.comment,
+    comment: args.comment.trim(),
   });
 
   if (!next) {
@@ -146,7 +176,7 @@ async function main() {
 
   let statusUpdated = false;
   if (passesReview(Math.round(args.score))) {
-    await setProjectDoneInScoreFile(resolved.courseId, resolved.projectId);
+    await setProjectDoneInScoreFile(resolved.courseId, resolved.storageKey);
     statusUpdated = true;
   }
 
