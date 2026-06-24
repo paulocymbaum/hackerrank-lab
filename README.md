@@ -2,81 +2,64 @@
 
 **Educational harness & interactive UI for self-directed coding mastery through Project-Based Learning.**
 
-A local, repo-native learning system — not a hosted course platform. It combines a graph-driven curriculum, predict-first lessons, hands-on CLI projects, and AI-augmented tutoring via the Cursor Agent. Built for junior developers on a self-learning journey and for teams who care about structured, measurable practice.
+A local, repo-native EdTech system — not a hosted course platform. It pairs a **validated content pipeline** with a **React learning UI** and a **Cursor Agent harness** for tutoring, project correction, and curriculum authoring. Built for junior developers on a self-learning journey and as a portfolio piece demonstrating frontend engineering, UX, instructional design, automation, and AI orchestration as first-class concerns.
 
 ---
 
-## What this is
+## At a glance
 
-Two complementary systems work together:
+| Audience | What you find here |
+|----------|-------------------|
+| **Junior learners** | Graph-driven path, predict-first lessons, quizzes, CLI projects with AI correction, Socratic tutor, points & Pomodoro |
+| **Recruiters & tech leaders** | Clean architecture, measurable progress artifacts, extensible harness, EdTech product thinking |
+| **Content authors** | Graph-aligned scaffolding, validators, authoring skills — [Getting Started →](docs/GETTING_STARTED.md) |
+
+Two complementary systems:
 
 | Layer | Role | Key paths |
 |-------|------|-----------|
-| **Educational harness** | Validates content, enforces taxonomy, scaffolds PBL projects, grades deliveries, powers AI tutoring | [`graph/`](graph/), [`scripts/`](scripts/), [`tests/`](tests/), [`.cursor/skills/`](.cursor/skills/) |
-| **Interactive UI** | Learner-facing navigation, predict-first lessons, quizzes, project workspace, progress tracking | [`frontend/`](frontend/) |
-
-> **Educational harness** — the validation, scaffolding, catalog, and AI-review pipeline that keeps curriculum structured and gives learners measurable feedback.
->
-> **Interactive UI** — the learner-facing shell that reads from that pipeline.
+| **Educational harness** | Validates curriculum, scaffolds PBL content, persists scores, powers AI workflows | [`graph/`](graph/), [`scripts/`](scripts/), [`tests/`](tests/), [`.cursor/`](.cursor/) |
+| **Interactive UI** | Navigation, lessons, quizzes, project workspace, progress & focus tools | [`frontend/`](frontend/) |
 
 ```mermaid
 flowchart TB
   subgraph harness [Educational Harness]
-    Graph["Topic graph\ncourse.graph.txt"]
-    Validate["Content validators\nscripts/validate-*.mjs"]
-    Tests["Pipeline tests\nnpm test"]
-    Catalog["Catalog builder\ncatalog:generate"]
-    Skills["AI tutoring skills\n.cursor/skills/"]
-    Review["PBL review workflow\nreview-course-project"]
+    Graph["Topic graph"] --> Validate["Validators + tests"]
+    Validate --> Catalog["catalog:generate"]
+    Skills["Cursor skills + rules"] --> Review["AI project correction"]
   end
 
   subgraph ui [Interactive UI]
-    App["React + Vite app\nfrontend/"]
-    Nav["Hierarchy navigation\ncatalog → lesson"]
-    Quiz["Quizzes + scoring"]
-    Project["Project drawer\nfiles + delivery"]
+    App["React + Vite"] --> Quiz["Quizzes"]
+    App --> Project["Projects + Delivery tab"]
   end
 
-  Graph --> Validate --> Catalog --> App
-  App --> Quiz
-  App --> Project
-  Skills --> Review
+  Catalog --> App
   Review --> Project
-  Learner["Junior learner"] --> App
+  Learner["Learner"] --> App
   Learner --> Skills
 ```
 
-**Canonical content hierarchy:** `Course → Module → Lesson → (explanation, projects, quiz)` — details in [`COURSE_STRUCTURE.md`](COURSE_STRUCTURE.md).
-
-### The PBL learning loop
-
-1. **Read** a predict-first lesson (Markdown in [`course/`](course/))
-2. **Quiz** interactively — scores persist to `course/<course>/quiz/score.json`
-3. **Build** in `starter/index.js`, test locally with Node.js, submit a delivery in the UI
-4. **Review** via the `review-course-project` Cursor skill — score **> 80** marks the project complete
+**Content hierarchy:** `Course → Module → Lesson → (explanation, projects, quiz)` — see [`COURSE_STRUCTURE.md`](COURSE_STRUCTURE.md).
 
 ---
 
-## For recruiters & tech leaders
+## How it's built
 
-### Problem this solves
+### Architecture
 
-Junior developers often practice by memorizing solutions. This project targets **reasoning under constraints**: predict output before running code, implement CLI-style challenges, and follow an explicit topic graph with prerequisites — closer to real interview and HackerRank-style work than passive video courses.
+- **Content-on-disk** — curriculum as Markdown, JSON, and Node.js starters; no production backend or database
+- **Static catalog** — `catalog:generate` syncs `course/` into JSON consumed by the UI
+- **Dev-time persistence** — Vite plugins write quiz scores and project deliveries back to the filesystem
+- **Frontend layers** — `domain → application → presentation → infrastructure`; URL-driven navigation; injectable repositories ([`ARCHITECTURE.md`](frontend/ARCHITECTURE.md))
 
-### Architecture snapshot
+### Harness layers
 
-- **Content-on-disk** — no production backend or database; curriculum lives as Markdown, JSON, and Node.js starters in the repo
-- **Static catalog** — `catalog:generate` syncs `course/` into a build-time JSON catalog consumed by the UI
-- **Dev-time persistence** — Vite middleware plugins write quiz scores and project deliveries back to the filesystem during local development
-- **Clean frontend layers** — `domain → application → presentation → infrastructure` (see [`frontend/ARCHITECTURE.md`](frontend/ARCHITECTURE.md))
-
-### Three harness layers
-
-| Harness | Purpose |
-|---------|---------|
-| **Content harness** | Graph as source of truth, validators, `npm test` pipeline — content cannot drift from taxonomy |
-| **PBL harness** | Project README acceptance criteria + `review-course-project` scoring (>80 = pass) |
-| **Tutoring harness** | Cursor skills as declarative tutor, reviewer, and author workflows — not ad-hoc prompts |
+| Layer | Purpose |
+|-------|---------|
+| **Content** | [`graph/course.graph.txt`](graph/course.graph.txt) as source of truth; validators; `npm test` pipeline |
+| **PBL** | Project README contracts; AI correction via `review-course-project` (>80 = pass) |
+| **Cursor** | [Skills](.cursor/skills/) + [rules](.cursor/rules/) + Node scripts for tutor, reviewer, and author workflows |
 
 ### Tech stack
 
@@ -85,31 +68,63 @@ Junior developers often practice by memorizing solutions. This project targets *
 | UI | React 18, TypeScript, Vite, React Router 7, Zustand, Radix UI, Tailwind |
 | Content | Markdown, JSON quizzes, Node.js CLI starters |
 | Tooling | Node ESM scripts, `node --test`, Vitest |
-| AI | Cursor Agent skills in [`.cursor/skills/`](.cursor/skills/) |
+| AI | Cursor Agent skills |
 
-**Current scope:** JavaScript course (fundamentals → objects → async). The graph and harness are designed to extend to additional course roots.
+### Design & engineering focus
+
+| Area | Highlights |
+|------|------------|
+| **Frontend** | Feature modules, clean architecture, substitutible data layer (static catalog today, API-ready) |
+| **UX** | Hierarchy navigation, progressive disclosure via drawers, deep-linkable URLs ([`ARCHITECTURE-FRONT.md`](frontend/ARCHITECTURE-FRONT.md)) |
+| **Design** | Token-driven glass UI, WCAG-conscious contrast, semantic quiz feedback, i18n-ready ([`DESIGN.md`](frontend/DESIGN.md)) |
+| **Instructional design** | Prerequisite graph, predict-first lessons, spaced retrieval quizzes, rubric-based PBL (not answer-key matching) |
+| **Automation** | Deterministic graph scaffolding, schema validation, integration tests for the authoring pipeline |
+
+**Current scope:** JavaScript course (fundamentals → objects → async). The graph and harness extend to additional course roots.
 
 ---
 
-## For junior learners
+## How learning works
 
-### What you get
+### Session flow
 
-- A **guided path** through atomic topics, grouped into modules
-- **Predict-first explanations** — reason about code before you run it
-- **Interactive quizzes** with feedback on wrong answers
-- **Hands-on CLI projects** that mirror coding-challenge format
-- A **Socratic AI tutor** that guides with hints, not full solutions
-- **Progress tracking** in the browser and on disk
+1. **Read** a predict-first lesson in [`course/`](course/)
+2. **Quiz** — interactive check with explanations on wrong answers
+3. **Build** in `starter/index.js`, test with Node.js, save a delivery write-up in the **Delivery** tab
+4. **Correct** — request AI review (`@review-course-project` or the Delivery tab **Project correction** button); iterate until score **> 80**
 
-### Suggested rhythm
+Use the **25-minute Pomodoro** in the app header to bound sessions (runs in the background while you navigate).
 
-- One lesson per short session, or half a module per long session
-- Always **predict** output before executing examples
-- Redo quizzes with low scores after re-reading the explanation
-- Iterate on projects until review score **> 80**
+### Scoring & progress
 
-### Quick start
+| Activity | Points | Complete when |
+|----------|--------|---------------|
+| **Quiz** | 1 pt per correct answer (best attempt counts) | Retake anytime; UI tiers at ≥80% / ≥50% / <50% |
+| **Project** | 4 pts when done | AI review score **> 80** / 100 |
+
+**Course total** = quiz best scores + project points. Progress surfaces on the catalog, course overview, and module cards.
+
+**Persistence:** browser state (Zustand) for instant UI; `course/<courseId>/quiz/score.json` for quiz/project status; `project-delivery.json` per project for delivery history and AI reviews.
+
+### AI project correction
+
+Projects are graded like a **mentor code review** — your `starter/` code and delivery write-up against the project README acceptance criteria, not a hidden reference solution.
+
+The `review-course-project` skill collects lesson context, README criteria, starter code, and your **last 3 deliveries**, then saves a **0–100 score** and short actionable comment. Passing reviews mark the project **done** and sync to `score.json`.
+
+| AI role | Skills | When to use |
+|---------|--------|-------------|
+| **Tutor** | `teacher-socratic`, `find-topics-graph` | Hints and concepts while coding — questions before answers |
+| **Reviewer** | `review-course-project` | Rubric-based grade after you submit a delivery |
+| **Author** | `create-course-module`, `generate-lesson-teacher`, `create-course-project`, `create-course-quiz` | Scaffold and validate new curriculum from the graph |
+
+Tutor and reviewer are **separate by design**. Learner-facing skills require explicit invocation — the agent will not silently grade or tutor without you asking.
+
+Skill details, example prompts, and commands: [Getting Started →](docs/GETTING_STARTED.md)
+
+---
+
+## Quick start
 
 ```bash
 cd frontend && npm install
@@ -117,9 +132,9 @@ npm run catalog:generate   # sync course/ → static catalog
 npm run dev                # open http://localhost:5173
 ```
 
-From the repo root you can also run `npm run dev` (delegates to `frontend/`).
+From the repo root: `npm run dev` and `npm run catalog:generate` delegate to `frontend/`.
 
-**Full workflow, routes, and Cursor skills:** [Getting Started →](docs/GETTING_STARTED.md)
+**Suggested rhythm:** one lesson per session; predict before running code; redo low-score quizzes; iterate projects until AI correction passes.
 
 ---
 
@@ -132,23 +147,26 @@ hackerrank-study/
 ├── graph/                  # Topic taxonomy (source of truth)
 ├── frontend/               # Interactive UI (Vite + React)
 ├── scripts/ + tests/       # Harness: validation, graph sync, integration tests
-└── .cursor/skills/         # AI tutoring & authoring workflows
+└── .cursor/
+    ├── skills/             # AI tutor, reviewer, and author playbooks
+    └── rules/              # Agent guardrails (course hierarchy)
 ```
 
 ---
 
 ## Documentation
 
-| Doc | Audience | Contents |
-|-----|----------|----------|
-| [**Getting Started**](docs/GETTING_STARTED.md) | Learners & authors | Setup, lesson workflow, Cursor skills, commands |
-| [COURSE_STRUCTURE.md](COURSE_STRUCTURE.md) | Authors | Content hierarchy contract and metadata schemas |
-| [frontend/ARCHITECTURE-FRONT.md](frontend/ARCHITECTURE-FRONT.md) | Engineers & learners | Student navigation journey in the UI |
-| [frontend/ARCHITECTURE.md](frontend/ARCHITECTURE.md) | Engineers | Routes, layers, and score persistence |
-| [docs/meta-schemas.md](docs/meta-schemas.md) | Authors | `*.meta.json` schema reference |
+| Doc | Contents |
+|-----|----------|
+| [**Getting Started**](docs/GETTING_STARTED.md) | Setup, workflow, routes, Cursor skills, commands |
+| [COURSE_STRUCTURE.md](COURSE_STRUCTURE.md) | Content hierarchy and metadata contract |
+| [frontend/ARCHITECTURE-FRONT.md](frontend/ARCHITECTURE-FRONT.md) | Learner navigation journey |
+| [frontend/ARCHITECTURE.md](frontend/ARCHITECTURE.md) | Routes, layers, score persistence |
+| [frontend/DESIGN.md](frontend/DESIGN.md) | Design tokens, glass UI, quiz feedback |
+| [docs/meta-schemas.md](docs/meta-schemas.md) | `*.meta.json` schemas |
 
 ---
 
 ## License & contribution
 
-This is a private repository (`"private": true` in `package.json`). To extend content, follow the topic graph in [`graph/course.graph.txt`](graph/course.graph.txt) and use the authoring skills documented in [Getting Started](docs/GETTING_STARTED.md) — never invent topics outside their corresponding graph node.
+Private repository (`"private": true`). Extend content via [`graph/course.graph.txt`](graph/course.graph.txt) and authoring skills in [Getting Started](docs/GETTING_STARTED.md) — never invent topics outside their graph node.
