@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import type { CourseTab, DrawerMode, DrawerTab } from "../../domain/types/navigation";
+import type { CourseTab, DrawerTab } from "../../domain/types/navigation";
 import type { ReaderItem, ReaderTab } from "../../domain/types/reader";
 import { closeReaderBeforeNavigate } from "../usecases/navigateWithCleanup";
 import { useContentReaderStore } from "../stores/contentReaderStore";
@@ -9,8 +9,7 @@ import { useQuizSessionStore } from "../stores/quizSessionStore";
 
 const VALID_TABS: CourseTab[] = ["readme", "examples", "projects", "quiz"];
 const VALID_READER_TABS: ReaderTab[] = ["folders", "explanation", "files", "delivery"];
-const VALID_DRAWER_MODES: DrawerMode[] = ["quiz", "project"];
-const VALID_DRAWER_TABS: DrawerTab[] = ["explanation", "files", "delivery"];
+const VALID_PROJECT_TABS: DrawerTab[] = ["explanation", "files", "delivery"];
 
 function parseCourseTab(value: string | null): CourseTab {
   if (value && VALID_TABS.includes(value as CourseTab)) return value as CourseTab;
@@ -22,18 +21,43 @@ function parseReaderTab(value: string | null): ReaderTab {
   return "explanation";
 }
 
-function parseDrawerMode(value: string | null): DrawerMode | null {
-  if (value && VALID_DRAWER_MODES.includes(value as DrawerMode)) return value as DrawerMode;
-  return null;
+function parseProjectTab(value: string | null): DrawerTab {
+  if (value && VALID_PROJECT_TABS.includes(value as DrawerTab)) return value as DrawerTab;
+  return "files";
 }
 
-function parseDrawerTab(value: string | null): DrawerTab {
-  if (value && VALID_DRAWER_TABS.includes(value as DrawerTab)) return value as DrawerTab;
-  return "explanation";
+function modulePath(courseId: string, moduleId: string): string {
+  return `/course/${encodeURIComponent(courseId)}/module/${encodeURIComponent(moduleId)}`;
 }
 
 function lessonPath(courseId: string, moduleId: string, lessonId: string): string {
   return `/course/${encodeURIComponent(courseId)}/module/${encodeURIComponent(moduleId)}/lesson/${encodeURIComponent(lessonId)}`;
+}
+
+function moduleQuizPath(courseId: string, moduleId: string, quizId: string): string {
+  return `${modulePath(courseId, moduleId)}/quiz/${encodeURIComponent(quizId)}`;
+}
+
+function lessonQuizPath(
+  courseId: string,
+  moduleId: string,
+  lessonId: string,
+  quizId: string,
+): string {
+  return `${lessonPath(courseId, moduleId, lessonId)}/quiz/${encodeURIComponent(quizId)}`;
+}
+
+function lessonProjectPath(
+  courseId: string,
+  moduleId: string,
+  lessonId: string,
+  projectId: string,
+  tab?: DrawerTab,
+): string {
+  const base = `${lessonPath(courseId, moduleId, lessonId)}/project/${encodeURIComponent(projectId)}`;
+  if (!tab || tab === "explanation") return base;
+  const params = new URLSearchParams({ tab });
+  return `${base}?${params.toString()}`;
 }
 
 export function useAppNavigation() {
@@ -61,56 +85,53 @@ export function useAppNavigation() {
   const goModule = useCallback(
     (courseId: string, moduleId: string) => {
       closeReaderBeforeNavigate();
-      navigate(
-        `/course/${encodeURIComponent(courseId)}/module/${encodeURIComponent(moduleId)}`,
-      );
+      navigate(modulePath(courseId, moduleId));
     },
     [navigate],
   );
 
   const goLesson = useCallback(
-    (courseId: string, moduleId: string, lessonId: string, drawer?: DrawerMode) => {
-      const params = new URLSearchParams();
-      if (drawer) params.set("drawer", drawer);
-      const query = params.toString();
-      navigate(`${lessonPath(courseId, moduleId, lessonId)}${query ? `?${query}` : ""}`);
-    },
-    [navigate],
-  );
-
-  const openLessonDrawer = useCallback(
-    (
-      courseId: string,
-      moduleId: string,
-      lessonId: string,
-      mode: DrawerMode,
-      id: string,
-      drawerTab?: DrawerTab,
-    ) => {
-      const params = new URLSearchParams();
-      params.set("drawer", mode);
-      if (mode === "quiz") params.set("quiz", id);
-      if (mode === "project") params.set("project", id);
-      if (drawerTab && drawerTab !== "explanation") params.set("drawerTab", drawerTab);
-      if (mode === "quiz") useQuizSessionStore.getState().start(id);
-      navigate(`${lessonPath(courseId, moduleId, lessonId)}?${params.toString()}`);
-    },
-    [navigate],
-  );
-
-  const closeLessonDrawer = useCallback(
     (courseId: string, moduleId: string, lessonId: string) => {
-      useQuizSessionStore.getState().reset();
+      closeReaderBeforeNavigate();
       navigate(lessonPath(courseId, moduleId, lessonId));
     },
     [navigate],
   );
 
-  const setLessonDrawerTab = useCallback(
-    (drawerTab: DrawerTab) => {
+  const goLessonQuiz = useCallback(
+    (courseId: string, moduleId: string, lessonId: string, quizId: string) => {
+      useQuizSessionStore.getState().start(quizId);
+      navigate(lessonQuizPath(courseId, moduleId, lessonId, quizId));
+    },
+    [navigate],
+  );
+
+  const goLessonProject = useCallback(
+    (
+      courseId: string,
+      moduleId: string,
+      lessonId: string,
+      projectId: string,
+      tab?: DrawerTab,
+    ) => {
+      navigate(lessonProjectPath(courseId, moduleId, lessonId, projectId, tab));
+    },
+    [navigate],
+  );
+
+  const goModuleQuiz = useCallback(
+    (courseId: string, moduleId: string, quizId: string) => {
+      useQuizSessionStore.getState().start(quizId);
+      navigate(moduleQuizPath(courseId, moduleId, quizId));
+    },
+    [navigate],
+  );
+
+  const setProjectTab = useCallback(
+    (tab: DrawerTab) => {
       const params = new URLSearchParams(searchParams);
-      if (drawerTab === "explanation") params.delete("drawerTab");
-      else params.set("drawerTab", drawerTab);
+      if (tab === "explanation" || tab === "files") params.delete("tab");
+      else params.set("tab", tab);
       setSearchParams(params, { replace: true });
     },
     [searchParams, setSearchParams],
@@ -151,16 +172,6 @@ export function useAppNavigation() {
     setSearchParams(params, { replace: true });
   }, [searchParams, setSearchParams]);
 
-  const openModuleQuiz = useCallback(
-    (courseId: string, moduleId: string, quizId: string) => {
-      useQuizSessionStore.getState().start(quizId);
-      navigate(
-        `/course/${encodeURIComponent(courseId)}/module/${encodeURIComponent(moduleId)}?quiz=${encodeURIComponent(quizId)}`,
-      );
-    },
-    [navigate],
-  );
-
   const openQuiz = useCallback(
     (courseId: string, quizId: string) => {
       closeReaderBeforeNavigate();
@@ -177,7 +188,6 @@ export function useAppNavigation() {
     useQuizSessionStore.getState().reset();
     const params = new URLSearchParams(searchParams);
     params.delete("quiz");
-    if (params.get("tab") === "quiz") params.set("tab", "quiz");
     setSearchParams(params, { replace: true });
   }, [searchParams, setSearchParams]);
 
@@ -197,19 +207,18 @@ export function useAppNavigation() {
     goCourse,
     goModule,
     goLesson,
-    openLessonDrawer,
-    closeLessonDrawer,
-    setLessonDrawerTab,
+    goLessonQuiz,
+    goLessonProject,
+    goModuleQuiz,
+    setProjectTab,
     setTab,
     openReader,
     closeReader,
-    openModuleQuiz,
     openQuiz,
     closeQuiz,
     setReaderTab,
     parseCourseTab,
     parseReaderTab,
-    parseDrawerMode,
-    parseDrawerTab,
+    parseProjectTab,
   };
 }

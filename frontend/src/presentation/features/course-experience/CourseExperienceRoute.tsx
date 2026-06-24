@@ -13,6 +13,7 @@ import { getQuizById } from "../../../application/selectors/quizSelectors";
 import { useCatalog } from "../../../application/hooks/useCatalog";
 import { useCourse } from "../../../application/hooks/useCourse";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
+import { useTranslation } from "../../../application/hooks/useTranslation";
 import { useCourseExperienceStore } from "../../../application/stores/courseExperienceStore";
 import { useContentReaderStore } from "../../../application/stores/contentReaderStore";
 import { useQuizSessionStore, useQuizProgressStore } from "../../../application/stores/quizSessionStore";
@@ -28,6 +29,7 @@ import { QuizSessionPanel } from "../quiz/components/QuizSessionPanel";
 
 export function CourseExperienceRoute() {
   const { courseId = "" } = useParams();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const { course, status, error, load, reload } = useCourse(courseId);
   const { courses } = useCatalog();
@@ -83,13 +85,13 @@ export function CourseExperienceRoute() {
   }, [tab]);
 
   if (status === "loading" || status === "idle") {
-    return <LoadingState message="Loading course…" />;
+    return <LoadingState message={t("course.loading")} />;
   }
 
   if (status === "error") {
     return (
       <ErrorPanel
-        title="Failed to load course catalog."
+        title={t("error.loadCatalogDetailed")}
         message={error ?? undefined}
         onRetry={() => void reload()}
       />
@@ -99,12 +101,12 @@ export function CourseExperienceRoute() {
   if (!course) {
     return (
       <ErrorPanel
-        title="Course not found."
-        message="The course may have been removed or the link is invalid."
+        title={t("error.courseNotFound")}
+        message={t("course.notFoundMessage")}
         action={
           <Button variant="secondary" onClick={goCatalog}>
             <Icon icon={ArrowLeft} />
-            Back to catalog
+            {t("course.backToCatalog")}
           </Button>
         }
       />
@@ -123,9 +125,9 @@ export function CourseExperienceRoute() {
   return (
     <section className="grid gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-        <Button variant="secondary" onClick={goCatalog} title="Back to catalog">
+        <Button variant="secondary" onClick={goCatalog} title={t("course.backToCatalog")}>
           <Icon icon={ArrowLeft} />
-          Back
+          {t("course.back")}
         </Button>
         <CourseTabBar value={tab} onValueChange={(next) => setTab(courseId, next)} />
       </div>

@@ -1,15 +1,18 @@
 import clsx from "clsx";
 import { Moon, Sun } from "lucide-react";
 import type { AppTheme } from "../../../domain/types/theme";
+import { useTranslation } from "../../../application/hooks/useTranslation";
 import { useThemeStore } from "../../../application/stores/themeStore";
 import { Button, Icon } from "../../design-system";
 
-const OPTIONS: { value: AppTheme; label: string; icon: typeof Sun }[] = [
-  { value: "light", label: "Light", icon: Sun },
-  { value: "dark", label: "Dark", icon: Moon },
-];
+const OPTIONS: { value: AppTheme; labelKey: "theme.light" | "theme.dark"; icon: typeof Sun }[] =
+  [
+    { value: "light", labelKey: "theme.light", icon: Sun },
+    { value: "dark", labelKey: "theme.dark", icon: Moon },
+  ];
 
 export function ThemeToggle() {
+  const { t } = useTranslation();
   const theme = useThemeStore((s) => s.theme);
   const setTheme = useThemeStore((s) => s.setTheme);
 
@@ -17,7 +20,7 @@ export function ThemeToggle() {
     <div
       className="inline-flex rounded-panel border border-border0 bg-surfacePanel p-0.5"
       role="group"
-      aria-label="Color theme"
+      aria-label={t("theme.label")}
     >
       {OPTIONS.map((option) => (
         <Button
@@ -33,7 +36,7 @@ export function ThemeToggle() {
           onClick={() => setTheme(option.value)}
         >
           <Icon icon={option.icon} size={16} />
-          {option.label}
+          {t(option.labelKey)}
         </Button>
       ))}
     </div>

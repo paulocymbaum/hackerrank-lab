@@ -5,13 +5,13 @@ import { useContentReader } from "../../../application/hooks/useContentReader";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
 import { useCourse } from "../../../application/hooks/useCourse";
 import { useProjectProgressStore } from "../../../application/stores/projectProgressStore";
-import { parentPath, humanPathSegments } from "../../shared/utils/pathUtils";
+import { humanPathSegments } from "../../shared/utils/pathUtils";
 import { Dialog, Button } from "../../design-system";
 import { LessonExplanationPanel } from "../lesson-workspace/components/LessonExplanationPanel";
 import { ReaderHeader } from "./components/ReaderHeader";
 import { ReaderTabBar } from "./components/ReaderTabBar";
 import { FolderBrowser } from "./components/FolderBrowser";
-import { FilePreview } from "./components/FilePreview";
+import { ProjectFileExplorer } from "./components/ProjectFileExplorer";
 import { ProjectDeliveryPanel } from "./components/ProjectDeliveryPanel";
 import { ProjectStatusBadge } from "../course-experience/components/ProjectStatusBadge";
 
@@ -25,26 +25,13 @@ function getExplanationMarkdown(item: ReaderItem, entries: ReaderEntry[], cwd: s
 export function ContentReaderDialog() {
   const { courseId = "" } = useParams();
   const { course } = useCourse(courseId);
-  const { isOpen, item, tab, cwd, selectedFilePath, close, setTab, setCwd, selectFile } =
-    useContentReader();
+  const { isOpen, item, tab, cwd, close, setTab, setCwd, selectFile } = useContentReader();
   const { closeReader, setReaderTab } = useAppNavigation();
   const getProjectStatus = useProjectProgressStore((s) => s.getStatus);
   const markProjectDoing = useProjectProgressStore((s) => s.markProjectDoing);
 
   const entries = item?.entries ?? [];
 
-  const children = useMemo(
-    () =>
-      entries
-        .filter((e) => e.path !== cwd && parentPath(e.path) === cwd)
-        .sort((a, b) => {
-          if (a.kind !== b.kind) return a.kind === "dir" ? -1 : 1;
-          return a.path.localeCompare(b.path);
-        }),
-    [entries, cwd],
-  );
-
-  const filesInCwd = children.filter((c) => c.kind === "file");
   const showFolders = item?.kind === "project";
   const showDelivery = item?.kind === "project";
 
@@ -121,17 +108,7 @@ export function ContentReaderDialog() {
         />
       ) : null}
 
-      {tab === "files" ? (
-        <FilePreview
-          entries={entries}
-          cwd={cwd}
-          filesInCwd={filesInCwd}
-          selectedFilePath={selectedFilePath}
-          showUp={item.kind === "project"}
-          onCwdChange={setCwd}
-          onSelectFile={selectFile}
-        />
-      ) : null}
+      {tab === "files" ? <ProjectFileExplorer entries={entries} /> : null}
 
       {tab === "delivery" && showDelivery && item.projectId && item.rootPath ? (
         <ProjectDeliveryPanel

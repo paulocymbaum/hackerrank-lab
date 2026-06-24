@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { Trophy, RotateCcw } from "lucide-react";
 import type { QuizAttempt } from "../../../../domain/types/quiz";
 import type { CoursePointsWithMax } from "../../../../domain/types/quizScore";
+import { useTranslation } from "../../../../application/hooks/useTranslation";
 import { Card, Button, Icon } from "../../../design-system";
 import { ScoreProgressRow } from "../../../shared/score";
 
@@ -19,6 +20,7 @@ export function QuizResultsPanel(props: {
   onRetry: () => void;
   onBackToList: () => void;
 }) {
+  const { t } = useTranslation();
   const pct =
     props.attempt.total > 0
       ? Math.round((props.attempt.score / props.attempt.total) * 100)
@@ -55,39 +57,40 @@ export function QuizResultsPanel(props: {
                 tier === "danger" && "text-dangerText",
               )}
             >
-              {props.attempt.score} / {props.attempt.total} correct ({pct}%)
+              {t("quiz.scoreSummary", {
+                score: props.attempt.score,
+                total: props.attempt.total,
+                pct,
+              })}
             </p>
             <p className="m-0 mt-2 text-body text-text1">
-              You finished &ldquo;{props.quizTitle}&rdquo;. Review explanations and try again to
-              improve your score.
+              {t("quiz.finishedMessage", { title: props.quizTitle })}
             </p>
           </div>
         </div>
 
         <div className="mt-4 rounded-panel border border-border0 bg-surfaceControl px-3 py-2">
           <ScoreProgressRow
-            label="Course score"
+            label={t("course.score")}
             metric={{ value: props.coursePoints.totalPoints, max: props.coursePoints.totalMax }}
             size="xs"
           />
           {props.quizPointsDelta > 0 ? (
             <p className="m-0 mt-2 text-meta text-successText">
-              +{props.quizPointsDelta} quiz pts added to your course total
+              {t("quiz.pointsAdded", { delta: props.quizPointsDelta })}
             </p>
           ) : (
-            <p className="m-0 mt-2 text-meta text-text1">
-              Your quiz total did not change — beat your previous best to earn more points.
-            </p>
+            <p className="m-0 mt-2 text-meta text-text1">{t("quiz.noPointsChange")}</p>
           )}
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="primary" size="md" onClick={props.onRetry}>
             <Icon icon={RotateCcw} />
-            Try again
+            {t("quiz.tryAgain")}
           </Button>
           <Button variant="secondary" size="md" onClick={props.onBackToList}>
-            Back to quizzes
+            {t("quiz.backToQuizzes")}
           </Button>
         </div>
       </div>

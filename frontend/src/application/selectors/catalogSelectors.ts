@@ -23,6 +23,18 @@ export function getLessonsForModule(course: Course, moduleId: string): Lesson[] 
   return getModuleById(course, moduleId)?.lessons ?? [];
 }
 
+export function getProjectById(
+  course: Course,
+  moduleId: string,
+  projectId: string,
+): Project | null {
+  return getModuleById(course, moduleId)?.projects.find((p) => p.id === projectId) ?? null;
+}
+
+export function getProjectsForModule(course: Course, moduleId: string): Project[] {
+  return getModuleById(course, moduleId)?.projects ?? [];
+}
+
 export function getProjectsForLesson(
   course: Course,
   moduleId: string,

@@ -1,38 +1,23 @@
 import { useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   getLessonById,
   getModuleById,
   getProjectsForLesson,
   getQuizzesForLesson,
 } from "../../../application/selectors/catalogSelectors";
-import { getQuizById } from "../../../application/selectors/quizSelectors";
 import { useCourse } from "../../../application/hooks/useCourse";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
-import { useQuizSessionStore } from "../../../application/stores/quizSessionStore";
 import { loadCourseScores } from "../../../application/usecases/courseScores";
-import { Drawer, ErrorPanel, LoadingState } from "../../design-system";
+import { ErrorPanel, LoadingState } from "../../design-system";
+import { workspaceSplitClassName } from "../../shared/workspaceLayout";
 import { LessonExplanationPanel } from "./components/LessonExplanationPanel";
-import { LessonActivitiesBar } from "./components/LessonActivitiesBar";
-import { ProjectWorkspacePanel } from "./components/ProjectWorkspacePanel";
-import { QuizDrawerPanel } from "./components/QuizDrawerPanel";
+import { LessonActivitiesSidebar } from "./components/LessonActivitiesSidebar";
 
 export function LessonWorkspaceRoute() {
   const { courseId = "", moduleId = "", lessonId = "" } = useParams();
-  const [searchParams] = useSearchParams();
   const { course, status, error, load, reload } = useCourse(courseId);
-  const {
-    openLessonDrawer,
-    closeLessonDrawer,
-    setLessonDrawerTab,
-    parseDrawerMode,
-    parseDrawerTab,
-  } = useAppNavigation();
-
-  const drawerMode = parseDrawerMode(searchParams.get("drawer"));
-  const drawerTab = parseDrawerTab(searchParams.get("drawerTab"));
-  const activeQuizId = searchParams.get("quiz");
-  const activeProjectId = searchParams.get("project");
+  const { goLessonQuiz, goLessonProject } = useAppNavigation();
 
   useEffect(() => {
     if (status === "idle") void load();
@@ -42,12 +27,6 @@ export function LessonWorkspaceRoute() {
     if (!courseId || status !== "ready") return;
     void loadCourseScores(courseId);
   }, [courseId, status]);
-
-  useEffect(() => {
-    if (drawerMode !== "quiz" || !activeQuizId) return;
-    const session = useQuizSessionStore.getState();
-    if (session.quizId !== activeQuizId) session.start(activeQuizId);
-  }, [drawerMode, activeQuizId]);
 
   if (status === "loading" || status === "idle") {
     return <LoadingState message="Loading lesson…" />;
@@ -76,67 +55,27 @@ export function LessonWorkspaceRoute() {
   const lessonQuizzes = getQuizzesForLesson(course, moduleId, lessonId);
   const lessonProjects = getProjectsForLesson(course, moduleId, lessonId);
 
-  const activeQuiz = activeQuizId ? getQuizById(course, activeQuizId) : null;
-  const activeProject = activeProjectId
-    ? lessonProjects.find((p) => p.id === activeProjectId) ?? null
-    : null;
-
-  const drawerOpen = drawerMode === "quiz" || drawerMode === "project";
-  const drawerTitle =
-    drawerMode === "quiz"
-      ? (activeQuiz?.title ?? "Quiz")
-      : drawerMode === "project"
-        ? (activeProject?.title ?? "Project")
-        : undefined;
-
   return (
-    <section className="flex min-h-[70vh] flex-col gap-0 overflow-hidden rounded-panel border border-border0 lg:flex-row">
-      <main className="flex min-h-0 min-w-0 flex-1 flex-col">
+    <section className={workspaceSplitClassName}>
+      <main className="min-h-0 overflow-y-auto">
         <LessonExplanationPanel
           title={lesson.title}
           markdown={lesson.markdown}
-          showTitle={false}
-        />
-        <LessonActivitiesBar
-          courseId={courseId}
-          lessonId={lessonId}
-          quizzes={lessonQuizzes}
-          projects={lessonProjects}
-          activeQuizId={activeQuizId}
-          activeProjectId={activeProjectId}
-          onOpenQuiz={(quizId) =>
-            openLessonDrawer(courseId, moduleId, lessonId, "quiz", quizId)
-          }
-          onOpenProject={(projectId) =>
-            openLessonDrawer(courseId, moduleId, lessonId, "project", projectId, "files")
-          }
+          showTitle
         />
       </main>
 
-      <Drawer
-        open={drawerOpen}
-        onClose={() => closeLessonDrawer(courseId, moduleId, lessonId)}
-        title={drawerTitle}
-      >
-        {drawerMode === "quiz" && activeQuiz ? (
-          <QuizDrawerPanel
-            courseId={courseId}
-            course={course}
-            quiz={activeQuiz}
-            onClose={() => closeLessonDrawer(courseId, moduleId, lessonId)}
-          />
-        ) : null}
-        {drawerMode === "project" && activeProject ? (
-          <ProjectWorkspacePanel
-            courseId={courseId}
-            courseTitle={course.title}
-            project={activeProject}
-            drawerTab={drawerTab}
-            onDrawerTabChange={setLessonDrawerTab}
-            embedded
-          />
-        ) : null}
-      </Drawer>
+      <LessonActivitiesSidebar
+        courseId={courseId}
+        lessonId={lessonId}
+        lessonTitle={lesson.title}
+        quizzes={lessonQuizzes}
+        projects={lessonProjects}
+        onOpenQuiz={(quizId) => goLessonQuiz(courseId, moduleId, lessonId, quizId)}
+        onOpenProject={(projectId) =>
+          goLessonProject(courseId, moduleId, lessonId, projectId, "files")
+        }
+      />
     </section>
   );
 }

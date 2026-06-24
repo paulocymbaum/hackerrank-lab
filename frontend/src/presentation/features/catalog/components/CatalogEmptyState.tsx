@@ -1,10 +1,13 @@
 import { EmptyState } from "../../../design-system";
+import { useTranslation } from "../../../../application/hooks/useTranslation";
 
 export function CatalogEmptyState() {
+  const { t } = useTranslation();
+
   return (
     <EmptyState
-      title="No courses found."
-      description="Add modules under course/ and run npm run catalog:generate."
+      title={t("catalog.empty.title")}
+      description={t("catalog.empty.description")}
     />
   );
 }

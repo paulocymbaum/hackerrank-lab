@@ -1,18 +1,14 @@
 import clsx from "clsx";
 import type { ProjectStatus } from "../../../../domain/types/quizScore";
 import { PROJECT_POINTS_WEIGHT } from "../../../../domain/types/quizScore";
-
-const STATUS_LABELS: Record<ProjectStatus, string> = {
-  pending: "Pending",
-  doing: "Doing",
-  done: "Done",
-};
+import { useProjectStatusLabels } from "../../../../application/hooks/useLocalizedLabels";
 
 export function ProjectStatusBadge(props: {
   value: ProjectStatus;
   showPoints?: boolean;
   size?: "sm" | "md";
 }) {
+  const statusLabels = useProjectStatusLabels();
   const size = props.size ?? "sm";
 
   return (
@@ -27,7 +23,7 @@ export function ProjectStatusBadge(props: {
             "border-successBorder bg-successFill text-successText",
         )}
       >
-        {STATUS_LABELS[props.value]}
+        {statusLabels[props.value]}
       </span>
       {props.showPoints && props.value === "done" ? (
         <span className="text-meta font-medium text-successText">+{PROJECT_POINTS_WEIGHT} pts</span>

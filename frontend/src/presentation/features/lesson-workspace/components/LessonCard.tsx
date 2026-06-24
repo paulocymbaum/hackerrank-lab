@@ -4,30 +4,9 @@ import type { Quiz } from "../../../../domain/types/quiz";
 import { useProjectProgressStore } from "../../../../application/stores/projectProgressStore";
 import { useQuizProgressStore } from "../../../../application/stores/quizSessionStore";
 import { Card, ProgressBar } from "../../../design-system";
-
-function lessonProgress(input: {
-  courseId: string;
-  lessonId: string;
-  quizzes: Quiz[];
-  projects: Project[];
-}): { done: number; total: number } {
-  const { courseId, lessonId, quizzes, projects } = input;
-  const quizStore = useQuizProgressStore.getState();
-  const projectStore = useProjectProgressStore.getState();
-
-  const items: boolean[] = [];
-  for (const quiz of quizzes) {
-    const progress = quizStore.getProgress(courseId, quiz.id, lessonId);
-    items.push((progress?.bestScore ?? 0) > 0);
-  }
-  for (const project of projects) {
-    const status = projectStore.getStatus(courseId, project.id, lessonId);
-    items.push(status === "done");
-  }
-
-  const done = items.filter(Boolean).length;
-  return { done, total: items.length };
-}
+import {
+  countLessonProgress,
+} from "../../../shared/lessonProgress";
 
 export function LessonCard(props: {
   courseId: string;
@@ -36,11 +15,15 @@ export function LessonCard(props: {
   projects: Project[];
   onOpen: () => void;
 }) {
-  const { done, total } = lessonProgress({
+  const getQuizProgress = useQuizProgressStore((s) => s.getProgress);
+  const getProjectStatus = useProjectProgressStore((s) => s.getStatus);
+  const { done, total } = countLessonProgress({
     courseId: props.courseId,
     lessonId: props.lesson.id,
     quizzes: props.quizzes,
     projects: props.projects,
+    getQuizProgress,
+    getProjectStatus,
   });
 
   return (

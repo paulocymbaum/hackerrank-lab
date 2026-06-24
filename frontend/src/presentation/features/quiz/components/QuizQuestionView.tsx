@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { CheckCircle2, XCircle } from "lucide-react";
 import type { QuizQuestion } from "../../../../domain/types/quiz";
+import { useTranslation } from "../../../../application/hooks/useTranslation";
 import { MarkdownView } from "../../../shared/MarkdownView";
 import { Card, Icon } from "../../../design-system";
 
@@ -37,15 +38,18 @@ export function QuizQuestionView(props: {
   isChecked: boolean;
   onSelect: (optionId: string) => void;
 }) {
+  const { t } = useTranslation();
   const { question, selectedOptionId, isChecked } = props;
   const isCorrect = selectedOptionId === question.correctOptionId;
 
   return (
     <Card variant="panel" className="grid gap-4 p-4">
-      <div className="text-meta font-semibold text-text1">Question {props.questionNumber}</div>
+      <div className="text-meta font-semibold text-text1">
+        {t("quiz.questionNumber", { number: props.questionNumber })}
+      </div>
       <MarkdownView markdown={question.prompt} />
 
-      <ul className="m-0 grid gap-2 p-0" role="listbox" aria-label="Answer options">
+      <ul className="m-0 grid gap-2 p-0" role="listbox" aria-label={t("quiz.answerOptions")}>
         {question.options.map((option) => {
           const isSelected = selectedOptionId === option.id;
           const isCorrectOption = option.id === question.correctOptionId;
@@ -114,7 +118,7 @@ export function QuizQuestionView(props: {
               size={16}
               className={isCorrect ? "text-successIcon" : "text-dangerIcon"}
             />
-            <span>{isCorrect ? "Correct" : "Not quite — review the explanation"}</span>
+            <span>{isCorrect ? t("quiz.correct") : t("quiz.incorrect")}</span>
           </div>
           <MarkdownView markdown={question.explanation} />
         </div>

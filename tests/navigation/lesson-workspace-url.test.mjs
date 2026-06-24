@@ -1,49 +1,60 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 
-function buildLessonUrl(courseId, moduleId, lessonId, params = {}) {
-  const base = `/course/${encodeURIComponent(courseId)}/module/${encodeURIComponent(moduleId)}/lesson/${encodeURIComponent(lessonId)}`;
-  const search = new URLSearchParams();
-  if (params.drawer) search.set("drawer", params.drawer);
-  if (params.quiz) search.set("quiz", params.quiz);
-  if (params.project) search.set("project", params.project);
-  if (params.drawerTab) search.set("drawerTab", params.drawerTab);
-  const query = search.toString();
-  return query ? `${base}?${query}` : base;
+function lessonQuizPath(courseId, moduleId, lessonId, quizId) {
+  return `/course/${encodeURIComponent(courseId)}/module/${encodeURIComponent(moduleId)}/lesson/${encodeURIComponent(lessonId)}/quiz/${encodeURIComponent(quizId)}`;
 }
 
-function parseLessonDrawer(search) {
-  const params = new URLSearchParams(search);
-  return {
-    drawer: params.get("drawer"),
-    quiz: params.get("quiz"),
-    project: params.get("project"),
-    drawerTab: params.get("drawerTab"),
-  };
+function lessonProjectPath(courseId, moduleId, lessonId, projectId, tab) {
+  const base = `/course/${encodeURIComponent(courseId)}/module/${encodeURIComponent(moduleId)}/lesson/${encodeURIComponent(lessonId)}/project/${encodeURIComponent(projectId)}`;
+  if (!tab || tab === "files") return base;
+  return `${base}?tab=${encodeURIComponent(tab)}`;
 }
 
-describe("lesson workspace URL state", () => {
-  it("round-trips quiz drawer params", () => {
-    const url = buildLessonUrl("javascript", "01-javascript-fundamentals", "01.8.1-truthy-vs-falsy", {
-      drawer: "quiz",
-      quiz: "quiz-truthy-falsy",
-    });
-    const query = url.split("?")[1] ?? "";
-    const parsed = parseLessonDrawer(query);
-    assert.equal(parsed.drawer, "quiz");
-    assert.equal(parsed.quiz, "quiz-truthy-falsy");
+function moduleQuizPath(courseId, moduleId, quizId) {
+  return `/course/${encodeURIComponent(courseId)}/module/${encodeURIComponent(moduleId)}/quiz/${encodeURIComponent(quizId)}`;
+}
+
+function parseProjectTab(search) {
+  const tab = new URLSearchParams(search).get("tab");
+  if (tab === "delivery") return "delivery";
+  return "files";
+}
+
+describe("activity routes", () => {
+  it("builds lesson quiz path", () => {
+    const url = lessonQuizPath(
+      "javascript",
+      "01-javascript-fundamentals",
+      "01.8.1-truthy-vs-falsy",
+      "quiz-truthy-falsy",
+    );
+    assert.equal(
+      url,
+      "/course/javascript/module/01-javascript-fundamentals/lesson/01.8.1-truthy-vs-falsy/quiz/quiz-truthy-falsy",
+    );
   });
 
-  it("round-trips project drawer with delivery tab", () => {
-    const url = buildLessonUrl("javascript", "01-javascript-fundamentals", "01.8.1-truthy-vs-falsy", {
-      drawer: "project",
-      project: "001-cli-input-validator",
-      drawerTab: "delivery",
-    });
-    const query = url.split("?")[1] ?? "";
-    const parsed = parseLessonDrawer(query);
-    assert.equal(parsed.drawer, "project");
-    assert.equal(parsed.project, "001-cli-input-validator");
-    assert.equal(parsed.drawerTab, "delivery");
+  it("builds lesson project path with delivery tab", () => {
+    const url = lessonProjectPath(
+      "javascript",
+      "01-javascript-fundamentals",
+      "01.8.1-truthy-vs-falsy",
+      "001-cli-input-validator",
+      "delivery",
+    );
+    assert.equal(
+      url.split("?")[0],
+      "/course/javascript/module/01-javascript-fundamentals/lesson/01.8.1-truthy-vs-falsy/project/001-cli-input-validator",
+    );
+    assert.equal(parseProjectTab(url.split("?")[1] ?? ""), "delivery");
+  });
+
+  it("builds module quiz path", () => {
+    const url = moduleQuizPath("javascript", "01-javascript-fundamentals", "01-fundamentals-check");
+    assert.equal(
+      url,
+      "/course/javascript/module/01-javascript-fundamentals/quiz/01-fundamentals-check",
+    );
   });
 });

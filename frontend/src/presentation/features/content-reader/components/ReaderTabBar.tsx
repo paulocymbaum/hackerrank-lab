@@ -1,5 +1,6 @@
-import type { ReaderTab } from "../../../../domain/types/reader";
 import { BookOpenText, FileText, FolderTree, Package } from "lucide-react";
+import type { ReaderTab } from "../../../../domain/types/reader";
+import { useTranslation } from "../../../../application/hooks/useTranslation";
 import { Icon, Tabs } from "../../../design-system";
 
 export function ReaderTabBar(props: {
@@ -8,14 +9,16 @@ export function ReaderTabBar(props: {
   showFolders: boolean;
   showDelivery?: boolean;
 }) {
+  const { t } = useTranslation();
+
   const items = [
-    { value: "explanation", label: "Explanation", icon: <Icon icon={BookOpenText} /> },
+    { value: "explanation", label: t("tabs.explanation"), icon: <Icon icon={BookOpenText} /> },
     ...(props.showFolders
-      ? [{ value: "folders", label: "Folders", icon: <Icon icon={FolderTree} /> }]
+      ? [{ value: "folders", label: t("tabs.folders"), icon: <Icon icon={FolderTree} /> }]
       : []),
-    { value: "files", label: "Files", icon: <Icon icon={FileText} /> },
+    { value: "files", label: t("tabs.files"), icon: <Icon icon={FileText} /> },
     ...(props.showDelivery
-      ? [{ value: "delivery", label: "Delivery", icon: <Icon icon={Package} /> }]
+      ? [{ value: "delivery", label: t("tabs.delivery"), icon: <Icon icon={Package} /> }]
       : []),
   ];
 

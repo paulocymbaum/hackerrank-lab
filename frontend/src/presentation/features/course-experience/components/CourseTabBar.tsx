@@ -1,21 +1,24 @@
 import { BookOpenText, Brain, ClipboardList, FileText } from "lucide-react";
 import type { CourseTab } from "../../../../domain/types/navigation";
+import { useCourseTabLabels } from "../../../../application/hooks/useLocalizedLabels";
 import { Icon, Tabs } from "../../../design-system";
-
-const TAB_ITEMS = [
-  { value: "readme" as const, label: "README", icon: <Icon icon={FileText} /> },
-  { value: "examples" as const, label: "Examples", icon: <Icon icon={BookOpenText} /> },
-  { value: "projects" as const, label: "Projects", icon: <Icon icon={ClipboardList} /> },
-  { value: "quiz" as const, label: "Quiz", icon: <Icon icon={Brain} /> },
-];
 
 export function CourseTabBar(props: {
   value: CourseTab;
   onValueChange: (tab: CourseTab) => void;
 }) {
+  const labels = useCourseTabLabels();
+
+  const tabItems = [
+    { value: "readme" as const, label: labels.readme, icon: <Icon icon={FileText} /> },
+    { value: "examples" as const, label: labels.examples, icon: <Icon icon={BookOpenText} /> },
+    { value: "projects" as const, label: labels.projects, icon: <Icon icon={ClipboardList} /> },
+    { value: "quiz" as const, label: labels.quiz, icon: <Icon icon={Brain} /> },
+  ];
+
   return (
     <Tabs
-      items={TAB_ITEMS}
+      items={tabItems}
       value={props.value}
       onValueChange={(value) => props.onValueChange(value as CourseTab)}
       listClassName="max-w-full"

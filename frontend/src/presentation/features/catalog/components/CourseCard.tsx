@@ -1,5 +1,6 @@
 import type { Course } from "../../../../domain/types/catalog";
 import { countCourseLessons, isHierarchyCourse } from "../../../../application/selectors/catalogSelectors";
+import { useTranslation } from "../../../../application/hooks/useTranslation";
 import { Button, Card, Icon } from "../../../design-system";
 import { ChevronRight } from "lucide-react";
 import type { MouseEvent } from "react";
@@ -9,6 +10,7 @@ const LEGACY_DUPLICATE_IDS = new Set(["03-asynchronous-javascript-runtime-model-
 
 export function CourseCard(props: { course: Course; courseId: string; onOpen: () => void }) {
   const { course } = props;
+  const { t } = useTranslation();
 
   if (LEGACY_DUPLICATE_IDS.has(course.id) && course.structure === "legacy") {
     return null;
@@ -29,14 +31,14 @@ export function CourseCard(props: { course: Course; courseId: string; onOpen: ()
           <div className="mt-2 flex flex-wrap items-center gap-3 text-meta text-text1">
             {isHierarchyCourse(course) ? (
               <>
-                <span>{moduleCount} modules</span>
-                <span>{lessonCount} lessons</span>
+                <span>{t("catalog.modules", { count: moduleCount })}</span>
+                <span>{t("catalog.lessons", { count: lessonCount })}</span>
               </>
             ) : (
-              <span>{course.lessons.length} examples</span>
+              <span>{t("catalog.examples", { count: course.lessons.length })}</span>
             )}
-            <span>{course.projects.length} projects</span>
-            <span>{course.quizzes.length} quizzes</span>
+            <span>{t("catalog.projects", { count: course.projects.length })}</span>
+            <span>{t("catalog.quizzes", { count: course.quizzes.length })}</span>
             {course.structure === "legacy" ? <span className="text-text2">legacy</span> : null}
             <CourseScoreBadge courseId={props.courseId} course={course} />
           </div>
@@ -48,9 +50,9 @@ export function CourseCard(props: { course: Course; courseId: string; onOpen: ()
             e.stopPropagation();
             props.onOpen();
           }}
-          title="Open course"
+          title={t("catalog.openCourse")}
         >
-          See course
+          {t("catalog.seeCourse")}
           <Icon icon={ChevronRight} />
         </Button>
       </button>

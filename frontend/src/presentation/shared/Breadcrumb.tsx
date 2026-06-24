@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useTranslation } from "../../application/hooks/useTranslation";
 
 export type BreadcrumbSegment = {
   label: string;
@@ -7,10 +8,12 @@ export type BreadcrumbSegment = {
 };
 
 export function Breadcrumb(props: { segments: BreadcrumbSegment[]; className?: string }) {
+  const { t } = useTranslation();
+
   if (props.segments.length === 0) return null;
 
   return (
-    <nav aria-label="Breadcrumb" className={clsx("min-w-0", props.className)}>
+    <nav aria-label={t("nav.breadcrumb")} className={clsx("min-w-0", props.className)}>
       <ol className="m-0 flex flex-wrap items-center gap-1 p-0 text-meta text-text1">
         {props.segments.map((segment, index) => {
           const isLast = index === props.segments.length - 1;
