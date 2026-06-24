@@ -1,6 +1,12 @@
 import type { ProjectDeliveryEntry, ProjectDeliveryReview } from "../../../../domain/types/projectDelivery";
+import type { ReaderEntry } from "../../../../domain/types/reader";
 import { PROJECT_DELIVERY_PASS_SCORE, passesDeliveryReview } from "../../../../domain/types/projectDelivery";
 import { useProjectDelivery } from "../../../../application/hooks/useProjectDelivery";
+import { useTranslation } from "../../../../application/hooks/useTranslation";
+import {
+  appendStarterToDraft,
+  hasProjectStarter,
+} from "../../../../application/usecases/importProjectStarter";
 import { Accordion, Button, EmptyState, ErrorPanel, LoadingState, Textarea } from "../../../design-system";
 import { MarkdownView } from "../../../shared/MarkdownView";
 import { DeliveryPromptToolbar } from "./DeliveryPromptToolbar";
@@ -112,12 +118,16 @@ export function ProjectDeliveryPanel(props: {
   projectTitle: string;
   projectId: string;
   rootPath: string;
+  entries?: ReaderEntry[];
   enabled: boolean;
 }) {
-  const { courseId, courseTitle, projectTitle, projectId, rootPath, enabled } = props;
+  const { courseId, courseTitle, projectTitle, projectId, rootPath, entries = [], enabled } = props;
+  const { t } = useTranslation();
   const { topicTitle } = parseProjectPath(rootPath);
   const { draft, setDraft, deliveries, loading, error, saving, save, canSave } =
     useProjectDelivery({ courseId, projectId, rootPath, enabled });
+
+  const canImportStarter = hasProjectStarter(entries);
 
   const promptContext = {
     courseId,
@@ -163,7 +173,18 @@ export function ProjectDeliveryPanel(props: {
 
         <div className="flex flex-wrap items-center gap-3">
           <Button type="button" variant="primary" disabled={!canSave} onClick={() => void save()}>
-            {saving ? "Saving…" : "Save delivery"}
+            {saving ? t("reader.saving") : t("reader.saveDelivery")}
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={!canImportStarter}
+            title={
+              canImportStarter ? t("delivery.importStarterTooltip") : t("delivery.noStarter")
+            }
+            onClick={() => setDraft((current) => appendStarterToDraft(current, entries))}
+          >
+            {t("delivery.importStarter")}
           </Button>
           {error ? <p className="text-meta text-text1">{error}</p> : null}
         </div>

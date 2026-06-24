@@ -39,7 +39,7 @@ export function ProjectReader(props: {
     courseId,
     courseTitle,
     project,
-    drawerTab = "files",
+    drawerTab = "delivery",
     onDrawerTabChange,
     overlayTab = "explanation",
     overlayCwd: externalCwd,
@@ -75,7 +75,7 @@ export function ProjectReader(props: {
   const filesInCwd = children.filter((c) => c.kind === "file");
   const explanationMarkdown = getExplanationMarkdown(project, entries, cwd);
 
-  const activeDrawerTab = embedded && drawerTab === "explanation" ? "files" : drawerTab;
+  const activeDrawerTab = embedded && drawerTab === "explanation" ? "delivery" : drawerTab;
 
   useEffect(() => {
     const onDelivery =
@@ -129,6 +129,7 @@ export function ProjectReader(props: {
             projectTitle={project.title}
             projectId={project.id}
             rootPath={project.rootPath}
+            entries={entries}
             enabled={overlayTab === "delivery"}
           />
         ) : null}
@@ -195,6 +196,7 @@ export function ProjectReader(props: {
           projectTitle={project.title}
           projectId={project.id}
           rootPath={project.rootPath}
+          entries={entries}
           enabled={activeDrawerTab === "delivery"}
         />
       ) : null}

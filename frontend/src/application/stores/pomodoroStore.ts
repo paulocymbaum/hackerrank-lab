@@ -8,39 +8,50 @@ type PomodoroState = {
   status: PomodoroStatus;
   remainingSeconds: number;
   durationSeconds: number;
+  /** Wall-clock deadline while running — keeps countdown accurate when the tab is backgrounded. */
+  endsAt: number | null;
   start: () => void;
   reset: () => void;
-  tick: () => void;
+  sync: () => void;
 };
 
 export const usePomodoroStore = create<PomodoroState>((set, get) => ({
   status: "idle",
   remainingSeconds: POMODORO_DURATION_SECONDS,
   durationSeconds: POMODORO_DURATION_SECONDS,
+  endsAt: null,
+
   start: () => {
     const { durationSeconds } = get();
     set({
       status: "running",
       remainingSeconds: durationSeconds,
+      endsAt: Date.now() + durationSeconds * 1000,
     });
   },
+
   reset: () => {
     const { durationSeconds } = get();
     set({
       status: "idle",
       remainingSeconds: durationSeconds,
+      endsAt: null,
     });
   },
-  tick: () => {
-    const { status, remainingSeconds } = get();
-    if (status !== "running") return;
 
-    if (remainingSeconds <= 1) {
-      set({ status: "finished", remainingSeconds: 0 });
+  sync: () => {
+    const { status, endsAt, durationSeconds } = get();
+    if (status !== "running" || endsAt === null) return;
+
+    const remaining = Math.max(0, Math.ceil((endsAt - Date.now()) / 1000));
+    if (remaining <= 0) {
+      set({ status: "finished", remainingSeconds: 0, endsAt: null });
       return;
     }
 
-    set({ remainingSeconds: remainingSeconds - 1 });
+    if (remaining !== get().remainingSeconds) {
+      set({ remainingSeconds: remaining });
+    }
   },
 }));
 

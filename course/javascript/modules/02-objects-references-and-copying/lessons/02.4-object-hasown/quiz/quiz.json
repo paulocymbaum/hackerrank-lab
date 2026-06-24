@@ -1,0 +1,69 @@
+{
+  "id": "quiz",
+  "title": "Object.hasOwn Check",
+  "description": "Own properties vs inherited prototype chain.",
+  "lessonId": "02.4-object-hasown",
+  "graphIndex": "02.4",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Given:\n\n```js\nconst base = { shared: true };\nconst user = Object.create(base);\nuser.name = \"Ana\";\n```\n\nWhich is **true**?",
+      "options": [
+        { "id": "a", "text": "`Object.hasOwn(user, \"shared\")` is false" },
+        { "id": "b", "text": "`Object.hasOwn(user, \"shared\")` is true" },
+        { "id": "c", "text": "`\"shared\" in user` is false" },
+        { "id": "d", "text": "`Object.hasOwn(user, \"name\")` is false" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`shared` is on the prototype, not an own property. `\"shared\" in user` is true, but `Object.hasOwn` returns false for inherited keys."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is the difference between `\"key\" in obj` and `Object.hasOwn(obj, \"key\")`?",
+      "options": [
+        { "id": "a", "text": "`in` includes inherited keys; `hasOwn` checks only own properties" },
+        { "id": "b", "text": "They are always identical" },
+        { "id": "c", "text": "`hasOwn` includes inherited keys; `in` does not" },
+        { "id": "d", "text": "`in` only works on arrays" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "The `in` operator walks the prototype chain. `Object.hasOwn` asks whether the property exists directly on the object."
+    },
+    {
+      "id": "q3",
+      "prompt": "For a plain object `record = { id: 1 }`, what is `Object.hasOwn(record, \"toString\")`?",
+      "options": [
+        { "id": "a", "text": "false" },
+        { "id": "b", "text": "true" },
+        { "id": "c", "text": "undefined" },
+        { "id": "d", "text": "throws TypeError" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`toString` is inherited from `Object.prototype`, not an own property of `record`."
+    },
+    {
+      "id": "q4",
+      "prompt": "Why prefer `Object.hasOwn(obj, key)` over `obj.hasOwnProperty(key)` in library code?",
+      "options": [
+        { "id": "a", "text": "Some objects may null out or override `hasOwnProperty`" },
+        { "id": "b", "text": "`hasOwnProperty` includes inherited keys" },
+        { "id": "c", "text": "`Object.hasOwn` is slower but required by syntax" },
+        { "id": "d", "text": "There is no practical difference" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "`Object.hasOwn` is the safe built-in that does not rely on the object possibly missing or overriding `hasOwnProperty`."
+    },
+    {
+      "id": "q5",
+      "prompt": "Given:\n\n```js\nconst config = Object.create({ theme: \"dark\" });\nconfig.lang = \"en\";\nconfig.theme = \"light\";\n```\n\nWhat is `config.theme` and is `\"theme\"` an own property?",
+      "options": [
+        { "id": "a", "text": "`\"light\"`; yes, own property after assignment" },
+        { "id": "b", "text": "`\"dark\"`; no, only inherited" },
+        { "id": "c", "text": "`\"light\"`; no, still inherited" },
+        { "id": "d", "text": "undefined; theme is not accessible" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Assigning `config.theme = \"light\"` creates an own property shadowing the prototype. Reading `config.theme` returns `\"light\"`."
+    }
+  ]
+}

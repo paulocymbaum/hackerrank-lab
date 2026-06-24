@@ -43,7 +43,11 @@ export function LegacyCourseRoute(props: { courseId: string; course: Course }) {
     const item = findReaderItemByPath(courses, readerPath);
     if (!item) return;
 
-    const readerTab = parseReaderTab(searchParams.get("readerTab"));
+    const readerTab = searchParams.has("readerTab")
+      ? parseReaderTab(searchParams.get("readerTab"))
+      : item.kind === "project"
+        ? "delivery"
+        : parseReaderTab(null);
     const current = useContentReaderStore.getState();
     if (current.isOpen && current.item?.path === item.path) {
       if (current.tab !== readerTab) current.setTab(readerTab);
@@ -85,7 +89,7 @@ export function LegacyCourseRoute(props: { courseId: string; course: Course }) {
           courseId={courseId}
           projects={course.projects}
           onOpenProject={(project) =>
-            openReader(courseId, projectToReaderItem(project), "projects")
+            openReader(courseId, projectToReaderItem(project), "projects", "delivery")
           }
         />
       ) : null}

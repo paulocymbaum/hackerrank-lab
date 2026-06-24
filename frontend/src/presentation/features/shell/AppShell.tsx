@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import type { ReactNode } from "react";
 import { useTranslation } from "../../../application/hooks/useTranslation";
+import { usePomodoroTimer } from "../../../application/hooks/usePomodoroTimer";
 import { useLocaleStore } from "../../../application/stores/localeStore";
 import { useThemeStore, applyThemeToDocument } from "../../../application/stores/themeStore";
 import { applyLocaleToDocument } from "../../../infrastructure/i18n/applyLocaleToDocument";
@@ -17,6 +18,8 @@ export function AppShell(props: {
   const theme = useThemeStore((s) => s.theme);
   const locale = useLocaleStore((s) => s.locale);
   const { t } = useTranslation();
+
+  usePomodoroTimer();
 
   useEffect(() => {
     applyThemeToDocument(theme);

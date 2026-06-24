@@ -24,7 +24,7 @@ export const useContentReaderStore = create<ContentReaderState>((set) => ({
     set({
       isOpen: true,
       item,
-      tab: options?.tab ?? "explanation",
+      tab: options?.tab ?? (item.kind === "project" ? "delivery" : "explanation"),
       cwd: "",
       selectedFilePath: null,
     }),

@@ -30,16 +30,8 @@ function playTone(frequency: number, startAt: number, duration: number, volume =
 }
 
 export async function playPomodoroNotification(kind: "finished" | "reset"): Promise<void> {
-  const ctx = getAudioContext();
+  const ctx = await resumePomodoroAudio();
   if (!ctx) return;
-
-  if (ctx.state === "suspended") {
-    try {
-      await ctx.resume();
-    } catch {
-      return;
-    }
-  }
 
   const now = ctx.currentTime;
 
@@ -52,4 +44,20 @@ export async function playPomodoroNotification(kind: "finished" | "reset"): Prom
 
   playTone(523, now, 0.12);
   playTone(784, now + 0.14, 0.16);
+}
+
+/** Resumes the shared AudioContext after a user gesture so notifications can play. */
+export async function resumePomodoroAudio(): Promise<AudioContext | null> {
+  const ctx = getAudioContext();
+  if (!ctx) return null;
+
+  if (ctx.state === "suspended") {
+    try {
+      await ctx.resume();
+    } catch {
+      return null;
+    }
+  }
+
+  return ctx;
 }

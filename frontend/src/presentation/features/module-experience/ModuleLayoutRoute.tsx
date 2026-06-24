@@ -1,20 +1,21 @@
-import { Outlet, useParams, useSearchParams } from "react-router-dom";
-import { getModuleById, getQuizzesForModule } from "../../../application/selectors/catalogSelectors";
-import { getQuizById } from "../../../application/selectors/quizSelectors";
+import { useParams, useSearchParams } from "react-router-dom";
+import type { Course } from "../../../domain/types/catalog";
+import { getModuleById } from "../../../application/selectors/catalogSelectors";
+import { resolveActiveModulePageQuiz } from "../../../application/selectors/moduleSelectors";
 import { useCourseRouteData } from "../../../application/hooks/useCourseRouteData";
 import { useQuizSessionFromUrl } from "../../../application/hooks/useQuizSessionFromUrl";
-import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
+import { useTranslation } from "../../../application/hooks/useTranslation";
 import { AsyncRouteBoundary } from "../../shared/AsyncRouteBoundary";
 import { ErrorPanel } from "../../design-system";
-import { QuizHost } from "../quiz/components/QuizHost";
-import { ModuleContentsDrawer } from "./components/ModuleContentsDrawer";
 import { ModuleLayoutProvider } from "./ModuleLayoutContext";
+import { ModuleQuizPage } from "./ModuleQuizPage";
+import { ModuleShellLayout } from "./ModuleShellLayout";
 
 export function ModuleLayoutRoute() {
   const { courseId = "", moduleId = "" } = useParams();
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const { course, status, error, reload } = useCourseRouteData(courseId);
-  const { goModule, goLesson, openLessonDrawer, openModuleQuiz, closeQuiz } = useAppNavigation();
   const activeQuizId = searchParams.get("quiz");
 
   useQuizSessionFromUrl({
@@ -27,62 +28,58 @@ export function ModuleLayoutRoute() {
       status={status}
       error={error}
       onRetry={reload}
-      loadingMessage="Loading module…"
-      errorTitle="Failed to load course."
-      notFoundTitle="Course not found."
+      loadingMessage={t("module.loading")}
+      errorTitle={t("error.loadCourse")}
+      notFoundTitle={t("error.courseNotFound")}
       isEmpty={status === "ready" && !course}
     >
       {course ? (
-        (() => {
-          const mod = getModuleById(course, moduleId);
-          if (!mod) {
-            return <ErrorPanel title="Module not found." />;
-          }
-
-          const moduleQuizzes = getQuizzesForModule(course, moduleId).filter((q) => !q.lessonId);
-          const activeQuiz = activeQuizId
-            ? getQuizById(course, activeQuizId, { moduleId })
-            : null;
-
-          if (activeQuiz && moduleQuizzes.some((q) => q.id === activeQuiz.id)) {
-            return (
-              <QuizHost
-                layout="page"
-                courseId={courseId}
-                course={course}
-                quiz={activeQuiz}
-                onClose={closeQuiz}
-              />
-            );
-          }
-
-          return (
-            <ModuleLayoutProvider value={{ courseId, moduleId, course, module: mod }}>
-              <section className="flex min-h-[70vh] flex-col lg:flex-row lg:items-stretch">
-                <ModuleContentsDrawer
-                  course={course}
-                  module={mod}
-                  courseId={courseId}
-                  moduleId={moduleId}
-                  onOpenLesson={(lessonId) => goLesson(courseId, moduleId, lessonId)}
-                  onOpenLessonQuiz={(lessonId, quizId) =>
-                    openLessonDrawer(courseId, moduleId, lessonId, "quiz", quizId)
-                  }
-                  onOpenLessonProject={(lessonId, projectId) =>
-                    openLessonDrawer(courseId, moduleId, lessonId, "project", projectId, "files")
-                  }
-                  onOpenModuleQuiz={(quizId) => openModuleQuiz(courseId, moduleId, quizId)}
-                  onOpenModuleContext={() => goModule(courseId, moduleId)}
-                />
-
-                <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-border0 bg-surfacePanel lg:border lg:border-l-0 lg:rounded-r-panel">
-                  <Outlet />
-                </div>
-              </section>
-            </ModuleLayoutProvider>
-          );
-        })()
+        <ModuleLayoutBody
+          courseId={courseId}
+          moduleId={moduleId}
+          course={course}
+          activeQuizId={activeQuizId}
+        />
       ) : null}
     </AsyncRouteBoundary>
+  );
+}
+
+function ModuleLayoutBody(props: {
+  courseId: string;
+  moduleId: string;
+  course: Course;
+  activeQuizId: string | null;
+}) {
+  const { t } = useTranslation();
+  const mod = getModuleById(props.course, props.moduleId);
+
+  if (!mod) {
+    return <ErrorPanel title={t("error.moduleNotFound")} />;
+  }
+
+  const activeModuleQuiz = resolveActiveModulePageQuiz(
+    props.course,
+    props.moduleId,
+    props.activeQuizId,
+  );
+
+  if (activeModuleQuiz) {
+    return (
+      <ModuleQuizPage courseId={props.courseId} course={props.course} quiz={activeModuleQuiz} />
+    );
+  }
+
+  return (
+    <ModuleLayoutProvider
+      value={{
+        courseId: props.courseId,
+        moduleId: props.moduleId,
+        course: props.course,
+        module: mod,
+      }}
+    >
+      <ModuleShellLayout />
+    </ModuleLayoutProvider>
   );
 }

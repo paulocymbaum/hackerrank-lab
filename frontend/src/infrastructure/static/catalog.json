@@ -182,6 +182,14 @@
               "graphIndex": "01.8.3"
             },
             {
+              "id": "01.8.4-typeof-and-array-isarray",
+              "title": "typeof and Array.isArray",
+              "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/README.md",
+              "markdown": "<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:javascript/01-javascript-fundamentals/01.8.4-typeof-and-array-isarray:README.md -->\n\n# typeof and Array.isArray\n\n## Context\nJavaScript's `typeof` operator is useful but has well-known quirks. Arrays are objects, so `typeof []` is `\"object\"`. Use `Array.isArray` when you need to distinguish arrays from plain objects.\n\n## Predict first\n\nWhat prints?\n\n```js\nconsole.log(typeof null);\nconsole.log(typeof []);\nconsole.log(typeof {});\nconsole.log(Array.isArray([]));\nconsole.log(Array.isArray(null));\n```\n\n### What to observe\n- `typeof null` is `\"object\"` (historical bug, kept for compatibility).\n- `typeof []` is `\"object\"`, not `\"array\"`.\n- `Array.isArray([])` is `true`; `Array.isArray(null)` is `false`.\n\n## Explanation\n\n| Value | `typeof` | `Array.isArray` |\n|-------|----------|-----------------|\n| `null` | `\"object\"` | `false` |\n| `[]` | `\"object\"` | `true` |\n| `{}` | `\"object\"` | `false` |\n| `\"hi\"` | `\"string\"` | `false` |\n| `42` | `\"number\"` | `false` |\n| `true` | `\"boolean\"` | `false` |\n| `undefined` | `\"undefined\"` | `false` |\n| `() => {}` | `\"function\"` | `false` |\n\nRule of thumb:\n- Use `typeof x === \"string\"` / `\"number\"` / `\"boolean\"` / `\"undefined\"` for primitives.\n- Use `x === null` to test null (not `typeof`).\n- Use `Array.isArray(x)` to test arrays (not `typeof x === \"object\"` alone).\n\n## What to observe\n\n```js\nfunction classify(value) {\n  if (value === null) return \"null\";\n  if (Array.isArray(value)) return \"array\";\n  return typeof value;\n}\n\nconsole.log(classify(null));    // \"null\"\nconsole.log(classify([]));      // \"array\"\nconsole.log(classify({}));      // \"object\"\n```\n\n## Quick challenge\nWithout running, classify each value: `0`, `\"\"`, `[]`, `{}`, `null`, `undefined`, `\"0\"`.\n\nWhich checks would you use in validation code for each?\n",
+              "moduleId": "01-javascript-fundamentals",
+              "graphIndex": "01.8.4"
+            },
+            {
               "id": "01.8.5-null-undefined-null",
               "title": "null, undefined, == null, ?., ??",
               "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/README.md",
@@ -823,6 +831,41 @@
               "moduleId": "01-javascript-fundamentals",
               "lessonId": "01.8.3-type-coercion",
               "graphIndex": "01.8.3"
+            },
+            {
+              "id": "001-type-guard-cli",
+              "title": "001. Type Guard Cli",
+              "rootPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/projects/001-type-guard-cli",
+              "readmePath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/projects/001-type-guard-cli/README.md",
+              "readmeMarkdown": "# Type Guard CLI\n\n## Problem context\nValidation pipelines receive mixed JSON values. You need a reliable **type label** for logging and routing — without falling into `typeof null === \"object\"` or treating arrays as generic objects.\n\n## Goal\nImplement `classifyValue(value)` that returns one of: `\"null\"`, `\"array\"`, `\"object\"`, `\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"function\"`, `\"bigint\"`, `\"symbol\"`.\n\nCLI reads one JSON value from `stdin` and prints the label as a plain string line.\n\n## Functional requirements\n- [ ] Implement `classifyValue(value)` with these rules:\n  - [ ] `null` → `\"null\"` (not `\"object\"`)\n  - [ ] Arrays → `\"array\"` (use `Array.isArray`)\n  - [ ] Plain objects → `\"object\"`\n  - [ ] Primitives → matching `typeof` result (`\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"bigint\"`, `\"symbol\"`)\n  - [ ] Functions → `\"function\"`\n- [ ] CLI reads one JSON value from `stdin` (any JSON type).\n- [ ] Print exactly one label line to `stdout`.\n- [ ] On invalid JSON input, print `ERROR: invalid JSON`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Explicit null check before `typeof`\n- [ ] Deterministic output\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use loose equality for type detection\n- [ ] Order checks: `null` first, then `Array.isArray`, then remaining types\n\n## Acceptance criteria\n- [ ] `null` → `null`\n- [ ] `[]` → `array`\n- [ ] `{}` → `object`\n- [ ] `\"hi\"` → `string`\n- [ ] `0` → `number`\n- [ ] `true` → `boolean`\n- [ ] `undefined` (JSON absent value handled via parsing strategy or literal) → `undefined`\n\n## Example data\n\nInput (stdin):\n\n```json\n[]\n```\n\nOutput (stdout):\n\n```\narray\n```\n\nInput:\n\n```json\nnull\n```\n\nOutput:\n\n```\nnull\n```\n\n## Suggested plan (no solution)\n1. Parse stdin as JSON.\n2. If `value === null`, return `\"null\"`.\n3. If `Array.isArray(value)`, return `\"array\"`.\n4. Otherwise return `typeof value` (covers object, string, number, boolean, undefined, function, bigint, symbol).\n5. Print label without extra JSON quoting.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept multiple JSON lines and print one label per line\n- [ ] Reject `NaN` with a dedicated label or error\n",
+              "entries": [
+                {
+                  "path": "",
+                  "kind": "dir",
+                  "readmeMarkdown": "# Type Guard CLI\n\n## Problem context\nValidation pipelines receive mixed JSON values. You need a reliable **type label** for logging and routing — without falling into `typeof null === \"object\"` or treating arrays as generic objects.\n\n## Goal\nImplement `classifyValue(value)` that returns one of: `\"null\"`, `\"array\"`, `\"object\"`, `\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"function\"`, `\"bigint\"`, `\"symbol\"`.\n\nCLI reads one JSON value from `stdin` and prints the label as a plain string line.\n\n## Functional requirements\n- [ ] Implement `classifyValue(value)` with these rules:\n  - [ ] `null` → `\"null\"` (not `\"object\"`)\n  - [ ] Arrays → `\"array\"` (use `Array.isArray`)\n  - [ ] Plain objects → `\"object\"`\n  - [ ] Primitives → matching `typeof` result (`\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"bigint\"`, `\"symbol\"`)\n  - [ ] Functions → `\"function\"`\n- [ ] CLI reads one JSON value from `stdin` (any JSON type).\n- [ ] Print exactly one label line to `stdout`.\n- [ ] On invalid JSON input, print `ERROR: invalid JSON`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Explicit null check before `typeof`\n- [ ] Deterministic output\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use loose equality for type detection\n- [ ] Order checks: `null` first, then `Array.isArray`, then remaining types\n\n## Acceptance criteria\n- [ ] `null` → `null`\n- [ ] `[]` → `array`\n- [ ] `{}` → `object`\n- [ ] `\"hi\"` → `string`\n- [ ] `0` → `number`\n- [ ] `true` → `boolean`\n- [ ] `undefined` (JSON absent value handled via parsing strategy or literal) → `undefined`\n\n## Example data\n\nInput (stdin):\n\n```json\n[]\n```\n\nOutput (stdout):\n\n```\narray\n```\n\nInput:\n\n```json\nnull\n```\n\nOutput:\n\n```\nnull\n```\n\n## Suggested plan (no solution)\n1. Parse stdin as JSON.\n2. If `value === null`, return `\"null\"`.\n3. If `Array.isArray(value)`, return `\"array\"`.\n4. Otherwise return `typeof value` (covers object, string, number, boolean, undefined, function, bigint, symbol).\n5. Print label without extra JSON quoting.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept multiple JSON lines and print one label per line\n- [ ] Reject `NaN` with a dedicated label or error\n"
+                },
+                {
+                  "path": "solution",
+                  "kind": "dir"
+                },
+                {
+                  "path": "starter",
+                  "kind": "dir"
+                },
+                {
+                  "path": "README.md",
+                  "kind": "file",
+                  "content": "# Type Guard CLI\n\n## Problem context\nValidation pipelines receive mixed JSON values. You need a reliable **type label** for logging and routing — without falling into `typeof null === \"object\"` or treating arrays as generic objects.\n\n## Goal\nImplement `classifyValue(value)` that returns one of: `\"null\"`, `\"array\"`, `\"object\"`, `\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"function\"`, `\"bigint\"`, `\"symbol\"`.\n\nCLI reads one JSON value from `stdin` and prints the label as a plain string line.\n\n## Functional requirements\n- [ ] Implement `classifyValue(value)` with these rules:\n  - [ ] `null` → `\"null\"` (not `\"object\"`)\n  - [ ] Arrays → `\"array\"` (use `Array.isArray`)\n  - [ ] Plain objects → `\"object\"`\n  - [ ] Primitives → matching `typeof` result (`\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"bigint\"`, `\"symbol\"`)\n  - [ ] Functions → `\"function\"`\n- [ ] CLI reads one JSON value from `stdin` (any JSON type).\n- [ ] Print exactly one label line to `stdout`.\n- [ ] On invalid JSON input, print `ERROR: invalid JSON`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Explicit null check before `typeof`\n- [ ] Deterministic output\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use loose equality for type detection\n- [ ] Order checks: `null` first, then `Array.isArray`, then remaining types\n\n## Acceptance criteria\n- [ ] `null` → `null`\n- [ ] `[]` → `array`\n- [ ] `{}` → `object`\n- [ ] `\"hi\"` → `string`\n- [ ] `0` → `number`\n- [ ] `true` → `boolean`\n- [ ] `undefined` (JSON absent value handled via parsing strategy or literal) → `undefined`\n\n## Example data\n\nInput (stdin):\n\n```json\n[]\n```\n\nOutput (stdout):\n\n```\narray\n```\n\nInput:\n\n```json\nnull\n```\n\nOutput:\n\n```\nnull\n```\n\n## Suggested plan (no solution)\n1. Parse stdin as JSON.\n2. If `value === null`, return `\"null\"`.\n3. If `Array.isArray(value)`, return `\"array\"`.\n4. Otherwise return `typeof value` (covers object, string, number, boolean, undefined, function, bigint, symbol).\n5. Print label without extra JSON quoting.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept multiple JSON lines and print one label per line\n- [ ] Reject `NaN` with a dedicated label or error\n"
+                },
+                {
+                  "path": "starter/index.js",
+                  "kind": "file",
+                  "content": "/**\n * Type Guard CLI\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction classifyValue(value) {\n  // TODO: null → \"null\", arrays → \"array\", else typeof\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"invalid JSON\");\n\n  let value;\n  try {\n    value = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  let label;\n  try {\n    label = classifyValue(value);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"failed\");\n  }\n\n  process.stdout.write(`${label}\\n`);\n}\n\nmain();\n"
+                }
+              ],
+              "moduleId": "01-javascript-fundamentals",
+              "lessonId": "01.8.4-typeof-and-array-isarray",
+              "graphIndex": "01.8.4"
             },
             {
               "id": "023-default-config-builder",
@@ -3610,6 +3653,137 @@
             },
             {
               "id": "quiz",
+              "title": "typeof and Array.isArray Check",
+              "description": "Predict typeof quirks and correct array detection.",
+              "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/quiz/quiz.json",
+              "questions": [
+                {
+                  "id": "q1",
+                  "prompt": "What is `typeof null`?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`\"object\"`"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`\"null\"`"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`\"undefined\"`"
+                    },
+                    {
+                      "id": "d",
+                      "text": "TypeError"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "`typeof null` is the famous historical quirk: it returns `\"object\"`. Test null with `value === null`."
+                },
+                {
+                  "id": "q2",
+                  "prompt": "What is `typeof []`?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`\"object\"`"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`\"array\"`"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`\"undefined\"`"
+                    },
+                    {
+                      "id": "d",
+                      "text": "`\"function\"`"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Arrays are objects in JavaScript, so `typeof []` is `\"object\"`. Use `Array.isArray` to detect arrays."
+                },
+                {
+                  "id": "q3",
+                  "prompt": "Which expression correctly detects an array?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`Array.isArray(value)`"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`typeof value === \"array\"`"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`value === []`"
+                    },
+                    {
+                      "id": "d",
+                      "text": "`typeof value === \"object\" && value.length !== undefined`"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "`Array.isArray` is the reliable built-in. `typeof` has no `\"array\"` result, and length checks false-positive plain objects."
+                },
+                {
+                  "id": "q4",
+                  "prompt": "What is `Array.isArray(null)`?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "false"
+                    },
+                    {
+                      "id": "b",
+                      "text": "true"
+                    },
+                    {
+                      "id": "c",
+                      "text": "null"
+                    },
+                    {
+                      "id": "d",
+                      "text": "TypeError"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Only array values return true. `null` is not an array."
+                },
+                {
+                  "id": "q5",
+                  "prompt": "What should `classify(null)` return in a type-guard function?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`\"null\"` (explicit null check before typeof)"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`\"object\"` (use typeof directly)"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`\"undefined\"`"
+                    },
+                    {
+                      "id": "d",
+                      "text": "false"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Because `typeof null` is `\"object\"`, classify null with `value === null` first and return a dedicated `\"null\"` label."
+                }
+              ],
+              "lessonId": "01.8.4-typeof-and-array-isarray",
+              "graphIndex": "01.8.4",
+              "moduleId": "01-javascript-fundamentals"
+            },
+            {
+              "id": "quiz",
               "title": "Nullish Operators Check",
               "description": "`null`, `undefined`, `== null`, `?.`, and `??`.",
               "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/quiz/quiz.json",
@@ -3859,6 +4033,14 @@
               "markdown": "<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:02-objects-references-and-copying:examples/03-deep-copy-and-structuredclone.md -->\n\n# Example 03 — Deep Copy: `structuredClone` vs JSON\n\n## Context\nSometimes you need a full snapshot (deep copy). But not all deep-copy techniques are correct for all data.\n\n## Example A — JSON cloning is lossy\nPredict what prints:\n\n```js\nconst x = {\n  when: new Date(\"2020-01-01T00:00:00Z\"),\n  n: 1,\n};\n\nconst y = JSON.parse(JSON.stringify(x));\nconsole.log(typeof y.when, y.when);\n```\n\n### What to observe\n- JSON turns `Date` into a **string**.\n- JSON drops `undefined` and cannot represent functions.\n- JSON throws on `BigInt`.\n- JSON fails on cycles.\n\n## Example B — `structuredClone` preserves more types\nIf your runtime supports it, try:\n\n```js\nconst x = {\n  when: new Date(\"2020-01-01T00:00:00Z\"),\n  set: new Set([1, 2]),\n};\n\nconst y = structuredClone(x);\nconsole.log(y.when instanceof Date);\nconsole.log(y.set instanceof Set);\n```\n\n## Trade-off\nDeep copying everything can be expensive. Prefer:\n- shallow copies + copy-on-write for most updates\n- deep copy only when you truly need an immutable snapshot boundary\n\n## Mini-exercise\nCreate a function `cloneForSafety(value)` with this behavior:\n- If `structuredClone` exists, use it.\n- Otherwise, allow only JSON-safe data and clone with JSON.\n- If cloning fails, throw a helpful error.\n",
               "moduleId": "02-objects-references-and-copying",
               "graphIndex": "02.3"
+            },
+            {
+              "id": "02.4-object-hasown",
+              "title": "Object.hasOwn",
+              "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.4-object-hasown/README.md",
+              "markdown": "<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:javascript/02-objects-references-and-copying/02.4-object-hasown:README.md -->\n\n# Object.hasOwn — Own Properties vs Inherited\n\n## Context\nObjects can have properties on themselves **and** on their prototype chain. The `in` operator returns `true` for inherited properties; sometimes you only care about **own** properties.\n\n## Predict first\n\nWhat prints?\n\n```js\nconst base = { shared: true };\nconst user = Object.create(base);\nuser.name = \"Ana\";\n\nconsole.log(\"name\" in user);\nconsole.log(\"shared\" in user);\nconsole.log(Object.hasOwn(user, \"name\"));\nconsole.log(Object.hasOwn(user, \"shared\"));\n```\n\n### What to observe\n- `\"name\" in user` is `true` (own property).\n- `\"shared\" in user` is `true` (inherited from prototype).\n- `Object.hasOwn(user, \"name\")` is `true`.\n- `Object.hasOwn(user, \"shared\")` is `false` — prototype properties are not \"own\".\n\n## Explanation\n\n| Check | Own property | Inherited property |\n|-------|--------------|-------------------|\n| `\"key\" in obj` | yes | yes |\n| `Object.hasOwn(obj, \"key\")` | yes | no |\n| `obj.hasOwnProperty(\"key\")` | yes | no (avoid on objects that may override it) |\n\n`Object.hasOwn(obj, key)` is the modern, safe way to ask: **does this object itself define this key?**\n\nCommon use cases:\n- Iterating keys you defined on an instance (ignore prototype noise).\n- Distinguishing `\"toString\" in obj` (often inherited) from data fields you added.\n- Building serializers that should not treat inherited methods as data fields.\n\n## What to observe\n\n```js\nconst record = { id: 1 };\nconsole.log(Object.hasOwn(record, \"toString\")); // false\nconsole.log(\"toString\" in record);               // true (from Object.prototype)\n```\n\n## Quick challenge\nGiven:\n\n```js\nconst config = Object.create({ theme: \"dark\" });\nconfig.lang = \"en\";\nconfig.theme = \"light\";\n```\n\nList which keys are **own** vs **inherited**. Which value wins for `config.theme` when you read it?\n",
+              "moduleId": "02-objects-references-and-copying",
+              "graphIndex": "02.4"
             }
           ],
           "projects": [
@@ -3901,9 +4083,610 @@
               "moduleId": "02-objects-references-and-copying",
               "lessonId": "02.1-reference-vs-value",
               "graphIndex": "02.1"
+            },
+            {
+              "id": "001-nested-state-updater",
+              "title": "001. Nested State Updater",
+              "rootPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.2-shallow-vs-deep-copy/projects/001-nested-state-updater",
+              "readmePath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.2-shallow-vs-deep-copy/projects/001-nested-state-updater/README.md",
+              "readmeMarkdown": "# Nested State Updater\n\n## Problem context\nUI state in JavaScript is often nested: `{ items: [{ id, qty }] }`. A common bug is to shallow-copy the outer object and still mutate the original because inner arrays/objects are shared.\n\nThis project trains **copy-on-write**: update nested data without mutating the input state.\n\n## Goal\nImplement `incrementItemQty(state, itemId)` that returns a **new** state object with the matching item's `qty` incremented by 1, leaving `state` unchanged.\n\n## Functional requirements\n- [ ] Implement `incrementItemQty(state, itemId)` exported from `starter/index.js` (or defined there for the CLI).\n- [ ] Input `state` shape: `{ items: Array<{ id: number, qty: number }> }`.\n- [ ] Find the item where `item.id === itemId` and increment its `qty` by 1.\n- [ ] If no item matches `itemId`, return a deep-enough copy with no quantity changes (still must not mutate input).\n- [ ] Do **not** mutate `state`, `state.items`, or any item object inside `state`.\n- [ ] CLI: read one JSON line from `stdin` shaped as `{ \"state\": {...}, \"itemId\": number }`, print one JSON line `{ \"nextState\": {...} }`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Error handling for invalid input\n- [ ] Use spread/copy-on-write at each nested level you change\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input objects\n- [ ] Do not use `structuredClone` (practice manual copy-on-write)\n\n## Acceptance criteria\n- [ ] After calling `incrementItemQty(state, 1)`, `state.items[0].qty` is unchanged\n- [ ] Returned `nextState.items` is a new array reference\n- [ ] Updated item object is a new object reference\n- [ ] Unchanged items keep the same `qty` values in the output\n\n## Example data\n\nInput (stdin):\n\n```json\n{\"state\":{\"items\":[{\"id\":1,\"qty\":1},{\"id\":2,\"qty\":5}]},\"itemId\":1}\n```\n\nOutput (stdout):\n\n```json\n{\"nextState\":{\"items\":[{\"id\":1,\"qty\":2},{\"id\":2,\"qty\":5}]}}\n```\n\nVerify immutability:\n\n```js\nconst state = { items: [{ id: 1, qty: 1 }] };\nconst next = incrementItemQty(state, 1);\n// state.items[0].qty === 1\n// next.items[0].qty === 2\n// state.items !== next.items\n```\n\n## Suggested plan (no solution)\n1. Map over `state.items` to build a new array.\n2. For the matching `id`, return a **new item object** with `qty + 1`.\n3. For non-matching items, you may reuse the same item reference (optional) or copy for clarity.\n4. Return `{ items: newItems }` without mutating `state`.\n5. Wire the CLI to parse stdin, call the function, and print JSON.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Support incrementing by a custom delta passed in the CLI payload\n- [ ] Add a test that shallow copy `{ ...state }` would fail the immutability check\n",
+              "entries": [
+                {
+                  "path": "",
+                  "kind": "dir",
+                  "readmeMarkdown": "# Nested State Updater\n\n## Problem context\nUI state in JavaScript is often nested: `{ items: [{ id, qty }] }`. A common bug is to shallow-copy the outer object and still mutate the original because inner arrays/objects are shared.\n\nThis project trains **copy-on-write**: update nested data without mutating the input state.\n\n## Goal\nImplement `incrementItemQty(state, itemId)` that returns a **new** state object with the matching item's `qty` incremented by 1, leaving `state` unchanged.\n\n## Functional requirements\n- [ ] Implement `incrementItemQty(state, itemId)` exported from `starter/index.js` (or defined there for the CLI).\n- [ ] Input `state` shape: `{ items: Array<{ id: number, qty: number }> }`.\n- [ ] Find the item where `item.id === itemId` and increment its `qty` by 1.\n- [ ] If no item matches `itemId`, return a deep-enough copy with no quantity changes (still must not mutate input).\n- [ ] Do **not** mutate `state`, `state.items`, or any item object inside `state`.\n- [ ] CLI: read one JSON line from `stdin` shaped as `{ \"state\": {...}, \"itemId\": number }`, print one JSON line `{ \"nextState\": {...} }`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Error handling for invalid input\n- [ ] Use spread/copy-on-write at each nested level you change\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input objects\n- [ ] Do not use `structuredClone` (practice manual copy-on-write)\n\n## Acceptance criteria\n- [ ] After calling `incrementItemQty(state, 1)`, `state.items[0].qty` is unchanged\n- [ ] Returned `nextState.items` is a new array reference\n- [ ] Updated item object is a new object reference\n- [ ] Unchanged items keep the same `qty` values in the output\n\n## Example data\n\nInput (stdin):\n\n```json\n{\"state\":{\"items\":[{\"id\":1,\"qty\":1},{\"id\":2,\"qty\":5}]},\"itemId\":1}\n```\n\nOutput (stdout):\n\n```json\n{\"nextState\":{\"items\":[{\"id\":1,\"qty\":2},{\"id\":2,\"qty\":5}]}}\n```\n\nVerify immutability:\n\n```js\nconst state = { items: [{ id: 1, qty: 1 }] };\nconst next = incrementItemQty(state, 1);\n// state.items[0].qty === 1\n// next.items[0].qty === 2\n// state.items !== next.items\n```\n\n## Suggested plan (no solution)\n1. Map over `state.items` to build a new array.\n2. For the matching `id`, return a **new item object** with `qty + 1`.\n3. For non-matching items, you may reuse the same item reference (optional) or copy for clarity.\n4. Return `{ items: newItems }` without mutating `state`.\n5. Wire the CLI to parse stdin, call the function, and print JSON.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Support incrementing by a custom delta passed in the CLI payload\n- [ ] Add a test that shallow copy `{ ...state }` would fail the immutability check\n"
+                },
+                {
+                  "path": "solution",
+                  "kind": "dir"
+                },
+                {
+                  "path": "starter",
+                  "kind": "dir"
+                },
+                {
+                  "path": "README.md",
+                  "kind": "file",
+                  "content": "# Nested State Updater\n\n## Problem context\nUI state in JavaScript is often nested: `{ items: [{ id, qty }] }`. A common bug is to shallow-copy the outer object and still mutate the original because inner arrays/objects are shared.\n\nThis project trains **copy-on-write**: update nested data without mutating the input state.\n\n## Goal\nImplement `incrementItemQty(state, itemId)` that returns a **new** state object with the matching item's `qty` incremented by 1, leaving `state` unchanged.\n\n## Functional requirements\n- [ ] Implement `incrementItemQty(state, itemId)` exported from `starter/index.js` (or defined there for the CLI).\n- [ ] Input `state` shape: `{ items: Array<{ id: number, qty: number }> }`.\n- [ ] Find the item where `item.id === itemId` and increment its `qty` by 1.\n- [ ] If no item matches `itemId`, return a deep-enough copy with no quantity changes (still must not mutate input).\n- [ ] Do **not** mutate `state`, `state.items`, or any item object inside `state`.\n- [ ] CLI: read one JSON line from `stdin` shaped as `{ \"state\": {...}, \"itemId\": number }`, print one JSON line `{ \"nextState\": {...} }`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Error handling for invalid input\n- [ ] Use spread/copy-on-write at each nested level you change\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input objects\n- [ ] Do not use `structuredClone` (practice manual copy-on-write)\n\n## Acceptance criteria\n- [ ] After calling `incrementItemQty(state, 1)`, `state.items[0].qty` is unchanged\n- [ ] Returned `nextState.items` is a new array reference\n- [ ] Updated item object is a new object reference\n- [ ] Unchanged items keep the same `qty` values in the output\n\n## Example data\n\nInput (stdin):\n\n```json\n{\"state\":{\"items\":[{\"id\":1,\"qty\":1},{\"id\":2,\"qty\":5}]},\"itemId\":1}\n```\n\nOutput (stdout):\n\n```json\n{\"nextState\":{\"items\":[{\"id\":1,\"qty\":2},{\"id\":2,\"qty\":5}]}}\n```\n\nVerify immutability:\n\n```js\nconst state = { items: [{ id: 1, qty: 1 }] };\nconst next = incrementItemQty(state, 1);\n// state.items[0].qty === 1\n// next.items[0].qty === 2\n// state.items !== next.items\n```\n\n## Suggested plan (no solution)\n1. Map over `state.items` to build a new array.\n2. For the matching `id`, return a **new item object** with `qty + 1`.\n3. For non-matching items, you may reuse the same item reference (optional) or copy for clarity.\n4. Return `{ items: newItems }` without mutating `state`.\n5. Wire the CLI to parse stdin, call the function, and print JSON.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Support incrementing by a custom delta passed in the CLI payload\n- [ ] Add a test that shallow copy `{ ...state }` would fail the immutability check\n"
+                },
+                {
+                  "path": "starter/index.js",
+                  "kind": "file",
+                  "content": "/**\n * Nested State Updater\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction incrementItemQty(state, itemId) {\n  // TODO: copy-on-write — do not mutate state or nested objects\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let payload;\n  try {\n    payload = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  if (payload == null || typeof payload !== \"object\" || Array.isArray(payload)) {\n    return fail(\"payload must be a JSON object\");\n  }\n\n  const { state, itemId } = payload;\n  if (state == null || typeof state !== \"object\" || Array.isArray(state)) {\n    return fail(\"state must be an object\");\n  }\n  if (typeof itemId !== \"number\" || !Number.isInteger(itemId)) {\n    return fail(\"itemId must be an integer\");\n  }\n\n  const before = JSON.stringify(state);\n\n  let nextState;\n  try {\n    nextState = incrementItemQty(state, itemId);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"clone failed\");\n  }\n\n  if (JSON.stringify(state) !== before) {\n    return fail(\"state was mutated\");\n  }\n\n  process.stdout.write(`${JSON.stringify({ nextState })}\\n`);\n}\n\nmain();\n"
+                }
+              ],
+              "moduleId": "02-objects-references-and-copying",
+              "lessonId": "02.2-shallow-vs-deep-copy",
+              "graphIndex": "02.2"
+            },
+            {
+              "id": "001-snapshot-cloner",
+              "title": "001. Snapshot Cloner",
+              "rootPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.3-structuredclone/projects/001-snapshot-cloner",
+              "readmePath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.3-structuredclone/projects/001-snapshot-cloner/README.md",
+              "readmeMarkdown": "# Snapshot Cloner\n\n## Problem context\nBefore sending data to another subsystem, teams often need an **immutable snapshot**. JSON cloning is tempting but lossy (`Date` → string, `undefined` dropped, `BigInt` throws).\n\nThis project builds a safe snapshot function using `structuredClone` when available, with a JSON fallback for simple data.\n\n## Goal\nImplement `cloneForSafety(value)` and a CLI that reads one JSON line from stdin, clones it, and prints the clone as one JSON line — without mutating the original parsed value.\n\n## Functional requirements\n- [ ] Implement `cloneForSafety(value)`:\n  - [ ] If `typeof structuredClone === \"function\"`, use it.\n  - [ ] Otherwise clone JSON-safe data via `JSON.parse(JSON.stringify(value))`.\n  - [ ] If cloning fails, throw an `Error` with a helpful message.\n- [ ] CLI reads one JSON value from `stdin` (object, array, or primitive).\n- [ ] Print cloned result as one JSON line to `stdout`.\n- [ ] Verify the original parsed value was not mutated (compare `JSON.stringify` before/after).\n- [ ] On error, print `ERROR: <message>` as one line.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages for unsupported data in JSON fallback\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input\n- [ ] JSON fallback must reject non-JSON-safe values with a clear error (e.g. `BigInt`, functions)\n\n## Acceptance criteria\n- [ ] `{ n: 1 }` clones to an equal but distinct object (`!==` original)\n- [ ] `{ when: \"2020-01-01T00:00:00.000Z\" }` clones successfully via JSON path\n- [ ] Input with `BigInt` fails gracefully when `structuredClone` is unavailable (or succeeds with `structuredClone` in modern Node)\n- [ ] Original input unchanged after clone\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\nOutput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\n(with different object identity than the parsed input)\n\n## Suggested plan (no solution)\n1. Parse stdin JSON safely.\n2. Snapshot `JSON.stringify(input)` before cloning.\n3. Implement `cloneForSafety` with structuredClone-first, JSON fallback second.\n4. In JSON fallback, wrap `JSON.stringify` in try/catch for `BigInt`/cycles.\n5. Compare before/after snapshots; fail if input mutated.\n6. Print cloned value as one JSON line.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `--report` flag listing which clone strategy was used\n- [ ] Document which types JSON loses vs `structuredClone` preserves\n",
+              "entries": [
+                {
+                  "path": "",
+                  "kind": "dir",
+                  "readmeMarkdown": "# Snapshot Cloner\n\n## Problem context\nBefore sending data to another subsystem, teams often need an **immutable snapshot**. JSON cloning is tempting but lossy (`Date` → string, `undefined` dropped, `BigInt` throws).\n\nThis project builds a safe snapshot function using `structuredClone` when available, with a JSON fallback for simple data.\n\n## Goal\nImplement `cloneForSafety(value)` and a CLI that reads one JSON line from stdin, clones it, and prints the clone as one JSON line — without mutating the original parsed value.\n\n## Functional requirements\n- [ ] Implement `cloneForSafety(value)`:\n  - [ ] If `typeof structuredClone === \"function\"`, use it.\n  - [ ] Otherwise clone JSON-safe data via `JSON.parse(JSON.stringify(value))`.\n  - [ ] If cloning fails, throw an `Error` with a helpful message.\n- [ ] CLI reads one JSON value from `stdin` (object, array, or primitive).\n- [ ] Print cloned result as one JSON line to `stdout`.\n- [ ] Verify the original parsed value was not mutated (compare `JSON.stringify` before/after).\n- [ ] On error, print `ERROR: <message>` as one line.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages for unsupported data in JSON fallback\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input\n- [ ] JSON fallback must reject non-JSON-safe values with a clear error (e.g. `BigInt`, functions)\n\n## Acceptance criteria\n- [ ] `{ n: 1 }` clones to an equal but distinct object (`!==` original)\n- [ ] `{ when: \"2020-01-01T00:00:00.000Z\" }` clones successfully via JSON path\n- [ ] Input with `BigInt` fails gracefully when `structuredClone` is unavailable (or succeeds with `structuredClone` in modern Node)\n- [ ] Original input unchanged after clone\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\nOutput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\n(with different object identity than the parsed input)\n\n## Suggested plan (no solution)\n1. Parse stdin JSON safely.\n2. Snapshot `JSON.stringify(input)` before cloning.\n3. Implement `cloneForSafety` with structuredClone-first, JSON fallback second.\n4. In JSON fallback, wrap `JSON.stringify` in try/catch for `BigInt`/cycles.\n5. Compare before/after snapshots; fail if input mutated.\n6. Print cloned value as one JSON line.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `--report` flag listing which clone strategy was used\n- [ ] Document which types JSON loses vs `structuredClone` preserves\n"
+                },
+                {
+                  "path": "solution",
+                  "kind": "dir"
+                },
+                {
+                  "path": "starter",
+                  "kind": "dir"
+                },
+                {
+                  "path": "README.md",
+                  "kind": "file",
+                  "content": "# Snapshot Cloner\n\n## Problem context\nBefore sending data to another subsystem, teams often need an **immutable snapshot**. JSON cloning is tempting but lossy (`Date` → string, `undefined` dropped, `BigInt` throws).\n\nThis project builds a safe snapshot function using `structuredClone` when available, with a JSON fallback for simple data.\n\n## Goal\nImplement `cloneForSafety(value)` and a CLI that reads one JSON line from stdin, clones it, and prints the clone as one JSON line — without mutating the original parsed value.\n\n## Functional requirements\n- [ ] Implement `cloneForSafety(value)`:\n  - [ ] If `typeof structuredClone === \"function\"`, use it.\n  - [ ] Otherwise clone JSON-safe data via `JSON.parse(JSON.stringify(value))`.\n  - [ ] If cloning fails, throw an `Error` with a helpful message.\n- [ ] CLI reads one JSON value from `stdin` (object, array, or primitive).\n- [ ] Print cloned result as one JSON line to `stdout`.\n- [ ] Verify the original parsed value was not mutated (compare `JSON.stringify` before/after).\n- [ ] On error, print `ERROR: <message>` as one line.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages for unsupported data in JSON fallback\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input\n- [ ] JSON fallback must reject non-JSON-safe values with a clear error (e.g. `BigInt`, functions)\n\n## Acceptance criteria\n- [ ] `{ n: 1 }` clones to an equal but distinct object (`!==` original)\n- [ ] `{ when: \"2020-01-01T00:00:00.000Z\" }` clones successfully via JSON path\n- [ ] Input with `BigInt` fails gracefully when `structuredClone` is unavailable (or succeeds with `structuredClone` in modern Node)\n- [ ] Original input unchanged after clone\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\nOutput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\n(with different object identity than the parsed input)\n\n## Suggested plan (no solution)\n1. Parse stdin JSON safely.\n2. Snapshot `JSON.stringify(input)` before cloning.\n3. Implement `cloneForSafety` with structuredClone-first, JSON fallback second.\n4. In JSON fallback, wrap `JSON.stringify` in try/catch for `BigInt`/cycles.\n5. Compare before/after snapshots; fail if input mutated.\n6. Print cloned value as one JSON line.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `--report` flag listing which clone strategy was used\n- [ ] Document which types JSON loses vs `structuredClone` preserves\n"
+                },
+                {
+                  "path": "starter/index.js",
+                  "kind": "file",
+                  "content": "/**\n * Snapshot Cloner\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction cloneForSafety(value) {\n  // TODO: structuredClone when available, else JSON fallback with clear errors\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let input;\n  try {\n    input = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  const before = JSON.stringify(input);\n\n  let cloned;\n  try {\n    cloned = cloneForSafety(input);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"clone failed\");\n  }\n\n  if (JSON.stringify(input) !== before) {\n    return fail(\"input was mutated\");\n  }\n\n  process.stdout.write(`${JSON.stringify(cloned)}\\n`);\n}\n\nmain();\n"
+                }
+              ],
+              "moduleId": "02-objects-references-and-copying",
+              "lessonId": "02.3-structuredclone",
+              "graphIndex": "02.3"
+            },
+            {
+              "id": "001-own-keys-filter",
+              "title": "001. Own Keys Filter",
+              "rootPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.4-object-hasown/projects/001-own-keys-filter",
+              "readmePath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.4-object-hasown/projects/001-own-keys-filter/README.md",
+              "readmeMarkdown": "# Own Keys Filter\n\n## Problem context\nWhen processing user records, you often need to serialize **only fields defined on the object**, not inherited prototype properties like `toString`.\n\nThis project trains `Object.hasOwn` to filter enumerable own keys safely.\n\n## Goal\nImplement `ownKeys(obj)` that returns an array of **own enumerable string keys** sorted alphabetically, ignoring inherited properties.\n\n## Functional requirements\n- [ ] Implement `ownKeys(obj)`.\n- [ ] Include only keys where `Object.hasOwn(obj, key)` is true.\n- [ ] Include only enumerable own keys (use `Object.keys` semantics combined with `hasOwn`, or equivalent).\n- [ ] Return keys sorted in ascending lexicographic order.\n- [ ] CLI: read one JSON object from `stdin`, print JSON array of own keys to `stdout`.\n- [ ] If input is not a plain object, print `ERROR: <message>`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Do not mutate the input object\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Use `Object.hasOwn` (not legacy `hasOwnProperty` on the object directly)\n- [ ] Reject `null`, arrays, and primitives with a clear error\n\n## Acceptance criteria\n- [ ] `{}` → `[]`\n- [ ] `{ b: 1, a: 2 }` → `[\"a\", \"b\"]`\n- [ ] Object with prototype properties does not list inherited keys\n- [ ] Input object unchanged after the call\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"score\":10}\n```\n\nOutput:\n\n```json\n[\"name\",\"score\"]\n```\n\nPrototype case:\n\n```js\nconst base = { inherited: true };\nconst obj = Object.create(base);\nobj.id = 1;\n// ownKeys(obj) => [\"id\"]\n```\n\n## Suggested plan (no solution)\n1. Validate input is a non-null, non-array object.\n2. Collect candidate keys (e.g. `Object.keys(obj)` or `for...in` with `hasOwn` guard).\n3. Filter with `Object.hasOwn(obj, key)`.\n4. Sort and return.\n5. Wire CLI to parse stdin and print JSON array.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `ownEntries(obj)` returning `[key, value]` pairs for own keys only\n- [ ] Support a `--values` flag that outputs own key/value object\n",
+              "entries": [
+                {
+                  "path": "",
+                  "kind": "dir",
+                  "readmeMarkdown": "# Own Keys Filter\n\n## Problem context\nWhen processing user records, you often need to serialize **only fields defined on the object**, not inherited prototype properties like `toString`.\n\nThis project trains `Object.hasOwn` to filter enumerable own keys safely.\n\n## Goal\nImplement `ownKeys(obj)` that returns an array of **own enumerable string keys** sorted alphabetically, ignoring inherited properties.\n\n## Functional requirements\n- [ ] Implement `ownKeys(obj)`.\n- [ ] Include only keys where `Object.hasOwn(obj, key)` is true.\n- [ ] Include only enumerable own keys (use `Object.keys` semantics combined with `hasOwn`, or equivalent).\n- [ ] Return keys sorted in ascending lexicographic order.\n- [ ] CLI: read one JSON object from `stdin`, print JSON array of own keys to `stdout`.\n- [ ] If input is not a plain object, print `ERROR: <message>`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Do not mutate the input object\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Use `Object.hasOwn` (not legacy `hasOwnProperty` on the object directly)\n- [ ] Reject `null`, arrays, and primitives with a clear error\n\n## Acceptance criteria\n- [ ] `{}` → `[]`\n- [ ] `{ b: 1, a: 2 }` → `[\"a\", \"b\"]`\n- [ ] Object with prototype properties does not list inherited keys\n- [ ] Input object unchanged after the call\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"score\":10}\n```\n\nOutput:\n\n```json\n[\"name\",\"score\"]\n```\n\nPrototype case:\n\n```js\nconst base = { inherited: true };\nconst obj = Object.create(base);\nobj.id = 1;\n// ownKeys(obj) => [\"id\"]\n```\n\n## Suggested plan (no solution)\n1. Validate input is a non-null, non-array object.\n2. Collect candidate keys (e.g. `Object.keys(obj)` or `for...in` with `hasOwn` guard).\n3. Filter with `Object.hasOwn(obj, key)`.\n4. Sort and return.\n5. Wire CLI to parse stdin and print JSON array.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `ownEntries(obj)` returning `[key, value]` pairs for own keys only\n- [ ] Support a `--values` flag that outputs own key/value object\n"
+                },
+                {
+                  "path": "solution",
+                  "kind": "dir"
+                },
+                {
+                  "path": "starter",
+                  "kind": "dir"
+                },
+                {
+                  "path": "README.md",
+                  "kind": "file",
+                  "content": "# Own Keys Filter\n\n## Problem context\nWhen processing user records, you often need to serialize **only fields defined on the object**, not inherited prototype properties like `toString`.\n\nThis project trains `Object.hasOwn` to filter enumerable own keys safely.\n\n## Goal\nImplement `ownKeys(obj)` that returns an array of **own enumerable string keys** sorted alphabetically, ignoring inherited properties.\n\n## Functional requirements\n- [ ] Implement `ownKeys(obj)`.\n- [ ] Include only keys where `Object.hasOwn(obj, key)` is true.\n- [ ] Include only enumerable own keys (use `Object.keys` semantics combined with `hasOwn`, or equivalent).\n- [ ] Return keys sorted in ascending lexicographic order.\n- [ ] CLI: read one JSON object from `stdin`, print JSON array of own keys to `stdout`.\n- [ ] If input is not a plain object, print `ERROR: <message>`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Do not mutate the input object\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Use `Object.hasOwn` (not legacy `hasOwnProperty` on the object directly)\n- [ ] Reject `null`, arrays, and primitives with a clear error\n\n## Acceptance criteria\n- [ ] `{}` → `[]`\n- [ ] `{ b: 1, a: 2 }` → `[\"a\", \"b\"]`\n- [ ] Object with prototype properties does not list inherited keys\n- [ ] Input object unchanged after the call\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"score\":10}\n```\n\nOutput:\n\n```json\n[\"name\",\"score\"]\n```\n\nPrototype case:\n\n```js\nconst base = { inherited: true };\nconst obj = Object.create(base);\nobj.id = 1;\n// ownKeys(obj) => [\"id\"]\n```\n\n## Suggested plan (no solution)\n1. Validate input is a non-null, non-array object.\n2. Collect candidate keys (e.g. `Object.keys(obj)` or `for...in` with `hasOwn` guard).\n3. Filter with `Object.hasOwn(obj, key)`.\n4. Sort and return.\n5. Wire CLI to parse stdin and print JSON array.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `ownEntries(obj)` returning `[key, value]` pairs for own keys only\n- [ ] Support a `--values` flag that outputs own key/value object\n"
+                },
+                {
+                  "path": "starter/index.js",
+                  "kind": "file",
+                  "content": "/**\n * Own Keys Filter\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction ownKeys(obj) {\n  // TODO: return sorted own enumerable keys using Object.hasOwn\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let input;\n  try {\n    input = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  if (input == null || typeof input !== \"object\" || Array.isArray(input)) {\n    return fail(\"input must be a JSON object\");\n  }\n\n  let keys;\n  try {\n    keys = ownKeys(input);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"failed\");\n  }\n\n  process.stdout.write(`${JSON.stringify(keys)}\\n`);\n}\n\nmain();\n"
+                }
+              ],
+              "moduleId": "02-objects-references-and-copying",
+              "lessonId": "02.4-object-hasown",
+              "graphIndex": "02.4"
             }
           ],
           "quizzes": [
+            {
+              "id": "quiz",
+              "title": "Reference vs Value Check",
+              "description": "Predict when variables share objects vs copy primitives.",
+              "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.1-reference-vs-value/quiz/quiz.json",
+              "questions": [
+                {
+                  "id": "q1",
+                  "prompt": "What prints?\n\n```js\nlet a = 10;\nlet b = a;\nb = 20;\nconsole.log(a, b);\n```",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "10 20"
+                    },
+                    {
+                      "id": "b",
+                      "text": "20 20"
+                    },
+                    {
+                      "id": "c",
+                      "text": "10 10"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Primitives copy by value. Reassigning `b` does not change `a`."
+                },
+                {
+                  "id": "q2",
+                  "prompt": "What prints?\n\n```js\nconst a = { n: 10 };\nconst b = a;\nb.n = 20;\nconsole.log(a.n, b.n);\n```",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "20 20"
+                    },
+                    {
+                      "id": "b",
+                      "text": "10 20"
+                    },
+                    {
+                      "id": "c",
+                      "text": "10 10"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "`b = a` creates an alias. Mutating through `b` changes the same object that `a` references."
+                },
+                {
+                  "id": "q3",
+                  "prompt": "What prints?\n\n```js\nconst a = { n: 1 };\nlet b = a;\nb = { n: 999 };\na.n = 2;\nconsole.log(a.n, b.n);\n```",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "2 999"
+                    },
+                    {
+                      "id": "b",
+                      "text": "2 2"
+                    },
+                    {
+                      "id": "c",
+                      "text": "999 999"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "`b = { n: 999 }` is reassignment (new object), not mutation. `a.n = 2` mutates the original object only."
+                },
+                {
+                  "id": "q4",
+                  "prompt": "Which assignment creates an **alias** (two variables referencing the same object)?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`const b = a` when `a` is an object"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`let b = a` when `a` is a number"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`const b = { ...a }`"
+                    },
+                    {
+                      "id": "d",
+                      "text": "`let b = a + 1` when `a` is a number"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Assigning an object variable to another creates a reference alias. Spread creates a new top-level object (shallow copy), and primitives copy by value."
+                },
+                {
+                  "id": "q5",
+                  "prompt": "Which of these is **mutation** (changing an existing value in place)?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`obj.n = 2`"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`b = { n: 999 }`"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`let b = a` when `a` is a number"
+                    },
+                    {
+                      "id": "d",
+                      "text": "`const copy = { ...obj }`"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Setting a property on an existing object mutates it. Reassignment and spread create new bindings or containers."
+                }
+              ],
+              "lessonId": "02.1-reference-vs-value",
+              "graphIndex": "02.1",
+              "moduleId": "02-objects-references-and-copying"
+            },
+            {
+              "id": "quiz",
+              "title": "Shallow Copy Check",
+              "description": "Predict nested sharing with spread and copy-on-write patterns.",
+              "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.2-shallow-vs-deep-copy/quiz/quiz.json",
+              "questions": [
+                {
+                  "id": "q1",
+                  "prompt": "What prints?\n\n```js\nconst user = { name: \"Ana\", address: { city: \"SP\" } };\nconst copy = { ...user };\ncopy.address.city = \"RJ\";\nconsole.log(user.address.city);\n```",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "\"RJ\""
+                    },
+                    {
+                      "id": "b",
+                      "text": "\"SP\""
+                    },
+                    {
+                      "id": "c",
+                      "text": "undefined"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Object spread is shallow: `copy` is new, but `copy.address` and `user.address` still point to the same nested object."
+                },
+                {
+                  "id": "q2",
+                  "prompt": "What prints?\n\n```js\nconst a = [{ x: 1 }];\nconst b = [...a];\nb[0].x = 99;\nconsole.log(a[0].x);\n```",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "99"
+                    },
+                    {
+                      "id": "b",
+                      "text": "1"
+                    },
+                    {
+                      "id": "c",
+                      "text": "undefined"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Array spread is also shallow. The outer array is new, but elements inside are still shared references."
+                },
+                {
+                  "id": "q3",
+                  "prompt": "Which update **does not** mutate the original `user`?\n\n```js\nconst user = { name: \"Ana\", address: { city: \"SP\" } };\n```",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`const next = { ...user, address: { ...user.address, city: \"RJ\" } };`"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`const copy = { ...user }; copy.address.city = \"RJ\";`"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`user.address.city = \"RJ\";`"
+                    },
+                    {
+                      "id": "d",
+                      "text": "`Object.assign(user, { address: { city: \"RJ\" } });`"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Copy-on-write replaces every nested level you change. Options b–d mutate shared nested data or the original object."
+                },
+                {
+                  "id": "q4",
+                  "prompt": "What is true about `{ ...obj }` and `Object.assign({}, obj)`?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "Both create a shallow copy of the top level only"
+                    },
+                    {
+                      "id": "b",
+                      "text": "Both create a deep copy of all nested objects"
+                    },
+                    {
+                      "id": "c",
+                      "text": "Spread is deep; Object.assign is shallow"
+                    },
+                    {
+                      "id": "d",
+                      "text": "Neither copies anything; both create aliases"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Spread and Object.assign copy enumerable own properties into a new object. Nested values are still shared references."
+                },
+                {
+                  "id": "q5",
+                  "prompt": "Given `const state = { items: [{ id: 1, qty: 1 }] };`, which pattern correctly increments `qty` without mutating `state`?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "Build `nextState` with spread at both the `items` array and the changed item object"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`state.items[0].qty += 1`"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`const next = { ...state }; next.items[0].qty += 1`"
+                    },
+                    {
+                      "id": "d",
+                      "text": "`const next = [...state.items]; next[0].qty += 1`"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Shallow copy of `state` or `items` still shares inner item objects. You must copy the array and replace the changed item."
+                }
+              ],
+              "lessonId": "02.2-shallow-vs-deep-copy",
+              "graphIndex": "02.2",
+              "moduleId": "02-objects-references-and-copying"
+            },
+            {
+              "id": "quiz",
+              "title": "Deep Copy Check",
+              "description": "JSON clone limits vs structuredClone for snapshots.",
+              "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.3-structuredclone/quiz/quiz.json",
+              "questions": [
+                {
+                  "id": "q1",
+                  "prompt": "After this JSON clone, what is `typeof y.when`?\n\n```js\nconst x = { when: new Date(), n: 1 };\nconst y = JSON.parse(JSON.stringify(x));\n```",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "\"string\""
+                    },
+                    {
+                      "id": "b",
+                      "text": "\"object\" (still a Date)"
+                    },
+                    {
+                      "id": "c",
+                      "text": "\"undefined\""
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "JSON serialization turns `Date` into an ISO string. JSON cloning is lossy for many types."
+                },
+                {
+                  "id": "q2",
+                  "prompt": "What prints?\n\n```js\nconst a = { n: 1n };\ntry {\n  JSON.stringify(a);\n  console.log(\"ok\");\n} catch (e) {\n  console.log(\"error\");\n}\n```",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "error"
+                    },
+                    {
+                      "id": "b",
+                      "text": "ok"
+                    },
+                    {
+                      "id": "c",
+                      "text": "undefined"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "`JSON.stringify` throws on `BigInt`. That is another reason JSON cloning is not a universal deep-copy solution."
+                },
+                {
+                  "id": "q3",
+                  "prompt": "What happens to `undefined` values in nested objects when using `JSON.parse(JSON.stringify(x))`?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "They are dropped (keys removed)"
+                    },
+                    {
+                      "id": "b",
+                      "text": "They are preserved as `undefined`"
+                    },
+                    {
+                      "id": "c",
+                      "text": "They become `null`"
+                    },
+                    {
+                      "id": "d",
+                      "text": "JSON.stringify throws immediately"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "JSON cannot represent `undefined`. During serialization, object properties with `undefined` values are omitted."
+                },
+                {
+                  "id": "q4",
+                  "prompt": "After `const y = structuredClone(x)` where `x = { when: new Date(), set: new Set([1, 2]) }`, which is true?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`y.when instanceof Date` and `y.set instanceof Set`"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`typeof y.when === \"string\"`"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`y.set` is a plain array `[1, 2]`"
+                    },
+                    {
+                      "id": "d",
+                      "text": "`y === x` (same reference)"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "`structuredClone` preserves supported built-in types like `Date` and `Set`, unlike JSON cloning."
+                },
+                {
+                  "id": "q5",
+                  "prompt": "When should you prefer a deep copy over shallow copy + copy-on-write?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "When you need an immutable snapshot boundary and cannot risk shared nested references"
+                    },
+                    {
+                      "id": "b",
+                      "text": "For every variable assignment in the program"
+                    },
+                    {
+                      "id": "c",
+                      "text": "Only when copying primitive numbers"
+                    },
+                    {
+                      "id": "d",
+                      "text": "Never — deep copy is always wrong"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Deep copies are expensive. Use them when you truly need isolation; otherwise prefer targeted copy-on-write updates."
+                }
+              ],
+              "lessonId": "02.3-structuredclone",
+              "graphIndex": "02.3",
+              "moduleId": "02-objects-references-and-copying"
+            },
+            {
+              "id": "quiz",
+              "title": "Object.hasOwn Check",
+              "description": "Own properties vs inherited prototype chain.",
+              "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.4-object-hasown/quiz/quiz.json",
+              "questions": [
+                {
+                  "id": "q1",
+                  "prompt": "Given:\n\n```js\nconst base = { shared: true };\nconst user = Object.create(base);\nuser.name = \"Ana\";\n```\n\nWhich is **true**?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`Object.hasOwn(user, \"shared\")` is false"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`Object.hasOwn(user, \"shared\")` is true"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`\"shared\" in user` is false"
+                    },
+                    {
+                      "id": "d",
+                      "text": "`Object.hasOwn(user, \"name\")` is false"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "`shared` is on the prototype, not an own property. `\"shared\" in user` is true, but `Object.hasOwn` returns false for inherited keys."
+                },
+                {
+                  "id": "q2",
+                  "prompt": "What is the difference between `\"key\" in obj` and `Object.hasOwn(obj, \"key\")`?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`in` includes inherited keys; `hasOwn` checks only own properties"
+                    },
+                    {
+                      "id": "b",
+                      "text": "They are always identical"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`hasOwn` includes inherited keys; `in` does not"
+                    },
+                    {
+                      "id": "d",
+                      "text": "`in` only works on arrays"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "The `in` operator walks the prototype chain. `Object.hasOwn` asks whether the property exists directly on the object."
+                },
+                {
+                  "id": "q3",
+                  "prompt": "For a plain object `record = { id: 1 }`, what is `Object.hasOwn(record, \"toString\")`?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "false"
+                    },
+                    {
+                      "id": "b",
+                      "text": "true"
+                    },
+                    {
+                      "id": "c",
+                      "text": "undefined"
+                    },
+                    {
+                      "id": "d",
+                      "text": "throws TypeError"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "`toString` is inherited from `Object.prototype`, not an own property of `record`."
+                },
+                {
+                  "id": "q4",
+                  "prompt": "Why prefer `Object.hasOwn(obj, key)` over `obj.hasOwnProperty(key)` in library code?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "Some objects may null out or override `hasOwnProperty`"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`hasOwnProperty` includes inherited keys"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`Object.hasOwn` is slower but required by syntax"
+                    },
+                    {
+                      "id": "d",
+                      "text": "There is no practical difference"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "`Object.hasOwn` is the safe built-in that does not rely on the object possibly missing or overriding `hasOwnProperty`."
+                },
+                {
+                  "id": "q5",
+                  "prompt": "Given:\n\n```js\nconst config = Object.create({ theme: \"dark\" });\nconfig.lang = \"en\";\nconfig.theme = \"light\";\n```\n\nWhat is `config.theme` and is `\"theme\"` an own property?",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "`\"light\"`; yes, own property after assignment"
+                    },
+                    {
+                      "id": "b",
+                      "text": "`\"dark\"`; no, only inherited"
+                    },
+                    {
+                      "id": "c",
+                      "text": "`\"light\"`; no, still inherited"
+                    },
+                    {
+                      "id": "d",
+                      "text": "undefined; theme is not accessible"
+                    }
+                  ],
+                  "correctOptionId": "a",
+                  "explanation": "Assigning `config.theme = \"light\"` creates an own property shadowing the prototype. Reading `config.theme` returns `\"light\"`."
+                }
+              ],
+              "lessonId": "02.4-object-hasown",
+              "graphIndex": "02.4",
+              "moduleId": "02-objects-references-and-copying"
+            },
             {
               "id": "01-references-check",
               "title": "References & Copying Check",
@@ -4440,6 +5223,14 @@
           "graphIndex": "01.8.3"
         },
         {
+          "id": "01.8.4-typeof-and-array-isarray",
+          "title": "typeof and Array.isArray",
+          "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/README.md",
+          "markdown": "<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:javascript/01-javascript-fundamentals/01.8.4-typeof-and-array-isarray:README.md -->\n\n# typeof and Array.isArray\n\n## Context\nJavaScript's `typeof` operator is useful but has well-known quirks. Arrays are objects, so `typeof []` is `\"object\"`. Use `Array.isArray` when you need to distinguish arrays from plain objects.\n\n## Predict first\n\nWhat prints?\n\n```js\nconsole.log(typeof null);\nconsole.log(typeof []);\nconsole.log(typeof {});\nconsole.log(Array.isArray([]));\nconsole.log(Array.isArray(null));\n```\n\n### What to observe\n- `typeof null` is `\"object\"` (historical bug, kept for compatibility).\n- `typeof []` is `\"object\"`, not `\"array\"`.\n- `Array.isArray([])` is `true`; `Array.isArray(null)` is `false`.\n\n## Explanation\n\n| Value | `typeof` | `Array.isArray` |\n|-------|----------|-----------------|\n| `null` | `\"object\"` | `false` |\n| `[]` | `\"object\"` | `true` |\n| `{}` | `\"object\"` | `false` |\n| `\"hi\"` | `\"string\"` | `false` |\n| `42` | `\"number\"` | `false` |\n| `true` | `\"boolean\"` | `false` |\n| `undefined` | `\"undefined\"` | `false` |\n| `() => {}` | `\"function\"` | `false` |\n\nRule of thumb:\n- Use `typeof x === \"string\"` / `\"number\"` / `\"boolean\"` / `\"undefined\"` for primitives.\n- Use `x === null` to test null (not `typeof`).\n- Use `Array.isArray(x)` to test arrays (not `typeof x === \"object\"` alone).\n\n## What to observe\n\n```js\nfunction classify(value) {\n  if (value === null) return \"null\";\n  if (Array.isArray(value)) return \"array\";\n  return typeof value;\n}\n\nconsole.log(classify(null));    // \"null\"\nconsole.log(classify([]));      // \"array\"\nconsole.log(classify({}));      // \"object\"\n```\n\n## Quick challenge\nWithout running, classify each value: `0`, `\"\"`, `[]`, `{}`, `null`, `undefined`, `\"0\"`.\n\nWhich checks would you use in validation code for each?\n",
+          "moduleId": "01-javascript-fundamentals",
+          "graphIndex": "01.8.4"
+        },
+        {
           "id": "01.8.5-null-undefined-null",
           "title": "null, undefined, == null, ?., ??",
           "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/README.md",
@@ -4470,6 +5261,14 @@
           "markdown": "<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:02-objects-references-and-copying:examples/03-deep-copy-and-structuredclone.md -->\n\n# Example 03 — Deep Copy: `structuredClone` vs JSON\n\n## Context\nSometimes you need a full snapshot (deep copy). But not all deep-copy techniques are correct for all data.\n\n## Example A — JSON cloning is lossy\nPredict what prints:\n\n```js\nconst x = {\n  when: new Date(\"2020-01-01T00:00:00Z\"),\n  n: 1,\n};\n\nconst y = JSON.parse(JSON.stringify(x));\nconsole.log(typeof y.when, y.when);\n```\n\n### What to observe\n- JSON turns `Date` into a **string**.\n- JSON drops `undefined` and cannot represent functions.\n- JSON throws on `BigInt`.\n- JSON fails on cycles.\n\n## Example B — `structuredClone` preserves more types\nIf your runtime supports it, try:\n\n```js\nconst x = {\n  when: new Date(\"2020-01-01T00:00:00Z\"),\n  set: new Set([1, 2]),\n};\n\nconst y = structuredClone(x);\nconsole.log(y.when instanceof Date);\nconsole.log(y.set instanceof Set);\n```\n\n## Trade-off\nDeep copying everything can be expensive. Prefer:\n- shallow copies + copy-on-write for most updates\n- deep copy only when you truly need an immutable snapshot boundary\n\n## Mini-exercise\nCreate a function `cloneForSafety(value)` with this behavior:\n- If `structuredClone` exists, use it.\n- Otherwise, allow only JSON-safe data and clone with JSON.\n- If cloning fails, throw a helpful error.\n",
           "moduleId": "02-objects-references-and-copying",
           "graphIndex": "02.3"
+        },
+        {
+          "id": "02.4-object-hasown",
+          "title": "Object.hasOwn",
+          "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.4-object-hasown/README.md",
+          "markdown": "<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:javascript/02-objects-references-and-copying/02.4-object-hasown:README.md -->\n\n# Object.hasOwn — Own Properties vs Inherited\n\n## Context\nObjects can have properties on themselves **and** on their prototype chain. The `in` operator returns `true` for inherited properties; sometimes you only care about **own** properties.\n\n## Predict first\n\nWhat prints?\n\n```js\nconst base = { shared: true };\nconst user = Object.create(base);\nuser.name = \"Ana\";\n\nconsole.log(\"name\" in user);\nconsole.log(\"shared\" in user);\nconsole.log(Object.hasOwn(user, \"name\"));\nconsole.log(Object.hasOwn(user, \"shared\"));\n```\n\n### What to observe\n- `\"name\" in user` is `true` (own property).\n- `\"shared\" in user` is `true` (inherited from prototype).\n- `Object.hasOwn(user, \"name\")` is `true`.\n- `Object.hasOwn(user, \"shared\")` is `false` — prototype properties are not \"own\".\n\n## Explanation\n\n| Check | Own property | Inherited property |\n|-------|--------------|-------------------|\n| `\"key\" in obj` | yes | yes |\n| `Object.hasOwn(obj, \"key\")` | yes | no |\n| `obj.hasOwnProperty(\"key\")` | yes | no (avoid on objects that may override it) |\n\n`Object.hasOwn(obj, key)` is the modern, safe way to ask: **does this object itself define this key?**\n\nCommon use cases:\n- Iterating keys you defined on an instance (ignore prototype noise).\n- Distinguishing `\"toString\" in obj` (often inherited) from data fields you added.\n- Building serializers that should not treat inherited methods as data fields.\n\n## What to observe\n\n```js\nconst record = { id: 1 };\nconsole.log(Object.hasOwn(record, \"toString\")); // false\nconsole.log(\"toString\" in record);               // true (from Object.prototype)\n```\n\n## Quick challenge\nGiven:\n\n```js\nconst config = Object.create({ theme: \"dark\" });\nconfig.lang = \"en\";\nconfig.theme = \"light\";\n```\n\nList which keys are **own** vs **inherited**. Which value wins for `config.theme` when you read it?\n",
+          "moduleId": "02-objects-references-and-copying",
+          "graphIndex": "02.4"
         },
         {
           "id": "03.1.1-single-threaded-execution",
@@ -5155,6 +5954,41 @@
           "graphIndex": "01.8.3"
         },
         {
+          "id": "001-type-guard-cli",
+          "title": "001. Type Guard Cli",
+          "rootPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/projects/001-type-guard-cli",
+          "readmePath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/projects/001-type-guard-cli/README.md",
+          "readmeMarkdown": "# Type Guard CLI\n\n## Problem context\nValidation pipelines receive mixed JSON values. You need a reliable **type label** for logging and routing — without falling into `typeof null === \"object\"` or treating arrays as generic objects.\n\n## Goal\nImplement `classifyValue(value)` that returns one of: `\"null\"`, `\"array\"`, `\"object\"`, `\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"function\"`, `\"bigint\"`, `\"symbol\"`.\n\nCLI reads one JSON value from `stdin` and prints the label as a plain string line.\n\n## Functional requirements\n- [ ] Implement `classifyValue(value)` with these rules:\n  - [ ] `null` → `\"null\"` (not `\"object\"`)\n  - [ ] Arrays → `\"array\"` (use `Array.isArray`)\n  - [ ] Plain objects → `\"object\"`\n  - [ ] Primitives → matching `typeof` result (`\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"bigint\"`, `\"symbol\"`)\n  - [ ] Functions → `\"function\"`\n- [ ] CLI reads one JSON value from `stdin` (any JSON type).\n- [ ] Print exactly one label line to `stdout`.\n- [ ] On invalid JSON input, print `ERROR: invalid JSON`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Explicit null check before `typeof`\n- [ ] Deterministic output\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use loose equality for type detection\n- [ ] Order checks: `null` first, then `Array.isArray`, then remaining types\n\n## Acceptance criteria\n- [ ] `null` → `null`\n- [ ] `[]` → `array`\n- [ ] `{}` → `object`\n- [ ] `\"hi\"` → `string`\n- [ ] `0` → `number`\n- [ ] `true` → `boolean`\n- [ ] `undefined` (JSON absent value handled via parsing strategy or literal) → `undefined`\n\n## Example data\n\nInput (stdin):\n\n```json\n[]\n```\n\nOutput (stdout):\n\n```\narray\n```\n\nInput:\n\n```json\nnull\n```\n\nOutput:\n\n```\nnull\n```\n\n## Suggested plan (no solution)\n1. Parse stdin as JSON.\n2. If `value === null`, return `\"null\"`.\n3. If `Array.isArray(value)`, return `\"array\"`.\n4. Otherwise return `typeof value` (covers object, string, number, boolean, undefined, function, bigint, symbol).\n5. Print label without extra JSON quoting.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept multiple JSON lines and print one label per line\n- [ ] Reject `NaN` with a dedicated label or error\n",
+          "entries": [
+            {
+              "path": "",
+              "kind": "dir",
+              "readmeMarkdown": "# Type Guard CLI\n\n## Problem context\nValidation pipelines receive mixed JSON values. You need a reliable **type label** for logging and routing — without falling into `typeof null === \"object\"` or treating arrays as generic objects.\n\n## Goal\nImplement `classifyValue(value)` that returns one of: `\"null\"`, `\"array\"`, `\"object\"`, `\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"function\"`, `\"bigint\"`, `\"symbol\"`.\n\nCLI reads one JSON value from `stdin` and prints the label as a plain string line.\n\n## Functional requirements\n- [ ] Implement `classifyValue(value)` with these rules:\n  - [ ] `null` → `\"null\"` (not `\"object\"`)\n  - [ ] Arrays → `\"array\"` (use `Array.isArray`)\n  - [ ] Plain objects → `\"object\"`\n  - [ ] Primitives → matching `typeof` result (`\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"bigint\"`, `\"symbol\"`)\n  - [ ] Functions → `\"function\"`\n- [ ] CLI reads one JSON value from `stdin` (any JSON type).\n- [ ] Print exactly one label line to `stdout`.\n- [ ] On invalid JSON input, print `ERROR: invalid JSON`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Explicit null check before `typeof`\n- [ ] Deterministic output\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use loose equality for type detection\n- [ ] Order checks: `null` first, then `Array.isArray`, then remaining types\n\n## Acceptance criteria\n- [ ] `null` → `null`\n- [ ] `[]` → `array`\n- [ ] `{}` → `object`\n- [ ] `\"hi\"` → `string`\n- [ ] `0` → `number`\n- [ ] `true` → `boolean`\n- [ ] `undefined` (JSON absent value handled via parsing strategy or literal) → `undefined`\n\n## Example data\n\nInput (stdin):\n\n```json\n[]\n```\n\nOutput (stdout):\n\n```\narray\n```\n\nInput:\n\n```json\nnull\n```\n\nOutput:\n\n```\nnull\n```\n\n## Suggested plan (no solution)\n1. Parse stdin as JSON.\n2. If `value === null`, return `\"null\"`.\n3. If `Array.isArray(value)`, return `\"array\"`.\n4. Otherwise return `typeof value` (covers object, string, number, boolean, undefined, function, bigint, symbol).\n5. Print label without extra JSON quoting.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept multiple JSON lines and print one label per line\n- [ ] Reject `NaN` with a dedicated label or error\n"
+            },
+            {
+              "path": "solution",
+              "kind": "dir"
+            },
+            {
+              "path": "starter",
+              "kind": "dir"
+            },
+            {
+              "path": "README.md",
+              "kind": "file",
+              "content": "# Type Guard CLI\n\n## Problem context\nValidation pipelines receive mixed JSON values. You need a reliable **type label** for logging and routing — without falling into `typeof null === \"object\"` or treating arrays as generic objects.\n\n## Goal\nImplement `classifyValue(value)` that returns one of: `\"null\"`, `\"array\"`, `\"object\"`, `\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"function\"`, `\"bigint\"`, `\"symbol\"`.\n\nCLI reads one JSON value from `stdin` and prints the label as a plain string line.\n\n## Functional requirements\n- [ ] Implement `classifyValue(value)` with these rules:\n  - [ ] `null` → `\"null\"` (not `\"object\"`)\n  - [ ] Arrays → `\"array\"` (use `Array.isArray`)\n  - [ ] Plain objects → `\"object\"`\n  - [ ] Primitives → matching `typeof` result (`\"string\"`, `\"number\"`, `\"boolean\"`, `\"undefined\"`, `\"bigint\"`, `\"symbol\"`)\n  - [ ] Functions → `\"function\"`\n- [ ] CLI reads one JSON value from `stdin` (any JSON type).\n- [ ] Print exactly one label line to `stdout`.\n- [ ] On invalid JSON input, print `ERROR: invalid JSON`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Explicit null check before `typeof`\n- [ ] Deterministic output\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use loose equality for type detection\n- [ ] Order checks: `null` first, then `Array.isArray`, then remaining types\n\n## Acceptance criteria\n- [ ] `null` → `null`\n- [ ] `[]` → `array`\n- [ ] `{}` → `object`\n- [ ] `\"hi\"` → `string`\n- [ ] `0` → `number`\n- [ ] `true` → `boolean`\n- [ ] `undefined` (JSON absent value handled via parsing strategy or literal) → `undefined`\n\n## Example data\n\nInput (stdin):\n\n```json\n[]\n```\n\nOutput (stdout):\n\n```\narray\n```\n\nInput:\n\n```json\nnull\n```\n\nOutput:\n\n```\nnull\n```\n\n## Suggested plan (no solution)\n1. Parse stdin as JSON.\n2. If `value === null`, return `\"null\"`.\n3. If `Array.isArray(value)`, return `\"array\"`.\n4. Otherwise return `typeof value` (covers object, string, number, boolean, undefined, function, bigint, symbol).\n5. Print label without extra JSON quoting.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept multiple JSON lines and print one label per line\n- [ ] Reject `NaN` with a dedicated label or error\n"
+            },
+            {
+              "path": "starter/index.js",
+              "kind": "file",
+              "content": "/**\n * Type Guard CLI\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction classifyValue(value) {\n  // TODO: null → \"null\", arrays → \"array\", else typeof\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"invalid JSON\");\n\n  let value;\n  try {\n    value = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  let label;\n  try {\n    label = classifyValue(value);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"failed\");\n  }\n\n  process.stdout.write(`${label}\\n`);\n}\n\nmain();\n"
+            }
+          ],
+          "moduleId": "01-javascript-fundamentals",
+          "lessonId": "01.8.4-typeof-and-array-isarray",
+          "graphIndex": "01.8.4"
+        },
+        {
           "id": "023-default-config-builder",
           "title": "023. Default Config Builder",
           "rootPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/projects/023-default-config-builder",
@@ -5224,6 +6058,111 @@
           "moduleId": "02-objects-references-and-copying",
           "lessonId": "02.1-reference-vs-value",
           "graphIndex": "02.1"
+        },
+        {
+          "id": "001-nested-state-updater",
+          "title": "001. Nested State Updater",
+          "rootPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.2-shallow-vs-deep-copy/projects/001-nested-state-updater",
+          "readmePath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.2-shallow-vs-deep-copy/projects/001-nested-state-updater/README.md",
+          "readmeMarkdown": "# Nested State Updater\n\n## Problem context\nUI state in JavaScript is often nested: `{ items: [{ id, qty }] }`. A common bug is to shallow-copy the outer object and still mutate the original because inner arrays/objects are shared.\n\nThis project trains **copy-on-write**: update nested data without mutating the input state.\n\n## Goal\nImplement `incrementItemQty(state, itemId)` that returns a **new** state object with the matching item's `qty` incremented by 1, leaving `state` unchanged.\n\n## Functional requirements\n- [ ] Implement `incrementItemQty(state, itemId)` exported from `starter/index.js` (or defined there for the CLI).\n- [ ] Input `state` shape: `{ items: Array<{ id: number, qty: number }> }`.\n- [ ] Find the item where `item.id === itemId` and increment its `qty` by 1.\n- [ ] If no item matches `itemId`, return a deep-enough copy with no quantity changes (still must not mutate input).\n- [ ] Do **not** mutate `state`, `state.items`, or any item object inside `state`.\n- [ ] CLI: read one JSON line from `stdin` shaped as `{ \"state\": {...}, \"itemId\": number }`, print one JSON line `{ \"nextState\": {...} }`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Error handling for invalid input\n- [ ] Use spread/copy-on-write at each nested level you change\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input objects\n- [ ] Do not use `structuredClone` (practice manual copy-on-write)\n\n## Acceptance criteria\n- [ ] After calling `incrementItemQty(state, 1)`, `state.items[0].qty` is unchanged\n- [ ] Returned `nextState.items` is a new array reference\n- [ ] Updated item object is a new object reference\n- [ ] Unchanged items keep the same `qty` values in the output\n\n## Example data\n\nInput (stdin):\n\n```json\n{\"state\":{\"items\":[{\"id\":1,\"qty\":1},{\"id\":2,\"qty\":5}]},\"itemId\":1}\n```\n\nOutput (stdout):\n\n```json\n{\"nextState\":{\"items\":[{\"id\":1,\"qty\":2},{\"id\":2,\"qty\":5}]}}\n```\n\nVerify immutability:\n\n```js\nconst state = { items: [{ id: 1, qty: 1 }] };\nconst next = incrementItemQty(state, 1);\n// state.items[0].qty === 1\n// next.items[0].qty === 2\n// state.items !== next.items\n```\n\n## Suggested plan (no solution)\n1. Map over `state.items` to build a new array.\n2. For the matching `id`, return a **new item object** with `qty + 1`.\n3. For non-matching items, you may reuse the same item reference (optional) or copy for clarity.\n4. Return `{ items: newItems }` without mutating `state`.\n5. Wire the CLI to parse stdin, call the function, and print JSON.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Support incrementing by a custom delta passed in the CLI payload\n- [ ] Add a test that shallow copy `{ ...state }` would fail the immutability check\n",
+          "entries": [
+            {
+              "path": "",
+              "kind": "dir",
+              "readmeMarkdown": "# Nested State Updater\n\n## Problem context\nUI state in JavaScript is often nested: `{ items: [{ id, qty }] }`. A common bug is to shallow-copy the outer object and still mutate the original because inner arrays/objects are shared.\n\nThis project trains **copy-on-write**: update nested data without mutating the input state.\n\n## Goal\nImplement `incrementItemQty(state, itemId)` that returns a **new** state object with the matching item's `qty` incremented by 1, leaving `state` unchanged.\n\n## Functional requirements\n- [ ] Implement `incrementItemQty(state, itemId)` exported from `starter/index.js` (or defined there for the CLI).\n- [ ] Input `state` shape: `{ items: Array<{ id: number, qty: number }> }`.\n- [ ] Find the item where `item.id === itemId` and increment its `qty` by 1.\n- [ ] If no item matches `itemId`, return a deep-enough copy with no quantity changes (still must not mutate input).\n- [ ] Do **not** mutate `state`, `state.items`, or any item object inside `state`.\n- [ ] CLI: read one JSON line from `stdin` shaped as `{ \"state\": {...}, \"itemId\": number }`, print one JSON line `{ \"nextState\": {...} }`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Error handling for invalid input\n- [ ] Use spread/copy-on-write at each nested level you change\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input objects\n- [ ] Do not use `structuredClone` (practice manual copy-on-write)\n\n## Acceptance criteria\n- [ ] After calling `incrementItemQty(state, 1)`, `state.items[0].qty` is unchanged\n- [ ] Returned `nextState.items` is a new array reference\n- [ ] Updated item object is a new object reference\n- [ ] Unchanged items keep the same `qty` values in the output\n\n## Example data\n\nInput (stdin):\n\n```json\n{\"state\":{\"items\":[{\"id\":1,\"qty\":1},{\"id\":2,\"qty\":5}]},\"itemId\":1}\n```\n\nOutput (stdout):\n\n```json\n{\"nextState\":{\"items\":[{\"id\":1,\"qty\":2},{\"id\":2,\"qty\":5}]}}\n```\n\nVerify immutability:\n\n```js\nconst state = { items: [{ id: 1, qty: 1 }] };\nconst next = incrementItemQty(state, 1);\n// state.items[0].qty === 1\n// next.items[0].qty === 2\n// state.items !== next.items\n```\n\n## Suggested plan (no solution)\n1. Map over `state.items` to build a new array.\n2. For the matching `id`, return a **new item object** with `qty + 1`.\n3. For non-matching items, you may reuse the same item reference (optional) or copy for clarity.\n4. Return `{ items: newItems }` without mutating `state`.\n5. Wire the CLI to parse stdin, call the function, and print JSON.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Support incrementing by a custom delta passed in the CLI payload\n- [ ] Add a test that shallow copy `{ ...state }` would fail the immutability check\n"
+            },
+            {
+              "path": "solution",
+              "kind": "dir"
+            },
+            {
+              "path": "starter",
+              "kind": "dir"
+            },
+            {
+              "path": "README.md",
+              "kind": "file",
+              "content": "# Nested State Updater\n\n## Problem context\nUI state in JavaScript is often nested: `{ items: [{ id, qty }] }`. A common bug is to shallow-copy the outer object and still mutate the original because inner arrays/objects are shared.\n\nThis project trains **copy-on-write**: update nested data without mutating the input state.\n\n## Goal\nImplement `incrementItemQty(state, itemId)` that returns a **new** state object with the matching item's `qty` incremented by 1, leaving `state` unchanged.\n\n## Functional requirements\n- [ ] Implement `incrementItemQty(state, itemId)` exported from `starter/index.js` (or defined there for the CLI).\n- [ ] Input `state` shape: `{ items: Array<{ id: number, qty: number }> }`.\n- [ ] Find the item where `item.id === itemId` and increment its `qty` by 1.\n- [ ] If no item matches `itemId`, return a deep-enough copy with no quantity changes (still must not mutate input).\n- [ ] Do **not** mutate `state`, `state.items`, or any item object inside `state`.\n- [ ] CLI: read one JSON line from `stdin` shaped as `{ \"state\": {...}, \"itemId\": number }`, print one JSON line `{ \"nextState\": {...} }`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Error handling for invalid input\n- [ ] Use spread/copy-on-write at each nested level you change\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input objects\n- [ ] Do not use `structuredClone` (practice manual copy-on-write)\n\n## Acceptance criteria\n- [ ] After calling `incrementItemQty(state, 1)`, `state.items[0].qty` is unchanged\n- [ ] Returned `nextState.items` is a new array reference\n- [ ] Updated item object is a new object reference\n- [ ] Unchanged items keep the same `qty` values in the output\n\n## Example data\n\nInput (stdin):\n\n```json\n{\"state\":{\"items\":[{\"id\":1,\"qty\":1},{\"id\":2,\"qty\":5}]},\"itemId\":1}\n```\n\nOutput (stdout):\n\n```json\n{\"nextState\":{\"items\":[{\"id\":1,\"qty\":2},{\"id\":2,\"qty\":5}]}}\n```\n\nVerify immutability:\n\n```js\nconst state = { items: [{ id: 1, qty: 1 }] };\nconst next = incrementItemQty(state, 1);\n// state.items[0].qty === 1\n// next.items[0].qty === 2\n// state.items !== next.items\n```\n\n## Suggested plan (no solution)\n1. Map over `state.items` to build a new array.\n2. For the matching `id`, return a **new item object** with `qty + 1`.\n3. For non-matching items, you may reuse the same item reference (optional) or copy for clarity.\n4. Return `{ items: newItems }` without mutating `state`.\n5. Wire the CLI to parse stdin, call the function, and print JSON.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Support incrementing by a custom delta passed in the CLI payload\n- [ ] Add a test that shallow copy `{ ...state }` would fail the immutability check\n"
+            },
+            {
+              "path": "starter/index.js",
+              "kind": "file",
+              "content": "/**\n * Nested State Updater\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction incrementItemQty(state, itemId) {\n  // TODO: copy-on-write — do not mutate state or nested objects\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let payload;\n  try {\n    payload = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  if (payload == null || typeof payload !== \"object\" || Array.isArray(payload)) {\n    return fail(\"payload must be a JSON object\");\n  }\n\n  const { state, itemId } = payload;\n  if (state == null || typeof state !== \"object\" || Array.isArray(state)) {\n    return fail(\"state must be an object\");\n  }\n  if (typeof itemId !== \"number\" || !Number.isInteger(itemId)) {\n    return fail(\"itemId must be an integer\");\n  }\n\n  const before = JSON.stringify(state);\n\n  let nextState;\n  try {\n    nextState = incrementItemQty(state, itemId);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"clone failed\");\n  }\n\n  if (JSON.stringify(state) !== before) {\n    return fail(\"state was mutated\");\n  }\n\n  process.stdout.write(`${JSON.stringify({ nextState })}\\n`);\n}\n\nmain();\n"
+            }
+          ],
+          "moduleId": "02-objects-references-and-copying",
+          "lessonId": "02.2-shallow-vs-deep-copy",
+          "graphIndex": "02.2"
+        },
+        {
+          "id": "001-snapshot-cloner",
+          "title": "001. Snapshot Cloner",
+          "rootPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.3-structuredclone/projects/001-snapshot-cloner",
+          "readmePath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.3-structuredclone/projects/001-snapshot-cloner/README.md",
+          "readmeMarkdown": "# Snapshot Cloner\n\n## Problem context\nBefore sending data to another subsystem, teams often need an **immutable snapshot**. JSON cloning is tempting but lossy (`Date` → string, `undefined` dropped, `BigInt` throws).\n\nThis project builds a safe snapshot function using `structuredClone` when available, with a JSON fallback for simple data.\n\n## Goal\nImplement `cloneForSafety(value)` and a CLI that reads one JSON line from stdin, clones it, and prints the clone as one JSON line — without mutating the original parsed value.\n\n## Functional requirements\n- [ ] Implement `cloneForSafety(value)`:\n  - [ ] If `typeof structuredClone === \"function\"`, use it.\n  - [ ] Otherwise clone JSON-safe data via `JSON.parse(JSON.stringify(value))`.\n  - [ ] If cloning fails, throw an `Error` with a helpful message.\n- [ ] CLI reads one JSON value from `stdin` (object, array, or primitive).\n- [ ] Print cloned result as one JSON line to `stdout`.\n- [ ] Verify the original parsed value was not mutated (compare `JSON.stringify` before/after).\n- [ ] On error, print `ERROR: <message>` as one line.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages for unsupported data in JSON fallback\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input\n- [ ] JSON fallback must reject non-JSON-safe values with a clear error (e.g. `BigInt`, functions)\n\n## Acceptance criteria\n- [ ] `{ n: 1 }` clones to an equal but distinct object (`!==` original)\n- [ ] `{ when: \"2020-01-01T00:00:00.000Z\" }` clones successfully via JSON path\n- [ ] Input with `BigInt` fails gracefully when `structuredClone` is unavailable (or succeeds with `structuredClone` in modern Node)\n- [ ] Original input unchanged after clone\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\nOutput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\n(with different object identity than the parsed input)\n\n## Suggested plan (no solution)\n1. Parse stdin JSON safely.\n2. Snapshot `JSON.stringify(input)` before cloning.\n3. Implement `cloneForSafety` with structuredClone-first, JSON fallback second.\n4. In JSON fallback, wrap `JSON.stringify` in try/catch for `BigInt`/cycles.\n5. Compare before/after snapshots; fail if input mutated.\n6. Print cloned value as one JSON line.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `--report` flag listing which clone strategy was used\n- [ ] Document which types JSON loses vs `structuredClone` preserves\n",
+          "entries": [
+            {
+              "path": "",
+              "kind": "dir",
+              "readmeMarkdown": "# Snapshot Cloner\n\n## Problem context\nBefore sending data to another subsystem, teams often need an **immutable snapshot**. JSON cloning is tempting but lossy (`Date` → string, `undefined` dropped, `BigInt` throws).\n\nThis project builds a safe snapshot function using `structuredClone` when available, with a JSON fallback for simple data.\n\n## Goal\nImplement `cloneForSafety(value)` and a CLI that reads one JSON line from stdin, clones it, and prints the clone as one JSON line — without mutating the original parsed value.\n\n## Functional requirements\n- [ ] Implement `cloneForSafety(value)`:\n  - [ ] If `typeof structuredClone === \"function\"`, use it.\n  - [ ] Otherwise clone JSON-safe data via `JSON.parse(JSON.stringify(value))`.\n  - [ ] If cloning fails, throw an `Error` with a helpful message.\n- [ ] CLI reads one JSON value from `stdin` (object, array, or primitive).\n- [ ] Print cloned result as one JSON line to `stdout`.\n- [ ] Verify the original parsed value was not mutated (compare `JSON.stringify` before/after).\n- [ ] On error, print `ERROR: <message>` as one line.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages for unsupported data in JSON fallback\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input\n- [ ] JSON fallback must reject non-JSON-safe values with a clear error (e.g. `BigInt`, functions)\n\n## Acceptance criteria\n- [ ] `{ n: 1 }` clones to an equal but distinct object (`!==` original)\n- [ ] `{ when: \"2020-01-01T00:00:00.000Z\" }` clones successfully via JSON path\n- [ ] Input with `BigInt` fails gracefully when `structuredClone` is unavailable (or succeeds with `structuredClone` in modern Node)\n- [ ] Original input unchanged after clone\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\nOutput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\n(with different object identity than the parsed input)\n\n## Suggested plan (no solution)\n1. Parse stdin JSON safely.\n2. Snapshot `JSON.stringify(input)` before cloning.\n3. Implement `cloneForSafety` with structuredClone-first, JSON fallback second.\n4. In JSON fallback, wrap `JSON.stringify` in try/catch for `BigInt`/cycles.\n5. Compare before/after snapshots; fail if input mutated.\n6. Print cloned value as one JSON line.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `--report` flag listing which clone strategy was used\n- [ ] Document which types JSON loses vs `structuredClone` preserves\n"
+            },
+            {
+              "path": "solution",
+              "kind": "dir"
+            },
+            {
+              "path": "starter",
+              "kind": "dir"
+            },
+            {
+              "path": "README.md",
+              "kind": "file",
+              "content": "# Snapshot Cloner\n\n## Problem context\nBefore sending data to another subsystem, teams often need an **immutable snapshot**. JSON cloning is tempting but lossy (`Date` → string, `undefined` dropped, `BigInt` throws).\n\nThis project builds a safe snapshot function using `structuredClone` when available, with a JSON fallback for simple data.\n\n## Goal\nImplement `cloneForSafety(value)` and a CLI that reads one JSON line from stdin, clones it, and prints the clone as one JSON line — without mutating the original parsed value.\n\n## Functional requirements\n- [ ] Implement `cloneForSafety(value)`:\n  - [ ] If `typeof structuredClone === \"function\"`, use it.\n  - [ ] Otherwise clone JSON-safe data via `JSON.parse(JSON.stringify(value))`.\n  - [ ] If cloning fails, throw an `Error` with a helpful message.\n- [ ] CLI reads one JSON value from `stdin` (object, array, or primitive).\n- [ ] Print cloned result as one JSON line to `stdout`.\n- [ ] Verify the original parsed value was not mutated (compare `JSON.stringify` before/after).\n- [ ] On error, print `ERROR: <message>` as one line.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages for unsupported data in JSON fallback\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not mutate the parsed input\n- [ ] JSON fallback must reject non-JSON-safe values with a clear error (e.g. `BigInt`, functions)\n\n## Acceptance criteria\n- [ ] `{ n: 1 }` clones to an equal but distinct object (`!==` original)\n- [ ] `{ when: \"2020-01-01T00:00:00.000Z\" }` clones successfully via JSON path\n- [ ] Input with `BigInt` fails gracefully when `structuredClone` is unavailable (or succeeds with `structuredClone` in modern Node)\n- [ ] Original input unchanged after clone\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\nOutput:\n\n```json\n{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n```\n\n(with different object identity than the parsed input)\n\n## Suggested plan (no solution)\n1. Parse stdin JSON safely.\n2. Snapshot `JSON.stringify(input)` before cloning.\n3. Implement `cloneForSafety` with structuredClone-first, JSON fallback second.\n4. In JSON fallback, wrap `JSON.stringify` in try/catch for `BigInt`/cycles.\n5. Compare before/after snapshots; fail if input mutated.\n6. Print cloned value as one JSON line.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `--report` flag listing which clone strategy was used\n- [ ] Document which types JSON loses vs `structuredClone` preserves\n"
+            },
+            {
+              "path": "starter/index.js",
+              "kind": "file",
+              "content": "/**\n * Snapshot Cloner\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction cloneForSafety(value) {\n  // TODO: structuredClone when available, else JSON fallback with clear errors\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let input;\n  try {\n    input = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  const before = JSON.stringify(input);\n\n  let cloned;\n  try {\n    cloned = cloneForSafety(input);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"clone failed\");\n  }\n\n  if (JSON.stringify(input) !== before) {\n    return fail(\"input was mutated\");\n  }\n\n  process.stdout.write(`${JSON.stringify(cloned)}\\n`);\n}\n\nmain();\n"
+            }
+          ],
+          "moduleId": "02-objects-references-and-copying",
+          "lessonId": "02.3-structuredclone",
+          "graphIndex": "02.3"
+        },
+        {
+          "id": "001-own-keys-filter",
+          "title": "001. Own Keys Filter",
+          "rootPath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.4-object-hasown/projects/001-own-keys-filter",
+          "readmePath": "course/javascript/modules/02-objects-references-and-copying/lessons/02.4-object-hasown/projects/001-own-keys-filter/README.md",
+          "readmeMarkdown": "# Own Keys Filter\n\n## Problem context\nWhen processing user records, you often need to serialize **only fields defined on the object**, not inherited prototype properties like `toString`.\n\nThis project trains `Object.hasOwn` to filter enumerable own keys safely.\n\n## Goal\nImplement `ownKeys(obj)` that returns an array of **own enumerable string keys** sorted alphabetically, ignoring inherited properties.\n\n## Functional requirements\n- [ ] Implement `ownKeys(obj)`.\n- [ ] Include only keys where `Object.hasOwn(obj, key)` is true.\n- [ ] Include only enumerable own keys (use `Object.keys` semantics combined with `hasOwn`, or equivalent).\n- [ ] Return keys sorted in ascending lexicographic order.\n- [ ] CLI: read one JSON object from `stdin`, print JSON array of own keys to `stdout`.\n- [ ] If input is not a plain object, print `ERROR: <message>`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Do not mutate the input object\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Use `Object.hasOwn` (not legacy `hasOwnProperty` on the object directly)\n- [ ] Reject `null`, arrays, and primitives with a clear error\n\n## Acceptance criteria\n- [ ] `{}` → `[]`\n- [ ] `{ b: 1, a: 2 }` → `[\"a\", \"b\"]`\n- [ ] Object with prototype properties does not list inherited keys\n- [ ] Input object unchanged after the call\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"score\":10}\n```\n\nOutput:\n\n```json\n[\"name\",\"score\"]\n```\n\nPrototype case:\n\n```js\nconst base = { inherited: true };\nconst obj = Object.create(base);\nobj.id = 1;\n// ownKeys(obj) => [\"id\"]\n```\n\n## Suggested plan (no solution)\n1. Validate input is a non-null, non-array object.\n2. Collect candidate keys (e.g. `Object.keys(obj)` or `for...in` with `hasOwn` guard).\n3. Filter with `Object.hasOwn(obj, key)`.\n4. Sort and return.\n5. Wire CLI to parse stdin and print JSON array.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `ownEntries(obj)` returning `[key, value]` pairs for own keys only\n- [ ] Support a `--values` flag that outputs own key/value object\n",
+          "entries": [
+            {
+              "path": "",
+              "kind": "dir",
+              "readmeMarkdown": "# Own Keys Filter\n\n## Problem context\nWhen processing user records, you often need to serialize **only fields defined on the object**, not inherited prototype properties like `toString`.\n\nThis project trains `Object.hasOwn` to filter enumerable own keys safely.\n\n## Goal\nImplement `ownKeys(obj)` that returns an array of **own enumerable string keys** sorted alphabetically, ignoring inherited properties.\n\n## Functional requirements\n- [ ] Implement `ownKeys(obj)`.\n- [ ] Include only keys where `Object.hasOwn(obj, key)` is true.\n- [ ] Include only enumerable own keys (use `Object.keys` semantics combined with `hasOwn`, or equivalent).\n- [ ] Return keys sorted in ascending lexicographic order.\n- [ ] CLI: read one JSON object from `stdin`, print JSON array of own keys to `stdout`.\n- [ ] If input is not a plain object, print `ERROR: <message>`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Do not mutate the input object\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Use `Object.hasOwn` (not legacy `hasOwnProperty` on the object directly)\n- [ ] Reject `null`, arrays, and primitives with a clear error\n\n## Acceptance criteria\n- [ ] `{}` → `[]`\n- [ ] `{ b: 1, a: 2 }` → `[\"a\", \"b\"]`\n- [ ] Object with prototype properties does not list inherited keys\n- [ ] Input object unchanged after the call\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"score\":10}\n```\n\nOutput:\n\n```json\n[\"name\",\"score\"]\n```\n\nPrototype case:\n\n```js\nconst base = { inherited: true };\nconst obj = Object.create(base);\nobj.id = 1;\n// ownKeys(obj) => [\"id\"]\n```\n\n## Suggested plan (no solution)\n1. Validate input is a non-null, non-array object.\n2. Collect candidate keys (e.g. `Object.keys(obj)` or `for...in` with `hasOwn` guard).\n3. Filter with `Object.hasOwn(obj, key)`.\n4. Sort and return.\n5. Wire CLI to parse stdin and print JSON array.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `ownEntries(obj)` returning `[key, value]` pairs for own keys only\n- [ ] Support a `--values` flag that outputs own key/value object\n"
+            },
+            {
+              "path": "solution",
+              "kind": "dir"
+            },
+            {
+              "path": "starter",
+              "kind": "dir"
+            },
+            {
+              "path": "README.md",
+              "kind": "file",
+              "content": "# Own Keys Filter\n\n## Problem context\nWhen processing user records, you often need to serialize **only fields defined on the object**, not inherited prototype properties like `toString`.\n\nThis project trains `Object.hasOwn` to filter enumerable own keys safely.\n\n## Goal\nImplement `ownKeys(obj)` that returns an array of **own enumerable string keys** sorted alphabetically, ignoring inherited properties.\n\n## Functional requirements\n- [ ] Implement `ownKeys(obj)`.\n- [ ] Include only keys where `Object.hasOwn(obj, key)` is true.\n- [ ] Include only enumerable own keys (use `Object.keys` semantics combined with `hasOwn`, or equivalent).\n- [ ] Return keys sorted in ascending lexicographic order.\n- [ ] CLI: read one JSON object from `stdin`, print JSON array of own keys to `stdout`.\n- [ ] If input is not a plain object, print `ERROR: <message>`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Do not mutate the input object\n- [ ] Deterministic output for the same input\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Use `Object.hasOwn` (not legacy `hasOwnProperty` on the object directly)\n- [ ] Reject `null`, arrays, and primitives with a clear error\n\n## Acceptance criteria\n- [ ] `{}` → `[]`\n- [ ] `{ b: 1, a: 2 }` → `[\"a\", \"b\"]`\n- [ ] Object with prototype properties does not list inherited keys\n- [ ] Input object unchanged after the call\n\n## Example data\n\nInput:\n\n```json\n{\"name\":\"Ana\",\"score\":10}\n```\n\nOutput:\n\n```json\n[\"name\",\"score\"]\n```\n\nPrototype case:\n\n```js\nconst base = { inherited: true };\nconst obj = Object.create(base);\nobj.id = 1;\n// ownKeys(obj) => [\"id\"]\n```\n\n## Suggested plan (no solution)\n1. Validate input is a non-null, non-array object.\n2. Collect candidate keys (e.g. `Object.keys(obj)` or `for...in` with `hasOwn` guard).\n3. Filter with `Object.hasOwn(obj, key)`.\n4. Sort and return.\n5. Wire CLI to parse stdin and print JSON array.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `ownEntries(obj)` returning `[key, value]` pairs for own keys only\n- [ ] Support a `--values` flag that outputs own key/value object\n"
+            },
+            {
+              "path": "starter/index.js",
+              "kind": "file",
+              "content": "/**\n * Own Keys Filter\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction ownKeys(obj) {\n  // TODO: return sorted own enumerable keys using Object.hasOwn\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let input;\n  try {\n    input = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  if (input == null || typeof input !== \"object\" || Array.isArray(input)) {\n    return fail(\"input must be a JSON object\");\n  }\n\n  let keys;\n  try {\n    keys = ownKeys(input);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"failed\");\n  }\n\n  process.stdout.write(`${JSON.stringify(keys)}\\n`);\n}\n\nmain();\n"
+            }
+          ],
+          "moduleId": "02-objects-references-and-copying",
+          "lessonId": "02.4-object-hasown",
+          "graphIndex": "02.4"
         },
         {
           "id": "001-output-order-predictor",
@@ -8046,6 +8985,137 @@
         },
         {
           "id": "quiz",
+          "title": "typeof and Array.isArray Check",
+          "description": "Predict typeof quirks and correct array detection.",
+          "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/quiz/quiz.json",
+          "questions": [
+            {
+              "id": "q1",
+              "prompt": "What is `typeof null`?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`\"object\"`"
+                },
+                {
+                  "id": "b",
+                  "text": "`\"null\"`"
+                },
+                {
+                  "id": "c",
+                  "text": "`\"undefined\"`"
+                },
+                {
+                  "id": "d",
+                  "text": "TypeError"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`typeof null` is the famous historical quirk: it returns `\"object\"`. Test null with `value === null`."
+            },
+            {
+              "id": "q2",
+              "prompt": "What is `typeof []`?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`\"object\"`"
+                },
+                {
+                  "id": "b",
+                  "text": "`\"array\"`"
+                },
+                {
+                  "id": "c",
+                  "text": "`\"undefined\"`"
+                },
+                {
+                  "id": "d",
+                  "text": "`\"function\"`"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Arrays are objects in JavaScript, so `typeof []` is `\"object\"`. Use `Array.isArray` to detect arrays."
+            },
+            {
+              "id": "q3",
+              "prompt": "Which expression correctly detects an array?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`Array.isArray(value)`"
+                },
+                {
+                  "id": "b",
+                  "text": "`typeof value === \"array\"`"
+                },
+                {
+                  "id": "c",
+                  "text": "`value === []`"
+                },
+                {
+                  "id": "d",
+                  "text": "`typeof value === \"object\" && value.length !== undefined`"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`Array.isArray` is the reliable built-in. `typeof` has no `\"array\"` result, and length checks false-positive plain objects."
+            },
+            {
+              "id": "q4",
+              "prompt": "What is `Array.isArray(null)`?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "false"
+                },
+                {
+                  "id": "b",
+                  "text": "true"
+                },
+                {
+                  "id": "c",
+                  "text": "null"
+                },
+                {
+                  "id": "d",
+                  "text": "TypeError"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Only array values return true. `null` is not an array."
+            },
+            {
+              "id": "q5",
+              "prompt": "What should `classify(null)` return in a type-guard function?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`\"null\"` (explicit null check before typeof)"
+                },
+                {
+                  "id": "b",
+                  "text": "`\"object\"` (use typeof directly)"
+                },
+                {
+                  "id": "c",
+                  "text": "`\"undefined\"`"
+                },
+                {
+                  "id": "d",
+                  "text": "false"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Because `typeof null` is `\"object\"`, classify null with `value === null` first and return a dedicated `\"null\"` label."
+            }
+          ],
+          "lessonId": "01.8.4-typeof-and-array-isarray",
+          "graphIndex": "01.8.4",
+          "moduleId": "01-javascript-fundamentals"
+        },
+        {
+          "id": "quiz",
           "title": "Nullish Operators Check",
           "description": "`null`, `undefined`, `== null`, `?.`, and `??`.",
           "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/quiz/quiz.json",
@@ -8262,6 +9332,502 @@
               "explanation": "Double negation (`!!`) converts to boolean. The other options change type or value."
             }
           ]
+        },
+        {
+          "id": "quiz",
+          "title": "Reference vs Value Check",
+          "description": "Predict when variables share objects vs copy primitives.",
+          "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.1-reference-vs-value/quiz/quiz.json",
+          "questions": [
+            {
+              "id": "q1",
+              "prompt": "What prints?\n\n```js\nlet a = 10;\nlet b = a;\nb = 20;\nconsole.log(a, b);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "10 20"
+                },
+                {
+                  "id": "b",
+                  "text": "20 20"
+                },
+                {
+                  "id": "c",
+                  "text": "10 10"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Primitives copy by value. Reassigning `b` does not change `a`."
+            },
+            {
+              "id": "q2",
+              "prompt": "What prints?\n\n```js\nconst a = { n: 10 };\nconst b = a;\nb.n = 20;\nconsole.log(a.n, b.n);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "20 20"
+                },
+                {
+                  "id": "b",
+                  "text": "10 20"
+                },
+                {
+                  "id": "c",
+                  "text": "10 10"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`b = a` creates an alias. Mutating through `b` changes the same object that `a` references."
+            },
+            {
+              "id": "q3",
+              "prompt": "What prints?\n\n```js\nconst a = { n: 1 };\nlet b = a;\nb = { n: 999 };\na.n = 2;\nconsole.log(a.n, b.n);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "2 999"
+                },
+                {
+                  "id": "b",
+                  "text": "2 2"
+                },
+                {
+                  "id": "c",
+                  "text": "999 999"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`b = { n: 999 }` is reassignment (new object), not mutation. `a.n = 2` mutates the original object only."
+            },
+            {
+              "id": "q4",
+              "prompt": "Which assignment creates an **alias** (two variables referencing the same object)?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`const b = a` when `a` is an object"
+                },
+                {
+                  "id": "b",
+                  "text": "`let b = a` when `a` is a number"
+                },
+                {
+                  "id": "c",
+                  "text": "`const b = { ...a }`"
+                },
+                {
+                  "id": "d",
+                  "text": "`let b = a + 1` when `a` is a number"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Assigning an object variable to another creates a reference alias. Spread creates a new top-level object (shallow copy), and primitives copy by value."
+            },
+            {
+              "id": "q5",
+              "prompt": "Which of these is **mutation** (changing an existing value in place)?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`obj.n = 2`"
+                },
+                {
+                  "id": "b",
+                  "text": "`b = { n: 999 }`"
+                },
+                {
+                  "id": "c",
+                  "text": "`let b = a` when `a` is a number"
+                },
+                {
+                  "id": "d",
+                  "text": "`const copy = { ...obj }`"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Setting a property on an existing object mutates it. Reassignment and spread create new bindings or containers."
+            }
+          ],
+          "lessonId": "02.1-reference-vs-value",
+          "graphIndex": "02.1",
+          "moduleId": "02-objects-references-and-copying"
+        },
+        {
+          "id": "quiz",
+          "title": "Shallow Copy Check",
+          "description": "Predict nested sharing with spread and copy-on-write patterns.",
+          "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.2-shallow-vs-deep-copy/quiz/quiz.json",
+          "questions": [
+            {
+              "id": "q1",
+              "prompt": "What prints?\n\n```js\nconst user = { name: \"Ana\", address: { city: \"SP\" } };\nconst copy = { ...user };\ncopy.address.city = \"RJ\";\nconsole.log(user.address.city);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "\"RJ\""
+                },
+                {
+                  "id": "b",
+                  "text": "\"SP\""
+                },
+                {
+                  "id": "c",
+                  "text": "undefined"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Object spread is shallow: `copy` is new, but `copy.address` and `user.address` still point to the same nested object."
+            },
+            {
+              "id": "q2",
+              "prompt": "What prints?\n\n```js\nconst a = [{ x: 1 }];\nconst b = [...a];\nb[0].x = 99;\nconsole.log(a[0].x);\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "99"
+                },
+                {
+                  "id": "b",
+                  "text": "1"
+                },
+                {
+                  "id": "c",
+                  "text": "undefined"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Array spread is also shallow. The outer array is new, but elements inside are still shared references."
+            },
+            {
+              "id": "q3",
+              "prompt": "Which update **does not** mutate the original `user`?\n\n```js\nconst user = { name: \"Ana\", address: { city: \"SP\" } };\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`const next = { ...user, address: { ...user.address, city: \"RJ\" } };`"
+                },
+                {
+                  "id": "b",
+                  "text": "`const copy = { ...user }; copy.address.city = \"RJ\";`"
+                },
+                {
+                  "id": "c",
+                  "text": "`user.address.city = \"RJ\";`"
+                },
+                {
+                  "id": "d",
+                  "text": "`Object.assign(user, { address: { city: \"RJ\" } });`"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Copy-on-write replaces every nested level you change. Options b–d mutate shared nested data or the original object."
+            },
+            {
+              "id": "q4",
+              "prompt": "What is true about `{ ...obj }` and `Object.assign({}, obj)`?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "Both create a shallow copy of the top level only"
+                },
+                {
+                  "id": "b",
+                  "text": "Both create a deep copy of all nested objects"
+                },
+                {
+                  "id": "c",
+                  "text": "Spread is deep; Object.assign is shallow"
+                },
+                {
+                  "id": "d",
+                  "text": "Neither copies anything; both create aliases"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Spread and Object.assign copy enumerable own properties into a new object. Nested values are still shared references."
+            },
+            {
+              "id": "q5",
+              "prompt": "Given `const state = { items: [{ id: 1, qty: 1 }] };`, which pattern correctly increments `qty` without mutating `state`?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "Build `nextState` with spread at both the `items` array and the changed item object"
+                },
+                {
+                  "id": "b",
+                  "text": "`state.items[0].qty += 1`"
+                },
+                {
+                  "id": "c",
+                  "text": "`const next = { ...state }; next.items[0].qty += 1`"
+                },
+                {
+                  "id": "d",
+                  "text": "`const next = [...state.items]; next[0].qty += 1`"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Shallow copy of `state` or `items` still shares inner item objects. You must copy the array and replace the changed item."
+            }
+          ],
+          "lessonId": "02.2-shallow-vs-deep-copy",
+          "graphIndex": "02.2",
+          "moduleId": "02-objects-references-and-copying"
+        },
+        {
+          "id": "quiz",
+          "title": "Deep Copy Check",
+          "description": "JSON clone limits vs structuredClone for snapshots.",
+          "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.3-structuredclone/quiz/quiz.json",
+          "questions": [
+            {
+              "id": "q1",
+              "prompt": "After this JSON clone, what is `typeof y.when`?\n\n```js\nconst x = { when: new Date(), n: 1 };\nconst y = JSON.parse(JSON.stringify(x));\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "\"string\""
+                },
+                {
+                  "id": "b",
+                  "text": "\"object\" (still a Date)"
+                },
+                {
+                  "id": "c",
+                  "text": "\"undefined\""
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "JSON serialization turns `Date` into an ISO string. JSON cloning is lossy for many types."
+            },
+            {
+              "id": "q2",
+              "prompt": "What prints?\n\n```js\nconst a = { n: 1n };\ntry {\n  JSON.stringify(a);\n  console.log(\"ok\");\n} catch (e) {\n  console.log(\"error\");\n}\n```",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "error"
+                },
+                {
+                  "id": "b",
+                  "text": "ok"
+                },
+                {
+                  "id": "c",
+                  "text": "undefined"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`JSON.stringify` throws on `BigInt`. That is another reason JSON cloning is not a universal deep-copy solution."
+            },
+            {
+              "id": "q3",
+              "prompt": "What happens to `undefined` values in nested objects when using `JSON.parse(JSON.stringify(x))`?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "They are dropped (keys removed)"
+                },
+                {
+                  "id": "b",
+                  "text": "They are preserved as `undefined`"
+                },
+                {
+                  "id": "c",
+                  "text": "They become `null`"
+                },
+                {
+                  "id": "d",
+                  "text": "JSON.stringify throws immediately"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "JSON cannot represent `undefined`. During serialization, object properties with `undefined` values are omitted."
+            },
+            {
+              "id": "q4",
+              "prompt": "After `const y = structuredClone(x)` where `x = { when: new Date(), set: new Set([1, 2]) }`, which is true?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`y.when instanceof Date` and `y.set instanceof Set`"
+                },
+                {
+                  "id": "b",
+                  "text": "`typeof y.when === \"string\"`"
+                },
+                {
+                  "id": "c",
+                  "text": "`y.set` is a plain array `[1, 2]`"
+                },
+                {
+                  "id": "d",
+                  "text": "`y === x` (same reference)"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`structuredClone` preserves supported built-in types like `Date` and `Set`, unlike JSON cloning."
+            },
+            {
+              "id": "q5",
+              "prompt": "When should you prefer a deep copy over shallow copy + copy-on-write?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "When you need an immutable snapshot boundary and cannot risk shared nested references"
+                },
+                {
+                  "id": "b",
+                  "text": "For every variable assignment in the program"
+                },
+                {
+                  "id": "c",
+                  "text": "Only when copying primitive numbers"
+                },
+                {
+                  "id": "d",
+                  "text": "Never — deep copy is always wrong"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Deep copies are expensive. Use them when you truly need isolation; otherwise prefer targeted copy-on-write updates."
+            }
+          ],
+          "lessonId": "02.3-structuredclone",
+          "graphIndex": "02.3",
+          "moduleId": "02-objects-references-and-copying"
+        },
+        {
+          "id": "quiz",
+          "title": "Object.hasOwn Check",
+          "description": "Own properties vs inherited prototype chain.",
+          "path": "course/javascript/modules/02-objects-references-and-copying/lessons/02.4-object-hasown/quiz/quiz.json",
+          "questions": [
+            {
+              "id": "q1",
+              "prompt": "Given:\n\n```js\nconst base = { shared: true };\nconst user = Object.create(base);\nuser.name = \"Ana\";\n```\n\nWhich is **true**?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`Object.hasOwn(user, \"shared\")` is false"
+                },
+                {
+                  "id": "b",
+                  "text": "`Object.hasOwn(user, \"shared\")` is true"
+                },
+                {
+                  "id": "c",
+                  "text": "`\"shared\" in user` is false"
+                },
+                {
+                  "id": "d",
+                  "text": "`Object.hasOwn(user, \"name\")` is false"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`shared` is on the prototype, not an own property. `\"shared\" in user` is true, but `Object.hasOwn` returns false for inherited keys."
+            },
+            {
+              "id": "q2",
+              "prompt": "What is the difference between `\"key\" in obj` and `Object.hasOwn(obj, \"key\")`?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`in` includes inherited keys; `hasOwn` checks only own properties"
+                },
+                {
+                  "id": "b",
+                  "text": "They are always identical"
+                },
+                {
+                  "id": "c",
+                  "text": "`hasOwn` includes inherited keys; `in` does not"
+                },
+                {
+                  "id": "d",
+                  "text": "`in` only works on arrays"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "The `in` operator walks the prototype chain. `Object.hasOwn` asks whether the property exists directly on the object."
+            },
+            {
+              "id": "q3",
+              "prompt": "For a plain object `record = { id: 1 }`, what is `Object.hasOwn(record, \"toString\")`?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "false"
+                },
+                {
+                  "id": "b",
+                  "text": "true"
+                },
+                {
+                  "id": "c",
+                  "text": "undefined"
+                },
+                {
+                  "id": "d",
+                  "text": "throws TypeError"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`toString` is inherited from `Object.prototype`, not an own property of `record`."
+            },
+            {
+              "id": "q4",
+              "prompt": "Why prefer `Object.hasOwn(obj, key)` over `obj.hasOwnProperty(key)` in library code?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "Some objects may null out or override `hasOwnProperty`"
+                },
+                {
+                  "id": "b",
+                  "text": "`hasOwnProperty` includes inherited keys"
+                },
+                {
+                  "id": "c",
+                  "text": "`Object.hasOwn` is slower but required by syntax"
+                },
+                {
+                  "id": "d",
+                  "text": "There is no practical difference"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "`Object.hasOwn` is the safe built-in that does not rely on the object possibly missing or overriding `hasOwnProperty`."
+            },
+            {
+              "id": "q5",
+              "prompt": "Given:\n\n```js\nconst config = Object.create({ theme: \"dark\" });\nconfig.lang = \"en\";\nconfig.theme = \"light\";\n```\n\nWhat is `config.theme` and is `\"theme\"` an own property?",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "`\"light\"`; yes, own property after assignment"
+                },
+                {
+                  "id": "b",
+                  "text": "`\"dark\"`; no, only inherited"
+                },
+                {
+                  "id": "c",
+                  "text": "`\"light\"`; no, still inherited"
+                },
+                {
+                  "id": "d",
+                  "text": "undefined; theme is not accessible"
+                }
+              ],
+              "correctOptionId": "a",
+              "explanation": "Assigning `config.theme = \"light\"` creates an own property shadowing the prototype. Reading `config.theme` returns `\"light\"`."
+            }
+          ],
+          "lessonId": "02.4-object-hasown",
+          "graphIndex": "02.4",
+          "moduleId": "02-objects-references-and-copying"
         },
         {
           "id": "01-references-check",

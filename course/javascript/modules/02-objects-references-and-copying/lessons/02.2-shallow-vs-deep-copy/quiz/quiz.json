@@ -1,0 +1,67 @@
+{
+  "id": "quiz",
+  "title": "Shallow Copy Check",
+  "description": "Predict nested sharing with spread and copy-on-write patterns.",
+  "lessonId": "02.2-shallow-vs-deep-copy",
+  "graphIndex": "02.2",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What prints?\n\n```js\nconst user = { name: \"Ana\", address: { city: \"SP\" } };\nconst copy = { ...user };\ncopy.address.city = \"RJ\";\nconsole.log(user.address.city);\n```",
+      "options": [
+        { "id": "a", "text": "\"RJ\"" },
+        { "id": "b", "text": "\"SP\"" },
+        { "id": "c", "text": "undefined" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Object spread is shallow: `copy` is new, but `copy.address` and `user.address` still point to the same nested object."
+    },
+    {
+      "id": "q2",
+      "prompt": "What prints?\n\n```js\nconst a = [{ x: 1 }];\nconst b = [...a];\nb[0].x = 99;\nconsole.log(a[0].x);\n```",
+      "options": [
+        { "id": "a", "text": "99" },
+        { "id": "b", "text": "1" },
+        { "id": "c", "text": "undefined" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Array spread is also shallow. The outer array is new, but elements inside are still shared references."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which update **does not** mutate the original `user`?\n\n```js\nconst user = { name: \"Ana\", address: { city: \"SP\" } };\n```",
+      "options": [
+        { "id": "a", "text": "`const next = { ...user, address: { ...user.address, city: \"RJ\" } };`" },
+        { "id": "b", "text": "`const copy = { ...user }; copy.address.city = \"RJ\";`" },
+        { "id": "c", "text": "`user.address.city = \"RJ\";`" },
+        { "id": "d", "text": "`Object.assign(user, { address: { city: \"RJ\" } });`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Copy-on-write replaces every nested level you change. Options b–d mutate shared nested data or the original object."
+    },
+    {
+      "id": "q4",
+      "prompt": "What is true about `{ ...obj }` and `Object.assign({}, obj)`?",
+      "options": [
+        { "id": "a", "text": "Both create a shallow copy of the top level only" },
+        { "id": "b", "text": "Both create a deep copy of all nested objects" },
+        { "id": "c", "text": "Spread is deep; Object.assign is shallow" },
+        { "id": "d", "text": "Neither copies anything; both create aliases" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Spread and Object.assign copy enumerable own properties into a new object. Nested values are still shared references."
+    },
+    {
+      "id": "q5",
+      "prompt": "Given `const state = { items: [{ id: 1, qty: 1 }] };`, which pattern correctly increments `qty` without mutating `state`?",
+      "options": [
+        { "id": "a", "text": "Build `nextState` with spread at both the `items` array and the changed item object" },
+        { "id": "b", "text": "`state.items[0].qty += 1`" },
+        { "id": "c", "text": "`const next = { ...state }; next.items[0].qty += 1`" },
+        { "id": "d", "text": "`const next = [...state.items]; next[0].qty += 1`" }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Shallow copy of `state` or `items` still shares inner item objects. You must copy the array and replace the changed item."
+    }
+  ]
+}
