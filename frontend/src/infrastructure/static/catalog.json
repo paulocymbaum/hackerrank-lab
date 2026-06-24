@@ -182,14 +182,6 @@
               "graphIndex": "01.8.3"
             },
             {
-              "id": "01.8.4-typeof-and-array-isarray",
-              "title": "typeof and Array.isArray",
-              "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/README.md",
-              "markdown": "# typeof and Array.isArray\n\n> Graph index: `01.8.4`\n\n<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:javascript/01-javascript-fundamentals/01.8.4-typeof-and-array-isarray:README.md -->\n\n## Context\n\nRuntime type checks help you validate messy input. `typeof` is useful but has gaps — especially for `null` and arrays.\n\n## typeof basics\n\n```js\nconsole.log(typeof \"hi\");      // \"string\"\nconsole.log(typeof 42);        // \"number\"\nconsole.log(typeof true);      // \"boolean\"\nconsole.log(typeof undefined); // \"undefined\"\nconsole.log(typeof {});        // \"object\"\n```\n\n## The typeof null quirk\n\n```js\nconsole.log(typeof null); // \"object\" (legacy bug)\n```\n\nNever check `typeof x === \"null\"`. Use `x === null` instead.\n\n## Arrays are objects\n\n```js\nconsole.log(typeof []);        // \"object\"\nconsole.log(Array.isArray([])); // true\n```\n\nAlways use `Array.isArray(value)` to detect arrays.\n\n## Predict first\n\nWhat is printed?\n\n```js\nconst values = [null, [], 0, NaN, \"\"];\n\nfor (const v of values) {\n  const label = Array.isArray(v) ? \"array\" : typeof v;\n  console.log(v, \"->\", label);\n}\n```\n\n## What to observe\n\n- Order matters: check `value === null` **before** `typeof`.\n- Check `Array.isArray` **before** treating something as a plain object.\n- `typeof NaN` is `\"number\"` — use `Number.isNaN(x)` for NaN specifically.\n- `Number.isFinite(x)` distinguishes real numbers from `NaN` / `Infinity`.\n\n## Mini-exercise\n\nImplement mental rules for:\n\n```js\ndescribe(null);    // \"null\" (not \"object\")\ndescribe([]);      // \"array\"\ndescribe(NaN);     // \"NaN\" or not finite\ndescribe(0);       // \"number\"\n```\n",
-              "moduleId": "01-javascript-fundamentals",
-              "graphIndex": "01.8.4"
-            },
-            {
               "id": "01.8.5-null-undefined-null",
               "title": "null, undefined, == null, ?., ??",
               "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/README.md",
@@ -210,10 +202,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Hello Stdin\n\n## Problem context\nYou are onboarding to a team that solves HackerRank-style problems in Node.js. Your first task is a tiny CLI that reads input from `stdin` and prints a greeting — the same I/O pattern used in most coding challenges.\n\n## Goal\nBuild a Node.js program that reads one line from `stdin` and prints a formatted greeting to `stdout`.\n\n## Functional requirements\n- [ ] Read exactly one line from `stdin` (the user's name).\n- [ ] Trim leading and trailing whitespace from the input.\n- [ ] If the line is empty after trim, print `ERROR: name is required`.\n- [ ] Otherwise print `Hello, <name>!` on a single line.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error message for missing input\n- [ ] No external dependencies\n\n## Constraints\n- [ ] Node.js only (no external libraries)\n- [ ] Use `process.stdin` / `readline` or buffered read — no `prompt()` in browser\n- [ ] Output must be exactly one line (no extra blank lines)\n\n## Acceptance criteria\n- [ ] Input `Alice` → `Hello, Alice!`\n- [ ] Input `  Bob  ` → `Hello, Bob!`\n- [ ] Input `` (empty line) → `ERROR: name is required`\n- [ ] Input with only spaces → `ERROR: name is required`\n\n## Example data\n\n### Valid input\nInput:\n- `Maria`\n\nOutput:\n- `Hello, Maria!`\n\n### Invalid input\nInput:\n- ``\n\nOutput:\n- `ERROR: name is required`\n\n## Suggested plan (no solution)\n1. Set up a `readline` interface on `process.stdin`.\n2. On the first `line` event, trim the value.\n3. Branch on empty vs non-empty and write the result to `stdout`.\n4. Close the interface and exit.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept a second line with a language code (`en`, `pt`) and greet in that language.\n- [ ] Reject names longer than 50 characters with a specific error message.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -247,10 +235,6 @@
                   "readmeMarkdown": "# Receipt Printer\n\n## Problem context\nYour team logs order summaries to the terminal during development. Stakeholders want readable, labeled output — not raw values dumped without context.\n\n## Goal\nRead three lines from `stdin` (item name, quantity, unit price) and print a formatted receipt to `stdout` using clear labels and fixed decimal formatting.\n\n## Functional requirements\n- [ ] Read 3 lines from `stdin`:\n  - [ ] `item` (string, required after trim)\n  - [ ] `quantity` (positive integer as string, required)\n  - [ ] `unitPrice` (number as string, may have decimals, required)\n- [ ] Validate each field explicitly; on failure print `ERROR: <message>` (single line).\n- [ ] On success print exactly 4 lines:\n  - [ ] `Item: <item>`\n  - [ ] `Qty: <quantity>`\n  - [ ] `Unit: $<price with 2 decimals>`\n  - [ ] `Total: $<qty * unitPrice with 2 decimals>`\n\n## Non-functional requirements\n- [ ] Readable labels on every output line\n- [ ] Consistent money formatting (always 2 decimal places)\n- [ ] Clear validation errors (which field failed)\n\n## Constraints\n- [ ] Node.js only (no external libraries)\n- [ ] Use `Number()` for numeric conversion\n- [ ] Reject non-finite numbers and non-positive quantity\n\n## Acceptance criteria\n- [ ] `Coffee`, `2`, `3.5` → four labeled lines; total is `$7.00`\n- [ ] Empty item name → `ERROR: item is required`\n- [ ] `quantity` of `0` or `-1` → `ERROR: quantity must be positive`\n- [ ] `unitPrice` of `abc` → `ERROR: unitPrice must be a number`\n\n## Example data\n\n### Valid input\nInput:\n- `Notebook`\n- `3`\n- `4.25`\n\nOutput:\n- `Item: Notebook`\n- `Qty: 3`\n- `Unit: $4.25`\n- `Total: $12.75`\n\n### Invalid input\nInput:\n- `Pen`\n- `abc`\n- `1.00`\n\nOutput:\n- `ERROR: quantity must be a positive integer`\n\n## Suggested plan (no solution)\n1. Collect three lines (buffer or readline `line` events).\n2. Trim strings; check emptiness before converting numbers.\n3. Parse `quantity` as integer (`Number` + `Number.isInteger` + `> 0`).\n4. Parse `unitPrice` with `Number()` + `Number.isFinite`.\n5. Format money with `toFixed(2)` and print labeled lines.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `Discount: $<amount>` line when quantity is 5 or more (10% off total).\n- [ ] Right-align dollar amounts for a column-style receipt.\n"
                 },
                 {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
                   "path": "starter",
                   "kind": "dir"
                 },
@@ -280,10 +264,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Validation Doc Block\n\n## Problem context\nA CLI validator script needs a human-readable rule list at the top of the file. Teammates should see validation rules without reading the implementation.\n\n## Goal\nRead three rule descriptions from `stdin` and print a multi-line comment block that documents them.\n\n## Functional requirements\n- [ ] Read exactly three non-empty lines: `rule1`, `rule2`, `rule3`.\n- [ ] Empty line on any input → `ERROR: rule required` (single line).\n- [ ] Print this shape (exact spacing inside the block):\n\n```\n/*\n  Validation rules:\n  - <rule1>\n  - <rule2>\n  - <rule3>\n*/\n```\n\n- [ ] Each rule appears on its own `- ` line inside the block.\n- [ ] No extra blank lines inside the block.\n\n## Non-functional requirements\n- [ ] Comments explain rules for humans — do not execute rule logic here\n- [ ] Readable output for copy-paste into a `.js` file\n\n## Constraints\n- [ ] Node.js only\n- [ ] Output is a comment block string via `process.stdout.write` (no `console.log` needed)\n\n## Acceptance criteria\n- [ ] Three valid lines produce the block with `- ` prefixes\n- [ ] Any empty line → `ERROR: rule required`\n- [ ] Rules with spaces are preserved verbatim\n\n## Example data\n\nInput:\n- `name must not be empty after trim`\n- `score must be 0–100`\n- `retries must be a positive integer`\n\nOutput:\n```\n/*\n  Validation rules:\n  - name must not be empty after trim\n  - score must be 0–100\n  - retries must be a positive integer\n*/\n```\n\n## Suggested plan (no solution)\n1. Collect three lines with `readline`.\n2. Reject empty trimmed lines early.\n3. Build the block with a template string or concatenation.\n4. Write the block once all three lines are valid.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept a fourth line `done` to finish early when piping input.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -317,10 +297,6 @@
                   "readmeMarkdown": "# Leaderboard Scores\n\n## Problem context\nA game backend tracks player scores. A junior dev used `const` everywhere and reassignment broke production. You need a small score updater that uses `let` and `const` correctly.\n\n## Goal\nImplement `updateLeaderboard(initialScores, events)` that applies a list of score events and returns the final leaderboard object without mutating the input.\n\n## Functional requirements\n- [ ] `initialScores` is an object `{ [playerId: string]: number }`.\n- [ ] `events` is an array of `{ playerId: string, delta: number }`.\n- [ ] Return a **new** object with updated scores (do not mutate `initialScores`).\n- [ ] Use `const` for bindings that are never reassigned; use `let` only when reassignment is required.\n- [ ] Unknown `playerId` in an event starts at `0` before applying `delta`.\n- [ ] Print nothing — return the object only (tests call the function).\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Idiomatic `let`/`const` usage (no `var`)\n- [ ] Predictable immutability of input\n\n## Constraints\n- [ ] No external libraries\n- [ ] Export `updateLeaderboard` from `starter/index.js` for testing\n- [ ] `delta` may be negative (penalties)\n\n## Acceptance criteria\n- [ ] `{ alice: 10 }` + `[{ playerId: \"alice\", delta: 5 }]` → `{ alice: 15 }`\n- [ ] `{ bob: 3 }` + `[{ playerId: \"carol\", delta: 7 }]` → `{ bob: 3, carol: 7 }`\n- [ ] Input object is unchanged after the call\n- [ ] Multiple events for the same player accumulate correctly\n\n## Example data\n\nInput:\n\n```js\nupdateLeaderboard(\n  { p1: 100, p2: 50 },\n  [\n    { playerId: \"p1\", delta: -10 },\n    { playerId: \"p2\", delta: 25 },\n    { playerId: \"p3\", delta: 5 },\n  ]\n)\n```\n\nOutput:\n\n```js\n{ p1: 90, p2: 75, p3: 5 }\n```\n\n## Suggested plan (no solution)\n1. `const` copy = shallow clone of `initialScores` into a new object.\n2. Loop events with `for...of`; `const` each event.\n3. `let` or lookup: if player missing, set base `0`, then add `delta`.\n4. Return the new object.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Reject events with empty `playerId` by throwing a clear `Error`.\n- [ ] Add `getTopPlayer(scores)` returning the id with highest score (ties: lexicographic first).\n"
                 },
                 {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
                   "path": "starter",
                   "kind": "dir"
                 },
@@ -350,10 +326,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Score Accumulator\n\n## Problem context\nA game server updates player scores with compound assignments (`+=`, `-=`, `*=`). You need a small CLI that replays a sequence of score changes.\n\n## Goal\nRead an initial score and a list of operations, apply each with compound assignment, and print the final total.\n\n## Functional requirements\n- [ ] Line 1: initial `score` (finite number).\n- [ ] Following lines: one operation per line until `done`:\n  - [ ] `+N` → `score += N`\n  - [ ] `-N` → `score -= N`\n  - [ ] `*N` → `score *= N`\n- [ ] Invalid initial score → `ERROR: invalid score`.\n- [ ] Malformed operation line → `ERROR: invalid operation`.\n- [ ] Print `Total: <score>` when `done` is received.\n\n## Non-functional requirements\n- [ ] Use compound operators (`+=`, `-=`, `*=`) — not `score = score + N`\n- [ ] Parse operation suffix with `Number()` and validate `Number.isFinite`\n\n## Constraints\n- [ ] Node.js only\n- [ ] `N` may be negative or decimal\n\n## Acceptance criteria\n- [ ] `10`, `+5`, `-3`, `*2`, `done` → `Total: 24` ((10+5-3)*2)\n- [ ] `100`, `done` → `Total: 100`\n- [ ] `abc` as first line → error\n- [ ] `+x` → error\n\n## Example data\n\nInput:\n- `10`\n- `+25`\n- `-10`\n- `*2`\n- `done`\n\nOutput:\n- `Total: 50`\n\n## Suggested plan (no solution)\n1. Parse initial score; validate.\n2. On each line, detect prefix `+`, `-`, or `*` and parse the rest as a number.\n3. Apply the matching compound assignment.\n4. On `done`, print the labeled total.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Support `/N` with `score /= N` and reject division by zero.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -387,10 +359,6 @@
                   "readmeMarkdown": "# User Badge Formatter\n\n## Problem context\nA dashboard shows compact user badges in logs and CLI tools. Names arrive messy (extra spaces, mixed case) and handles must be URL-safe.\n\n## Goal\nImplement `formatUserBadge(user)` that returns a single-line badge string built from string primitives and template literals.\n\n## Functional requirements\n- [ ] `user` has `{ displayName: string, handle: string, level: number }`.\n- [ ] Normalize `displayName`: trim and collapse internal runs of spaces to one space.\n- [ ] Normalize `handle`: trim, lowercase, remove leading `@` if present.\n- [ ] Validate `level`: must be a finite integer `>= 1`; otherwise throw `Error` with message `invalid level`.\n- [ ] Return format: `[L<level>] <displayName> (@<handle>)`\n- [ ] If `displayName` is empty after normalization, throw `Error` with message `displayName is required`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Pure function (no I/O side effects)\n- [ ] Clear error messages\n\n## Constraints\n- [ ] No external libraries\n- [ ] Use template literals for the final badge string\n- [ ] Export `formatUserBadge` from `starter/index.js`\n\n## Acceptance criteria\n- [ ] `{ displayName: \"  Ana   Silva \", handle: \"@AnaS\", level: 3 }` → `[L3] Ana Silva (@anas)`\n- [ ] `{ displayName: \"Bob\", handle: \"bob\", level: 1 }` → `[L1] Bob (@bob)`\n- [ ] `{ displayName: \"   \", handle: \"x\", level: 2 }` throws `displayName is required`\n- [ ] `{ displayName: \"Eve\", handle: \"eve\", level: 0 }` throws `invalid level`\n\n## Example data\n\nInput:\n\n```js\nformatUserBadge({ displayName: \"  João  \", handle: \"@JOAO\", level: 12 })\n```\n\nOutput:\n\n```js\n\"[L12] João (@joao)\"\n```\n\n## Suggested plan (no solution)\n1. Trim and collapse spaces in `displayName` (split/filter/join or regex).\n2. Strip `@`, trim, lowercase `handle`.\n3. Validate `level` with `Number.isInteger` and range check.\n4. Return template literal `[L${level}] ${displayName} (@${handle})`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add optional `verified: boolean` — append ` ✓` when true.\n- [ ] Truncate `displayName` to 24 characters with `…` when longer.\n"
                 },
                 {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
                   "path": "starter",
                   "kind": "dir"
                 },
@@ -420,10 +388,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Price Split Formatter\n\n## Problem context\nA bill-splitting tool reads a total charge and party size from `stdin`, then shows each person's share formatted as currency.\n\n## Goal\nParse two numeric lines and print `Share: $<amount>` with exactly two decimal places.\n\n## Functional requirements\n- [ ] Line 1: `total` (finite number, `> 0`).\n- [ ] Line 2: `people` (positive integer).\n- [ ] Invalid or non-finite numbers → `ERROR: invalid number`.\n- [ ] `people` must be integer `>= 1`.\n- [ ] Compute `share = total / people` and print `Share: $` + `share.toFixed(2)`.\n\n## Non-functional requirements\n- [ ] Validate with `Number.isFinite` before dividing\n- [ ] Use `toFixed(2)` for display only\n\n## Constraints\n- [ ] Node.js only\n- [ ] Trim whitespace on each line before parsing\n\n## Acceptance criteria\n- [ ] `100` and `4` → `Share: $25.00`\n- [ ] `10` and `3` → `Share: $3.33`\n- [ ] `abc` and `4` → error\n- [ ] `100` and `0` → error\n\n## Example data\n\nInput:\n- `100`\n- `4`\n\nOutput:\n- `Share: $25.00`\n\n## Suggested plan (no solution)\n1. Read two lines; trim and parse with `Number()`.\n2. Reject non-finite values and invalid `people`.\n3. Divide and format with `toFixed(2)`.\n4. Print the labeled share string.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Also print remainder cents when split is not exact.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -457,10 +421,6 @@
                   "readmeMarkdown": "# Validation Flags Reporter\n\n## Problem context\nA grading service stores boolean flags for each submission before running heavier checks. You need a CLI that computes and reports those flags from a single score.\n\n## Goal\nRead one score and print three boolean flags on separate lines.\n\n## Functional requirements\n- [ ] Read one line `score` (0–100 integer).\n- [ ] Invalid input → `ERROR: invalid score`.\n- [ ] Compute and print:\n  - [ ] `passed: <true|false>` — `score >= 60`\n  - [ ] `perfect: <true|false>` — `score === 100`\n  - [ ] `invalid: <true|false>` — `score < 0 || score > 100`\n- [ ] Print lowercase `true` / `false` as shown.\n\n## Non-functional requirements\n- [ ] Store each flag in a named boolean variable before printing\n- [ ] Use comparisons that return booleans directly\n\n## Constraints\n- [ ] Node.js only\n- [ ] Score must be integer in range for `passed`/`perfect`; out-of-range still sets `invalid: true`\n\n## Acceptance criteria\n- [ ] `90` → `passed: true`, `perfect: false`, `invalid: false`\n- [ ] `100` → `passed: true`, `perfect: true`, `invalid: false`\n- [ ] `105` → `passed: true`, `perfect: false`, `invalid: true`\n- [ ] `abc` → error\n\n## Example data\n\nInput:\n- `90`\n\nOutput:\n```\npassed: true\nperfect: false\ninvalid: false\n```\n\n## Suggested plan (no solution)\n1. Parse score; validate integer (allow out-of-range for flag demo, or validate first — document: accept any integer).\n2. Assign `passed`, `perfect`, `invalid` with comparison expressions.\n3. Print three labeled lines.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `needsReview: true` when `invalid` is true.\n"
                 },
                 {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
                   "path": "starter",
                   "kind": "dir"
                 },
@@ -490,10 +450,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Missing Value Labeler\n\n## Problem context\nOptional profile fields arrive as real values, the literal token `null`, or the literal token `undefined`. Downstream code must label each case consistently.\n\n## Goal\nRead one token from `stdin` and print a single status label.\n\n## Functional requirements\n- [ ] Read one trimmed line `token`.\n- [ ] Labels:\n  - [ ] `undefined` → `missing`\n  - [ ] `null` → `empty`\n  - [ ] any other value (including empty string `\"\"`) → `has-value`\n- [ ] Matching is **exact string** on the trimmed line (case-sensitive).\n\n## Non-functional requirements\n- [ ] Use strict equality (`===`) when comparing to `\"undefined\"` and `\"null\"`\n- [ ] Do not use `typeof` for null checks\n\n## Constraints\n- [ ] Node.js only\n- [ ] Input is always one line\n\n## Acceptance criteria\n- [ ] `undefined` → `missing`\n- [ ] `null` → `empty`\n- [ ] `Ana` → `has-value`\n- [ ] `` (empty line after trim) → `has-value`\n- [ ] `0` → `has-value`\n\n## Example data\n\nInput:\n- `null`\n\nOutput:\n- `empty`\n\n## Suggested plan (no solution)\n1. Trim the line.\n2. Branch with `===` for `\"undefined\"` and `\"null\"`.\n3. Default to `has-value` for everything else.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept JSON `null` from parsed input and treat as `empty`.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -527,10 +483,6 @@
                   "readmeMarkdown": "# Bill Split Calculator\n\n## Problem context\nAfter dinner, your app splits the bill evenly. Totals must be exact to the cent — floating-point surprises are not acceptable in the output.\n\n## Goal\nRead `total` and `people` from `stdin` and print each person's share formatted to two decimals.\n\n## Functional requirements\n- [ ] Read 2 lines: `total` (number), `people` (positive integer).\n- [ ] Validate both fields; on error print `ERROR: <message>` (one line).\n- [ ] Compute `share = total / people`.\n- [ ] Print `Share: $<amount>` with exactly 2 decimal places.\n\n## Non-functional requirements\n- [ ] Clear validation messages\n- [ ] Readable output label\n\n## Constraints\n- [ ] Node.js only\n- [ ] Use `Number()` for parsing\n- [ ] Reject non-finite `total` and non-positive `people`\n\n## Acceptance criteria\n- [ ] `100` and `4` → `Share: $25.00`\n- [ ] `10` and `3` → `Share: $3.33` (rounded display via `toFixed(2)`)\n- [ ] `people` of `0` → error\n- [ ] `total` of `abc` → error\n\n## Example data\n\nInput:\n- `50`\n- `2`\n\nOutput:\n- `Share: $25.00`\n\n## Suggested plan (no solution)\n1. Read and trim two lines.\n2. Parse with `Number()`; validate with `Number.isFinite` / `Number.isInteger`.\n3. Divide and format with `toFixed(2)`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Print remainder cents separately when split is not exact.\n"
                 },
                 {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
                   "path": "starter",
                   "kind": "dir"
                 },
@@ -560,10 +512,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Boundary Checker\n\n## Problem context\nForm validators must confirm a numeric answer sits inside an inclusive min/max range. Off-by-one bugs at boundaries are common without explicit `>=` and `<=` checks.\n\n## Goal\nRead `value`, `min`, and `max` and print whether the value is inside the inclusive range.\n\n## Functional requirements\n- [ ] Read three finite numbers: `value`, `min`, `max` (one per line).\n- [ ] Invalid number on any line → `ERROR: invalid number`.\n- [ ] If `min > max` → `ERROR: invalid range`.\n- [ ] Inclusive check: `value >= min && value <= max`.\n- [ ] Print `IN RANGE` or `OUT OF RANGE` (exact casing).\n\n## Non-functional requirements\n- [ ] Use strict parsing with `Number()` and `Number.isFinite`\n- [ ] Store `inRange` in a boolean variable\n\n## Constraints\n- [ ] Node.js only\n- [ ] Boundaries are inclusive on both ends\n\n## Acceptance criteria\n- [ ] `90`, `0`, `100` → `IN RANGE`\n- [ ] `90`, `0`, `89` → `OUT OF RANGE`\n- [ ] `90`, `90`, `100` → `IN RANGE` (lower bound inclusive)\n- [ ] `10`, `20`, `10` → `ERROR: invalid range`\n\n## Example data\n\nInput:\n- `89`\n- `0`\n- `100`\n\nOutput:\n- `IN RANGE`\n\n## Suggested plan (no solution)\n1. Read and parse three numbers.\n2. Validate `min <= max`.\n3. Compare with `>=` and `<=`; print result label.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Also print which boundary failed when out of range.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -597,10 +545,6 @@
                   "readmeMarkdown": "# Access Gate Validator\n\n## Problem context\nA venue scanner grants entry only when a visitor is an adult **and** presents ID. Both conditions must pass — a classic `&&` validation.\n\n## Goal\nRead `age` and `hasId`, then print `ALLOWED` or `DENIED`.\n\n## Functional requirements\n- [ ] Line 1: `age` (non-negative integer).\n- [ ] Line 2: `hasId` — exactly `true` or `false` (lowercase).\n- [ ] Invalid age or hasId → `ERROR: invalid input`.\n- [ ] `ALLOWED` when `age >= 18 && hasId === true`.\n- [ ] Otherwise `DENIED`.\n\n## Non-functional requirements\n- [ ] Combine conditions with `&&` in one expression or named variable\n- [ ] Parse `hasId` as boolean, not truthy string `\"false\"`\n\n## Constraints\n- [ ] Node.js only\n- [ ] `hasId` must be literal `true` or `false` text\n\n## Acceptance criteria\n- [ ] `20` and `true` → `ALLOWED`\n- [ ] `20` and `false` → `DENIED`\n- [ ] `17` and `true` → `DENIED`\n- [ ] `25` and `yes` → error\n\n## Example data\n\nInput:\n- `20`\n- `true`\n\nOutput:\n- `ALLOWED`\n\n## Suggested plan (no solution)\n1. Parse age; validate integer `>= 0`.\n2. Map `hasId` line to boolean only for `true`/`false`.\n3. Evaluate `canEnter = age >= 18 && hasId`.\n4. Print access label.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `SENIOR` discount flag when `age >= 65 && hasId`.\n"
                 },
                 {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
                   "path": "starter",
                   "kind": "dir"
                 },
@@ -630,10 +574,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Grade Classifier\n\n## Problem context\nA learning platform maps numeric scores to letter grades. Rules must be explicit — no off-by-one bugs at boundaries.\n\n## Goal\nRead one score from `stdin` and print the letter grade using `if` / `else if` / `else`.\n\n## Functional requirements\n- [ ] Read one line `score` (0–100 integer).\n- [ ] Invalid input → `ERROR: invalid score` (single line).\n- [ ] Grading rules:\n  - [ ] `90–100` → `A`\n  - [ ] `80–89` → `B`\n  - [ ] `70–79` → `C`\n  - [ ] `60–69` → `D`\n  - [ ] `0–59` → `F`\n- [ ] Print `Grade: <letter>` on success.\n\n## Non-functional requirements\n- [ ] Boundaries inclusive on lower bound (e.g. 90 is `A`)\n- [ ] Readable branch structure\n\n## Constraints\n- [ ] Node.js only\n- [ ] Score must be integer in range 0–100\n\n## Acceptance criteria\n- [ ] `90` → `Grade: A`\n- [ ] `89` → `Grade: B`\n- [ ] `59` → `Grade: F`\n- [ ] `-1` or `101` or `abc` → error\n\n## Example data\n\nInput:\n- `84`\n\nOutput:\n- `Grade: B`\n\n## Suggested plan (no solution)\n1. Parse score with `Number()`; check `Number.isInteger` and range.\n2. Chain `if / else if` from highest threshold down.\n3. Print labeled result.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `Grade: A+` for scores `>= 97`.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -667,10 +607,6 @@
                   "readmeMarkdown": "# Menu Command Router\n\n## Problem context\nA text-based admin console routes user commands to actions. A `switch` keeps each command branch explicit and easy to extend.\n\n## Goal\nRead one command string and print the matching action message using `switch`.\n\n## Functional requirements\n- [ ] Read one trimmed line `cmd`.\n- [ ] Routes (exact match, case-sensitive):\n  - [ ] `start` → `Starting`\n  - [ ] `quit` → `Goodbye`\n  - [ ] `help` → `Help available`\n  - [ ] anything else → `Unknown command`\n- [ ] Each matching `case` must use `break`.\n\n## Non-functional requirements\n- [ ] Use `switch` — not a chain of `if / else if`\n- [ ] Include a `default` branch for unknown commands\n\n## Constraints\n- [ ] Node.js only\n- [ ] Strict string matching (`===` via `switch`)\n\n## Acceptance criteria\n- [ ] `start` → `Starting`\n- [ ] `quit` → `Goodbye`\n- [ ] `help` → `Help available`\n- [ ] `pause` → `Unknown command`\n- [ ] `Start` → `Unknown command` (case-sensitive)\n\n## Example data\n\nInput:\n- `quit`\n\nOutput:\n- `Goodbye`\n\n## Suggested plan (no solution)\n1. Trim the command line.\n2. `switch (cmd)` with one `case` per known command.\n3. `break` after each case body.\n4. `default` prints unknown message.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `list` → `Listing items` and document intentional fall-through for `list` + `help`.\n"
                 },
                 {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
                   "path": "starter",
                   "kind": "dir"
                 },
@@ -700,10 +636,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Sum Range\n\n## Problem context\nAnalytics needs the sum of all integers from `start` to `end` inclusive. A `for` loop is the straightforward tool.\n\n## Goal\nRead `start` and `end` from `stdin` and print the inclusive sum.\n\n## Functional requirements\n- [ ] Read two integers `start` and `end` (may be negative; `start` may be greater than `end`).\n- [ ] Invalid input → `ERROR: invalid range` (one line).\n- [ ] Use a `for` loop to accumulate the sum.\n- [ ] Print `Sum: <total>` on success.\n\n## Non-functional requirements\n- [ ] Loop bounds correct when `start > end` (sum should be `0` or swap logic — document: use min/max)\n- [ ] No external libraries\n\n## Constraints\n- [ ] Node.js only\n- [ ] Must use `for` (not `while` or formulas) for practice\n\n## Acceptance criteria\n- [ ] `1` and `5` → `Sum: 15` (1+2+3+4+5)\n- [ ] `5` and `1` → `Sum: 15` (same inclusive range)\n- [ ] `3` and `3` → `Sum: 3`\n- [ ] Non-integer input → error\n\n## Example data\n\nInput:\n- `1`\n- `4`\n\nOutput:\n- `Sum: 10`\n\n## Suggested plan (no solution)\n1. Parse integers; validate.\n2. Set `low = Math.min(start, end)`, `high = Math.max(start, end)`.\n3. `let sum = 0`; loop `i` from `low` to `high`; add each `i`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Also print how many iterations ran.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -737,10 +669,6 @@
                   "readmeMarkdown": "# Sentinel Sum\n\n## Problem context\nA telemetry collector reads numeric samples until it receives a sentinel value `0`. The running total must use a `while` loop because the count is not known upfront.\n\n## Goal\nRead integers one per line until `0`, sum all prior values, and print the total.\n\n## Functional requirements\n- [ ] Read lines until a line parses to integer `0`.\n- [ ] Non-integer line before sentinel → `ERROR: invalid number`.\n- [ ] Do **not** include the `0` in the sum.\n- [ ] If first line is `0`, sum is `0`.\n- [ ] Print `Sum: <total>` after sentinel.\n\n## Non-functional requirements\n- [ ] Use `while` — not `for`\n- [ ] Update loop variables inside the body to avoid infinite loops\n\n## Constraints\n- [ ] Node.js only\n- [ ] Integers only (`Number.isInteger`)\n\n## Acceptance criteria\n- [ ] `10`, `20`, `0` → `Sum: 30`\n- [ ] `0` → `Sum: 0`\n- [ ] `5`, `abc` → error\n- [ ] `-3`, `7`, `0` → `Sum: 4`\n\n## Example data\n\nInput:\n- `10`\n- `20`\n- `0`\n\nOutput:\n- `Sum: 30`\n\n## Suggested plan (no solution)\n1. Read first line; if not `0`, validate and add to sum.\n2. `while` last value is not `0`, read next line and accumulate.\n3. Stop when `0` is read; print labeled sum.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Also print how many values were summed.\n"
                 },
                 {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
                   "path": "starter",
                   "kind": "dir"
                 },
@@ -770,10 +698,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Celsius Converter\n\n## Problem context\nA weather widget needs reusable conversion logic. Extract the formula into a function with a clear return value.\n\n## Goal\nImplement `toFahrenheit(celsius)` and a small CLI that reads one number and prints the converted value.\n\n## Functional requirements\n- [ ] Implement `function toFahrenheit(celsius)` returning `celsius * 9/5 + 32`.\n- [ ] Read one line from `stdin`; parse as finite number or print `ERROR: invalid temperature`.\n- [ ] Print `F: <value>` with one decimal place on success.\n- [ ] Export `toFahrenheit` from `starter/index.js`.\n\n## Non-functional requirements\n- [ ] Pure conversion function (no I/O inside `toFahrenheit`)\n- [ ] Readable function declaration\n\n## Constraints\n- [ ] Node.js only\n- [ ] Use a **function declaration** (not arrow) for `toFahrenheit`\n\n## Acceptance criteria\n- [ ] `toFahrenheit(0)` → `32`\n- [ ] `toFahrenheit(100)` → `212`\n- [ ] Input `37.5` → `F: 99.5`\n- [ ] Input `abc` → error\n\n## Example data\n\nInput:\n- `0`\n\nOutput:\n- `F: 32.0`\n\n## Suggested plan (no solution)\n1. Write `toFahrenheit` with explicit `return`.\n2. Parse stdin; validate with `Number.isFinite`.\n3. Call function and format output.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `toCelsius(fahrenheit)` as a second function.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -807,10 +731,6 @@
                   "readmeMarkdown": "# Clamp Utility\n\n## Problem context\nAPI rate limiters and UI sliders need a `clamp` helper that forces a value into `[min, max]` without printing inside the function.\n\n## Goal\nImplement `clamp(value, min, max)` with early returns, read three numbers from `stdin`, and print the clamped result.\n\n## Functional requirements\n- [ ] Implement `function clamp(value, min, max)` that **returns** a number (no `console.log` inside).\n- [ ] If `value < min` → return `min`.\n- [ ] If `value > max` → return `max`.\n- [ ] Otherwise return `value`.\n- [ ] Read `value`, `min`, `max` from `stdin` (one per line).\n- [ ] Invalid number → `ERROR: invalid number`.\n- [ ] If `min > max` → `ERROR: invalid range`.\n- [ ] Print `Result: <clamped>`.\n\n## Non-functional requirements\n- [ ] Separate computation (`return`) from I/O (`console.log` / `process.stdout.write`)\n- [ ] Use early `return` branches\n\n## Constraints\n- [ ] Node.js only\n- [ ] `clamp` must be reusable — caller prints the result\n\n## Acceptance criteria\n- [ ] `5`, `0`, `10` → `Result: 5`\n- [ ] `-3`, `0`, `10` → `Result: 0`\n- [ ] `99`, `0`, `10` → `Result: 10`\n- [ ] `5`, `10`, `0` → `ERROR: invalid range`\n\n## Example data\n\nInput:\n- `-3`\n- `0`\n- `10`\n\nOutput:\n- `Result: 0`\n\n## Suggested plan (no solution)\n1. Write `clamp` with three early-return paths.\n2. Parse stdin numbers in `main`.\n3. Call `clamp` and print the labeled result.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `clampMany(values, min, max)` returning an array.\n"
                 },
                 {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
                   "path": "starter",
                   "kind": "dir"
                 },
@@ -842,9 +762,18 @@
                   "readmeMarkdown": "# CLI Input Validator\n\n## Problem context\nYou’re building a tiny CLI tool that receives user input as **strings** (like in HackerRank). Your team keeps shipping bugs because checks rely on truthiness/coercion instead of explicit validation.\n\n## Goal\nBuild a CLI program that reads 3 values and prints either a normalized result or an error message. The exercise is about **explicit conversion** and **defensive checks**.\n\n## Functional requirements\n- [ ] Read input from `stdin` (3 lines):\n  - [ ] `age` (expected integer, may be `0`)\n  - [ ] `score` (expected number, may be `0` or decimals)\n  - [ ] `isActive` (expected string: `true` or `false`, case-insensitive)\n- [ ] Convert values explicitly:\n  - [ ] Use `Number()` for numeric parsing (no implicit coercion).\n  - [ ] Reject non-finite numbers with `Number.isFinite(...)`.\n- [ ] Output:\n  - [ ] If valid, print a single JSON line with `{ age, score, isActive }` using correct types.\n  - [ ] If invalid, print `ERROR: <message>` (single line).\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages (tell which field is invalid and why)\n- [ ] No unexpected truthiness checks for numeric fields (don’t treat `0` as missing)\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use `parseInt` / `parseFloat` for the numeric fields (use `Number()`)\n\n## Acceptance criteria\n- [ ] `age = 0` is accepted as valid input.\n- [ ] Empty strings are rejected for all fields.\n- [ ] `score` rejects `NaN`, `Infinity`, `-Infinity`.\n- [ ] `isActive` accepts `true/false` in any casing (e.g. `TRUE`, `False`).\n\n## Example data\n\n### Valid input\nInput:\n- `0`\n- `10.5`\n- `TRUE`\n\nOutput:\n- `{\"age\":0,\"score\":10.5,\"isActive\":true}`\n\n### Invalid input\nInput:\n- ``\n- `10`\n- `true`\n\nOutput:\n- `ERROR: age is required`\n\n## Suggested plan (no solution)\n1. Read `stdin` lines and trim safely.\n2. Validate emptiness explicitly (check `line.length === 0`).\n3. Convert using `Number(...)`, validate with `Number.isFinite`.\n4. Normalize `isActive` with `toLowerCase()` and compare to `\"true\"` / `\"false\"`.\n5. Print output in the required format.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept `isActive` values like `1/0` and `yes/no` (explicit mapping only).\n- [ ] Support optional whitespace lines in the input.\n"
                 },
                 {
+                  "path": "starter",
+                  "kind": "dir"
+                },
+                {
                   "path": "README.md",
                   "kind": "file",
                   "content": "# CLI Input Validator\n\n## Problem context\nYou’re building a tiny CLI tool that receives user input as **strings** (like in HackerRank). Your team keeps shipping bugs because checks rely on truthiness/coercion instead of explicit validation.\n\n## Goal\nBuild a CLI program that reads 3 values and prints either a normalized result or an error message. The exercise is about **explicit conversion** and **defensive checks**.\n\n## Functional requirements\n- [ ] Read input from `stdin` (3 lines):\n  - [ ] `age` (expected integer, may be `0`)\n  - [ ] `score` (expected number, may be `0` or decimals)\n  - [ ] `isActive` (expected string: `true` or `false`, case-insensitive)\n- [ ] Convert values explicitly:\n  - [ ] Use `Number()` for numeric parsing (no implicit coercion).\n  - [ ] Reject non-finite numbers with `Number.isFinite(...)`.\n- [ ] Output:\n  - [ ] If valid, print a single JSON line with `{ age, score, isActive }` using correct types.\n  - [ ] If invalid, print `ERROR: <message>` (single line).\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages (tell which field is invalid and why)\n- [ ] No unexpected truthiness checks for numeric fields (don’t treat `0` as missing)\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use `parseInt` / `parseFloat` for the numeric fields (use `Number()`)\n\n## Acceptance criteria\n- [ ] `age = 0` is accepted as valid input.\n- [ ] Empty strings are rejected for all fields.\n- [ ] `score` rejects `NaN`, `Infinity`, `-Infinity`.\n- [ ] `isActive` accepts `true/false` in any casing (e.g. `TRUE`, `False`).\n\n## Example data\n\n### Valid input\nInput:\n- `0`\n- `10.5`\n- `TRUE`\n\nOutput:\n- `{\"age\":0,\"score\":10.5,\"isActive\":true}`\n\n### Invalid input\nInput:\n- ``\n- `10`\n- `true`\n\nOutput:\n- `ERROR: age is required`\n\n## Suggested plan (no solution)\n1. Read `stdin` lines and trim safely.\n2. Validate emptiness explicitly (check `line.length === 0`).\n3. Convert using `Number(...)`, validate with `Number.isFinite`.\n4. Normalize `isActive` with `toLowerCase()` and compare to `\"true\"` / `\"false\"`.\n5. Print output in the required format.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept `isActive` values like `1/0` and `yes/no` (explicit mapping only).\n- [ ] Support optional whitespace lines in the input.\n"
+                },
+                {
+                  "path": "starter/index.js",
+                  "kind": "file",
+                  "content": "/**\n * CLI Input Validator\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const linhas = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    linhas.push(line);\n    if (linhas.length < 3) return;\n\n    // TODO: trim, validar vazio, Number() + Number.isFinite para age/score\n    // TODO: normalizar isActive (toLowerCase) e imprimir JSON ou ERROR: ...\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -896,41 +825,6 @@
               "graphIndex": "01.8.3"
             },
             {
-              "id": "012-type-guard",
-              "title": "012. Type Guard",
-              "rootPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/projects/012-type-guard",
-              "readmePath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/projects/012-type-guard/README.md",
-              "readmeMarkdown": "# Type Guard\n\n## Problem context\nAPI payloads mix strings, numbers, arrays, and plain objects. `typeof` alone is misleading (`typeof null === \"object\"`). You need safe runtime checks.\n\n## Goal\nImplement `describeValue(value)` that returns a human-readable type label using `typeof` and `Array.isArray`.\n\n## Functional requirements\n- [ ] Return `\"null\"` when `value === null` (do not rely on `typeof`).\n- [ ] Return `\"array\"` when `Array.isArray(value)`.\n- [ ] Return `\"number\"` only for finite numbers (`Number.isFinite`).\n- [ ] Return `\"NaN\"` when `typeof value === \"number\"` but not finite.\n- [ ] Otherwise return `typeof value` as string (`\"string\"`, `\"boolean\"`, `\"undefined\"`, `\"object\"`, etc.).\n\n## Non-functional requirements\n- [ ] Check `null` before `typeof`\n- [ ] Check `Array.isArray` before generic `object`\n\n## Constraints\n- [ ] No external libraries\n- [ ] Export `describeValue` from `starter/index.js`\n\n## Acceptance criteria\n- [ ] `describeValue(null)` → `\"null\"`\n- [ ] `describeValue([])` → `\"array\"`\n- [ ] `describeValue(NaN)` → `\"NaN\"`\n- [ ] `describeValue(\"x\")` → `\"string\"`\n- [ ] `describeValue({})` → `\"object\"`\n\n## Example data\n\n```js\ndescribeValue([1, 2]); // \"array\"\ndescribeValue(null);   // \"null\"\ndescribeValue(0);      // \"number\"\n```\n\n## Suggested plan (no solution)\n1. Handle `value === null` first.\n2. Then `Array.isArray(value)`.\n3. Then numbers with `Number.isFinite` vs `NaN`.\n4. Fall back to `typeof value`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Return `\"integer\"` for whole numbers.\n",
-              "entries": [
-                {
-                  "path": "",
-                  "kind": "dir",
-                  "readmeMarkdown": "# Type Guard\n\n## Problem context\nAPI payloads mix strings, numbers, arrays, and plain objects. `typeof` alone is misleading (`typeof null === \"object\"`). You need safe runtime checks.\n\n## Goal\nImplement `describeValue(value)` that returns a human-readable type label using `typeof` and `Array.isArray`.\n\n## Functional requirements\n- [ ] Return `\"null\"` when `value === null` (do not rely on `typeof`).\n- [ ] Return `\"array\"` when `Array.isArray(value)`.\n- [ ] Return `\"number\"` only for finite numbers (`Number.isFinite`).\n- [ ] Return `\"NaN\"` when `typeof value === \"number\"` but not finite.\n- [ ] Otherwise return `typeof value` as string (`\"string\"`, `\"boolean\"`, `\"undefined\"`, `\"object\"`, etc.).\n\n## Non-functional requirements\n- [ ] Check `null` before `typeof`\n- [ ] Check `Array.isArray` before generic `object`\n\n## Constraints\n- [ ] No external libraries\n- [ ] Export `describeValue` from `starter/index.js`\n\n## Acceptance criteria\n- [ ] `describeValue(null)` → `\"null\"`\n- [ ] `describeValue([])` → `\"array\"`\n- [ ] `describeValue(NaN)` → `\"NaN\"`\n- [ ] `describeValue(\"x\")` → `\"string\"`\n- [ ] `describeValue({})` → `\"object\"`\n\n## Example data\n\n```js\ndescribeValue([1, 2]); // \"array\"\ndescribeValue(null);   // \"null\"\ndescribeValue(0);      // \"number\"\n```\n\n## Suggested plan (no solution)\n1. Handle `value === null` first.\n2. Then `Array.isArray(value)`.\n3. Then numbers with `Number.isFinite` vs `NaN`.\n4. Fall back to `typeof value`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Return `\"integer\"` for whole numbers.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
-                },
-                {
-                  "path": "starter",
-                  "kind": "dir"
-                },
-                {
-                  "path": "README.md",
-                  "kind": "file",
-                  "content": "# Type Guard\n\n## Problem context\nAPI payloads mix strings, numbers, arrays, and plain objects. `typeof` alone is misleading (`typeof null === \"object\"`). You need safe runtime checks.\n\n## Goal\nImplement `describeValue(value)` that returns a human-readable type label using `typeof` and `Array.isArray`.\n\n## Functional requirements\n- [ ] Return `\"null\"` when `value === null` (do not rely on `typeof`).\n- [ ] Return `\"array\"` when `Array.isArray(value)`.\n- [ ] Return `\"number\"` only for finite numbers (`Number.isFinite`).\n- [ ] Return `\"NaN\"` when `typeof value === \"number\"` but not finite.\n- [ ] Otherwise return `typeof value` as string (`\"string\"`, `\"boolean\"`, `\"undefined\"`, `\"object\"`, etc.).\n\n## Non-functional requirements\n- [ ] Check `null` before `typeof`\n- [ ] Check `Array.isArray` before generic `object`\n\n## Constraints\n- [ ] No external libraries\n- [ ] Export `describeValue` from `starter/index.js`\n\n## Acceptance criteria\n- [ ] `describeValue(null)` → `\"null\"`\n- [ ] `describeValue([])` → `\"array\"`\n- [ ] `describeValue(NaN)` → `\"NaN\"`\n- [ ] `describeValue(\"x\")` → `\"string\"`\n- [ ] `describeValue({})` → `\"object\"`\n\n## Example data\n\n```js\ndescribeValue([1, 2]); // \"array\"\ndescribeValue(null);   // \"null\"\ndescribeValue(0);      // \"number\"\n```\n\n## Suggested plan (no solution)\n1. Handle `value === null` first.\n2. Then `Array.isArray(value)`.\n3. Then numbers with `Number.isFinite` vs `NaN`.\n4. Fall back to `typeof value`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Return `\"integer\"` for whole numbers.\n"
-                },
-                {
-                  "path": "starter/index.js",
-                  "kind": "file",
-                  "content": "/**\n * Type Guard\n * node starter/index.js\n */\n\nfunction describeValue(value) {\n  // TODO: null, array, number/NaN, typeof fallback\n  return \"unknown\";\n}\n\nfunction main() {\n  const samples = [null, [], NaN, 0, \"hi\", {}, undefined];\n  for (const v of samples) {\n    console.log(JSON.stringify(v), \"->\", describeValue(v));\n  }\n}\n\nif (require.main === module) {\n  main();\n}\n\nmodule.exports = { describeValue };\n"
-                }
-              ],
-              "moduleId": "01-javascript-fundamentals",
-              "lessonId": "01.8.4-typeof-and-array-isarray",
-              "graphIndex": "01.8.4"
-            },
-            {
               "id": "023-default-config-builder",
               "title": "023. Default Config Builder",
               "rootPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/projects/023-default-config-builder",
@@ -941,10 +835,6 @@
                   "path": "",
                   "kind": "dir",
                   "readmeMarkdown": "# Default Config Builder\n\n## Problem context\nService configs merge user overrides with safe defaults. `??` preserves `0` and `false`; `||` treats empty strings as missing — pick the right operator per field.\n\n## Goal\nRead four optional config fields and print a normalized config object using `??` and `||`.\n\n## Functional requirements\n- [ ] Read four lines: `retries`, `timeout`, `label`, `active`.\n- [ ] Each line may be:\n  - [ ] empty (after trim) → treat as `undefined`\n  - [ ] `null` → JavaScript `null`\n  - [ ] any other text → use as raw value\n- [ ] Normalization (implement `buildConfig(raw)` returning an object):\n  - [ ] `retries`: `Number(raw.retries)` when provided and finite; if nullish input → `3`\n  - [ ] `timeout`: `Number(raw.timeout)` when provided and finite; if nullish input → `5000` (`0` must stay `0`)\n  - [ ] `label`: trim string; if nullish → `\"\"`; then `label || \"default\"`\n  - [ ] `active`: if nullish → `false`; if `\"true\"`/`\"false\"` → boolean; else → `ERROR: invalid active`\n- [ ] Invalid `retries` or `timeout` number → `ERROR: invalid number`.\n- [ ] Print four lines:\n  - [ ] `retries: <n>`\n  - [ ] `timeout: <n>`\n  - [ ] `label: <text>`\n  - [ ] `active: <true|false>`\n\n## Non-functional requirements\n- [ ] Use `??` for nullish defaults on numeric fields\n- [ ] Use `||` only where empty string should fall back to `\"default\"`\n\n## Constraints\n- [ ] Node.js only\n- [ ] `buildConfig` returns a plain object; `main` handles printing\n\n## Acceptance criteria\n- [ ] empty, empty, empty, empty → `3`, `5000`, `default`, `false`\n- [ ] `0`, `0`, ``, `true` → `0`, `0`, `default`, `true`\n- [ ] `5`, `null`, `  api  `, `false` → `5`, `5000`, `api`, `false`\n- [ ] `x`, `100`, `ok`, `true` → error on retries\n\n## Example data\n\nInput:\n- (empty)\n- (empty)\n- (empty)\n- (empty)\n\nOutput:\n```\nretries: 3\ntimeout: 5000\nlabel: default\nactive: false\n```\n\n## Suggested plan (no solution)\n1. Map each stdin line to `undefined`, `null`, or string value.\n2. In `buildConfig`, apply `??` for numeric defaults after parsing.\n3. Apply `|| \"default\"` only on `label` after trim.\n4. Print labeled fields from the returned object.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Use optional chaining when reading nested `raw.meta?.label`.\n"
-                },
-                {
-                  "path": "solution",
-                  "kind": "dir"
                 },
                 {
                   "path": "starter",
@@ -3720,137 +3610,6 @@
             },
             {
               "id": "quiz",
-              "title": "typeof and Array.isArray Check",
-              "description": "Runtime type labels without typeof traps.",
-              "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/quiz/quiz.json",
-              "questions": [
-                {
-                  "id": "q1",
-                  "prompt": "What does `typeof null` return?",
-                  "options": [
-                    {
-                      "id": "a",
-                      "text": "`\"object\"`"
-                    },
-                    {
-                      "id": "b",
-                      "text": "`\"null\"`"
-                    },
-                    {
-                      "id": "c",
-                      "text": "`\"undefined\"`"
-                    },
-                    {
-                      "id": "d",
-                      "text": "`\"number\"`"
-                    }
-                  ],
-                  "correctOptionId": "a",
-                  "explanation": "A long-standing quirk — use `value === null` instead of `typeof`."
-                },
-                {
-                  "id": "q2",
-                  "prompt": "How do you reliably detect an array?",
-                  "options": [
-                    {
-                      "id": "a",
-                      "text": "`Array.isArray(value)`"
-                    },
-                    {
-                      "id": "b",
-                      "text": "`typeof value === \"array\"`"
-                    },
-                    {
-                      "id": "c",
-                      "text": "`value instanceof Object`"
-                    },
-                    {
-                      "id": "d",
-                      "text": "`typeof value === \"object\" && value.length`"
-                    }
-                  ],
-                  "correctOptionId": "a",
-                  "explanation": "`typeof []` is `\"object\"`. `Array.isArray` is the correct test."
-                },
-                {
-                  "id": "q3",
-                  "prompt": "What does `typeof NaN` return?",
-                  "options": [
-                    {
-                      "id": "a",
-                      "text": "`\"number\"`"
-                    },
-                    {
-                      "id": "b",
-                      "text": "`\"NaN\"`"
-                    },
-                    {
-                      "id": "c",
-                      "text": "`\"undefined\"`"
-                    },
-                    {
-                      "id": "d",
-                      "text": "TypeError"
-                    }
-                  ],
-                  "correctOptionId": "a",
-                  "explanation": "NaN is still the number type. Detect it with `Number.isNaN(x)`."
-                },
-                {
-                  "id": "q4",
-                  "prompt": "Which check correctly identifies `null`?",
-                  "options": [
-                    {
-                      "id": "a",
-                      "text": "`value === null`"
-                    },
-                    {
-                      "id": "b",
-                      "text": "`typeof value === \"null\"`"
-                    },
-                    {
-                      "id": "c",
-                      "text": "`value == undefined` only"
-                    },
-                    {
-                      "id": "d",
-                      "text": "`!value`"
-                    }
-                  ],
-                  "correctOptionId": "a",
-                  "explanation": "Strict null check is explicit. `!value` also treats `0` and `\"\"` as missing."
-                },
-                {
-                  "id": "q5",
-                  "prompt": "Recommended order when labeling unknown `value`?",
-                  "options": [
-                    {
-                      "id": "a",
-                      "text": "`null` → `Array.isArray` → numbers → `typeof`"
-                    },
-                    {
-                      "id": "b",
-                      "text": "`typeof` first, then everything else"
-                    },
-                    {
-                      "id": "c",
-                      "text": "`== null` then return `\"missing\"`"
-                    },
-                    {
-                      "id": "d",
-                      "text": "Always `JSON.stringify`"
-                    }
-                  ],
-                  "correctOptionId": "a",
-                  "explanation": "Handle known quirks before falling back to `typeof`."
-                }
-              ],
-              "lessonId": "01.8.4-typeof-and-array-isarray",
-              "graphIndex": "01.8.4",
-              "moduleId": "01-javascript-fundamentals"
-            },
-            {
-              "id": "quiz",
               "title": "Nullish Operators Check",
               "description": "`null`, `undefined`, `== null`, `?.`, and `??`.",
               "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/quiz/quiz.json",
@@ -4681,14 +4440,6 @@
           "graphIndex": "01.8.3"
         },
         {
-          "id": "01.8.4-typeof-and-array-isarray",
-          "title": "typeof and Array.isArray",
-          "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/README.md",
-          "markdown": "# typeof and Array.isArray\n\n> Graph index: `01.8.4`\n\n<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:javascript/01-javascript-fundamentals/01.8.4-typeof-and-array-isarray:README.md -->\n\n## Context\n\nRuntime type checks help you validate messy input. `typeof` is useful but has gaps — especially for `null` and arrays.\n\n## typeof basics\n\n```js\nconsole.log(typeof \"hi\");      // \"string\"\nconsole.log(typeof 42);        // \"number\"\nconsole.log(typeof true);      // \"boolean\"\nconsole.log(typeof undefined); // \"undefined\"\nconsole.log(typeof {});        // \"object\"\n```\n\n## The typeof null quirk\n\n```js\nconsole.log(typeof null); // \"object\" (legacy bug)\n```\n\nNever check `typeof x === \"null\"`. Use `x === null` instead.\n\n## Arrays are objects\n\n```js\nconsole.log(typeof []);        // \"object\"\nconsole.log(Array.isArray([])); // true\n```\n\nAlways use `Array.isArray(value)` to detect arrays.\n\n## Predict first\n\nWhat is printed?\n\n```js\nconst values = [null, [], 0, NaN, \"\"];\n\nfor (const v of values) {\n  const label = Array.isArray(v) ? \"array\" : typeof v;\n  console.log(v, \"->\", label);\n}\n```\n\n## What to observe\n\n- Order matters: check `value === null` **before** `typeof`.\n- Check `Array.isArray` **before** treating something as a plain object.\n- `typeof NaN` is `\"number\"` — use `Number.isNaN(x)` for NaN specifically.\n- `Number.isFinite(x)` distinguishes real numbers from `NaN` / `Infinity`.\n\n## Mini-exercise\n\nImplement mental rules for:\n\n```js\ndescribe(null);    // \"null\" (not \"object\")\ndescribe([]);      // \"array\"\ndescribe(NaN);     // \"NaN\" or not finite\ndescribe(0);       // \"number\"\n```\n",
-          "moduleId": "01-javascript-fundamentals",
-          "graphIndex": "01.8.4"
-        },
-        {
           "id": "01.8.5-null-undefined-null",
           "title": "null, undefined, == null, ?., ??",
           "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/README.md",
@@ -4783,10 +4534,6 @@
               "readmeMarkdown": "# Hello Stdin\n\n## Problem context\nYou are onboarding to a team that solves HackerRank-style problems in Node.js. Your first task is a tiny CLI that reads input from `stdin` and prints a greeting — the same I/O pattern used in most coding challenges.\n\n## Goal\nBuild a Node.js program that reads one line from `stdin` and prints a formatted greeting to `stdout`.\n\n## Functional requirements\n- [ ] Read exactly one line from `stdin` (the user's name).\n- [ ] Trim leading and trailing whitespace from the input.\n- [ ] If the line is empty after trim, print `ERROR: name is required`.\n- [ ] Otherwise print `Hello, <name>!` on a single line.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error message for missing input\n- [ ] No external dependencies\n\n## Constraints\n- [ ] Node.js only (no external libraries)\n- [ ] Use `process.stdin` / `readline` or buffered read — no `prompt()` in browser\n- [ ] Output must be exactly one line (no extra blank lines)\n\n## Acceptance criteria\n- [ ] Input `Alice` → `Hello, Alice!`\n- [ ] Input `  Bob  ` → `Hello, Bob!`\n- [ ] Input `` (empty line) → `ERROR: name is required`\n- [ ] Input with only spaces → `ERROR: name is required`\n\n## Example data\n\n### Valid input\nInput:\n- `Maria`\n\nOutput:\n- `Hello, Maria!`\n\n### Invalid input\nInput:\n- ``\n\nOutput:\n- `ERROR: name is required`\n\n## Suggested plan (no solution)\n1. Set up a `readline` interface on `process.stdin`.\n2. On the first `line` event, trim the value.\n3. Branch on empty vs non-empty and write the result to `stdout`.\n4. Close the interface and exit.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept a second line with a language code (`en`, `pt`) and greet in that language.\n- [ ] Reject names longer than 50 characters with a specific error message.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
               "path": "starter",
               "kind": "dir"
             },
@@ -4816,10 +4563,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Receipt Printer\n\n## Problem context\nYour team logs order summaries to the terminal during development. Stakeholders want readable, labeled output — not raw values dumped without context.\n\n## Goal\nRead three lines from `stdin` (item name, quantity, unit price) and print a formatted receipt to `stdout` using clear labels and fixed decimal formatting.\n\n## Functional requirements\n- [ ] Read 3 lines from `stdin`:\n  - [ ] `item` (string, required after trim)\n  - [ ] `quantity` (positive integer as string, required)\n  - [ ] `unitPrice` (number as string, may have decimals, required)\n- [ ] Validate each field explicitly; on failure print `ERROR: <message>` (single line).\n- [ ] On success print exactly 4 lines:\n  - [ ] `Item: <item>`\n  - [ ] `Qty: <quantity>`\n  - [ ] `Unit: $<price with 2 decimals>`\n  - [ ] `Total: $<qty * unitPrice with 2 decimals>`\n\n## Non-functional requirements\n- [ ] Readable labels on every output line\n- [ ] Consistent money formatting (always 2 decimal places)\n- [ ] Clear validation errors (which field failed)\n\n## Constraints\n- [ ] Node.js only (no external libraries)\n- [ ] Use `Number()` for numeric conversion\n- [ ] Reject non-finite numbers and non-positive quantity\n\n## Acceptance criteria\n- [ ] `Coffee`, `2`, `3.5` → four labeled lines; total is `$7.00`\n- [ ] Empty item name → `ERROR: item is required`\n- [ ] `quantity` of `0` or `-1` → `ERROR: quantity must be positive`\n- [ ] `unitPrice` of `abc` → `ERROR: unitPrice must be a number`\n\n## Example data\n\n### Valid input\nInput:\n- `Notebook`\n- `3`\n- `4.25`\n\nOutput:\n- `Item: Notebook`\n- `Qty: 3`\n- `Unit: $4.25`\n- `Total: $12.75`\n\n### Invalid input\nInput:\n- `Pen`\n- `abc`\n- `1.00`\n\nOutput:\n- `ERROR: quantity must be a positive integer`\n\n## Suggested plan (no solution)\n1. Collect three lines (buffer or readline `line` events).\n2. Trim strings; check emptiness before converting numbers.\n3. Parse `quantity` as integer (`Number` + `Number.isInteger` + `> 0`).\n4. Parse `unitPrice` with `Number()` + `Number.isFinite`.\n5. Format money with `toFixed(2)` and print labeled lines.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add a `Discount: $<amount>` line when quantity is 5 or more (10% off total).\n- [ ] Right-align dollar amounts for a column-style receipt.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -4853,10 +4596,6 @@
               "readmeMarkdown": "# Validation Doc Block\n\n## Problem context\nA CLI validator script needs a human-readable rule list at the top of the file. Teammates should see validation rules without reading the implementation.\n\n## Goal\nRead three rule descriptions from `stdin` and print a multi-line comment block that documents them.\n\n## Functional requirements\n- [ ] Read exactly three non-empty lines: `rule1`, `rule2`, `rule3`.\n- [ ] Empty line on any input → `ERROR: rule required` (single line).\n- [ ] Print this shape (exact spacing inside the block):\n\n```\n/*\n  Validation rules:\n  - <rule1>\n  - <rule2>\n  - <rule3>\n*/\n```\n\n- [ ] Each rule appears on its own `- ` line inside the block.\n- [ ] No extra blank lines inside the block.\n\n## Non-functional requirements\n- [ ] Comments explain rules for humans — do not execute rule logic here\n- [ ] Readable output for copy-paste into a `.js` file\n\n## Constraints\n- [ ] Node.js only\n- [ ] Output is a comment block string via `process.stdout.write` (no `console.log` needed)\n\n## Acceptance criteria\n- [ ] Three valid lines produce the block with `- ` prefixes\n- [ ] Any empty line → `ERROR: rule required`\n- [ ] Rules with spaces are preserved verbatim\n\n## Example data\n\nInput:\n- `name must not be empty after trim`\n- `score must be 0–100`\n- `retries must be a positive integer`\n\nOutput:\n```\n/*\n  Validation rules:\n  - name must not be empty after trim\n  - score must be 0–100\n  - retries must be a positive integer\n*/\n```\n\n## Suggested plan (no solution)\n1. Collect three lines with `readline`.\n2. Reject empty trimmed lines early.\n3. Build the block with a template string or concatenation.\n4. Write the block once all three lines are valid.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept a fourth line `done` to finish early when piping input.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
               "path": "starter",
               "kind": "dir"
             },
@@ -4886,10 +4625,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Leaderboard Scores\n\n## Problem context\nA game backend tracks player scores. A junior dev used `const` everywhere and reassignment broke production. You need a small score updater that uses `let` and `const` correctly.\n\n## Goal\nImplement `updateLeaderboard(initialScores, events)` that applies a list of score events and returns the final leaderboard object without mutating the input.\n\n## Functional requirements\n- [ ] `initialScores` is an object `{ [playerId: string]: number }`.\n- [ ] `events` is an array of `{ playerId: string, delta: number }`.\n- [ ] Return a **new** object with updated scores (do not mutate `initialScores`).\n- [ ] Use `const` for bindings that are never reassigned; use `let` only when reassignment is required.\n- [ ] Unknown `playerId` in an event starts at `0` before applying `delta`.\n- [ ] Print nothing — return the object only (tests call the function).\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Idiomatic `let`/`const` usage (no `var`)\n- [ ] Predictable immutability of input\n\n## Constraints\n- [ ] No external libraries\n- [ ] Export `updateLeaderboard` from `starter/index.js` for testing\n- [ ] `delta` may be negative (penalties)\n\n## Acceptance criteria\n- [ ] `{ alice: 10 }` + `[{ playerId: \"alice\", delta: 5 }]` → `{ alice: 15 }`\n- [ ] `{ bob: 3 }` + `[{ playerId: \"carol\", delta: 7 }]` → `{ bob: 3, carol: 7 }`\n- [ ] Input object is unchanged after the call\n- [ ] Multiple events for the same player accumulate correctly\n\n## Example data\n\nInput:\n\n```js\nupdateLeaderboard(\n  { p1: 100, p2: 50 },\n  [\n    { playerId: \"p1\", delta: -10 },\n    { playerId: \"p2\", delta: 25 },\n    { playerId: \"p3\", delta: 5 },\n  ]\n)\n```\n\nOutput:\n\n```js\n{ p1: 90, p2: 75, p3: 5 }\n```\n\n## Suggested plan (no solution)\n1. `const` copy = shallow clone of `initialScores` into a new object.\n2. Loop events with `for...of`; `const` each event.\n3. `let` or lookup: if player missing, set base `0`, then add `delta`.\n4. Return the new object.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Reject events with empty `playerId` by throwing a clear `Error`.\n- [ ] Add `getTopPlayer(scores)` returning the id with highest score (ties: lexicographic first).\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -4923,10 +4658,6 @@
               "readmeMarkdown": "# Score Accumulator\n\n## Problem context\nA game server updates player scores with compound assignments (`+=`, `-=`, `*=`). You need a small CLI that replays a sequence of score changes.\n\n## Goal\nRead an initial score and a list of operations, apply each with compound assignment, and print the final total.\n\n## Functional requirements\n- [ ] Line 1: initial `score` (finite number).\n- [ ] Following lines: one operation per line until `done`:\n  - [ ] `+N` → `score += N`\n  - [ ] `-N` → `score -= N`\n  - [ ] `*N` → `score *= N`\n- [ ] Invalid initial score → `ERROR: invalid score`.\n- [ ] Malformed operation line → `ERROR: invalid operation`.\n- [ ] Print `Total: <score>` when `done` is received.\n\n## Non-functional requirements\n- [ ] Use compound operators (`+=`, `-=`, `*=`) — not `score = score + N`\n- [ ] Parse operation suffix with `Number()` and validate `Number.isFinite`\n\n## Constraints\n- [ ] Node.js only\n- [ ] `N` may be negative or decimal\n\n## Acceptance criteria\n- [ ] `10`, `+5`, `-3`, `*2`, `done` → `Total: 24` ((10+5-3)*2)\n- [ ] `100`, `done` → `Total: 100`\n- [ ] `abc` as first line → error\n- [ ] `+x` → error\n\n## Example data\n\nInput:\n- `10`\n- `+25`\n- `-10`\n- `*2`\n- `done`\n\nOutput:\n- `Total: 50`\n\n## Suggested plan (no solution)\n1. Parse initial score; validate.\n2. On each line, detect prefix `+`, `-`, or `*` and parse the rest as a number.\n3. Apply the matching compound assignment.\n4. On `done`, print the labeled total.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Support `/N` with `score /= N` and reject division by zero.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
               "path": "starter",
               "kind": "dir"
             },
@@ -4956,10 +4687,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# User Badge Formatter\n\n## Problem context\nA dashboard shows compact user badges in logs and CLI tools. Names arrive messy (extra spaces, mixed case) and handles must be URL-safe.\n\n## Goal\nImplement `formatUserBadge(user)` that returns a single-line badge string built from string primitives and template literals.\n\n## Functional requirements\n- [ ] `user` has `{ displayName: string, handle: string, level: number }`.\n- [ ] Normalize `displayName`: trim and collapse internal runs of spaces to one space.\n- [ ] Normalize `handle`: trim, lowercase, remove leading `@` if present.\n- [ ] Validate `level`: must be a finite integer `>= 1`; otherwise throw `Error` with message `invalid level`.\n- [ ] Return format: `[L<level>] <displayName> (@<handle>)`\n- [ ] If `displayName` is empty after normalization, throw `Error` with message `displayName is required`.\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Pure function (no I/O side effects)\n- [ ] Clear error messages\n\n## Constraints\n- [ ] No external libraries\n- [ ] Use template literals for the final badge string\n- [ ] Export `formatUserBadge` from `starter/index.js`\n\n## Acceptance criteria\n- [ ] `{ displayName: \"  Ana   Silva \", handle: \"@AnaS\", level: 3 }` → `[L3] Ana Silva (@anas)`\n- [ ] `{ displayName: \"Bob\", handle: \"bob\", level: 1 }` → `[L1] Bob (@bob)`\n- [ ] `{ displayName: \"   \", handle: \"x\", level: 2 }` throws `displayName is required`\n- [ ] `{ displayName: \"Eve\", handle: \"eve\", level: 0 }` throws `invalid level`\n\n## Example data\n\nInput:\n\n```js\nformatUserBadge({ displayName: \"  João  \", handle: \"@JOAO\", level: 12 })\n```\n\nOutput:\n\n```js\n\"[L12] João (@joao)\"\n```\n\n## Suggested plan (no solution)\n1. Trim and collapse spaces in `displayName` (split/filter/join or regex).\n2. Strip `@`, trim, lowercase `handle`.\n3. Validate `level` with `Number.isInteger` and range check.\n4. Return template literal `[L${level}] ${displayName} (@${handle})`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add optional `verified: boolean` — append ` ✓` when true.\n- [ ] Truncate `displayName` to 24 characters with `…` when longer.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -4993,10 +4720,6 @@
               "readmeMarkdown": "# Price Split Formatter\n\n## Problem context\nA bill-splitting tool reads a total charge and party size from `stdin`, then shows each person's share formatted as currency.\n\n## Goal\nParse two numeric lines and print `Share: $<amount>` with exactly two decimal places.\n\n## Functional requirements\n- [ ] Line 1: `total` (finite number, `> 0`).\n- [ ] Line 2: `people` (positive integer).\n- [ ] Invalid or non-finite numbers → `ERROR: invalid number`.\n- [ ] `people` must be integer `>= 1`.\n- [ ] Compute `share = total / people` and print `Share: $` + `share.toFixed(2)`.\n\n## Non-functional requirements\n- [ ] Validate with `Number.isFinite` before dividing\n- [ ] Use `toFixed(2)` for display only\n\n## Constraints\n- [ ] Node.js only\n- [ ] Trim whitespace on each line before parsing\n\n## Acceptance criteria\n- [ ] `100` and `4` → `Share: $25.00`\n- [ ] `10` and `3` → `Share: $3.33`\n- [ ] `abc` and `4` → error\n- [ ] `100` and `0` → error\n\n## Example data\n\nInput:\n- `100`\n- `4`\n\nOutput:\n- `Share: $25.00`\n\n## Suggested plan (no solution)\n1. Read two lines; trim and parse with `Number()`.\n2. Reject non-finite values and invalid `people`.\n3. Divide and format with `toFixed(2)`.\n4. Print the labeled share string.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Also print remainder cents when split is not exact.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
               "path": "starter",
               "kind": "dir"
             },
@@ -5026,10 +4749,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Validation Flags Reporter\n\n## Problem context\nA grading service stores boolean flags for each submission before running heavier checks. You need a CLI that computes and reports those flags from a single score.\n\n## Goal\nRead one score and print three boolean flags on separate lines.\n\n## Functional requirements\n- [ ] Read one line `score` (0–100 integer).\n- [ ] Invalid input → `ERROR: invalid score`.\n- [ ] Compute and print:\n  - [ ] `passed: <true|false>` — `score >= 60`\n  - [ ] `perfect: <true|false>` — `score === 100`\n  - [ ] `invalid: <true|false>` — `score < 0 || score > 100`\n- [ ] Print lowercase `true` / `false` as shown.\n\n## Non-functional requirements\n- [ ] Store each flag in a named boolean variable before printing\n- [ ] Use comparisons that return booleans directly\n\n## Constraints\n- [ ] Node.js only\n- [ ] Score must be integer in range for `passed`/`perfect`; out-of-range still sets `invalid: true`\n\n## Acceptance criteria\n- [ ] `90` → `passed: true`, `perfect: false`, `invalid: false`\n- [ ] `100` → `passed: true`, `perfect: true`, `invalid: false`\n- [ ] `105` → `passed: true`, `perfect: false`, `invalid: true`\n- [ ] `abc` → error\n\n## Example data\n\nInput:\n- `90`\n\nOutput:\n```\npassed: true\nperfect: false\ninvalid: false\n```\n\n## Suggested plan (no solution)\n1. Parse score; validate integer (allow out-of-range for flag demo, or validate first — document: accept any integer).\n2. Assign `passed`, `perfect`, `invalid` with comparison expressions.\n3. Print three labeled lines.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `needsReview: true` when `invalid` is true.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -5063,10 +4782,6 @@
               "readmeMarkdown": "# Missing Value Labeler\n\n## Problem context\nOptional profile fields arrive as real values, the literal token `null`, or the literal token `undefined`. Downstream code must label each case consistently.\n\n## Goal\nRead one token from `stdin` and print a single status label.\n\n## Functional requirements\n- [ ] Read one trimmed line `token`.\n- [ ] Labels:\n  - [ ] `undefined` → `missing`\n  - [ ] `null` → `empty`\n  - [ ] any other value (including empty string `\"\"`) → `has-value`\n- [ ] Matching is **exact string** on the trimmed line (case-sensitive).\n\n## Non-functional requirements\n- [ ] Use strict equality (`===`) when comparing to `\"undefined\"` and `\"null\"`\n- [ ] Do not use `typeof` for null checks\n\n## Constraints\n- [ ] Node.js only\n- [ ] Input is always one line\n\n## Acceptance criteria\n- [ ] `undefined` → `missing`\n- [ ] `null` → `empty`\n- [ ] `Ana` → `has-value`\n- [ ] `` (empty line after trim) → `has-value`\n- [ ] `0` → `has-value`\n\n## Example data\n\nInput:\n- `null`\n\nOutput:\n- `empty`\n\n## Suggested plan (no solution)\n1. Trim the line.\n2. Branch with `===` for `\"undefined\"` and `\"null\"`.\n3. Default to `has-value` for everything else.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept JSON `null` from parsed input and treat as `empty`.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
               "path": "starter",
               "kind": "dir"
             },
@@ -5096,10 +4811,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Bill Split Calculator\n\n## Problem context\nAfter dinner, your app splits the bill evenly. Totals must be exact to the cent — floating-point surprises are not acceptable in the output.\n\n## Goal\nRead `total` and `people` from `stdin` and print each person's share formatted to two decimals.\n\n## Functional requirements\n- [ ] Read 2 lines: `total` (number), `people` (positive integer).\n- [ ] Validate both fields; on error print `ERROR: <message>` (one line).\n- [ ] Compute `share = total / people`.\n- [ ] Print `Share: $<amount>` with exactly 2 decimal places.\n\n## Non-functional requirements\n- [ ] Clear validation messages\n- [ ] Readable output label\n\n## Constraints\n- [ ] Node.js only\n- [ ] Use `Number()` for parsing\n- [ ] Reject non-finite `total` and non-positive `people`\n\n## Acceptance criteria\n- [ ] `100` and `4` → `Share: $25.00`\n- [ ] `10` and `3` → `Share: $3.33` (rounded display via `toFixed(2)`)\n- [ ] `people` of `0` → error\n- [ ] `total` of `abc` → error\n\n## Example data\n\nInput:\n- `50`\n- `2`\n\nOutput:\n- `Share: $25.00`\n\n## Suggested plan (no solution)\n1. Read and trim two lines.\n2. Parse with `Number()`; validate with `Number.isFinite` / `Number.isInteger`.\n3. Divide and format with `toFixed(2)`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Print remainder cents separately when split is not exact.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -5133,10 +4844,6 @@
               "readmeMarkdown": "# Boundary Checker\n\n## Problem context\nForm validators must confirm a numeric answer sits inside an inclusive min/max range. Off-by-one bugs at boundaries are common without explicit `>=` and `<=` checks.\n\n## Goal\nRead `value`, `min`, and `max` and print whether the value is inside the inclusive range.\n\n## Functional requirements\n- [ ] Read three finite numbers: `value`, `min`, `max` (one per line).\n- [ ] Invalid number on any line → `ERROR: invalid number`.\n- [ ] If `min > max` → `ERROR: invalid range`.\n- [ ] Inclusive check: `value >= min && value <= max`.\n- [ ] Print `IN RANGE` or `OUT OF RANGE` (exact casing).\n\n## Non-functional requirements\n- [ ] Use strict parsing with `Number()` and `Number.isFinite`\n- [ ] Store `inRange` in a boolean variable\n\n## Constraints\n- [ ] Node.js only\n- [ ] Boundaries are inclusive on both ends\n\n## Acceptance criteria\n- [ ] `90`, `0`, `100` → `IN RANGE`\n- [ ] `90`, `0`, `89` → `OUT OF RANGE`\n- [ ] `90`, `90`, `100` → `IN RANGE` (lower bound inclusive)\n- [ ] `10`, `20`, `10` → `ERROR: invalid range`\n\n## Example data\n\nInput:\n- `89`\n- `0`\n- `100`\n\nOutput:\n- `IN RANGE`\n\n## Suggested plan (no solution)\n1. Read and parse three numbers.\n2. Validate `min <= max`.\n3. Compare with `>=` and `<=`; print result label.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Also print which boundary failed when out of range.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
               "path": "starter",
               "kind": "dir"
             },
@@ -5166,10 +4873,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Access Gate Validator\n\n## Problem context\nA venue scanner grants entry only when a visitor is an adult **and** presents ID. Both conditions must pass — a classic `&&` validation.\n\n## Goal\nRead `age` and `hasId`, then print `ALLOWED` or `DENIED`.\n\n## Functional requirements\n- [ ] Line 1: `age` (non-negative integer).\n- [ ] Line 2: `hasId` — exactly `true` or `false` (lowercase).\n- [ ] Invalid age or hasId → `ERROR: invalid input`.\n- [ ] `ALLOWED` when `age >= 18 && hasId === true`.\n- [ ] Otherwise `DENIED`.\n\n## Non-functional requirements\n- [ ] Combine conditions with `&&` in one expression or named variable\n- [ ] Parse `hasId` as boolean, not truthy string `\"false\"`\n\n## Constraints\n- [ ] Node.js only\n- [ ] `hasId` must be literal `true` or `false` text\n\n## Acceptance criteria\n- [ ] `20` and `true` → `ALLOWED`\n- [ ] `20` and `false` → `DENIED`\n- [ ] `17` and `true` → `DENIED`\n- [ ] `25` and `yes` → error\n\n## Example data\n\nInput:\n- `20`\n- `true`\n\nOutput:\n- `ALLOWED`\n\n## Suggested plan (no solution)\n1. Parse age; validate integer `>= 0`.\n2. Map `hasId` line to boolean only for `true`/`false`.\n3. Evaluate `canEnter = age >= 18 && hasId`.\n4. Print access label.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `SENIOR` discount flag when `age >= 65 && hasId`.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -5203,10 +4906,6 @@
               "readmeMarkdown": "# Grade Classifier\n\n## Problem context\nA learning platform maps numeric scores to letter grades. Rules must be explicit — no off-by-one bugs at boundaries.\n\n## Goal\nRead one score from `stdin` and print the letter grade using `if` / `else if` / `else`.\n\n## Functional requirements\n- [ ] Read one line `score` (0–100 integer).\n- [ ] Invalid input → `ERROR: invalid score` (single line).\n- [ ] Grading rules:\n  - [ ] `90–100` → `A`\n  - [ ] `80–89` → `B`\n  - [ ] `70–79` → `C`\n  - [ ] `60–69` → `D`\n  - [ ] `0–59` → `F`\n- [ ] Print `Grade: <letter>` on success.\n\n## Non-functional requirements\n- [ ] Boundaries inclusive on lower bound (e.g. 90 is `A`)\n- [ ] Readable branch structure\n\n## Constraints\n- [ ] Node.js only\n- [ ] Score must be integer in range 0–100\n\n## Acceptance criteria\n- [ ] `90` → `Grade: A`\n- [ ] `89` → `Grade: B`\n- [ ] `59` → `Grade: F`\n- [ ] `-1` or `101` or `abc` → error\n\n## Example data\n\nInput:\n- `84`\n\nOutput:\n- `Grade: B`\n\n## Suggested plan (no solution)\n1. Parse score with `Number()`; check `Number.isInteger` and range.\n2. Chain `if / else if` from highest threshold down.\n3. Print labeled result.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `Grade: A+` for scores `>= 97`.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
               "path": "starter",
               "kind": "dir"
             },
@@ -5236,10 +4935,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Menu Command Router\n\n## Problem context\nA text-based admin console routes user commands to actions. A `switch` keeps each command branch explicit and easy to extend.\n\n## Goal\nRead one command string and print the matching action message using `switch`.\n\n## Functional requirements\n- [ ] Read one trimmed line `cmd`.\n- [ ] Routes (exact match, case-sensitive):\n  - [ ] `start` → `Starting`\n  - [ ] `quit` → `Goodbye`\n  - [ ] `help` → `Help available`\n  - [ ] anything else → `Unknown command`\n- [ ] Each matching `case` must use `break`.\n\n## Non-functional requirements\n- [ ] Use `switch` — not a chain of `if / else if`\n- [ ] Include a `default` branch for unknown commands\n\n## Constraints\n- [ ] Node.js only\n- [ ] Strict string matching (`===` via `switch`)\n\n## Acceptance criteria\n- [ ] `start` → `Starting`\n- [ ] `quit` → `Goodbye`\n- [ ] `help` → `Help available`\n- [ ] `pause` → `Unknown command`\n- [ ] `Start` → `Unknown command` (case-sensitive)\n\n## Example data\n\nInput:\n- `quit`\n\nOutput:\n- `Goodbye`\n\n## Suggested plan (no solution)\n1. Trim the command line.\n2. `switch (cmd)` with one `case` per known command.\n3. `break` after each case body.\n4. `default` prints unknown message.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `list` → `Listing items` and document intentional fall-through for `list` + `help`.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -5273,10 +4968,6 @@
               "readmeMarkdown": "# Sum Range\n\n## Problem context\nAnalytics needs the sum of all integers from `start` to `end` inclusive. A `for` loop is the straightforward tool.\n\n## Goal\nRead `start` and `end` from `stdin` and print the inclusive sum.\n\n## Functional requirements\n- [ ] Read two integers `start` and `end` (may be negative; `start` may be greater than `end`).\n- [ ] Invalid input → `ERROR: invalid range` (one line).\n- [ ] Use a `for` loop to accumulate the sum.\n- [ ] Print `Sum: <total>` on success.\n\n## Non-functional requirements\n- [ ] Loop bounds correct when `start > end` (sum should be `0` or swap logic — document: use min/max)\n- [ ] No external libraries\n\n## Constraints\n- [ ] Node.js only\n- [ ] Must use `for` (not `while` or formulas) for practice\n\n## Acceptance criteria\n- [ ] `1` and `5` → `Sum: 15` (1+2+3+4+5)\n- [ ] `5` and `1` → `Sum: 15` (same inclusive range)\n- [ ] `3` and `3` → `Sum: 3`\n- [ ] Non-integer input → error\n\n## Example data\n\nInput:\n- `1`\n- `4`\n\nOutput:\n- `Sum: 10`\n\n## Suggested plan (no solution)\n1. Parse integers; validate.\n2. Set `low = Math.min(start, end)`, `high = Math.max(start, end)`.\n3. `let sum = 0`; loop `i` from `low` to `high`; add each `i`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Also print how many iterations ran.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
               "path": "starter",
               "kind": "dir"
             },
@@ -5306,10 +4997,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Sentinel Sum\n\n## Problem context\nA telemetry collector reads numeric samples until it receives a sentinel value `0`. The running total must use a `while` loop because the count is not known upfront.\n\n## Goal\nRead integers one per line until `0`, sum all prior values, and print the total.\n\n## Functional requirements\n- [ ] Read lines until a line parses to integer `0`.\n- [ ] Non-integer line before sentinel → `ERROR: invalid number`.\n- [ ] Do **not** include the `0` in the sum.\n- [ ] If first line is `0`, sum is `0`.\n- [ ] Print `Sum: <total>` after sentinel.\n\n## Non-functional requirements\n- [ ] Use `while` — not `for`\n- [ ] Update loop variables inside the body to avoid infinite loops\n\n## Constraints\n- [ ] Node.js only\n- [ ] Integers only (`Number.isInteger`)\n\n## Acceptance criteria\n- [ ] `10`, `20`, `0` → `Sum: 30`\n- [ ] `0` → `Sum: 0`\n- [ ] `5`, `abc` → error\n- [ ] `-3`, `7`, `0` → `Sum: 4`\n\n## Example data\n\nInput:\n- `10`\n- `20`\n- `0`\n\nOutput:\n- `Sum: 30`\n\n## Suggested plan (no solution)\n1. Read first line; if not `0`, validate and add to sum.\n2. `while` last value is not `0`, read next line and accumulate.\n3. Stop when `0` is read; print labeled sum.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Also print how many values were summed.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -5343,10 +5030,6 @@
               "readmeMarkdown": "# Celsius Converter\n\n## Problem context\nA weather widget needs reusable conversion logic. Extract the formula into a function with a clear return value.\n\n## Goal\nImplement `toFahrenheit(celsius)` and a small CLI that reads one number and prints the converted value.\n\n## Functional requirements\n- [ ] Implement `function toFahrenheit(celsius)` returning `celsius * 9/5 + 32`.\n- [ ] Read one line from `stdin`; parse as finite number or print `ERROR: invalid temperature`.\n- [ ] Print `F: <value>` with one decimal place on success.\n- [ ] Export `toFahrenheit` from `starter/index.js`.\n\n## Non-functional requirements\n- [ ] Pure conversion function (no I/O inside `toFahrenheit`)\n- [ ] Readable function declaration\n\n## Constraints\n- [ ] Node.js only\n- [ ] Use a **function declaration** (not arrow) for `toFahrenheit`\n\n## Acceptance criteria\n- [ ] `toFahrenheit(0)` → `32`\n- [ ] `toFahrenheit(100)` → `212`\n- [ ] Input `37.5` → `F: 99.5`\n- [ ] Input `abc` → error\n\n## Example data\n\nInput:\n- `0`\n\nOutput:\n- `F: 32.0`\n\n## Suggested plan (no solution)\n1. Write `toFahrenheit` with explicit `return`.\n2. Parse stdin; validate with `Number.isFinite`.\n3. Call function and format output.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `toCelsius(fahrenheit)` as a second function.\n"
             },
             {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
               "path": "starter",
               "kind": "dir"
             },
@@ -5376,10 +5059,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Clamp Utility\n\n## Problem context\nAPI rate limiters and UI sliders need a `clamp` helper that forces a value into `[min, max]` without printing inside the function.\n\n## Goal\nImplement `clamp(value, min, max)` with early returns, read three numbers from `stdin`, and print the clamped result.\n\n## Functional requirements\n- [ ] Implement `function clamp(value, min, max)` that **returns** a number (no `console.log` inside).\n- [ ] If `value < min` → return `min`.\n- [ ] If `value > max` → return `max`.\n- [ ] Otherwise return `value`.\n- [ ] Read `value`, `min`, `max` from `stdin` (one per line).\n- [ ] Invalid number → `ERROR: invalid number`.\n- [ ] If `min > max` → `ERROR: invalid range`.\n- [ ] Print `Result: <clamped>`.\n\n## Non-functional requirements\n- [ ] Separate computation (`return`) from I/O (`console.log` / `process.stdout.write`)\n- [ ] Use early `return` branches\n\n## Constraints\n- [ ] Node.js only\n- [ ] `clamp` must be reusable — caller prints the result\n\n## Acceptance criteria\n- [ ] `5`, `0`, `10` → `Result: 5`\n- [ ] `-3`, `0`, `10` → `Result: 0`\n- [ ] `99`, `0`, `10` → `Result: 10`\n- [ ] `5`, `10`, `0` → `ERROR: invalid range`\n\n## Example data\n\nInput:\n- `-3`\n- `0`\n- `10`\n\nOutput:\n- `Result: 0`\n\n## Suggested plan (no solution)\n1. Write `clamp` with three early-return paths.\n2. Parse stdin numbers in `main`.\n3. Call `clamp` and print the labeled result.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Add `clampMany(values, min, max)` returning an array.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -5413,9 +5092,18 @@
               "readmeMarkdown": "# CLI Input Validator\n\n## Problem context\nYou’re building a tiny CLI tool that receives user input as **strings** (like in HackerRank). Your team keeps shipping bugs because checks rely on truthiness/coercion instead of explicit validation.\n\n## Goal\nBuild a CLI program that reads 3 values and prints either a normalized result or an error message. The exercise is about **explicit conversion** and **defensive checks**.\n\n## Functional requirements\n- [ ] Read input from `stdin` (3 lines):\n  - [ ] `age` (expected integer, may be `0`)\n  - [ ] `score` (expected number, may be `0` or decimals)\n  - [ ] `isActive` (expected string: `true` or `false`, case-insensitive)\n- [ ] Convert values explicitly:\n  - [ ] Use `Number()` for numeric parsing (no implicit coercion).\n  - [ ] Reject non-finite numbers with `Number.isFinite(...)`.\n- [ ] Output:\n  - [ ] If valid, print a single JSON line with `{ age, score, isActive }` using correct types.\n  - [ ] If invalid, print `ERROR: <message>` (single line).\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages (tell which field is invalid and why)\n- [ ] No unexpected truthiness checks for numeric fields (don’t treat `0` as missing)\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use `parseInt` / `parseFloat` for the numeric fields (use `Number()`)\n\n## Acceptance criteria\n- [ ] `age = 0` is accepted as valid input.\n- [ ] Empty strings are rejected for all fields.\n- [ ] `score` rejects `NaN`, `Infinity`, `-Infinity`.\n- [ ] `isActive` accepts `true/false` in any casing (e.g. `TRUE`, `False`).\n\n## Example data\n\n### Valid input\nInput:\n- `0`\n- `10.5`\n- `TRUE`\n\nOutput:\n- `{\"age\":0,\"score\":10.5,\"isActive\":true}`\n\n### Invalid input\nInput:\n- ``\n- `10`\n- `true`\n\nOutput:\n- `ERROR: age is required`\n\n## Suggested plan (no solution)\n1. Read `stdin` lines and trim safely.\n2. Validate emptiness explicitly (check `line.length === 0`).\n3. Convert using `Number(...)`, validate with `Number.isFinite`.\n4. Normalize `isActive` with `toLowerCase()` and compare to `\"true\"` / `\"false\"`.\n5. Print output in the required format.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept `isActive` values like `1/0` and `yes/no` (explicit mapping only).\n- [ ] Support optional whitespace lines in the input.\n"
             },
             {
+              "path": "starter",
+              "kind": "dir"
+            },
+            {
               "path": "README.md",
               "kind": "file",
               "content": "# CLI Input Validator\n\n## Problem context\nYou’re building a tiny CLI tool that receives user input as **strings** (like in HackerRank). Your team keeps shipping bugs because checks rely on truthiness/coercion instead of explicit validation.\n\n## Goal\nBuild a CLI program that reads 3 values and prints either a normalized result or an error message. The exercise is about **explicit conversion** and **defensive checks**.\n\n## Functional requirements\n- [ ] Read input from `stdin` (3 lines):\n  - [ ] `age` (expected integer, may be `0`)\n  - [ ] `score` (expected number, may be `0` or decimals)\n  - [ ] `isActive` (expected string: `true` or `false`, case-insensitive)\n- [ ] Convert values explicitly:\n  - [ ] Use `Number()` for numeric parsing (no implicit coercion).\n  - [ ] Reject non-finite numbers with `Number.isFinite(...)`.\n- [ ] Output:\n  - [ ] If valid, print a single JSON line with `{ age, score, isActive }` using correct types.\n  - [ ] If invalid, print `ERROR: <message>` (single line).\n\n## Non-functional requirements\n- [ ] Readability and maintainability\n- [ ] Clear error messages (tell which field is invalid and why)\n- [ ] No unexpected truthiness checks for numeric fields (don’t treat `0` as missing)\n\n## Constraints\n- [ ] Node.js only (no external dependencies)\n- [ ] Do not use `parseInt` / `parseFloat` for the numeric fields (use `Number()`)\n\n## Acceptance criteria\n- [ ] `age = 0` is accepted as valid input.\n- [ ] Empty strings are rejected for all fields.\n- [ ] `score` rejects `NaN`, `Infinity`, `-Infinity`.\n- [ ] `isActive` accepts `true/false` in any casing (e.g. `TRUE`, `False`).\n\n## Example data\n\n### Valid input\nInput:\n- `0`\n- `10.5`\n- `TRUE`\n\nOutput:\n- `{\"age\":0,\"score\":10.5,\"isActive\":true}`\n\n### Invalid input\nInput:\n- ``\n- `10`\n- `true`\n\nOutput:\n- `ERROR: age is required`\n\n## Suggested plan (no solution)\n1. Read `stdin` lines and trim safely.\n2. Validate emptiness explicitly (check `line.length === 0`).\n3. Convert using `Number(...)`, validate with `Number.isFinite`.\n4. Normalize `isActive` with `toLowerCase()` and compare to `\"true\"` / `\"false\"`.\n5. Print output in the required format.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Accept `isActive` values like `1/0` and `yes/no` (explicit mapping only).\n- [ ] Support optional whitespace lines in the input.\n"
+            },
+            {
+              "path": "starter/index.js",
+              "kind": "file",
+              "content": "/**\n * CLI Input Validator\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const linhas = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    linhas.push(line);\n    if (linhas.length < 3) return;\n\n    // TODO: trim, validar vazio, Number() + Number.isFinite para age/score\n    // TODO: normalizar isActive (toLowerCase) e imprimir JSON ou ERROR: ...\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5467,41 +5155,6 @@
           "graphIndex": "01.8.3"
         },
         {
-          "id": "012-type-guard",
-          "title": "012. Type Guard",
-          "rootPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/projects/012-type-guard",
-          "readmePath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/projects/012-type-guard/README.md",
-          "readmeMarkdown": "# Type Guard\n\n## Problem context\nAPI payloads mix strings, numbers, arrays, and plain objects. `typeof` alone is misleading (`typeof null === \"object\"`). You need safe runtime checks.\n\n## Goal\nImplement `describeValue(value)` that returns a human-readable type label using `typeof` and `Array.isArray`.\n\n## Functional requirements\n- [ ] Return `\"null\"` when `value === null` (do not rely on `typeof`).\n- [ ] Return `\"array\"` when `Array.isArray(value)`.\n- [ ] Return `\"number\"` only for finite numbers (`Number.isFinite`).\n- [ ] Return `\"NaN\"` when `typeof value === \"number\"` but not finite.\n- [ ] Otherwise return `typeof value` as string (`\"string\"`, `\"boolean\"`, `\"undefined\"`, `\"object\"`, etc.).\n\n## Non-functional requirements\n- [ ] Check `null` before `typeof`\n- [ ] Check `Array.isArray` before generic `object`\n\n## Constraints\n- [ ] No external libraries\n- [ ] Export `describeValue` from `starter/index.js`\n\n## Acceptance criteria\n- [ ] `describeValue(null)` → `\"null\"`\n- [ ] `describeValue([])` → `\"array\"`\n- [ ] `describeValue(NaN)` → `\"NaN\"`\n- [ ] `describeValue(\"x\")` → `\"string\"`\n- [ ] `describeValue({})` → `\"object\"`\n\n## Example data\n\n```js\ndescribeValue([1, 2]); // \"array\"\ndescribeValue(null);   // \"null\"\ndescribeValue(0);      // \"number\"\n```\n\n## Suggested plan (no solution)\n1. Handle `value === null` first.\n2. Then `Array.isArray(value)`.\n3. Then numbers with `Number.isFinite` vs `NaN`.\n4. Fall back to `typeof value`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Return `\"integer\"` for whole numbers.\n",
-          "entries": [
-            {
-              "path": "",
-              "kind": "dir",
-              "readmeMarkdown": "# Type Guard\n\n## Problem context\nAPI payloads mix strings, numbers, arrays, and plain objects. `typeof` alone is misleading (`typeof null === \"object\"`). You need safe runtime checks.\n\n## Goal\nImplement `describeValue(value)` that returns a human-readable type label using `typeof` and `Array.isArray`.\n\n## Functional requirements\n- [ ] Return `\"null\"` when `value === null` (do not rely on `typeof`).\n- [ ] Return `\"array\"` when `Array.isArray(value)`.\n- [ ] Return `\"number\"` only for finite numbers (`Number.isFinite`).\n- [ ] Return `\"NaN\"` when `typeof value === \"number\"` but not finite.\n- [ ] Otherwise return `typeof value` as string (`\"string\"`, `\"boolean\"`, `\"undefined\"`, `\"object\"`, etc.).\n\n## Non-functional requirements\n- [ ] Check `null` before `typeof`\n- [ ] Check `Array.isArray` before generic `object`\n\n## Constraints\n- [ ] No external libraries\n- [ ] Export `describeValue` from `starter/index.js`\n\n## Acceptance criteria\n- [ ] `describeValue(null)` → `\"null\"`\n- [ ] `describeValue([])` → `\"array\"`\n- [ ] `describeValue(NaN)` → `\"NaN\"`\n- [ ] `describeValue(\"x\")` → `\"string\"`\n- [ ] `describeValue({})` → `\"object\"`\n\n## Example data\n\n```js\ndescribeValue([1, 2]); // \"array\"\ndescribeValue(null);   // \"null\"\ndescribeValue(0);      // \"number\"\n```\n\n## Suggested plan (no solution)\n1. Handle `value === null` first.\n2. Then `Array.isArray(value)`.\n3. Then numbers with `Number.isFinite` vs `NaN`.\n4. Fall back to `typeof value`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Return `\"integer\"` for whole numbers.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
-            },
-            {
-              "path": "starter",
-              "kind": "dir"
-            },
-            {
-              "path": "README.md",
-              "kind": "file",
-              "content": "# Type Guard\n\n## Problem context\nAPI payloads mix strings, numbers, arrays, and plain objects. `typeof` alone is misleading (`typeof null === \"object\"`). You need safe runtime checks.\n\n## Goal\nImplement `describeValue(value)` that returns a human-readable type label using `typeof` and `Array.isArray`.\n\n## Functional requirements\n- [ ] Return `\"null\"` when `value === null` (do not rely on `typeof`).\n- [ ] Return `\"array\"` when `Array.isArray(value)`.\n- [ ] Return `\"number\"` only for finite numbers (`Number.isFinite`).\n- [ ] Return `\"NaN\"` when `typeof value === \"number\"` but not finite.\n- [ ] Otherwise return `typeof value` as string (`\"string\"`, `\"boolean\"`, `\"undefined\"`, `\"object\"`, etc.).\n\n## Non-functional requirements\n- [ ] Check `null` before `typeof`\n- [ ] Check `Array.isArray` before generic `object`\n\n## Constraints\n- [ ] No external libraries\n- [ ] Export `describeValue` from `starter/index.js`\n\n## Acceptance criteria\n- [ ] `describeValue(null)` → `\"null\"`\n- [ ] `describeValue([])` → `\"array\"`\n- [ ] `describeValue(NaN)` → `\"NaN\"`\n- [ ] `describeValue(\"x\")` → `\"string\"`\n- [ ] `describeValue({})` → `\"object\"`\n\n## Example data\n\n```js\ndescribeValue([1, 2]); // \"array\"\ndescribeValue(null);   // \"null\"\ndescribeValue(0);      // \"number\"\n```\n\n## Suggested plan (no solution)\n1. Handle `value === null` first.\n2. Then `Array.isArray(value)`.\n3. Then numbers with `Number.isFinite` vs `NaN`.\n4. Fall back to `typeof value`.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Return `\"integer\"` for whole numbers.\n"
-            },
-            {
-              "path": "starter/index.js",
-              "kind": "file",
-              "content": "/**\n * Type Guard\n * node starter/index.js\n */\n\nfunction describeValue(value) {\n  // TODO: null, array, number/NaN, typeof fallback\n  return \"unknown\";\n}\n\nfunction main() {\n  const samples = [null, [], NaN, 0, \"hi\", {}, undefined];\n  for (const v of samples) {\n    console.log(JSON.stringify(v), \"->\", describeValue(v));\n  }\n}\n\nif (require.main === module) {\n  main();\n}\n\nmodule.exports = { describeValue };\n"
-            }
-          ],
-          "moduleId": "01-javascript-fundamentals",
-          "lessonId": "01.8.4-typeof-and-array-isarray",
-          "graphIndex": "01.8.4"
-        },
-        {
           "id": "023-default-config-builder",
           "title": "023. Default Config Builder",
           "rootPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.5-null-undefined-null/projects/023-default-config-builder",
@@ -5512,10 +5165,6 @@
               "path": "",
               "kind": "dir",
               "readmeMarkdown": "# Default Config Builder\n\n## Problem context\nService configs merge user overrides with safe defaults. `??` preserves `0` and `false`; `||` treats empty strings as missing — pick the right operator per field.\n\n## Goal\nRead four optional config fields and print a normalized config object using `??` and `||`.\n\n## Functional requirements\n- [ ] Read four lines: `retries`, `timeout`, `label`, `active`.\n- [ ] Each line may be:\n  - [ ] empty (after trim) → treat as `undefined`\n  - [ ] `null` → JavaScript `null`\n  - [ ] any other text → use as raw value\n- [ ] Normalization (implement `buildConfig(raw)` returning an object):\n  - [ ] `retries`: `Number(raw.retries)` when provided and finite; if nullish input → `3`\n  - [ ] `timeout`: `Number(raw.timeout)` when provided and finite; if nullish input → `5000` (`0` must stay `0`)\n  - [ ] `label`: trim string; if nullish → `\"\"`; then `label || \"default\"`\n  - [ ] `active`: if nullish → `false`; if `\"true\"`/`\"false\"` → boolean; else → `ERROR: invalid active`\n- [ ] Invalid `retries` or `timeout` number → `ERROR: invalid number`.\n- [ ] Print four lines:\n  - [ ] `retries: <n>`\n  - [ ] `timeout: <n>`\n  - [ ] `label: <text>`\n  - [ ] `active: <true|false>`\n\n## Non-functional requirements\n- [ ] Use `??` for nullish defaults on numeric fields\n- [ ] Use `||` only where empty string should fall back to `\"default\"`\n\n## Constraints\n- [ ] Node.js only\n- [ ] `buildConfig` returns a plain object; `main` handles printing\n\n## Acceptance criteria\n- [ ] empty, empty, empty, empty → `3`, `5000`, `default`, `false`\n- [ ] `0`, `0`, ``, `true` → `0`, `0`, `default`, `true`\n- [ ] `5`, `null`, `  api  `, `false` → `5`, `5000`, `api`, `false`\n- [ ] `x`, `100`, `ok`, `true` → error on retries\n\n## Example data\n\nInput:\n- (empty)\n- (empty)\n- (empty)\n- (empty)\n\nOutput:\n```\nretries: 3\ntimeout: 5000\nlabel: default\nactive: false\n```\n\n## Suggested plan (no solution)\n1. Map each stdin line to `undefined`, `null`, or string value.\n2. In `buildConfig`, apply `??` for numeric defaults after parsing.\n3. Apply `|| \"default\"` only on `label` after trim.\n4. Print labeled fields from the returned object.\n\n## Deliverables\n- [ ] Code in `starter/`\n- [ ] (Optional) reference in `solution/`\n\n## Extensions (optional)\n- [ ] Use optional chaining when reading nested `raw.meta?.label`.\n"
-            },
-            {
-              "path": "solution",
-              "kind": "dir"
             },
             {
               "path": "starter",
@@ -8393,137 +8042,6 @@
           ],
           "lessonId": "01.8.3-type-coercion",
           "graphIndex": "01.8.3",
-          "moduleId": "01-javascript-fundamentals"
-        },
-        {
-          "id": "quiz",
-          "title": "typeof and Array.isArray Check",
-          "description": "Runtime type labels without typeof traps.",
-          "path": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray/quiz/quiz.json",
-          "questions": [
-            {
-              "id": "q1",
-              "prompt": "What does `typeof null` return?",
-              "options": [
-                {
-                  "id": "a",
-                  "text": "`\"object\"`"
-                },
-                {
-                  "id": "b",
-                  "text": "`\"null\"`"
-                },
-                {
-                  "id": "c",
-                  "text": "`\"undefined\"`"
-                },
-                {
-                  "id": "d",
-                  "text": "`\"number\"`"
-                }
-              ],
-              "correctOptionId": "a",
-              "explanation": "A long-standing quirk — use `value === null` instead of `typeof`."
-            },
-            {
-              "id": "q2",
-              "prompt": "How do you reliably detect an array?",
-              "options": [
-                {
-                  "id": "a",
-                  "text": "`Array.isArray(value)`"
-                },
-                {
-                  "id": "b",
-                  "text": "`typeof value === \"array\"`"
-                },
-                {
-                  "id": "c",
-                  "text": "`value instanceof Object`"
-                },
-                {
-                  "id": "d",
-                  "text": "`typeof value === \"object\" && value.length`"
-                }
-              ],
-              "correctOptionId": "a",
-              "explanation": "`typeof []` is `\"object\"`. `Array.isArray` is the correct test."
-            },
-            {
-              "id": "q3",
-              "prompt": "What does `typeof NaN` return?",
-              "options": [
-                {
-                  "id": "a",
-                  "text": "`\"number\"`"
-                },
-                {
-                  "id": "b",
-                  "text": "`\"NaN\"`"
-                },
-                {
-                  "id": "c",
-                  "text": "`\"undefined\"`"
-                },
-                {
-                  "id": "d",
-                  "text": "TypeError"
-                }
-              ],
-              "correctOptionId": "a",
-              "explanation": "NaN is still the number type. Detect it with `Number.isNaN(x)`."
-            },
-            {
-              "id": "q4",
-              "prompt": "Which check correctly identifies `null`?",
-              "options": [
-                {
-                  "id": "a",
-                  "text": "`value === null`"
-                },
-                {
-                  "id": "b",
-                  "text": "`typeof value === \"null\"`"
-                },
-                {
-                  "id": "c",
-                  "text": "`value == undefined` only"
-                },
-                {
-                  "id": "d",
-                  "text": "`!value`"
-                }
-              ],
-              "correctOptionId": "a",
-              "explanation": "Strict null check is explicit. `!value` also treats `0` and `\"\"` as missing."
-            },
-            {
-              "id": "q5",
-              "prompt": "Recommended order when labeling unknown `value`?",
-              "options": [
-                {
-                  "id": "a",
-                  "text": "`null` → `Array.isArray` → numbers → `typeof`"
-                },
-                {
-                  "id": "b",
-                  "text": "`typeof` first, then everything else"
-                },
-                {
-                  "id": "c",
-                  "text": "`== null` then return `\"missing\"`"
-                },
-                {
-                  "id": "d",
-                  "text": "Always `JSON.stringify`"
-                }
-              ],
-              "correctOptionId": "a",
-              "explanation": "Handle known quirks before falling back to `typeof`."
-            }
-          ],
-          "lessonId": "01.8.4-typeof-and-array-isarray",
-          "graphIndex": "01.8.4",
           "moduleId": "01-javascript-fundamentals"
         },
         {
