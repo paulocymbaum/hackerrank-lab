@@ -8,7 +8,7 @@ import { Tabs } from "../../../design-system";
 import { MarkdownView } from "../../../shared/MarkdownView";
 import { ProjectFileExplorer } from "../../content-reader/components/ProjectFileExplorer";
 import { ProjectDeliveryPanel } from "../../content-reader/components/ProjectDeliveryPanel";
-import { ProjectStatusBadge } from "../../course-experience/components/ProjectStatusBadge";
+import { ProjectScoreProgress } from "../../../shared/score";
 
 function getExplanationMarkdown(project: Project, entries: ReaderEntry[], cwd: string): string {
   const currentDir = entries.find((e) => e.kind === "dir" && e.path === cwd);
@@ -30,6 +30,7 @@ export function ProjectWorkspacePanel(props: {
   const entries = project.entries;
 
   const getProjectStatus = useProjectProgressStore((s) => s.getStatus);
+  const getProjectProgress = useProjectProgressStore((s) => s.getProgress);
   const markProjectDoing = useProjectProgressStore((s) => s.markProjectDoing);
 
   useEffect(() => {
@@ -59,10 +60,11 @@ export function ProjectWorkspacePanel(props: {
           onValueChange={(v) => onDrawerTabChange(v as DrawerTab)}
           items={tabItems}
         />
-        <ProjectStatusBadge
-          value={getProjectStatus(courseId, project.id, project.lessonId)}
-          showPoints
-          size="sm"
+        <ProjectScoreProgress
+          status={getProjectStatus(courseId, project.id, project.lessonId)}
+          points={getProjectProgress(courseId, project.id, project.lessonId)?.points ?? 0}
+          layout="inline"
+          barSize="xs"
         />
       </div>
 

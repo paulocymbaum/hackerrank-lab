@@ -86,6 +86,7 @@ export const zh: TranslationDictionary = {
   "project.inProgress": "进行中 · 0 分",
   "project.donePoints": "已完成 · {points} 分",
   "project.pointsMax": "0 / {max} 分",
+  "project.progressAria": "项目得分 {value}/{max}",
 
   "reader.hideFileList": "隐藏文件列表",
   "reader.showFileList": "显示文件列表",

@@ -13,7 +13,7 @@ import { ReaderTabBar } from "./components/ReaderTabBar";
 import { FolderBrowser } from "./components/FolderBrowser";
 import { ProjectFileExplorer } from "./components/ProjectFileExplorer";
 import { ProjectDeliveryPanel } from "./components/ProjectDeliveryPanel";
-import { ProjectStatusBadge } from "../course-experience/components/ProjectStatusBadge";
+import { ProjectScoreProgress } from "../../shared/score";
 
 function getExplanationMarkdown(item: ReaderItem, entries: ReaderEntry[], cwd: string): string {
   if (item.kind === "lesson") return item.markdown;
@@ -28,6 +28,7 @@ export function ContentReaderDialog() {
   const { isOpen, item, tab, cwd, close, setTab, setCwd, selectFile } = useContentReader();
   const { closeReader, setReaderTab } = useAppNavigation();
   const getProjectStatus = useProjectProgressStore((s) => s.getStatus);
+  const getProjectProgress = useProjectProgressStore((s) => s.getProgress);
   const markProjectDoing = useProjectProgressStore((s) => s.markProjectDoing);
 
   const entries = item?.entries ?? [];
@@ -79,10 +80,12 @@ export function ContentReaderDialog() {
             />
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               {item.kind === "project" && item.projectId ? (
-                <ProjectStatusBadge
-                  value={getProjectStatus(courseId, item.projectId, item.lessonId)}
-                  showPoints
-                  size="md"
+                <ProjectScoreProgress
+                  status={getProjectStatus(courseId, item.projectId, item.lessonId)}
+                  points={
+                    getProjectProgress(courseId, item.projectId, item.lessonId)?.points ?? 0
+                  }
+                  layout="inline"
                 />
               ) : null}
               <Button variant="ghost" size="md" onClick={handleClose}>

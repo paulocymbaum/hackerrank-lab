@@ -87,6 +87,7 @@ export const pt: TranslationDictionary = {
   "project.inProgress": "Em andamento · 0 pts",
   "project.donePoints": "Concluído · {points} pts",
   "project.pointsMax": "0 / {max} pts",
+  "project.progressAria": "{value} de {max} pts do projeto",
 
   "reader.hideFileList": "Ocultar lista de arquivos",
   "reader.showFileList": "Mostrar lista de arquivos",

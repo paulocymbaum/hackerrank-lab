@@ -25,3 +25,13 @@ export function formatProjectScoreLabel(status: ProjectStatus, points = 0): stri
   if (status === "doing") return `In progress · 0 pts`;
   return `0 / ${PROJECT_POINTS_WEIGHT} pts`;
 }
+
+export function projectProgressMetrics(
+  status: ProjectStatus,
+  points = 0,
+): { value: number; max: number } {
+  return {
+    value: status === "done" ? points : 0,
+    max: PROJECT_POINTS_WEIGHT,
+  };
+}

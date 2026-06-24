@@ -2,7 +2,7 @@ import type { Project } from "../../../../domain/types/catalog";
 import { Card, EmptyState, Icon } from "../../../design-system";
 import { ClipboardList } from "lucide-react";
 import { useProjectProgressStore } from "../../../../application/stores/projectProgressStore";
-import { ProjectStatusBadge } from "./ProjectStatusBadge";
+import { ProjectScoreProgress } from "../../../shared/score";
 
 export function ProjectList(props: {
   courseId: string;
@@ -10,6 +10,7 @@ export function ProjectList(props: {
   onOpenProject: (project: Project) => void;
 }) {
   const getStatus = useProjectProgressStore((s) => s.getStatus);
+  const getProgress = useProjectProgressStore((s) => s.getProgress);
 
   return (
     <Card variant="panel" className="p-4">
@@ -27,12 +28,13 @@ export function ProjectList(props: {
         <ol className="m-0 grid gap-3 pl-0">
           {props.projects.map((project) => {
             const status = getStatus(props.courseId, project.id, project.lessonId);
+            const progress = getProgress(props.courseId, project.id, project.lessonId);
             return (
               <li
                 key={project.readmePath}
                 className="rounded-panel border border-border0 bg-surfaceControl p-3"
               >
-                <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex flex-col gap-3">
                   <button
                     type="button"
                     className="min-h-11 text-left text-body font-medium text-text0 underline decoration-border0 underline-offset-4 hover:decoration-text1"
@@ -40,7 +42,11 @@ export function ProjectList(props: {
                   >
                     {project.title}
                   </button>
-                  <ProjectStatusBadge value={status} showPoints />
+                  <ProjectScoreProgress
+                    status={status}
+                    points={progress?.points ?? 0}
+                    layout="stack"
+                  />
                 </div>
               </li>
             );

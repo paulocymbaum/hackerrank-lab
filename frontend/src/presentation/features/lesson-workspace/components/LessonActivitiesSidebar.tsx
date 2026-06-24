@@ -5,6 +5,7 @@ import { useTranslation } from "../../../../application/hooks/useTranslation";
 import { useProjectProgressStore } from "../../../../application/stores/projectProgressStore";
 import { useQuizProgressStore } from "../../../../application/stores/quizSessionStore";
 import { ActivitySidebarItem } from "../../../shared/ActivitySidebarItem";
+import { ProjectSidebarItem } from "../../../shared/ProjectSidebarItem";
 import { ArtifactSection } from "../../../shared/ArtifactSection";
 import { EmptyState } from "../../../design-system";
 
@@ -20,7 +21,7 @@ export function LessonActivitiesSidebar(props: {
   onOpenProject: (projectId: string) => void;
 }) {
   const { t } = useTranslation();
-  const { formatQuizScoreLabel, formatProjectScoreLabel } = useActivityScoreLabels();
+  const { formatQuizScoreLabel } = useActivityScoreLabels();
   const getQuizProgress = useQuizProgressStore((s) => s.getProgress);
   const getProjectStatus = useProjectProgressStore((s) => s.getStatus);
   const getProjectProgress = useProjectProgressStore((s) => s.getProgress);
@@ -52,10 +53,11 @@ export function LessonActivitiesSidebar(props: {
                     props.lessonId,
                   );
                   return (
-                    <ActivitySidebarItem
+                    <ProjectSidebarItem
                       key={project.id}
                       title={project.title}
-                      scoreLabel={formatProjectScoreLabel(status, progress?.points ?? 0)}
+                      status={status}
+                      points={progress?.points ?? 0}
                       active={props.activeProjectId === project.id}
                       onClick={() => props.onOpenProject(project.id)}
                     />

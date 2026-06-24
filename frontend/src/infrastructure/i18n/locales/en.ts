@@ -83,6 +83,7 @@ export const en = {
   "project.inProgress": "In progress · 0 pts",
   "project.donePoints": "Done · {points} pts",
   "project.pointsMax": "0 / {max} pts",
+  "project.progressAria": "{value} of {max} project points",
 
   "reader.hideFileList": "Hide file list",
   "reader.showFileList": "Show file list",
