@@ -1,51 +1,48 @@
-<!-- cursor:teacher:add-explanation (deterministic) -->
-<!-- marker:02-objects-references-and-copying:examples/03-deep-copy-and-structuredclone.md -->
+# structuredClone
 
-# Example 03 — Deep Copy: `structuredClone` vs JSON
+> Graph index: `02.3`
+
+<!-- cursor:teacher:add-explanation (deterministic) -->
+<!-- marker:02-objects-references-and-copying/02.3-structuredclone:README.md -->
 
 ## Context
-Sometimes you need a full snapshot (deep copy). But not all deep-copy techniques are correct for all data.
 
-## Example A — JSON cloning is lossy
-Predict what prints:
+Sometimes you need a full snapshot (deep copy). JSON cloning is simple but lossy; `structuredClone` preserves more types when available.
+
+## Predict first
+
+What is `typeof y.when` after JSON clone?
 
 ```js
 const x = {
   when: new Date("2020-01-01T00:00:00Z"),
   n: 1,
 };
-
 const y = JSON.parse(JSON.stringify(x));
 console.log(typeof y.when, y.when);
 ```
 
-### What to observe
-- JSON turns `Date` into a **string**.
-- JSON drops `undefined` and cannot represent functions.
-- JSON throws on `BigInt`.
-- JSON fails on cycles.
+## Explanation
 
-## Example B — `structuredClone` preserves more types
-If your runtime supports it, try:
+JSON clone limitations:
+
+- `Date` becomes a string
+- Drops `undefined`, functions, `Symbol`
+- Throws on `BigInt` and cycles
+
+`structuredClone` preserves more:
 
 ```js
-const x = {
-  when: new Date("2020-01-01T00:00:00Z"),
-  set: new Set([1, 2]),
-};
-
 const y = structuredClone(x);
-console.log(y.when instanceof Date);
-console.log(y.set instanceof Set);
+console.log(y.when instanceof Date); // true
 ```
 
-## Trade-off
-Deep copying everything can be expensive. Prefer:
-- shallow copies + copy-on-write for most updates
-- deep copy only when you truly need an immutable snapshot boundary
+## What to observe
 
-## Mini-exercise
-Create a function `cloneForSafety(value)` with this behavior:
-- If `structuredClone` exists, use it.
-- Otherwise, allow only JSON-safe data and clone with JSON.
-- If cloning fails, throw a helpful error.
+- Prefer shallow copy + copy-on-write for most updates.
+- Deep copy when you need an immutable snapshot boundary.
+- `structuredClone` is the modern default when supported.
+
+## Quick challenge
+
+Implement `cloneForSafety(value)`: use `structuredClone` when available, else JSON for JSON-safe data only.

@@ -1,60 +1,57 @@
-# Retry With Backoff
+# Promise Chain Builder
 
 ## Problem context
-Your application calls an unreliable API. Sometimes it fails due to transient errors. You want retries, but you also want to avoid hammering the server.
+Legacy callback APIs are still common in Node.js. Your team wraps them in Promises and chains `.then` / `.catch` for readable async flow.
 
 ## Goal
-Implement a `retry` utility that retries an async function with **exponential backoff** and clear error rules.
+Implement `runPipeline()` that wraps a callback-style function in a `new Promise`, chains two `.then` handlers, and handles rejection with `.catch`.
+
+## Lesson concepts practiced
+- [ ] Create a Promise with `new Promise((resolve, reject) => ...)`
+- [ ] Chain `.then` for fulfilled values
+- [ ] Handle rejection with `.catch`
 
 ## Functional requirements
-- [ ] Implement `retry(fn, options)` where:
-  - [ ] `fn` is a function returning a promise
-  - [ ] `options.retries` (default `3`)
-  - [ ] `options.baseDelayMs` (default `100`)
-  - [ ] `options.factor` (default `2`)
-  - [ ] `options.shouldRetry(error)` (optional predicate)
-- [ ] Behavior:
-  - [ ] Call `fn` until it succeeds OR retries are exhausted.
-  - [ ] Between attempts, wait `baseDelayMs * factor^(attempt-1)` milliseconds.
-  - [ ] If `shouldRetry` returns false, fail immediately.
-- [ ] Return the successful value, or throw the last error.
+- [ ] Implement `fakeRead(path, callback)` — calls `callback(null, "data:" + path)` on next tick via `setTimeout(..., 0)`.
+- [ ] Implement `readAsPromise(path)` — wrap `fakeRead` in `new Promise`; reject if `err`, else resolve `data`.
+- [ ] Implement `runPipeline(path)`:
+  - [ ] Call `readAsPromise(path)`
+  - [ ] First `.then`: append `" -> parsed"`
+  - [ ] Second `.then`: append `" -> done"`
+  - [ ] `.catch`: return `"ERROR: " + err.message`
+- [ ] `main()` reads one path line from stdin and prints the final string.
 
 ## Non-functional requirements
-- [ ] Readable implementation (small helpers like `sleep(ms)` allowed)
-- [ ] Deterministic tests/examples (use predictable fake failures)
+- [ ] Use Promise chaining (not async/await)
+- [ ] Readable helper names
 
 ## Constraints
+- [ ] Node.js only
 - [ ] No external libraries
+- [ ] Do not use async/await in the solution
 
 ## Acceptance criteria
-- [ ] Retries happen with increasing delay.
-- [ ] `shouldRetry` can stop retries early.
-- [ ] Errors propagate correctly when retries are exhausted.
+- [ ] Input `users.json` prints `data:users.json -> parsed -> done`
+- [ ] If `fakeRead` is called with path `fail`, it calls `callback(new Error("not found"))` — pipeline prints `ERROR: not found`
+- [ ] `readAsPromise` uses `new Promise`, not `Promise.resolve` alone
 
 ## Example data
 
-```js
-let count = 0;
-const fn = async () => {
-  count++;
-  if (count < 3) throw new Error("temporary");
-  return "ok";
-};
+Input:
+- `users.json`
 
-const result = await retry(fn, { retries: 5, baseDelayMs: 10 });
-console.log(result); // ok
-```
+Output:
+- `data:users.json -> parsed -> done`
 
 ## Suggested plan (no solution)
-1. Define `sleep(ms)` returning a promise.
-2. Loop attempts, using `try/catch` around `await fn()`.
-3. Decide when to stop (retries exhausted or `shouldRetry` false).
-4. Await the computed delay before the next attempt.
+1. Write `fakeRead` with setTimeout and callback convention.
+2. Wrap in `new Promise` inside `readAsPromise`.
+3. Chain two `.then` transforms in `runPipeline`.
+4. Wire stdin in `main`.
 
 ## Deliverables
 - [ ] Code in `starter/`
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)
-- [ ] Add jitter to the delay.
-- [ ] Add a max delay cap.
+- [ ] Add a `.finally` that logs `pipeline finished`.

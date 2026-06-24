@@ -1,69 +1,57 @@
-# CLI Input Validator
+# Truthy Classifier
 
 ## Problem context
-You’re building a tiny CLI tool that receives user input as **strings** (like in HackerRank). Your team keeps shipping bugs because checks rely on truthiness/coercion instead of explicit validation.
+Business rules often misuse truthiness — treating valid `0` or `"0"` incorrectly. You need explicit `Boolean()` classification.
 
 ## Goal
-Build a CLI program that reads 3 values and prints either a normalized result or an error message. The exercise is about **explicit conversion** and **defensive checks**.
+Implement `classify(value)` returning `"truthy"` or `"falsy"` using `Boolean(value)`, and demonstrate one case where naive `if (value)` fails for valid data.
+
+## Lesson concepts practiced
+- [ ] Complete falsy list: `false`, `0`, `""`, `null`, `undefined`, `NaN`
+- [ ] `"0"` and `[]` are truthy
+- [ ] Falsy does not mean invalid (`0` can be valid)
 
 ## Functional requirements
-- [ ] Read input from `stdin` (3 lines):
-  - [ ] `age` (expected integer, may be `0`)
-  - [ ] `score` (expected number, may be `0` or decimals)
-  - [ ] `isActive` (expected string: `true` or `false`, case-insensitive)
-- [ ] Convert values explicitly:
-  - [ ] Use `Number()` for numeric parsing (no implicit coercion).
-  - [ ] Reject non-finite numbers with `Number.isFinite(...)`.
-- [ ] Output:
-  - [ ] If valid, print a single JSON line with `{ age, score, isActive }` using correct types.
-  - [ ] If invalid, print `ERROR: <message>` (single line).
+- [ ] Implement `classify(value)` — return `"truthy"` or `"falsy"` via `Boolean(value)`.
+- [ ] Implement `naiveGate(value)` — returns `"blocked"` if `!value`, else `"allowed"`.
+- [ ] `main()` reads one JSON value per line until `done`:
+  - [ ] Print `classify: <truthy|falsy>` for each value
+  - [ ] For value `0`, also print `naiveGate: <allowed|blocked>` and `note: 0 is valid but falsy`
+- [ ] Test values must include: `0`, `""`, `"0"`, `[]`, `null`, `" "` (space string)
 
 ## Non-functional requirements
-- [ ] Readability and maintainability
-- [ ] Clear error messages (tell which field is invalid and why)
-- [ ] No unexpected truthiness checks for numeric fields (don’t treat `0` as missing)
+- [ ] Use `Boolean()` in `classify`, not implicit `if (value)` coercion alone
+- [ ] Clear output labels
 
 ## Constraints
-- [ ] Node.js only (no external dependencies)
-- [ ] Do not use `parseInt` / `parseFloat` for the numeric fields (use `Number()`)
+- [ ] Node.js only
+- [ ] Parse stdin lines as JSON values
 
 ## Acceptance criteria
-- [ ] `age = 0` is accepted as valid input.
-- [ ] Empty strings are rejected for all fields.
-- [ ] `score` rejects `NaN`, `Infinity`, `-Infinity`.
-- [ ] `isActive` accepts `true/false` in any casing (e.g. `TRUE`, `False`).
+- [ ] `0` → `classify: falsy` and `naiveGate: blocked` and note about valid zero
+- [ ] `"0"` → `classify: truthy`
+- [ ] `[]` → `classify: truthy`
+- [ ] `""` → `classify: falsy`
+- [ ] `" "` (space) → `classify: truthy`
 
 ## Example data
 
-### Valid input
 Input:
 - `0`
-- `10.5`
-- `TRUE`
 
 Output:
-- `{"age":0,"score":10.5,"isActive":true}`
-
-### Invalid input
-Input:
-- ``
-- `10`
-- `true`
-
-Output:
-- `ERROR: age is required`
+- `classify: falsy`
+- `naiveGate: blocked`
+- `note: 0 is valid but falsy`
 
 ## Suggested plan (no solution)
-1. Read `stdin` lines and trim safely.
-2. Validate emptiness explicitly (check `line.length === 0`).
-3. Convert using `Number(...)`, validate with `Number.isFinite`.
-4. Normalize `isActive` with `toLowerCase()` and compare to `"true"` / `"false"`.
-5. Print output in the required format.
+1. Implement `classify` with `Boolean(value)`.
+2. Implement `naiveGate` with `!value` to show the pitfall.
+3. Parse JSON lines; special-case `0` for the note.
 
 ## Deliverables
 - [ ] Code in `starter/`
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)
-- [ ] Accept `isActive` values like `1/0` and `yes/no` (explicit mapping only).
-- [ ] Support optional whitespace lines in the input.
+- [ ] Add `explain(value)` printing which falsy rule applies.

@@ -4,6 +4,11 @@
 A game backend tracks player scores. A junior dev used `const` everywhere and reassignment broke production. You need a small score updater that uses `let` and `const` correctly.
 
 ## Goal
+## Lesson concepts practiced
+- [ ] Default to `const`; reach for `let` only when reassignment is intentional.
+- [ ] `const` objects/arrays can still be **mutated** — only the variable reference is locked.
+- [ ] Block scope: variables declared inside `{}` are not visible outside.
+
 Implement `updateLeaderboard(initialScores, events)` that applies a list of score events and returns the final leaderboard object without mutating the input.
 
 ## Functional requirements

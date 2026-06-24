@@ -11,6 +11,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  validateLessonProjectAlignment,
   validateModuleProjectsReadme,
   validateProjectReadme,
 } from "./project-contract.mjs";
@@ -85,6 +86,17 @@ async function validateModuleProjectsReadmeFile(modulePath, relBase) {
   ];
 }
 
+async function findLessonReadmeForProject(projectPath) {
+  const parts = projectPath.split(path.sep);
+  const lessonsIdx = parts.lastIndexOf("lessons");
+  const projectsIdx = parts.lastIndexOf("projects");
+  if (lessonsIdx < 0 || projectsIdx < 0 || projectsIdx <= lessonsIdx) return null;
+  const lessonPath = parts.slice(0, projectsIdx).join(path.sep);
+  const lessonReadme = path.join(lessonPath, "README.md");
+  if (await fileExists(lessonReadme)) return lessonReadme;
+  return null;
+}
+
 async function validateSingleProject(projectPath) {
   const findings = [];
   const rel = path.relative(repoRoot, projectPath);
@@ -103,6 +115,18 @@ async function validateSingleProject(projectPath) {
   }
   for (const message of readmeCheck.warnings) {
     findings.push({ level: "warn", path: path.relative(repoRoot, readmePath), message });
+  }
+
+  const lessonReadmePath = await findLessonReadmeForProject(projectPath);
+  if (lessonReadmePath) {
+    const lessonMarkdown = await readTextSafe(lessonReadmePath);
+    const alignment = validateLessonProjectAlignment(lessonMarkdown, markdown);
+    for (const message of alignment.errors) {
+      findings.push({ level: "error", path: path.relative(repoRoot, readmePath), message });
+    }
+    for (const message of alignment.warnings) {
+      findings.push({ level: "warn", path: path.relative(repoRoot, readmePath), message });
+    }
   }
 
   if (!(await fileExists(starterPath))) {

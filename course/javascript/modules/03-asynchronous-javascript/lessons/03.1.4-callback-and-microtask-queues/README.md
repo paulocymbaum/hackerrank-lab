@@ -1,16 +1,17 @@
+# Callback and Microtask Queues
+
+> Graph index: `03.1.4`
+
 <!-- cursor:teacher:add-explanation (deterministic) -->
-<!-- marker:03-asynchronous-javascript-runtime-model-event-loop:examples/02-event-loop-microtasks-vs-tasks.md -->
+<!-- marker:03-asynchronous-javascript/03.1.4-callback-and-microtask-queues:README.md -->
 
-# Tier 2 — Event Loop: Microtasks vs Tasks
+## Context
 
-## Goal
-Learn the core ordering rule:
-- run sync
-- drain microtasks
-- run one task
-- repeat
+The event loop drains **microtasks** (Promise reactions) before running the next **task** (e.g. `setTimeout`). Understanding this ordering prevents "mystery" output when mixing Promises and timers.
 
-## Example: Promise vs timer
+## Predict first
+
+What prints first: `micro` or `timer`?
 
 ```js
 console.log("start");
@@ -21,10 +22,9 @@ setTimeout(() => console.log("timer"), 0);
 console.log("end");
 ```
 
-### Predict
-What prints first: `micro` or `timer`?
+## Explanation
 
-## Example: chaining microtasks
+Chaining microtasks:
 
 ```js
 Promise.resolve()
@@ -34,9 +34,14 @@ Promise.resolve()
 setTimeout(() => console.log("t1"), 0);
 ```
 
-### What to observe
+Both `m1` and `m2` run before `t1` because the microtask queue is drained completely before the next task.
+
+## What to observe
+
 - Promise reactions are microtasks.
 - Microtasks run to completion before the next task.
+- `setTimeout(fn, 0)` does not mean "run immediately" — it means "schedule as a task after current sync + microtasks".
 
-## Mini-exercise
-Add exactly one line so that `t1` prints before `m2` (hint: schedule work in a task).
+## Quick challenge
+
+Add exactly one line of code so that `t1` prints before `m2` (hint: schedule work in a task).

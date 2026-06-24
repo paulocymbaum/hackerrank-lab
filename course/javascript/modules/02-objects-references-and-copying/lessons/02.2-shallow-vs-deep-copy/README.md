@@ -1,59 +1,59 @@
-<!-- cursor:teacher:add-explanation (deterministic) -->
-<!-- marker:02-objects-references-and-copying:examples/02-shallow-copy-pitfalls.md -->
+# Shallow vs Deep Copy
 
-# Example 02 — Shallow Copy Pitfalls (Nested trap)
+> Graph index: `02.2`
+
+<!-- cursor:teacher:add-explanation (deterministic) -->
+<!-- marker:02-objects-references-and-copying/02.2-shallow-vs-deep-copy:README.md -->
 
 ## Context
-Shallow copy creates a new **top-level container**, but it does **not** duplicate nested objects. This is the #1 reason someone says “I copied it but the original changed”.
 
-## Example A — object spread is shallow
-Predict the output first:
+Shallow copy creates a new **top-level container**, but nested objects are still shared. This is the main reason "I copied it but the original changed" bugs happen.
+
+## Predict first
+
+What is `user.address.city` after this runs?
 
 ```js
 const user = {
   name: "Ana",
   address: { city: "SP" },
 };
-
 const copy = { ...user };
 copy.address.city = "RJ";
-
 console.log(user.address.city);
 ```
 
-### What to observe
-- `copy` is a new object.
-- `copy.address` and `user.address` point to the **same nested object**.
+## Explanation
 
-## Example B — array spread is shallow
-Predict the output first:
+Object spread is shallow:
+
+```js
+const copy = { ...user };
+copy.address.city = "RJ"; // mutates shared nested object
+```
+
+Array spread is shallow too:
 
 ```js
 const a = [{ x: 1 }];
 const b = [...a];
-
-b[0].x = 99;
-console.log(a[0].x);
+b[0].x = 99; // mutates shared inner object
 ```
 
-## Safer update pattern (copy-on-write)
-If you change nested data, copy every level you touch:
+## What to observe
+
+- `copy` is a new top-level object; `copy.address` still references `user.address`.
+- To update nested data safely, copy every level you touch (copy-on-write).
+
+## Safer update pattern
 
 ```js
 const next = {
   ...user,
-  address: {
-    ...user.address,
-    city: "RJ",
-  },
+  address: { ...user.address, city: "RJ" },
 };
 ```
 
-## Mini-exercise
-Given:
+## Quick challenge
 
-```js
-const state = { items: [{ id: 1, qty: 1 }] };
-```
-
-Write a `nextState` that increments `qty` for `id: 1` without mutating `state`.
+Update `user.address.city` to `"RJ"` without mutating `user.address`.

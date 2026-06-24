@@ -25,7 +25,7 @@ node .cursor/skills/create-course-project/scripts/collect-project-context.mjs --
 node .cursor/tools/teacher/add-project-idea.js javascript 01-javascript-fundamentals 01.8.1-truthy-vs-falsy 1 "CLI Input Validator"
 ```
 
-3. **Fill content** in project `README.md` using lesson README as source truth.
+3. **Fill content** in project `README.md` using lesson README as source truth. Each project must include `## Lesson concepts practiced` with at least 2 items from the lesson's Predict first / What to observe sections.
 
 4. **Update** lesson `projects/README.md` catalog.
 
@@ -47,6 +47,7 @@ cd frontend && npm run catalog:generate
 - [ ] collect-project-context.mjs --lesson run
 - [ ] Project number (NNN) is next sequential id in the lesson
 - [ ] README has all required PBL sections (English headers)
+- [ ] README has ## Lesson concepts practiced (≥2 items from lesson)
 - [ ] starter/index.js exists (node starter/index.js)
 - [ ] projects/README.md catalog updated
 - [ ] validate-project.mjs passes

@@ -1,4 +1,4 @@
-# Projects — Validation Doc Block
+# Projects — Comments
 
 Practice exercises for this lesson. Run each project with:
 
@@ -6,29 +6,15 @@ Practice exercises for this lesson. Run each project with:
 node starter/index.js
 ```
 
-## Folder conventions
+## What you should practice
 
-- Projects live directly under `projects/` as `NNN-kebab-name/`
-- Each project has `README.md` (PBL contract), `starter/index.js`, optional `solution/`
-- Project numbers (`001`, `002`, …) are sequential within this lesson
+- Writing `//` comments that explain why a rule exists
+- Commenting out a line to disable a check
+- Comments live in source code, not only in stdout
 
 ## Project catalog
 
 ### 013-validation-doc-block/
 
-Read three validation rules from `stdin` and print a multi-line `/* ... */` documentation block.
+Implement a three-rule validator with `//` comments on each rule; one rule disabled via commented-out code.
 
-## PBL contract checklist
-
-Each project README must include (English headers):
-
-- Problem context
-- Goal
-- Functional requirements
-- Non-functional requirements
-- Constraints
-- Acceptance criteria
-- Example data (if applicable)
-- Suggested plan (no solution)
-- Deliverables
-- Extensions (optional)

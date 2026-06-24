@@ -4,6 +4,11 @@
 Your team logs order summaries to the terminal during development. Stakeholders want readable, labeled output — not raw values dumped without context.
 
 ## Goal
+## Lesson concepts practiced
+- [ ] `console.log(x)` is like `process.stdout.write(String(x) + "\n")`.
+- [ ] Mixing raw writes and `console.log` can produce surprising line breaks.
+- [ ] Label every value in exercise output (`Item:`, `Qty:`, `ERROR:`) so reviewers can scan results quickly.
+
 Read three lines from `stdin` (item name, quantity, unit price) and print a formatted receipt to `stdout` using clear labels and fixed decimal formatting.
 
 ## Functional requirements

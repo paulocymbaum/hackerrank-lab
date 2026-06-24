@@ -1,60 +1,59 @@
-# Data Normalizer
+# Coercion Predictor
 
 ## Problem context
-You receive user records from multiple sources. Some fields come as numbers, some as strings, and missing values are inconsistent (`null`, `undefined`, empty string).
+Loose equality `==` surprises teams in code review. You practice predicting coercion before choosing `===`.
 
 ## Goal
-Write a function that **normalizes** a record into a consistent shape, using explicit conversions and predictable rules.
+Read two JSON values and an operator (`==` or `===`), print the comparison result and a one-line coercion rule.
+
+## Lesson concepts practiced
+- [ ] `==` may coerce types before comparing
+- [ ] `===` compares type and value without coercion
+- [ ] Cases like `"" == 0`, `[] == 0`, `null == undefined`
 
 ## Functional requirements
-- [ ] Implement `normalizeRecord(record)` that returns a new object (do not mutate input).
-- [ ] Inputs may contain:
-  - [ ] `id`: string or number (required)
-  - [ ] `age`: string/number/null/undefined (optional; may be `0`)
-  - [ ] `email`: string/null/undefined (optional)
-  - [ ] `isActive`: boolean/string/null/undefined (optional)
-- [ ] Normalization rules:
-  - [ ] `id`: convert to `String(id)` and trim.
-  - [ ] `age`: if nullish -> `null`; otherwise convert via `Number(...)` and if not finite -> error.
-  - [ ] `email`: if nullish -> `null`; otherwise trim; if empty after trim -> `null`.
-  - [ ] `isActive`: accept `true/false` booleans, or strings `"true"`/`"false"` (case-insensitive). Nullish -> `null`. Anything else -> error.
+- [ ] Read 3 lines: JSON value `a`, operator (`==` or `===`), JSON value `b`.
+- [ ] Print `result: true` or `result: false`.
+- [ ] Print `rule: <one line explaining coercion or lack thereof>`.
+- [ ] Hardcode rule text for known lesson cases:
+  - [ ] `"" == 0` → mentions empty string coerces to 0
+  - [ ] `[] == 0` → mentions array coerces to 0
+  - [ ] `null == undefined` → true with `==`, false with `===`
+- [ ] Invalid operator → `ERROR: invalid operator`
 
 ## Non-functional requirements
-- [ ] Clear errors (include which field failed)
-- [ ] No reliance on loose equality for correctness
+- [ ] Use actual `==` or `===` for the result (do not hardcode only the boolean)
+- [ ] Rule text must match the operator used
 
 ## Constraints
-- [ ] No external libraries
-- [ ] Use `Number.isFinite` and `Number.isNaN` as needed
+- [ ] Node.js only
+- [ ] Parse `a` and `b` with `JSON.parse`
 
 ## Acceptance criteria
-- [ ] `age: 0` remains `0` (not treated as missing)
-- [ ] `email: "   "` becomes `null`
-- [ ] `isActive: "FALSE"` becomes `false`
-- [ ] Bad numeric values produce an error (e.g. `"abc"` for age)
+- [ ] `""`, `==`, `0` → `result: true` and rule mentions coercion
+- [ ] `[]`, `==`, `0` → `result: true`
+- [ ] `null`, `===`, `undefined` → `result: false`
+- [ ] `null`, `==`, `undefined` → `result: true`
 
 ## Example data
 
 Input:
-
-```js
-normalizeRecord({ id: 10, age: "0", email: "  a@b.com ", isActive: "TRUE" })
-```
+- `""`
+- `==`
+- `0`
 
 Output:
-
-```js
-{ id: "10", age: 0, email: "a@b.com", isActive: true }
-```
+- `result: true`
+- `rule: empty string coerces to 0 with ==`
 
 ## Suggested plan (no solution)
-1. Decide which fields are allowed to become `null` vs must throw.
-2. Normalize each field with explicit checks: nullish (`== null`) vs empty string.
-3. Return a brand-new object.
+1. Parse three stdin lines.
+2. Evaluate `a op b` with the chosen operator.
+3. Map known pairs to rule strings; fallback generic rule for `===`.
 
 ## Deliverables
 - [ ] Code in `starter/`
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)
-- [ ] Add a `normalizeMany(records)` that returns `{ ok: normalized[], errors: [...] }` without throwing.
+- [ ] Add `!=` and `!==` support.

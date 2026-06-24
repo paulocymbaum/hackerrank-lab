@@ -4,6 +4,11 @@
 A game server updates player scores with compound assignments (`+=`, `-=`, `*=`). You need a small CLI that replays a sequence of score changes.
 
 ## Goal
+## Lesson concepts practiced
+- [ ] `=` is assignment, not mathematical equality (that is `===`).
+- [ ] Use `let` when a value will change; use `const` when the binding should stay put.
+- [ ] `+=`, `-=`, `*=`, `/=` are common in loops and score updates.
+
 Read an initial score and a list of operations, apply each with compound assignment, and print the final total.
 
 ## Functional requirements

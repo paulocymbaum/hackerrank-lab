@@ -1,10 +1,16 @@
-# Projects — Type Guard CLI
+# Projects — Single-Threaded Execution
 
 Practice exercises for this lesson. Run each project with:
 
 ```bash
 node starter/index.js
 ```
+
+## What you should practice
+
+- Synchronous code runs before scheduled callbacks
+- `setTimeout` schedules work; it does not run immediately
+- Tracing call-stack order vs deferred callbacks
 
 ## Folder conventions
 
@@ -14,9 +20,9 @@ node starter/index.js
 
 ## Project catalog
 
-### 001-type-guard-cli/
+### 001-sync-trace/
 
-Classify JSON values with correct null and array handling using `typeof` and `Array.isArray`.
+Read a snippet id from stdin and print the synchronous execution order before any timer callbacks run.
 
 ## PBL contract checklist
 
@@ -24,6 +30,7 @@ Each project README must include (English headers):
 
 - Problem context
 - Goal
+- Lesson concepts practiced
 - Functional requirements
 - Non-functional requirements
 - Constraints

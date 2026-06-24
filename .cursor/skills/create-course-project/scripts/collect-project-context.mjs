@@ -13,6 +13,7 @@ import { fileURLToPath } from "node:url";
 import {
   PBL_README_SECTIONS,
   PROJECT_TREE,
+  extractObserveLines,
   validateModuleProjectsReadme,
   validateProjectReadme,
 } from "./project-contract.mjs";
@@ -190,10 +191,24 @@ async function collectCourse(courseId, stripMarkers) {
   };
 }
 
+function extractLessonSection(markdown, heading) {
+  const block = markdown.match(new RegExp(`^##\\s+${heading}\\s*[\\r\\n]+([\\s\\S]*?)(?=^##\\s|\\Z)`, "im"));
+  return block ? block[1].trim() : "";
+}
+
 function formatMarkdown(ctx) {
   const lines = [
     `# Project context — ${ctx.courseId}`,
     "",
+  ];
+
+  if (ctx.lessonReadme) {
+    lines.push("## Lesson README — Predict first", "", extractLessonSection(ctx.lessonReadme, "Predict first") || "_none_", "");
+    lines.push("## Lesson README — What to observe", "", extractLessonSection(ctx.lessonReadme, "What to observe") || extractObserveLines(ctx.lessonReadme).map((l) => `- ${l}`).join("\n") || "_none_", "");
+    lines.push("## Lesson README (excerpt)", "", ctx.lessonReadme.slice(0, 4000) || "_empty_", "");
+  }
+
+  lines.push(
     "## Canonical structure",
     "",
     "```text",
