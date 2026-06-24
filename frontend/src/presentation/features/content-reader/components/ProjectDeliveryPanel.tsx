@@ -3,6 +3,7 @@ import type { ReaderEntry } from "../../../../domain/types/reader";
 import { PROJECT_DELIVERY_PASS_SCORE, passesDeliveryReview } from "../../../../domain/types/projectDelivery";
 import { useProjectDelivery } from "../../../../application/hooks/useProjectDelivery";
 import { useTranslation } from "../../../../application/hooks/useTranslation";
+import { formatDeliveryMarkdownForDisplay } from "../../../../application/usecases/formatDeliveryMarkdown";
 import {
   appendStarterToDraft,
   hasProjectStarter,
@@ -83,12 +84,19 @@ function DeliveryReviewBlock(props: { review: ProjectDeliveryReview }) {
   );
 }
 
-function DeliveryHistoryItem(props: { entry: ProjectDeliveryEntry; index: number; total: number }) {
-  const { entry, index, total } = props;
+function DeliveryHistoryItem(props: {
+  entry: ProjectDeliveryEntry;
+  index: number;
+  total: number;
+  defaultOpen?: boolean;
+}) {
+  const { entry, index, total, defaultOpen } = props;
   const order = total - index;
+  const displayMarkdown = formatDeliveryMarkdownForDisplay(entry.content);
 
   return (
     <Accordion
+      defaultOpen={defaultOpen}
       title={
         <div className="min-w-0">
           <p className="truncate text-body font-medium text-text0">
@@ -106,7 +114,7 @@ function DeliveryHistoryItem(props: { entry: ProjectDeliveryEntry; index: number
     >
       <div className="grid gap-3">
         {entry.review ? <DeliveryReviewBlock review={entry.review} /> : null}
-        <MarkdownView markdown={entry.content} />
+        <MarkdownView markdown={displayMarkdown} />
       </div>
     </Accordion>
   );
@@ -210,6 +218,7 @@ export function ProjectDeliveryPanel(props: {
                   entry={entry}
                   index={index}
                   total={deliveries.length}
+                  defaultOpen={index === 0}
                 />
               ))}
             </div>
