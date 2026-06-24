@@ -41,9 +41,14 @@ function starterIndexStub(projectTitle) {
   });
 }
 
+function starterSampleInputStub() {
+  return loadTemplate("starter-sample.input");
+}
+
 module.exports = {
   moduleProjectsReadme,
   lessonProjectsReadme,
   projectReadmeSkeleton,
   starterIndexStub,
+  starterSampleInputStub,
 };

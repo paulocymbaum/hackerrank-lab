@@ -55,9 +55,11 @@ The comment appears in the **Delivery tab**. Keep it scannable.
 **Good examples:**
 
 ```text
+Pass (100): All acceptance criteria pass with labeled output and exact README error strings. Validation uses Number(), Number.isInteger, and Number.isFinite correctly. Solid match to lesson concepts and functional requirements.
+
 Pass (85): Empty strings rejected with clear errors; age/score use Number() and Number.isFinite. isActive accepts any casing. Solid match to acceptance criteria.
 
-Fail — no code (10): No starter/index.js to evaluate. Next: read three stdin lines, reject empty input explicitly, parse with Number.isFinite, normalize isActive, print JSON or ERROR.
+Fail — no code (10): No solution code in the latest delivery to evaluate. Next: read three stdin lines, reject empty input explicitly, parse with Number.isFinite, normalize isActive, print JSON or ERROR.
 
 Fail — partial (45): Reads stdin but treats age=0 as missing (truthiness bug). Next: check line.length === 0 and use Number.isFinite instead of if (age).
 ```
@@ -69,7 +71,7 @@ Fail — partial (45): Reads stdin but treats age=0 as missing (truthiness bug).
 **Gaps vs acceptance criteria:**
 - Cannot verify…
 - Cannot verify…
-**Next step:** Implement starter…
+**Next step:** Implement the solution in your delivery…
 Also remember to use the Delivery tab correctly.
 ```
 
@@ -80,14 +82,20 @@ Also remember to use the Delivery tab correctly.
 
 ## What to grade
 
-1. Project README acceptance criteria and requirements
-2. Module lesson concepts (from module `README.md`)
-3. `starter/` code
-4. Delivery text **only** if it explains the solution (ignore placeholders)
+1. Project README acceptance criteria and functional requirements
+2. Module lesson concepts (from lesson `README.md`)
+3. **Solution code in the latest delivery** — this is the student deliverable
+4. Last 3 deliveries for progression only (ignore placeholders)
+
+## What NOT to grade
+
+- `starter/` on disk — template scaffold; TODO stubs are expected
+- Code style, formatting, or extra validation when all acceptance criteria pass (score **100**)
+- Whether the student copied code into `starter/index.js`
 
 ## Out of scope (never in comment)
 
-Study app UI, Delivery tab, `project-delivery.json`, skills, catalog, repo architecture, delivery workflow.
+Study app UI, Delivery tab, `project-delivery.json`, skills, catalog, repo architecture, delivery workflow, `starter/` sync or TODO stub status.
 
 ## Shared library
 

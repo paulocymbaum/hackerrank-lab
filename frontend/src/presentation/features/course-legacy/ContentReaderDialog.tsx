@@ -40,6 +40,7 @@ export function ContentReaderDialog() {
   if (!item) return null;
 
   const showFolders = item.kind === "project";
+  const showContext = item.kind === "project" && Boolean(item.markdown?.trim());
   const showDelivery = item.kind === "project";
 
   const projectFromItem = (readerItem: ReaderItem): Project | null => {
@@ -73,6 +74,7 @@ export function ContentReaderDialog() {
               value={tab}
               onValueChange={handleTabChange}
               showFolders={showFolders}
+              showContext={showContext}
               showDelivery={showDelivery}
             />
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">

@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "npm run catalog:generate && tsc -b && vite build",
     "preview": "vite preview",
-    "catalog:generate": "node scripts/generate-static-catalog.mjs",
+    "catalog:generate": "node scripts/backfill-project-sample-input.mjs && node scripts/generate-static-catalog.mjs",
     "test": "vitest run",
     "smoke:routes": "node scripts/smoke-routes.mjs"
   },
