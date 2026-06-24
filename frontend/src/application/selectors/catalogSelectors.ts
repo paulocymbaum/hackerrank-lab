@@ -20,6 +20,14 @@ export function getLessonById(course: Course, moduleId: string, lessonId: string
   return mod?.lessons.find((l) => l.id === lessonId) ?? null;
 }
 
+export function getProjectById(
+  course: Course,
+  moduleId: string,
+  projectId: string,
+): Project | null {
+  return getModuleById(course, moduleId)?.projects.find((p) => p.id === projectId) ?? null;
+}
+
 export function getProjectsForLesson(
   course: Course,
   moduleId: string,

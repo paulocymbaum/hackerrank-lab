@@ -47,5 +47,13 @@ export function getQuizById(
     if (inModule) return inModule;
   }
 
-  return course.quizzes.find((q) => q.id === quizId) ?? null;
+  const fromCourse = course.quizzes.find((q) => q.id === quizId);
+  if (fromCourse) return fromCourse;
+
+  for (const mod of course.modules ?? []) {
+    const fromModule = mod.quizzes.find((q) => q.id === quizId);
+    if (fromModule) return fromModule;
+  }
+
+  return null;
 }

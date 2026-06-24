@@ -1,32 +1,32 @@
-import { Outlet, useParams, useSearchParams, useLocation, matchPath } from "react-router-dom";
+import { Outlet, useParams, useSearchParams, useLocation } from "react-router-dom";
 import { useMemo } from "react";
 import { ContentReaderDialog } from "../features/course-legacy/ContentReaderDialog";
 import { CourseScoreBadge } from "../features/course-experience/components/CourseScoreSummary";
 import { AppShell } from "../features/shell/AppShell";
 import { Breadcrumb } from "../shared/Breadcrumb";
 import { useCatalog } from "../../application/hooks/useCatalog";
+import { useCourseTabLabels } from "../../application/hooks/useLocalizedLabels";
+import { useTranslation } from "../../application/hooks/useTranslation";
 import {
   getCourseById,
   getLessonById,
   getModuleById,
+  getProjectById,
   isHierarchyCourse,
 } from "../../application/selectors/catalogSelectors";
+import { getQuizById } from "../../application/selectors/quizSelectors";
 import { useAppNavigation } from "../../application/hooks/useAppNavigation";
 import type { CourseTab } from "../../domain/types/navigation";
 
-const TAB_LABELS: Record<CourseTab, string> = {
-  readme: "README",
-  examples: "Examples",
-  projects: "Projects",
-  quiz: "Quiz",
-};
-
 export function AppLayout() {
   const { courses } = useCatalog();
+  const { t } = useTranslation();
+  const tabLabels = useCourseTabLabels();
   const params = useParams();
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const { goCatalog, goCourse, goModule, goLesson, parseCourseTab } = useAppNavigation();
+  const { goCatalog, goCourse, goModule, goLesson, parseCourseTab, parseDrawerMode } =
+    useAppNavigation();
 
   const courseId = params.courseId;
   const moduleId = params.moduleId;
@@ -48,17 +48,33 @@ export function AppLayout() {
     [course, moduleId, lessonId],
   );
 
+  const drawerMode = parseDrawerMode(searchParams.get("drawer"));
+  const activeQuizId = searchParams.get("quiz");
+  const activeProjectId = searchParams.get("project");
+
+  const quiz = useMemo(() => {
+    if (!course || !activeQuizId) return null;
+    if (drawerMode === "quiz" && lessonId && moduleId) {
+      return getQuizById(course, activeQuizId, { moduleId, lessonId });
+    }
+    if (moduleId && !lessonId) {
+      return getQuizById(course, activeQuizId, { moduleId });
+    }
+    return getQuizById(course, activeQuizId);
+  }, [course, activeQuizId, drawerMode, lessonId, moduleId]);
+
+  const project = useMemo(() => {
+    if (!course || !moduleId || !activeProjectId || drawerMode !== "project") return null;
+    return getProjectById(course, moduleId, activeProjectId);
+  }, [course, moduleId, activeProjectId, drawerMode]);
+
   const tab = courseId ? parseCourseTab(searchParams.get("tab")) : null;
-  const lessonMatch = matchPath(
-    "/course/:courseId/module/:moduleId/lesson/:lessonId",
-    location.pathname,
-  );
 
   const breadcrumbSegments = useMemo(() => {
-    if (!isCourseRoute || !course) return [{ label: "Catalog" }];
+    if (!isCourseRoute || !course) return [{ label: t("nav.catalog") }];
 
     const segments: { label: string; onClick?: () => void }[] = [
-      { label: "Catalog", onClick: goCatalog },
+      { label: t("nav.catalog"), onClick: goCatalog },
       { label: course.title, onClick: () => goCourse(course.id) },
     ];
 
@@ -73,8 +89,17 @@ export function AppLayout() {
       });
     }
 
+    if (quiz) {
+      segments.push({ label: quiz.title });
+    } else if (project) {
+      segments.push({ label: project.title });
+    } else if (moduleId && activeQuizId && !lessonId) {
+      const moduleQuiz = getQuizById(course, activeQuizId, { moduleId });
+      if (moduleQuiz) segments.push({ label: moduleQuiz.title });
+    }
+
     if (!isHierarchyCourse(course) && tab && tab !== "readme") {
-      segments.push({ label: TAB_LABELS[tab] });
+      segments.push({ label: tabLabels[tab as CourseTab] });
     }
 
     return segments;
@@ -83,10 +108,14 @@ export function AppLayout() {
     course,
     mod,
     lesson,
+    quiz,
+    project,
     moduleId,
+    lessonId,
+    activeQuizId,
     tab,
-    lessonMatch,
-    searchParams,
+    tabLabels,
+    t,
     goCatalog,
     goCourse,
     goModule,
@@ -95,7 +124,7 @@ export function AppLayout() {
 
   return (
     <AppShell
-      title="Hackerrank Study"
+      title={t("app.title")}
       breadcrumb={<Breadcrumb segments={breadcrumbSegments} />}
       right={
         isCourseRoute && course ? (

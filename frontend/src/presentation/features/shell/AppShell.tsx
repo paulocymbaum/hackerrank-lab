@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import type { ReactNode } from "react";
+import { useTranslation } from "../../../application/hooks/useTranslation";
+import { useLocaleStore } from "../../../application/stores/localeStore";
 import { useThemeStore, applyThemeToDocument } from "../../../application/stores/themeStore";
+import { applyLocaleToDocument } from "../../../infrastructure/i18n/applyLocaleToDocument";
 import { AppTopBar } from "./AppTopBar";
 import { Container } from "./Container";
 
@@ -12,10 +15,16 @@ export function AppShell(props: {
   children: ReactNode;
 }) {
   const theme = useThemeStore((s) => s.theme);
+  const locale = useLocaleStore((s) => s.locale);
+  const { t } = useTranslation();
 
   useEffect(() => {
     applyThemeToDocument(theme);
   }, [theme]);
+
+  useEffect(() => {
+    applyLocaleToDocument(locale);
+  }, [locale]);
 
   return (
     <div className="min-h-dvh text-text0" data-theme={theme}>
@@ -24,7 +33,7 @@ export function AppShell(props: {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-14 focus:z-50 focus:rounded-panel focus:bg-surfaceControl focus:px-3 focus:py-2"
       >
-        Skip to content
+        {t("nav.skipToContent")}
       </a>
       <div className="py-6 sm:py-10">
         <Container>

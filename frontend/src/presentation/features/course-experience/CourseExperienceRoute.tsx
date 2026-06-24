@@ -5,11 +5,13 @@ import { CourseOverviewRoute } from "../course-overview/CourseOverviewRoute";
 import { LegacyCourseRoute } from "../course-legacy/LegacyCourseRoute";
 import { useCourseRouteData } from "../../../application/hooks/useCourseRouteData";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
+import { useTranslation } from "../../../application/hooks/useTranslation";
 import { AsyncRouteBoundary } from "../../shared/AsyncRouteBoundary";
 import { Button, ErrorPanel, Icon } from "../../design-system";
 
 export function CourseExperienceRoute() {
   const { courseId = "" } = useParams();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const { course, status, error, reload } = useCourseRouteData(courseId);
   const { goCatalog } = useAppNavigation();
@@ -19,10 +21,10 @@ export function CourseExperienceRoute() {
       status={status}
       error={error}
       onRetry={reload}
-      loadingMessage="Loading course…"
-      errorTitle="Failed to load course catalog."
-      notFoundTitle="Course not found."
-      notFoundMessage="The course may have been removed or the link is invalid."
+      loadingMessage={t("course.loading")}
+      errorTitle={t("error.loadCatalogDetailed")}
+      notFoundTitle={t("error.courseNotFound")}
+      notFoundMessage={t("course.notFoundMessage")}
       isEmpty={status === "ready" && !course}
     >
       {course ? (
@@ -38,12 +40,12 @@ export function CourseExperienceRoute() {
         })()
       ) : (
         <ErrorPanel
-          title="Course not found."
-          message="The course may have been removed or the link is invalid."
+          title={t("error.courseNotFound")}
+          message={t("course.notFoundMessage")}
           action={
             <Button variant="secondary" onClick={goCatalog}>
               <Icon icon={ArrowLeft} />
-              Back to catalog
+              {t("course.backToCatalog")}
             </Button>
           }
         />

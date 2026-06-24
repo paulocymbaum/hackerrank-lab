@@ -1,5 +1,6 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import { useQuizSessionFromUrl } from "../../../application/hooks/useQuizSessionFromUrl";
+import { useTranslation } from "../../../application/hooks/useTranslation";
 import {
   getLessonById,
   getProjectsForLesson,
@@ -7,14 +8,14 @@ import {
 } from "../../../application/selectors/catalogSelectors";
 import { findQuizInList } from "../../../application/selectors/quizSelectors";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
-import { Drawer } from "../../design-system";
-import { ErrorPanel } from "../../design-system";
+import { Drawer, ErrorPanel } from "../../design-system";
 import { LessonExplanationPanel } from "./components/LessonExplanationPanel";
 import { ProjectReader } from "../content-reader/ProjectReader";
 import { QuizHost } from "../quiz/components/QuizHost";
 import { useModuleLayoutContext } from "../module-experience/ModuleLayoutContext";
 
 export function LessonWorkspaceRoute() {
+  const { t } = useTranslation();
   const { courseId, moduleId, course } = useModuleLayoutContext();
   const { lessonId = "" } = useParams();
   const [searchParams] = useSearchParams();
@@ -34,7 +35,7 @@ export function LessonWorkspaceRoute() {
 
   const lesson = getLessonById(course, moduleId, lessonId);
   if (!lesson) {
-    return <ErrorPanel title="Lesson not found." />;
+    return <ErrorPanel title={t("error.lessonNotFound")} />;
   }
 
   const lessonQuizzes = getQuizzesForLesson(course, moduleId, lessonId);
@@ -48,9 +49,9 @@ export function LessonWorkspaceRoute() {
   const drawerOpen = drawerMode === "quiz" || drawerMode === "project";
   const drawerTitle =
     drawerMode === "quiz"
-      ? (activeQuiz?.title ?? "Quiz")
+      ? (activeQuiz?.title ?? t("quiz.title"))
       : drawerMode === "project"
-        ? (activeProject?.title ?? "Project")
+        ? (activeProject?.title ?? t("project.title"))
         : undefined;
 
   return (

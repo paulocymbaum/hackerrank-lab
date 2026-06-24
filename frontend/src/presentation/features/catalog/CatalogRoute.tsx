@@ -3,6 +3,7 @@ import { BookOpenText } from "lucide-react";
 import { useCatalog } from "../../../application/hooks/useCatalog";
 import { useCatalogPoints } from "../../../application/hooks/useCatalogPoints";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
+import { useTranslation } from "../../../application/hooks/useTranslation";
 import { loadAllCourseScores } from "../../../application/usecases/loadAllCourseScores";
 import { migrateProgressKeysFromCatalog } from "../../../application/usecases/migrateProgressKeys";
 import { ErrorPanel, Icon, LoadingState } from "../../design-system";
@@ -13,6 +14,7 @@ import { CatalogEmptyState } from "./components/CatalogEmptyState";
 export function CatalogRoute() {
   const { status, courses, error, load, reload } = useCatalog();
   const { goCourse } = useAppNavigation();
+  const { t } = useTranslation();
   const catalogPoints = useCatalogPoints(courses);
 
   useEffect(() => {
@@ -26,13 +28,13 @@ export function CatalogRoute() {
   }, [status, courses]);
 
   if (status === "loading" || status === "idle") {
-    return <LoadingState message="Loading catalog…" />;
+    return <LoadingState message={t("catalog.loading")} />;
   }
 
   if (status === "error") {
     return (
       <ErrorPanel
-        title="Failed to load catalog."
+        title={t("catalog.error")}
         message={error ?? undefined}
         onRetry={() => void reload()}
       />
@@ -42,7 +44,7 @@ export function CatalogRoute() {
   return (
     <section>
       <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="m-0 text-body font-semibold text-text0">Courses</h2>
+        <h2 className="m-0 text-body font-semibold text-text0">{t("catalog.title")}</h2>
         <div className="flex flex-wrap items-center gap-3">
           <CatalogScoreSummary
             totalPoints={catalogPoints.totalPoints}

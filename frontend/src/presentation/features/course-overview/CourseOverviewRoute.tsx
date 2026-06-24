@@ -1,4 +1,5 @@
 import type { Course } from "../../../domain/types/catalog";
+import { useTranslation } from "../../../application/hooks/useTranslation";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
 import { sortByGraphIndex } from "../../../application/selectors/lessonDisplay";
 import { Card, Icon } from "../../design-system";
@@ -9,6 +10,7 @@ import { Box, ChevronRight } from "lucide-react";
 
 export function CourseOverviewRoute(props: { courseId: string; course: Course }) {
   const { goModule } = useAppNavigation();
+  const { t } = useTranslation();
   const modules = sortByGraphIndex(props.course.modules ?? []);
   const showReadme = hasDisplayableReadme(props.course.readmeMarkdown, props.course.title);
 
@@ -44,9 +46,16 @@ export function CourseOverviewRoute(props: { courseId: string; course: Course })
                     <span className="text-body font-semibold text-text0">{mod.title}</span>
                   </span>
                   <span className="mt-2 block text-meta text-text1">
-                    {mod.lessons.length} lessons · {mod.projects.length} projects
-                    {lessonQuizzes > 0 ? ` · ${lessonQuizzes} quizzes` : ""}
-                    {moduleQuizzes > 0 ? ` · ${moduleQuizzes} module quiz` : ""}
+                    {t("course.moduleLessons", {
+                      lessons: mod.lessons.length,
+                      projects: mod.projects.length,
+                    })}
+                    {lessonQuizzes > 0
+                      ? t("course.lessonQuizSuffix", { count: lessonQuizzes })
+                      : ""}
+                    {moduleQuizzes > 0
+                      ? t("course.moduleQuizSuffix", { count: moduleQuizzes })
+                      : ""}
                   </span>
                   <ModuleScoreSummary courseId={props.courseId} module={mod} />
                 </span>
@@ -60,7 +69,11 @@ export function CourseOverviewRoute(props: { courseId: string; course: Course })
 
       {showReadme ? (
         <Card variant="panel" className="p-4">
-          <ReadmePanel markdown={props.course.readmeMarkdown} title={props.course.title} variant="card" />
+          <ReadmePanel
+            markdown={props.course.readmeMarkdown}
+            title={props.course.title}
+            variant="card"
+          />
         </Card>
       ) : null}
     </section>
