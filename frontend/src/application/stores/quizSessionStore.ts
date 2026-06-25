@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { QuizAnswerMap, QuizAttempt, Quiz } from "../../domain/types/quiz";
+import { embaralharPerguntasQuiz } from "../../domain/embaralharOpcoesQuiz";
+import type { QuizAnswerMap, QuizAttempt, Quiz, QuizQuestion } from "../../domain/types/quiz";
 import { scoreQuiz } from "../../domain/types/quiz";
 import { persistQuizScore } from "../usecases/courseScores";
 import { quizSessionKey } from "../selectors/quizSelectors";
@@ -9,13 +10,15 @@ type QuizSessionState = {
   quizId: string | null;
   lessonId: string | null;
   sessionKey: string | null;
+  perguntasEmbaralhadas: QuizQuestion[] | null;
   currentIndex: number;
   answers: QuizAnswerMap;
   checkedQuestions: Record<string, boolean>;
   isComplete: boolean;
   lastAttempt: QuizAttempt | null;
   lastQuizPointsDelta: number;
-  start: (quizId: string, lessonId?: string) => void;
+  start: (quizId: string, lessonId?: string, perguntas?: QuizQuestion[]) => void;
+  garantirPerguntasEmbaralhadas: (perguntas: QuizQuestion[]) => void;
   reset: () => void;
   selectAnswer: (questionId: string, optionId: string) => void;
   checkCurrent: (questionId: string) => void;
@@ -28,6 +31,7 @@ const initialSession = {
   quizId: null as string | null,
   lessonId: null as string | null,
   sessionKey: null as string | null,
+  perguntasEmbaralhadas: null as QuizQuestion[] | null,
   currentIndex: 0,
   answers: {} as QuizAnswerMap,
   checkedQuestions: {} as Record<string, boolean>,
@@ -38,12 +42,13 @@ const initialSession = {
 
 export const useQuizSessionStore = create<QuizSessionState>((set, get) => ({
   ...initialSession,
-  start: (quizId, lessonId) => {
+  start: (quizId, lessonId, perguntas) => {
     const sessionKey = quizSessionKey(quizId, lessonId);
     set({
       quizId,
       lessonId: lessonId ?? null,
       sessionKey,
+      perguntasEmbaralhadas: perguntas ? embaralharPerguntasQuiz(perguntas) : null,
       currentIndex: 0,
       answers: {},
       checkedQuestions: {},
@@ -53,6 +58,10 @@ export const useQuizSessionStore = create<QuizSessionState>((set, get) => ({
     });
   },
   reset: () => set(initialSession),
+  garantirPerguntasEmbaralhadas: (perguntas) => {
+    if (get().perguntasEmbaralhadas) return;
+    set({ perguntasEmbaralhadas: embaralharPerguntasQuiz(perguntas) });
+  },
   selectAnswer: (questionId, optionId) =>
     set((state) => ({
       answers: { ...state.answers, [questionId]: optionId },
