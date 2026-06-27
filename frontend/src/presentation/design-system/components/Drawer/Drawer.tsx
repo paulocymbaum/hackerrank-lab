@@ -18,12 +18,12 @@ export function Drawer(props: {
       <button
         type="button"
         aria-label="Close drawer overlay"
-        className="fixed inset-0 z-40 bg-black/30 lg:hidden"
+        className="fixed inset-0 z-[var(--z-gaveta-fundo)] bg-black/30 lg:hidden"
         onClick={props.onClose}
       />
       <aside
         className={clsx(
-          "fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col overflow-hidden rounded-t-sheet border border-border0 bg-surfaceModal shadow-glass2",
+          "fixed inset-x-0 bottom-0 z-[var(--z-gaveta)] flex max-h-[85vh] flex-col overflow-hidden rounded-t-sheet border border-border0 bg-surfaceModal shadow-glass2",
           "lg:static lg:inset-auto lg:max-h-none lg:w-[min(480px,40vw)] lg:shrink-0 lg:rounded-panel lg:border-l lg:border-t-0",
           props.className,
         )}

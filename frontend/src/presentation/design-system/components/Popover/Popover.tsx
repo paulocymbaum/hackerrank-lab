@@ -100,7 +100,7 @@ export function Popover(props: {
             role="dialog"
             aria-labelledby={triggerId}
             className={clsx(
-              "fixed z-[200] w-[min(100vw-2rem,22rem)] rounded-panel border border-border0 bg-surfaceModal p-2 shadow-glass2",
+              "fixed z-[var(--z-popover)] w-[min(100vw-2rem,22rem)] rounded-panel border border-border0 bg-surfaceModal p-2 shadow-glass2",
               props.panelClassName,
             )}
             style={panelStyle}

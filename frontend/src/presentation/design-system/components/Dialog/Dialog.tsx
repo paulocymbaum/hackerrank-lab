@@ -14,10 +14,10 @@ export function Dialog(props: {
   return (
     <RadixDialog.Root open={props.open} onOpenChange={props.onOpenChange}>
       <RadixDialog.Portal>
-        <RadixDialog.Overlay className="fixed inset-0 z-50 bg-black/50" />
+        <RadixDialog.Overlay className="fixed inset-0 z-[var(--z-dialogo)] bg-black/50" />
         <RadixDialog.Content
           className={clsx(
-            "fixed left-1/2 top-1/2 z-50 flex max-h-[90vh] w-[calc(100%-2rem)] max-w-[980px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-sheet border border-border0 bg-surfaceModal shadow-glass2 outline-none",
+            "fixed left-1/2 top-1/2 z-[var(--z-dialogo)] flex max-h-[90vh] w-[calc(100%-2rem)] max-w-[980px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-sheet border border-border0 bg-surfaceModal shadow-glass2 outline-none",
             props.className,
           )}
           aria-describedby={props.description ? "dialog-description" : undefined}

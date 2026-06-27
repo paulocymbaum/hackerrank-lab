@@ -1,0 +1,146 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`resolverEstadoFrameCenaMascote > snapshot por emoção e zoom > celebrating-zoom-1 1`] = `
+{
+  "ancora": {
+    "azimuteCaminhadaGraus": 20,
+    "correcaoYawMascoteRad": 0,
+    "inclinacaoPlanetaRad": -0.15,
+    "posicao": [
+      0,
+      2,
+      0,
+    ],
+    "sentidoCamera": "frente",
+  },
+  "animacao": {
+    "clip": "Jump",
+    "escalaTempo": 1.1,
+    "modo": "loop",
+    "velocidadeCaminhada": 0.55,
+  },
+  "camera": {
+    "azimuteCaminhadaGraus": 20,
+    "deslocamentoAzimuteGraus": 32,
+    "distancia": 1.75,
+    "fatorZoom": 1,
+    "pitchGraus": 16,
+  },
+}
+`;
+
+exports[`resolverEstadoFrameCenaMascote > snapshot por emoção e zoom > concerned-zoom-1 1`] = `
+{
+  "ancora": {
+    "azimuteCaminhadaGraus": 20,
+    "correcaoYawMascoteRad": 0,
+    "inclinacaoPlanetaRad": -0.15,
+    "posicao": [
+      0,
+      2,
+      0,
+    ],
+    "sentidoCamera": "frente",
+  },
+  "animacao": {
+    "clip": "Sneak",
+    "escalaTempo": 0.75,
+    "modo": "loop",
+    "velocidadeCaminhada": 0.35,
+  },
+  "camera": {
+    "azimuteCaminhadaGraus": 20,
+    "deslocamentoAzimuteGraus": 32,
+    "distancia": 1.75,
+    "fatorZoom": 1,
+    "pitchGraus": 16,
+  },
+}
+`;
+
+exports[`resolverEstadoFrameCenaMascote > snapshot por emoção e zoom > greeting-zoom-1 1`] = `
+{
+  "ancora": {
+    "azimuteCaminhadaGraus": 20,
+    "correcaoYawMascoteRad": 0,
+    "inclinacaoPlanetaRad": -0.15,
+    "posicao": [
+      0,
+      2,
+      0,
+    ],
+    "sentidoCamera": "frente",
+  },
+  "animacao": {
+    "clip": "Bark",
+    "escalaTempo": 1,
+    "modo": "once",
+    "velocidadeCaminhada": 0,
+  },
+  "camera": {
+    "azimuteCaminhadaGraus": 20,
+    "deslocamentoAzimuteGraus": 32,
+    "distancia": 1.75,
+    "fatorZoom": 1,
+    "pitchGraus": 16,
+  },
+}
+`;
+
+exports[`resolverEstadoFrameCenaMascote > snapshot por emoção e zoom > idle-zoom-1 1`] = `
+{
+  "ancora": {
+    "azimuteCaminhadaGraus": 20,
+    "correcaoYawMascoteRad": 0,
+    "inclinacaoPlanetaRad": -0.15,
+    "posicao": [
+      0,
+      2,
+      0,
+    ],
+    "sentidoCamera": "frente",
+  },
+  "animacao": {
+    "clip": "Sit",
+    "escalaTempo": 1,
+    "modo": "loop",
+    "velocidadeCaminhada": 0.12,
+  },
+  "camera": {
+    "azimuteCaminhadaGraus": 20,
+    "deslocamentoAzimuteGraus": 32,
+    "distancia": 1.75,
+    "fatorZoom": 1,
+    "pitchGraus": 16,
+  },
+}
+`;
+
+exports[`resolverEstadoFrameCenaMascote > snapshot por emoção e zoom > walking-zoom-1 1`] = `
+{
+  "ancora": {
+    "azimuteCaminhadaGraus": 20,
+    "correcaoYawMascoteRad": 0,
+    "inclinacaoPlanetaRad": -0.15,
+    "posicao": [
+      0,
+      2,
+      0,
+    ],
+    "sentidoCamera": "frente",
+  },
+  "animacao": {
+    "clip": "Walk",
+    "escalaTempo": 1,
+    "modo": "loop",
+    "velocidadeCaminhada": 0.85,
+  },
+  "camera": {
+    "azimuteCaminhadaGraus": 20,
+    "deslocamentoAzimuteGraus": 32,
+    "distancia": 1.75,
+    "fatorZoom": 1,
+    "pitchGraus": 16,
+  },
+}
+`;

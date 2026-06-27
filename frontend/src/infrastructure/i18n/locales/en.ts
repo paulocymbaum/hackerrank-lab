@@ -190,6 +190,17 @@ export const en = {
   "error.quizNotFound": "Quiz not found.",
   "error.projectNotFound": "Project not found.",
   "error.loadCatalogDetailed": "Failed to load course catalog.",
+
+  "mascote.show": "Show mascot",
+  "mascote.hide": "Hide mascot",
+  "mascote.dismissMessage": "Dismiss mascot message",
+  "mascote.greeting.lesson": "Let's study this lesson together!",
+  "mascote.greeting.quiz": "Ready for the quiz? You've got this!",
+  "mascote.greeting.project": "Time to build something cool!",
+  "mascote.celebration.quiz": "Great job on the quiz! {score}/{total} correct.",
+  "mascote.celebration.project": "Project complete! Amazing work!",
+  "mascote.concerned": "You still have {count} activities pending. Let's finish them!",
+  "mascote.zoom.tooltip": "Drag vertically to zoom · double-click to reset",
 } as const;
 
 export type TranslationKey = keyof typeof en;

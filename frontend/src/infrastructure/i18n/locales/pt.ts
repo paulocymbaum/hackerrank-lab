@@ -194,6 +194,17 @@ export const pt: TranslationDictionary = {
   "error.quizNotFound": "Quiz não encontrado.",
   "error.projectNotFound": "Projeto não encontrado.",
   "error.loadCatalogDetailed": "Falha ao carregar o catálogo do curso.",
+
+  "mascote.show": "Mostrar mascote",
+  "mascote.hide": "Ocultar mascote",
+  "mascote.dismissMessage": "Fechar mensagem do mascote",
+  "mascote.greeting.lesson": "Vamos estudar esta lição juntos!",
+  "mascote.greeting.quiz": "Pronto para o quiz? Você consegue!",
+  "mascote.greeting.project": "Hora de construir algo legal!",
+  "mascote.celebration.quiz": "Ótimo trabalho no quiz! {score}/{total} acertos.",
+  "mascote.celebration.project": "Projeto concluído! Trabalho incrível!",
+  "mascote.concerned": "Você ainda tem {count} atividades pendentes. Vamos terminar!",
+  "mascote.zoom.tooltip": "Arraste verticalmente para zoom · duplo clique para redefinir",
 };
 
 export const ptWithFallback: TranslationDictionary = { ...en, ...pt };

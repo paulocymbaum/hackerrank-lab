@@ -191,6 +191,17 @@ export const zh: TranslationDictionary = {
   "error.quizNotFound": "未找到测验。",
   "error.projectNotFound": "未找到项目。",
   "error.loadCatalogDetailed": "加载课程目录失败。",
+
+  "mascote.show": "显示吉祥物",
+  "mascote.hide": "隐藏吉祥物",
+  "mascote.dismissMessage": "关闭吉祥物消息",
+  "mascote.greeting.lesson": "一起学习这节课吧！",
+  "mascote.greeting.quiz": "准备好做测验了吗？你可以的！",
+  "mascote.greeting.project": "是时候动手做项目了！",
+  "mascote.celebration.quiz": "测验做得好！答对 {score}/{total} 题。",
+  "mascote.celebration.project": "项目完成！太棒了！",
+  "mascote.concerned": "你还有 {count} 项活动待完成。一起完成吧！",
+  "mascote.zoom.tooltip": "垂直拖动缩放 · 双击重置",
 };
 
 export const zhWithFallback: TranslationDictionary = { ...en, ...zh };
