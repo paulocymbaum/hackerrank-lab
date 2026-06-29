@@ -31,13 +31,25 @@ describe("embaralharArray", () => {
 });
 
 describe("embaralharPerguntasQuiz", () => {
-  it("embaralha opções de cada pergunta sem alterar metadados", () => {
+  it("embaralha opções e renumeria ids pela posição exibida", () => {
     const perguntas = embaralharPerguntasQuiz([perguntaExemplo], () => 0);
 
     expect(perguntas).toHaveLength(1);
     expect(perguntas[0].id).toBe("q1");
-    expect(perguntas[0].correctOptionId).toBe("b");
-    expect(perguntas[0].options.map((o) => o.id).sort()).toEqual(["a", "b", "c"]);
-    expect(perguntas[0].options.map((o) => o.id)).not.toEqual(["a", "b", "c"]);
+    expect(perguntas[0].options.map((o) => o.id)).toEqual(["a", "b", "c"]);
+    expect(perguntas[0].options.map((o) => o.text)).toEqual(["B", "C", "A"]);
+    expect(perguntas[0].correctOptionId).toBe("a");
+  });
+
+  it("distribui a resposta correta entre letras diferentes", () => {
+    const sequencia = [0.99, 0.99, 0, 0.99, 0.99, 0];
+    let indice = 0;
+    const aleatorio = () => sequencia[indice++ % sequencia.length];
+
+    const resultados = Array.from({ length: 30 }, () =>
+      embaralharPerguntasQuiz([perguntaExemplo], aleatorio)[0].correctOptionId,
+    );
+
+    expect(new Set(resultados).size).toBeGreaterThan(1);
   });
 });

@@ -80,7 +80,8 @@ export const useQuizSessionStore = create<QuizSessionState>((set, get) => ({
     })),
   finish: (quiz, courseId) => {
     const lessonId = quiz.lessonId ?? get().lessonId ?? undefined;
-    const attempt = scoreQuiz(quiz.questions, get().answers);
+    const perguntas = get().perguntasEmbaralhadas ?? quiz.questions;
+    const attempt = scoreQuiz(perguntas, get().answers);
     const prevBest =
       useQuizProgressStore.getState().getProgress(courseId, quiz.id, lessonId)?.bestScore ?? 0;
     useQuizProgressStore.getState().recordAttempt(courseId, quiz.id, attempt, lessonId);

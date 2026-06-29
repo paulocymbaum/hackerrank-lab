@@ -13,12 +13,28 @@ export function embaralharArray<T>(
   return resultado;
 }
 
+function idOpcaoPorIndice(indice: number): string {
+  return String.fromCharCode(97 + indice);
+}
+
+/** Embaralha opções e renumeria ids (a, b, c…) pela posição exibida. */
 export function embaralharPerguntasQuiz(
   perguntas: QuizQuestion[],
   aleatorio?: () => number,
 ): QuizQuestion[] {
-  return perguntas.map((pergunta) => ({
-    ...pergunta,
-    options: embaralharArray(pergunta.options, aleatorio),
-  }));
+  return perguntas.map((pergunta) => {
+    const opcoesEmbaralhadas = embaralharArray(pergunta.options, aleatorio);
+    const indiceCorreto = opcoesEmbaralhadas.findIndex(
+      (opcao) => opcao.id === pergunta.correctOptionId,
+    );
+
+    return {
+      ...pergunta,
+      correctOptionId: idOpcaoPorIndice(indiceCorreto),
+      options: opcoesEmbaralhadas.map((opcao, indice) => ({
+        ...opcao,
+        id: idOpcaoPorIndice(indice),
+      })),
+    };
+  });
 }
