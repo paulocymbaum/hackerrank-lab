@@ -216,6 +216,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Hello Stdin\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: trim, validate, and print greeting or error\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "Maria\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -247,6 +252,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Receipt Printer\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nconst readline = require(\"node:readline\");\n\nfunction formatMoney(value) {\n  return `$${value.toFixed(2)}`;\n}\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 3) return;\n\n    // TODO: validate fields and print receipt or ERROR\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "Notebook\n3\n4.25\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -278,6 +288,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Commented Validator\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction validate(name, score) {\n  const trimmed = name.trim();\n\n  // Rule 1: name must not be empty after trim\n  if (trimmed.length === 0) {\n    return \"ERROR: name is required\";\n  }\n\n  // Rule 2: score must be 0–100\n  // if (!Number.isInteger(score) || score < 0 || score > 100) {\n  //   return \"ERROR: score out of range\";\n  // }\n\n  // Rule 3: name must be at least 2 chars after trim\n  if (trimmed.length < 2) {\n    return \"ERROR: name too short\";\n  }\n\n  return \"OK\";\n}\n\nasync function main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    lines.push(line);\n    if (lines.length < 2) continue;\n    const name = lines[0];\n    const score = Number(lines[1].trim());\n    process.stdout.write(validate(name, score) + \"\\n\");\n    rl.close();\n    return;\n  }\n  rl.close();\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "Ana\n200\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -309,6 +324,10 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Leaderboard Scores\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction updateLeaderboard(initialScores, events) {\n  // TODO: return new scores object; use let/const correctly\n  return {};\n}\n\nfunction main() {\n  const result = updateLeaderboard(\n    { alice: 10, bob: 4 },\n    [\n      { playerId: \"alice\", delta: 2 },\n      { playerId: \"carol\", delta: 8 },\n    ],\n  );\n  console.log(JSON.stringify(result));\n}\n\nif (require.main === module) {\n  main();\n}\n\nmodule.exports = { updateLeaderboard };\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -340,6 +359,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Score Accumulator\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  let score = null;\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse initial score, apply += -= *= operations until done\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "10\n+25\n-10\n*2\ndone\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -371,6 +395,10 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * User Badge Formatter\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction formatUserBadge(user) {\n  // TODO: normalize strings and return badge template literal\n  return \"\";\n}\n\nfunction main() {\n  try {\n    const badge = formatUserBadge({\n      displayName: \"  Ana   Silva \",\n      handle: \"@AnaS\",\n      level: 3,\n    });\n    console.log(badge);\n  } catch (err) {\n    console.error(err.message);\n    process.exitCode = 1;\n  }\n}\n\nif (require.main === module) {\n  main();\n}\n\nmodule.exports = { formatUserBadge };\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -402,6 +430,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Price Split Formatter\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 2) return;\n\n    // TODO: parse total and people, print Share: $X.XX or ERROR\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "100\n4\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -433,6 +466,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Validation Flags Reporter\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse score, compute passed/perfect/invalid flags, print lines\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "90\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -464,6 +502,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Optional Field Describer\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction describeField(value) {\n  if (value === undefined) return \"not provided\";\n  if (value === null) return \"explicitly empty\";\n  return \"has value: \" + String(value);\n}\n\nfunction parseLine(line) {\n  const trimmed = line.trim();\n  if (trimmed === \"undefined\") return undefined;\n  return JSON.parse(trimmed);\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    if (line.trim() === \"done\") break;\n    try {\n      const value = parseLine(line);\n      process.stdout.write(describeField(value) + \"\\n\");\n    } catch {\n      process.stdout.write(\"ERROR: invalid input\\n\");\n    }\n  }\n  rl.close();\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "null\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -495,6 +538,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Expression Evaluator\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction isNumericPair(a, b) {\n  return Number.isFinite(Number(a)) && Number.isFinite(Number(b));\n}\n\nfunction applyOp(a, op, b) {\n  if (op === \"+\") {\n    if (isNumericPair(a, b)) return Number(a) + Number(b);\n    return String(a) + String(b);\n  }\n  const x = Number(a);\n  const y = Number(b);\n  if (!Number.isFinite(x) || !Number.isFinite(y)) return { error: \"invalid number\" };\n  if (op === \"-\") return x - y;\n  if (op === \"*\") return x * y;\n  if (op === \"/\") {\n    if (y === 0) return { error: \"division by zero\" };\n    return x / y;\n  }\n  if (op === \"%\") return x % y;\n  if (op === \"**\") return x ** y;\n  return { error: \"invalid operator\" };\n}\n\nfunction evalPrecedence(expr) {\n  const parts = expr.trim().split(/\\s+/);\n  if (parts.length !== 5) return { error: \"invalid expression\" };\n  const [a, op1, b, op2, c] = parts;\n  if (op2 === \"*\") {\n    const mid = applyOp(b, op2, c);\n    if (mid && mid.error) return mid;\n    return applyOp(a, op1, String(mid));\n  }\n  return { error: \"unsupported expression\" };\n}\n\nasync function main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    lines.push(line);\n  }\n  rl.close();\n\n  if (lines.length === 1 && lines[0].includes(\"*\")) {\n    const result = evalPrecedence(lines[0]);\n    if (result && result.error) {\n      process.stdout.write(\"ERROR: \" + result.error + \"\\n\");\n      return;\n    }\n    process.stdout.write(\"Result: \" + result + \"\\n\");\n    return;\n  }\n\n  if (lines.length < 3) {\n    process.stdout.write(\"ERROR: invalid input\\n\");\n    return;\n  }\n\n  const a = lines[0].trim();\n  const op = lines[1].trim();\n  const b = lines[2].trim();\n  const result = applyOp(a, op, b);\n  if (result && result.error) {\n    process.stdout.write(\"ERROR: \" + result.error + \"\\n\");\n    return;\n  }\n  process.stdout.write(\"Result: \" + result + \"\\n\");\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "10\n+\n5\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -526,6 +574,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Boundary Checker\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 3) return;\n\n    // TODO: parse value/min/max, check inclusive range, print IN RANGE or OUT OF RANGE\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "89\n0\n100\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -557,6 +610,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Access Gate Validator\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 2) return;\n\n    // TODO: parse age and hasId, print ALLOWED or DENIED\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "20\ntrue\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -588,6 +646,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Grade Classifier\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse score, classify, print Grade: X or ERROR\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "84\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -619,6 +682,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Menu Command Router\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: switch on cmd, print action message\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "quit\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -650,6 +718,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Sum Range\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 2) return;\n\n    // TODO: sum inclusive range with for loop\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "1\n4\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -681,6 +754,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Sentinel Sum\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  let sum = 0;\n  let current = null;\n  let reading = true;\n\n  rl.on(\"line\", (line) => {\n    // TODO: while-loop style accumulation until sentinel 0\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "10\n20\n0\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -712,6 +790,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Celsius Converter\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction toFahrenheit(celsius) {\n  // TODO: return converted value\n  return 0;\n}\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse, call toFahrenheit, print F: X.X\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nif (require.main === module) {\n  main();\n}\n\nmodule.exports = { toFahrenheit };\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "0\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -743,6 +826,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Clamp Utility\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction clamp(value, min, max) {\n  // TODO: return min, max, or value with early returns\n  return value;\n}\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 3) return;\n\n    // TODO: parse value/min/max, call clamp, print Result: X\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "-3\n0\n10\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -774,6 +862,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Truthy Classifier\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction classify(value) {\n  return Boolean(value) ? \"truthy\" : \"falsy\";\n}\n\nfunction naiveGate(value) {\n  return !value ? \"blocked\" : \"allowed\";\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const trimmed = line.trim();\n    if (trimmed === \"done\") break;\n    let value;\n    try {\n      value = JSON.parse(trimmed);\n    } catch {\n      process.stdout.write(\"ERROR: invalid JSON\\n\");\n      continue;\n    }\n    process.stdout.write(\"classify: \" + classify(value) + \"\\n\");\n    if (value === 0) {\n      process.stdout.write(\"naiveGate: \" + naiveGate(value) + \"\\n\");\n      process.stdout.write(\"note: 0 is valid but falsy\\n\");\n    }\n  }\n  rl.close();\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "0\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -805,6 +898,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Equality Judge\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction judge(a, b) {\n  const loose = a == b;\n  const strict = a === b;\n  const prefer = loose !== strict ? \"prefer: ===\" : \"prefer: either (same result)\";\n  return [\"loose: \" + loose, \"strict: \" + strict, prefer];\n}\n\nfunction runDemo() {\n  const pairs = [\n    [[], 0],\n    [{}, {}],\n  ];\n  for (const [a, b] of pairs) {\n    for (const line of judge(a, b)) {\n      process.stdout.write(line + \"\\n\");\n    }\n    process.stdout.write(\"---\\n\");\n  }\n}\n\nasync function main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    lines.push(line);\n    if (lines.length === 1 && lines[0].trim() === \"demo\") {\n      runDemo();\n      rl.close();\n      return;\n    }\n    if (lines.length < 2) continue;\n    const a = JSON.parse(lines[0]);\n    const b = JSON.parse(lines[1]);\n    for (const out of judge(a, b)) {\n      process.stdout.write(out + \"\\n\");\n    }\n    rl.close();\n    return;\n  }\n  rl.close();\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "[]\n0\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -836,6 +934,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Coercion Predictor\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nconst RULES = new Map([\n  ['\"\"|==|0', \"empty string coerces to 0 with ==\"],\n  [\"[]|==|0\", \"array coerces to 0 with ==\"],\n  [\"null|==|undefined\", \"null and undefined are equal with ==\"],\n  [\"null|===|undefined\", \"null and undefined are different types with ===\"],\n]);\n\nfunction ruleFor(a, op, b) {\n  const key = JSON.stringify(a) + \"|\" + op + \"|\" + JSON.stringify(b);\n  if (RULES.has(key)) return RULES.get(key);\n  if (op === \"===\") return \"no coercion with ===\";\n  return \"== may coerce types before comparing\";\n}\n\nfunction compare(a, op, b) {\n  if (op === \"==\") return a == b;\n  if (op === \"===\") return a === b;\n  return null;\n}\n\nasync function main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    lines.push(line);\n    if (lines.length < 3) continue;\n    const a = JSON.parse(lines[0]);\n    const op = lines[1].trim();\n    const b = JSON.parse(lines[2]);\n    if (op !== \"==\" && op !== \"===\") {\n      process.stdout.write(\"ERROR: invalid operator\\n\");\n      rl.close();\n      return;\n    }\n    const result = compare(a, op, b);\n    process.stdout.write(\"result: \" + result + \"\\n\");\n    process.stdout.write(\"rule: \" + ruleFor(a, op, b) + \"\\n\");\n    rl.close();\n    return;\n  }\n  rl.close();\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "\"\"\n==\n0\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -867,6 +970,10 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Default Config Builder\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction parseField(line) {\n  const trimmed = line.trim();\n  if (trimmed === \"\") return undefined;\n  if (trimmed === \"null\") return null;\n  return line;\n}\n\nfunction buildConfig(raw) {\n  // TODO: apply ?? and || rules, return { retries, timeout, label, active }\n  return {};\n}\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 4) return;\n\n    // TODO: buildConfig, print four labeled lines or ERROR\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -3922,6 +4029,10 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Alias Tracker\n *\n * Entrypoint: node starter/index.js\n */\n\nfunction main() {\n  const original = { n: 1 };\n  let b = original;\n  process.stdout.write(\"step 1: original.n=1 unchanged (binding)\\n\");\n\n  b.n = 2;\n  process.stdout.write(\"step 2: original.n=2 changed (mutation)\\n\");\n\n  b = { n: 99 };\n  process.stdout.write(\"step 3: original.n=2 unchanged (reassignment)\\n\");\n\n  original.n = 5;\n  process.stdout.write(\"step 4: original.n=5 changed (mutation)\\n\");\n\n  process.stdout.write(\"final: original.n=\" + original.n + \" b.n=\" + b.n + \"\\n\");\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file"
                 }
               ],
               "moduleId": "02-objects-references-and-copying",
@@ -3957,6 +4068,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Nested State Updater\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction incrementItemQty(state, itemId) {\n  // TODO: copy-on-write — do not mutate state or nested objects\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let payload;\n  try {\n    payload = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  if (payload == null || typeof payload !== \"object\" || Array.isArray(payload)) {\n    return fail(\"payload must be a JSON object\");\n  }\n\n  const { state, itemId } = payload;\n  if (state == null || typeof state !== \"object\" || Array.isArray(state)) {\n    return fail(\"state must be an object\");\n  }\n  if (typeof itemId !== \"number\" || !Number.isInteger(itemId)) {\n    return fail(\"itemId must be an integer\");\n  }\n\n  const before = JSON.stringify(state);\n\n  let nextState;\n  try {\n    nextState = incrementItemQty(state, itemId);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"clone failed\");\n  }\n\n  if (JSON.stringify(state) !== before) {\n    return fail(\"state was mutated\");\n  }\n\n  process.stdout.write(`${JSON.stringify({ nextState })}\\n`);\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "state\n"
                 }
               ],
               "moduleId": "02-objects-references-and-copying",
@@ -3992,6 +4108,10 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Snapshot Cloner\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction cloneForSafety(value) {\n  // TODO: structuredClone when available, else JSON fallback with clear errors\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let input;\n  try {\n    input = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  const before = JSON.stringify(input);\n\n  let cloned;\n  try {\n    cloned = cloneForSafety(input);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"clone failed\");\n  }\n\n  if (JSON.stringify(input) !== before) {\n    return fail(\"input was mutated\");\n  }\n\n  process.stdout.write(`${JSON.stringify(cloned)}\\n`);\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file"
                 }
               ],
               "moduleId": "02-objects-references-and-copying",
@@ -4027,6 +4147,10 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Own Keys Filter\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction ownKeys(obj) {\n  // TODO: return sorted own enumerable keys using Object.hasOwn\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let input;\n  try {\n    input = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  if (input == null || typeof input !== \"object\" || Array.isArray(input)) {\n    return fail(\"input must be a JSON object\");\n  }\n\n  let keys;\n  try {\n    keys = ownKeys(input);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"failed\");\n  }\n\n  process.stdout.write(`${JSON.stringify(keys)}\\n`);\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file"
                 }
               ],
               "moduleId": "02-objects-references-and-copying",
@@ -4705,6 +4829,14 @@
               "graphIndex": "03.1.2"
             },
             {
+              "id": "03.1.3-call-stack",
+              "title": "Call Stack",
+              "path": "course/javascript/modules/03-asynchronous-javascript/lessons/03.1.3-call-stack/README.md",
+              "markdown": "# Call Stack\n\n> Graph index: `03.1.3`\n<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:javascript/03-asynchronous-javascript/03.1.3-call-stack:README.md -->\n\n## Context\n\nThe **call stack** is where JavaScript runs synchronous function calls. Each time a function is invoked, a new **stack frame** is pushed; when the function returns, that frame is popped. Only the frame on top can execute — this is why one thread handles one synchronous call chain at a time.\n\n## Predict first\n\nWhat prints, and in what order?\n\n```js\nfunction second() {\n  console.log(\"second\");\n}\n\nfunction first() {\n  console.log(\"first\");\n  second();\n  console.log(\"after second\");\n}\n\nconsole.log(\"start\");\nfirst();\nconsole.log(\"end\");\n```\n\n## Explanation\n\nCalling `first()` pushes a frame for `first`. Inside it, `second()` pushes another frame on top. `second` finishes and pops before `after second` runs. Then `first` returns, and finally `end` prints.\n\n```js\nfunction a() {\n  console.log(\"a\");\n  b();\n  console.log(\"a done\");\n}\n\nfunction b() {\n  console.log(\"b\");\n}\n\na();\n```\n\nStack at the moment `\"b\"` prints: `a` (waiting below) → `b` (running on top).\n\nInfinite recursion fills the stack until the engine throws:\n\n```js\nfunction recurse() {\n  recurse();\n}\n\nrecurse(); // RangeError: Maximum call stack size exceeded\n```\n\nScheduled callbacks (`setTimeout`, Promise reactions) do **not** jump onto the stack immediately. The current synchronous work must finish (frames pop) before the event loop can run queued callbacks — linking the call stack to async behavior from earlier lessons.\n\n## What to observe\n\n- Calls **push** frames; returns **pop** them (last in, first out).\n- Inner functions must complete before the line after the call in the outer function runs.\n- Long-running or infinitely recursive synchronous code keeps the stack busy — nothing else on that thread runs until it finishes or overflows.\n\n## Quick challenge\n\nFor the first example, list the call stack top-to-bottom at the exact moment `\"second\"` prints. Which frames are still waiting underneath?\n",
+              "moduleId": "03-asynchronous-javascript",
+              "graphIndex": "03.1.3"
+            },
+            {
               "id": "03.1.4-callback-and-microtask-queues",
               "title": "Callback and Microtask Queues",
               "path": "course/javascript/modules/03-asynchronous-javascript/lessons/03.1.4-callback-and-microtask-queues/README.md",
@@ -4763,6 +4895,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Sync Trace\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nconst SNIPPETS = {\n  basic: \"A C\",\n  nested: \"1 4\",\n  chain: \"start middle end\",\n};\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const id = line.trim();\n    const order = SNIPPETS[id];\n    if (!order) {\n      process.stdout.write(\"ERROR: unknown snippet\\n\");\n    } else {\n      process.stdout.write(\"Sync order: \" + order + \"\\n\");\n    }\n    break;\n  }\n  rl.close();\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "basic\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -4794,6 +4931,10 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Output Order Predictor\n *\n * Entrypoint: node starter/index.js\n */\n\nconst SNIPPETS = [\n  {\n    name: \"basic\",\n    order: \"A B micro timer\",\n    classifications: [\n      \"A:sync\",\n      \"B:sync\",\n      \"micro:microtask\",\n      \"timer:task\",\n    ],\n    explanation:\n      \"Sync logs run on the call stack first. Promise reactions are microtasks and drain before the setTimeout task runs.\",\n  },\n  {\n    name: \"async-await\",\n    order: \"A C B\",\n    classifications: [\"A:sync\", \"C:sync\", \"B:microtask\"],\n    explanation:\n      \"main() runs until await, which schedules the rest as a microtask. C prints before B resumes.\",\n  },\n  {\n    name: \"chained-microtasks\",\n    order: \"m1 m2 t1\",\n    classifications: [\"m1:microtask\", \"m2:microtask\", \"t1:task\"],\n    explanation:\n      \"Microtasks m1 and m2 drain completely before task t1 from setTimeout.\",\n  },\n  {\n    name: \"trick\",\n    order: \"start end micro timer\",\n    classifications: [\n      \"start:sync\",\n      \"end:sync\",\n      \"micro:microtask\",\n      \"timer:task\",\n    ],\n    explanation:\n      \"Microtasks always run before the next task, so micro prints before timer even with setTimeout(0).\",\n  },\n];\n\nfunction formatSnippet(snippet) {\n  const lines = [\n    `=== ${snippet.name} ===`,\n    `order: ${snippet.order}`,\n    ...snippet.classifications.map((c) => `  ${c}`),\n    `explanation: ${snippet.explanation}`,\n  ];\n  return lines.join(\"\\n\");\n}\n\nfunction main() {\n  for (const snippet of SNIPPETS) {\n    process.stdout.write(formatSnippet(snippet) + \"\\n\\n\");\n  }\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -4825,6 +4966,10 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Microtask Before Timer\n *\n * Entrypoint: node starter/index.js\n */\n\nfunction main() {\n  process.stdout.write(\"order: start end micro timer\\n\");\n  process.stdout.write(\"rule: microtasks drain before the next task\\n\");\n  process.stdout.write(\"micro_before_timer: true\\n\");\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -4856,6 +5001,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Promise Chain Builder\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction fakeRead(path, callback) {\n  setTimeout(() => {\n    if (path === \"fail\") {\n      callback(new Error(\"not found\"));\n      return;\n    }\n    callback(null, \"data:\" + path);\n  }, 0);\n}\n\nfunction readAsPromise(path) {\n  return new Promise((resolve, reject) => {\n    fakeRead(path, (err, data) => {\n      if (err) reject(err);\n      else resolve(data);\n    });\n  });\n}\n\nfunction runPipeline(path) {\n  return readAsPromise(path)\n    .then((data) => data + \" -> parsed\")\n    .then((data) => data + \" -> done\")\n    .catch((err) => \"ERROR: \" + err.message);\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const path = line.trim();\n    const result = await runPipeline(path);\n    process.stdout.write(result + \"\\n\");\n    break;\n  }\n  rl.close();\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "users.json\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -4887,6 +5037,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * Sequential Async Runner\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction delay(ms, label) {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve(label), ms);\n  });\n}\n\nasync function stepFetch() {\n  return delay(10, \"fetch:ok\");\n}\n\nasync function stepTransform() {\n  return delay(10, \"transform:ok\");\n}\n\nasync function stepSave(shouldFail) {\n  if (shouldFail) {\n    throw new Error(\"save failed\");\n  }\n  return delay(10, \"save:ok\");\n}\n\nasync function runPipeline(shouldFail) {\n  try {\n    const a = await stepFetch();\n    const b = await stepTransform();\n    const c = await stepSave(shouldFail);\n    return [a, b, c].join(\" | \");\n  } catch (err) {\n    return \"ERROR: \" + err.message;\n  }\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const mode = line.trim();\n    const shouldFail = mode === \"fail\";\n    const result = await runPipeline(shouldFail);\n    process.stdout.write(result + \"\\n\");\n    break;\n  }\n  rl.close();\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "ok\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -4918,6 +5073,11 @@
                   "path": "starter/index.js",
                   "kind": "file",
                   "content": "/**\n * To Result\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nasync function toResult(promise) {\n  try {\n    const value = await promise;\n    return { ok: true, value };\n  } catch (error) {\n    return { ok: false, error };\n  }\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const mode = line.trim();\n    if (mode === \"ok\") {\n      const result = await toResult(Promise.resolve(42));\n      process.stdout.write(\"ok:\" + result.value + \"\\n\");\n    } else if (mode === \"fail\") {\n      const result = await toResult(Promise.reject(new Error(\"boom\")));\n      process.stdout.write(\"err:\" + result.error.message + \"\\n\");\n    } else {\n      process.stdout.write(\"ERROR: use ok or fail\\n\");\n    }\n    break;\n  }\n  rl.close();\n}\n\nmain();\n"
+                },
+                {
+                  "path": "starter/sample.input",
+                  "kind": "file",
+                  "content": "ok\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -5243,6 +5403,14 @@
           "graphIndex": "03.1.2"
         },
         {
+          "id": "03.1.3-call-stack",
+          "title": "Call Stack",
+          "path": "course/javascript/modules/03-asynchronous-javascript/lessons/03.1.3-call-stack/README.md",
+          "markdown": "# Call Stack\n\n> Graph index: `03.1.3`\n<!-- cursor:teacher:add-explanation (deterministic) -->\n<!-- marker:javascript/03-asynchronous-javascript/03.1.3-call-stack:README.md -->\n\n## Context\n\nThe **call stack** is where JavaScript runs synchronous function calls. Each time a function is invoked, a new **stack frame** is pushed; when the function returns, that frame is popped. Only the frame on top can execute — this is why one thread handles one synchronous call chain at a time.\n\n## Predict first\n\nWhat prints, and in what order?\n\n```js\nfunction second() {\n  console.log(\"second\");\n}\n\nfunction first() {\n  console.log(\"first\");\n  second();\n  console.log(\"after second\");\n}\n\nconsole.log(\"start\");\nfirst();\nconsole.log(\"end\");\n```\n\n## Explanation\n\nCalling `first()` pushes a frame for `first`. Inside it, `second()` pushes another frame on top. `second` finishes and pops before `after second` runs. Then `first` returns, and finally `end` prints.\n\n```js\nfunction a() {\n  console.log(\"a\");\n  b();\n  console.log(\"a done\");\n}\n\nfunction b() {\n  console.log(\"b\");\n}\n\na();\n```\n\nStack at the moment `\"b\"` prints: `a` (waiting below) → `b` (running on top).\n\nInfinite recursion fills the stack until the engine throws:\n\n```js\nfunction recurse() {\n  recurse();\n}\n\nrecurse(); // RangeError: Maximum call stack size exceeded\n```\n\nScheduled callbacks (`setTimeout`, Promise reactions) do **not** jump onto the stack immediately. The current synchronous work must finish (frames pop) before the event loop can run queued callbacks — linking the call stack to async behavior from earlier lessons.\n\n## What to observe\n\n- Calls **push** frames; returns **pop** them (last in, first out).\n- Inner functions must complete before the line after the call in the outer function runs.\n- Long-running or infinitely recursive synchronous code keeps the stack busy — nothing else on that thread runs until it finishes or overflows.\n\n## Quick challenge\n\nFor the first example, list the call stack top-to-bottom at the exact moment `\"second\"` prints. Which frames are still waiting underneath?\n",
+          "moduleId": "03-asynchronous-javascript",
+          "graphIndex": "03.1.3"
+        },
+        {
           "id": "03.1.4-callback-and-microtask-queues",
           "title": "Callback and Microtask Queues",
           "path": "course/javascript/modules/03-asynchronous-javascript/lessons/03.1.4-callback-and-microtask-queues/README.md",
@@ -5301,6 +5469,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Hello Stdin\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: trim, validate, and print greeting or error\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "Maria\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5332,6 +5505,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Receipt Printer\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nconst readline = require(\"node:readline\");\n\nfunction formatMoney(value) {\n  return `$${value.toFixed(2)}`;\n}\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 3) return;\n\n    // TODO: validate fields and print receipt or ERROR\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "Notebook\n3\n4.25\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5363,6 +5541,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Commented Validator\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction validate(name, score) {\n  const trimmed = name.trim();\n\n  // Rule 1: name must not be empty after trim\n  if (trimmed.length === 0) {\n    return \"ERROR: name is required\";\n  }\n\n  // Rule 2: score must be 0–100\n  // if (!Number.isInteger(score) || score < 0 || score > 100) {\n  //   return \"ERROR: score out of range\";\n  // }\n\n  // Rule 3: name must be at least 2 chars after trim\n  if (trimmed.length < 2) {\n    return \"ERROR: name too short\";\n  }\n\n  return \"OK\";\n}\n\nasync function main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    lines.push(line);\n    if (lines.length < 2) continue;\n    const name = lines[0];\n    const score = Number(lines[1].trim());\n    process.stdout.write(validate(name, score) + \"\\n\");\n    rl.close();\n    return;\n  }\n  rl.close();\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "Ana\n200\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5394,6 +5577,10 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Leaderboard Scores\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction updateLeaderboard(initialScores, events) {\n  // TODO: return new scores object; use let/const correctly\n  return {};\n}\n\nfunction main() {\n  const result = updateLeaderboard(\n    { alice: 10, bob: 4 },\n    [\n      { playerId: \"alice\", delta: 2 },\n      { playerId: \"carol\", delta: 8 },\n    ],\n  );\n  console.log(JSON.stringify(result));\n}\n\nif (require.main === module) {\n  main();\n}\n\nmodule.exports = { updateLeaderboard };\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5425,6 +5612,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Score Accumulator\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  let score = null;\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse initial score, apply += -= *= operations until done\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "10\n+25\n-10\n*2\ndone\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5456,6 +5648,10 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * User Badge Formatter\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction formatUserBadge(user) {\n  // TODO: normalize strings and return badge template literal\n  return \"\";\n}\n\nfunction main() {\n  try {\n    const badge = formatUserBadge({\n      displayName: \"  Ana   Silva \",\n      handle: \"@AnaS\",\n      level: 3,\n    });\n    console.log(badge);\n  } catch (err) {\n    console.error(err.message);\n    process.exitCode = 1;\n  }\n}\n\nif (require.main === module) {\n  main();\n}\n\nmodule.exports = { formatUserBadge };\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5487,6 +5683,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Price Split Formatter\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 2) return;\n\n    // TODO: parse total and people, print Share: $X.XX or ERROR\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "100\n4\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5518,6 +5719,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Validation Flags Reporter\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse score, compute passed/perfect/invalid flags, print lines\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "90\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5549,6 +5755,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Optional Field Describer\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction describeField(value) {\n  if (value === undefined) return \"not provided\";\n  if (value === null) return \"explicitly empty\";\n  return \"has value: \" + String(value);\n}\n\nfunction parseLine(line) {\n  const trimmed = line.trim();\n  if (trimmed === \"undefined\") return undefined;\n  return JSON.parse(trimmed);\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    if (line.trim() === \"done\") break;\n    try {\n      const value = parseLine(line);\n      process.stdout.write(describeField(value) + \"\\n\");\n    } catch {\n      process.stdout.write(\"ERROR: invalid input\\n\");\n    }\n  }\n  rl.close();\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "null\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5580,6 +5791,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Expression Evaluator\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction isNumericPair(a, b) {\n  return Number.isFinite(Number(a)) && Number.isFinite(Number(b));\n}\n\nfunction applyOp(a, op, b) {\n  if (op === \"+\") {\n    if (isNumericPair(a, b)) return Number(a) + Number(b);\n    return String(a) + String(b);\n  }\n  const x = Number(a);\n  const y = Number(b);\n  if (!Number.isFinite(x) || !Number.isFinite(y)) return { error: \"invalid number\" };\n  if (op === \"-\") return x - y;\n  if (op === \"*\") return x * y;\n  if (op === \"/\") {\n    if (y === 0) return { error: \"division by zero\" };\n    return x / y;\n  }\n  if (op === \"%\") return x % y;\n  if (op === \"**\") return x ** y;\n  return { error: \"invalid operator\" };\n}\n\nfunction evalPrecedence(expr) {\n  const parts = expr.trim().split(/\\s+/);\n  if (parts.length !== 5) return { error: \"invalid expression\" };\n  const [a, op1, b, op2, c] = parts;\n  if (op2 === \"*\") {\n    const mid = applyOp(b, op2, c);\n    if (mid && mid.error) return mid;\n    return applyOp(a, op1, String(mid));\n  }\n  return { error: \"unsupported expression\" };\n}\n\nasync function main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    lines.push(line);\n  }\n  rl.close();\n\n  if (lines.length === 1 && lines[0].includes(\"*\")) {\n    const result = evalPrecedence(lines[0]);\n    if (result && result.error) {\n      process.stdout.write(\"ERROR: \" + result.error + \"\\n\");\n      return;\n    }\n    process.stdout.write(\"Result: \" + result + \"\\n\");\n    return;\n  }\n\n  if (lines.length < 3) {\n    process.stdout.write(\"ERROR: invalid input\\n\");\n    return;\n  }\n\n  const a = lines[0].trim();\n  const op = lines[1].trim();\n  const b = lines[2].trim();\n  const result = applyOp(a, op, b);\n  if (result && result.error) {\n    process.stdout.write(\"ERROR: \" + result.error + \"\\n\");\n    return;\n  }\n  process.stdout.write(\"Result: \" + result + \"\\n\");\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "10\n+\n5\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5611,6 +5827,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Boundary Checker\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 3) return;\n\n    // TODO: parse value/min/max, check inclusive range, print IN RANGE or OUT OF RANGE\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "89\n0\n100\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5642,6 +5863,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Access Gate Validator\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 2) return;\n\n    // TODO: parse age and hasId, print ALLOWED or DENIED\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "20\ntrue\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5673,6 +5899,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Grade Classifier\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse score, classify, print Grade: X or ERROR\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "84\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5704,6 +5935,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Menu Command Router\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: switch on cmd, print action message\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "quit\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5735,6 +5971,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Sum Range\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 2) return;\n\n    // TODO: sum inclusive range with for loop\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "1\n4\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5766,6 +6007,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Sentinel Sum\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  let sum = 0;\n  let current = null;\n  let reading = true;\n\n  rl.on(\"line\", (line) => {\n    // TODO: while-loop style accumulation until sentinel 0\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "10\n20\n0\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5797,6 +6043,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Celsius Converter\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction toFahrenheit(celsius) {\n  // TODO: return converted value\n  return 0;\n}\n\nfunction main() {\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse, call toFahrenheit, print F: X.X\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nif (require.main === module) {\n  main();\n}\n\nmodule.exports = { toFahrenheit };\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "0\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5828,6 +6079,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Clamp Utility\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction clamp(value, min, max) {\n  // TODO: return min, max, or value with early returns\n  return value;\n}\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 3) return;\n\n    // TODO: parse value/min/max, call clamp, print Result: X\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "-3\n0\n10\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5859,6 +6115,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Truthy Classifier\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction classify(value) {\n  return Boolean(value) ? \"truthy\" : \"falsy\";\n}\n\nfunction naiveGate(value) {\n  return !value ? \"blocked\" : \"allowed\";\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const trimmed = line.trim();\n    if (trimmed === \"done\") break;\n    let value;\n    try {\n      value = JSON.parse(trimmed);\n    } catch {\n      process.stdout.write(\"ERROR: invalid JSON\\n\");\n      continue;\n    }\n    process.stdout.write(\"classify: \" + classify(value) + \"\\n\");\n    if (value === 0) {\n      process.stdout.write(\"naiveGate: \" + naiveGate(value) + \"\\n\");\n      process.stdout.write(\"note: 0 is valid but falsy\\n\");\n    }\n  }\n  rl.close();\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "0\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5890,6 +6151,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Equality Judge\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction judge(a, b) {\n  const loose = a == b;\n  const strict = a === b;\n  const prefer = loose !== strict ? \"prefer: ===\" : \"prefer: either (same result)\";\n  return [\"loose: \" + loose, \"strict: \" + strict, prefer];\n}\n\nfunction runDemo() {\n  const pairs = [\n    [[], 0],\n    [{}, {}],\n  ];\n  for (const [a, b] of pairs) {\n    for (const line of judge(a, b)) {\n      process.stdout.write(line + \"\\n\");\n    }\n    process.stdout.write(\"---\\n\");\n  }\n}\n\nasync function main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    lines.push(line);\n    if (lines.length === 1 && lines[0].trim() === \"demo\") {\n      runDemo();\n      rl.close();\n      return;\n    }\n    if (lines.length < 2) continue;\n    const a = JSON.parse(lines[0]);\n    const b = JSON.parse(lines[1]);\n    for (const out of judge(a, b)) {\n      process.stdout.write(out + \"\\n\");\n    }\n    rl.close();\n    return;\n  }\n  rl.close();\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "[]\n0\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5921,6 +6187,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Coercion Predictor\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nconst RULES = new Map([\n  ['\"\"|==|0', \"empty string coerces to 0 with ==\"],\n  [\"[]|==|0\", \"array coerces to 0 with ==\"],\n  [\"null|==|undefined\", \"null and undefined are equal with ==\"],\n  [\"null|===|undefined\", \"null and undefined are different types with ===\"],\n]);\n\nfunction ruleFor(a, op, b) {\n  const key = JSON.stringify(a) + \"|\" + op + \"|\" + JSON.stringify(b);\n  if (RULES.has(key)) return RULES.get(key);\n  if (op === \"===\") return \"no coercion with ===\";\n  return \"== may coerce types before comparing\";\n}\n\nfunction compare(a, op, b) {\n  if (op === \"==\") return a == b;\n  if (op === \"===\") return a === b;\n  return null;\n}\n\nasync function main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    lines.push(line);\n    if (lines.length < 3) continue;\n    const a = JSON.parse(lines[0]);\n    const op = lines[1].trim();\n    const b = JSON.parse(lines[2]);\n    if (op !== \"==\" && op !== \"===\") {\n      process.stdout.write(\"ERROR: invalid operator\\n\");\n      rl.close();\n      return;\n    }\n    const result = compare(a, op, b);\n    process.stdout.write(\"result: \" + result + \"\\n\");\n    process.stdout.write(\"rule: \" + ruleFor(a, op, b) + \"\\n\");\n    rl.close();\n    return;\n  }\n  rl.close();\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "\"\"\n==\n0\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5952,6 +6223,10 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Default Config Builder\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction parseField(line) {\n  const trimmed = line.trim();\n  if (trimmed === \"\") return undefined;\n  if (trimmed === \"null\") return null;\n  return line;\n}\n\nfunction buildConfig(raw) {\n  // TODO: apply ?? and || rules, return { retries, timeout, label, active }\n  return {};\n}\n\nfunction main() {\n  const lines = [];\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    lines.push(line);\n    if (lines.length < 4) return;\n\n    // TODO: buildConfig, print four labeled lines or ERROR\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5992,6 +6267,10 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Alias Tracker\n *\n * Entrypoint: node starter/index.js\n */\n\nfunction main() {\n  const original = { n: 1 };\n  let b = original;\n  process.stdout.write(\"step 1: original.n=1 unchanged (binding)\\n\");\n\n  b.n = 2;\n  process.stdout.write(\"step 2: original.n=2 changed (mutation)\\n\");\n\n  b = { n: 99 };\n  process.stdout.write(\"step 3: original.n=2 unchanged (reassignment)\\n\");\n\n  original.n = 5;\n  process.stdout.write(\"step 4: original.n=5 changed (mutation)\\n\");\n\n  process.stdout.write(\"final: original.n=\" + original.n + \" b.n=\" + b.n + \"\\n\");\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file"
             }
           ],
           "moduleId": "02-objects-references-and-copying",
@@ -6027,6 +6306,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Nested State Updater\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction incrementItemQty(state, itemId) {\n  // TODO: copy-on-write — do not mutate state or nested objects\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let payload;\n  try {\n    payload = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  if (payload == null || typeof payload !== \"object\" || Array.isArray(payload)) {\n    return fail(\"payload must be a JSON object\");\n  }\n\n  const { state, itemId } = payload;\n  if (state == null || typeof state !== \"object\" || Array.isArray(state)) {\n    return fail(\"state must be an object\");\n  }\n  if (typeof itemId !== \"number\" || !Number.isInteger(itemId)) {\n    return fail(\"itemId must be an integer\");\n  }\n\n  const before = JSON.stringify(state);\n\n  let nextState;\n  try {\n    nextState = incrementItemQty(state, itemId);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"clone failed\");\n  }\n\n  if (JSON.stringify(state) !== before) {\n    return fail(\"state was mutated\");\n  }\n\n  process.stdout.write(`${JSON.stringify({ nextState })}\\n`);\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "state\n"
             }
           ],
           "moduleId": "02-objects-references-and-copying",
@@ -6062,6 +6346,10 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Snapshot Cloner\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction cloneForSafety(value) {\n  // TODO: structuredClone when available, else JSON fallback with clear errors\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let input;\n  try {\n    input = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  const before = JSON.stringify(input);\n\n  let cloned;\n  try {\n    cloned = cloneForSafety(input);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"clone failed\");\n  }\n\n  if (JSON.stringify(input) !== before) {\n    return fail(\"input was mutated\");\n  }\n\n  process.stdout.write(`${JSON.stringify(cloned)}\\n`);\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file"
             }
           ],
           "moduleId": "02-objects-references-and-copying",
@@ -6097,6 +6385,10 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Own Keys Filter\n *\n * Entrypoint: node starter/index.js\n * Implement the behavior described in ../README.md\n */\n\nfunction readStdin() {\n  return new Promise((resolve) => {\n    let data = \"\";\n    process.stdin.setEncoding(\"utf8\");\n    process.stdin.on(\"data\", (chunk) => (data += chunk));\n    process.stdin.on(\"end\", () => resolve(data));\n  });\n}\n\nfunction fail(message) {\n  process.stdout.write(`ERROR: ${message}\\n`);\n}\n\nfunction ownKeys(obj) {\n  // TODO: return sorted own enumerable keys using Object.hasOwn\n  throw new Error(\"Not implemented\");\n}\n\nasync function main() {\n  const raw = (await readStdin()).trim();\n  if (raw.length === 0) return fail(\"missing input\");\n\n  let input;\n  try {\n    input = JSON.parse(raw);\n  } catch {\n    return fail(\"invalid JSON\");\n  }\n\n  if (input == null || typeof input !== \"object\" || Array.isArray(input)) {\n    return fail(\"input must be a JSON object\");\n  }\n\n  let keys;\n  try {\n    keys = ownKeys(input);\n  } catch (e) {\n    return fail(e instanceof Error ? e.message : \"failed\");\n  }\n\n  process.stdout.write(`${JSON.stringify(keys)}\\n`);\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file"
             }
           ],
           "moduleId": "02-objects-references-and-copying",
@@ -6128,6 +6420,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Sync Trace\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nconst SNIPPETS = {\n  basic: \"A C\",\n  nested: \"1 4\",\n  chain: \"start middle end\",\n};\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const id = line.trim();\n    const order = SNIPPETS[id];\n    if (!order) {\n      process.stdout.write(\"ERROR: unknown snippet\\n\");\n    } else {\n      process.stdout.write(\"Sync order: \" + order + \"\\n\");\n    }\n    break;\n  }\n  rl.close();\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "basic\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6159,6 +6456,10 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Output Order Predictor\n *\n * Entrypoint: node starter/index.js\n */\n\nconst SNIPPETS = [\n  {\n    name: \"basic\",\n    order: \"A B micro timer\",\n    classifications: [\n      \"A:sync\",\n      \"B:sync\",\n      \"micro:microtask\",\n      \"timer:task\",\n    ],\n    explanation:\n      \"Sync logs run on the call stack first. Promise reactions are microtasks and drain before the setTimeout task runs.\",\n  },\n  {\n    name: \"async-await\",\n    order: \"A C B\",\n    classifications: [\"A:sync\", \"C:sync\", \"B:microtask\"],\n    explanation:\n      \"main() runs until await, which schedules the rest as a microtask. C prints before B resumes.\",\n  },\n  {\n    name: \"chained-microtasks\",\n    order: \"m1 m2 t1\",\n    classifications: [\"m1:microtask\", \"m2:microtask\", \"t1:task\"],\n    explanation:\n      \"Microtasks m1 and m2 drain completely before task t1 from setTimeout.\",\n  },\n  {\n    name: \"trick\",\n    order: \"start end micro timer\",\n    classifications: [\n      \"start:sync\",\n      \"end:sync\",\n      \"micro:microtask\",\n      \"timer:task\",\n    ],\n    explanation:\n      \"Microtasks always run before the next task, so micro prints before timer even with setTimeout(0).\",\n  },\n];\n\nfunction formatSnippet(snippet) {\n  const lines = [\n    `=== ${snippet.name} ===`,\n    `order: ${snippet.order}`,\n    ...snippet.classifications.map((c) => `  ${c}`),\n    `explanation: ${snippet.explanation}`,\n  ];\n  return lines.join(\"\\n\");\n}\n\nfunction main() {\n  for (const snippet of SNIPPETS) {\n    process.stdout.write(formatSnippet(snippet) + \"\\n\\n\");\n  }\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6190,6 +6491,10 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Microtask Before Timer\n *\n * Entrypoint: node starter/index.js\n */\n\nfunction main() {\n  process.stdout.write(\"order: start end micro timer\\n\");\n  process.stdout.write(\"rule: microtasks drain before the next task\\n\");\n  process.stdout.write(\"micro_before_timer: true\\n\");\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6221,6 +6526,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Promise Chain Builder\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction fakeRead(path, callback) {\n  setTimeout(() => {\n    if (path === \"fail\") {\n      callback(new Error(\"not found\"));\n      return;\n    }\n    callback(null, \"data:\" + path);\n  }, 0);\n}\n\nfunction readAsPromise(path) {\n  return new Promise((resolve, reject) => {\n    fakeRead(path, (err, data) => {\n      if (err) reject(err);\n      else resolve(data);\n    });\n  });\n}\n\nfunction runPipeline(path) {\n  return readAsPromise(path)\n    .then((data) => data + \" -> parsed\")\n    .then((data) => data + \" -> done\")\n    .catch((err) => \"ERROR: \" + err.message);\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const path = line.trim();\n    const result = await runPipeline(path);\n    process.stdout.write(result + \"\\n\");\n    break;\n  }\n  rl.close();\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "users.json\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6252,6 +6562,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * Sequential Async Runner\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nfunction delay(ms, label) {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve(label), ms);\n  });\n}\n\nasync function stepFetch() {\n  return delay(10, \"fetch:ok\");\n}\n\nasync function stepTransform() {\n  return delay(10, \"transform:ok\");\n}\n\nasync function stepSave(shouldFail) {\n  if (shouldFail) {\n    throw new Error(\"save failed\");\n  }\n  return delay(10, \"save:ok\");\n}\n\nasync function runPipeline(shouldFail) {\n  try {\n    const a = await stepFetch();\n    const b = await stepTransform();\n    const c = await stepSave(shouldFail);\n    return [a, b, c].join(\" | \");\n  } catch (err) {\n    return \"ERROR: \" + err.message;\n  }\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const mode = line.trim();\n    const shouldFail = mode === \"fail\";\n    const result = await runPipeline(shouldFail);\n    process.stdout.write(result + \"\\n\");\n    break;\n  }\n  rl.close();\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "ok\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6283,6 +6598,11 @@
               "path": "starter/index.js",
               "kind": "file",
               "content": "/**\n * To Result\n *\n * Entrypoint: node starter/index.js\n */\n\nconst readline = require(\"readline\");\n\nasync function toResult(promise) {\n  try {\n    const value = await promise;\n    return { ok: true, value };\n  } catch (error) {\n    return { ok: false, error };\n  }\n}\n\nasync function main() {\n  const rl = readline.createInterface({ input: process.stdin });\n  for await (const line of rl) {\n    const mode = line.trim();\n    if (mode === \"ok\") {\n      const result = await toResult(Promise.resolve(42));\n      process.stdout.write(\"ok:\" + result.value + \"\\n\");\n    } else if (mode === \"fail\") {\n      const result = await toResult(Promise.reject(new Error(\"boom\")));\n      process.stdout.write(\"err:\" + result.error.message + \"\\n\");\n    } else {\n      process.stdout.write(\"ERROR: use ok or fail\\n\");\n    }\n    break;\n  }\n  rl.close();\n}\n\nmain();\n"
+            },
+            {
+              "path": "starter/sample.input",
+              "kind": "file",
+              "content": "ok\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",

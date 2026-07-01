@@ -137,6 +137,15 @@ async function validateSingleProject(projectPath) {
     });
   }
 
+  const sampleInputPath = path.join(projectPath, "starter", "sample.input");
+  if (!(await fileExists(sampleInputPath))) {
+    findings.push({
+      level: "warn",
+      path: path.relative(repoRoot, sampleInputPath),
+      message: "Missing starter/sample.input (Run sample button unavailable in UI)",
+    });
+  }
+
   return findings;
 }
 

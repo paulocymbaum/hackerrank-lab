@@ -8,7 +8,7 @@ const courseDir = path.join(repoRoot, "course");
 
 const MAX_FILE_BYTES = 200_000;
 const TEXT_EXTENSIONS = new Set([
-  ".md", ".txt", ".js", ".mjs", ".cjs", ".ts", ".tsx", ".jsx", ".json", ".css", ".html", ".yml", ".yaml",
+  ".md", ".txt", ".js", ".mjs", ".cjs", ".ts", ".tsx", ".jsx", ".json", ".css", ".html", ".yml", ".yaml", ".input",
 ]);
 
 function isProbablyLegacyModuleFolder(name) {

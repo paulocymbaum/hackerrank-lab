@@ -17,6 +17,7 @@ course/<NN-module-slug>/
         README.md                   # PBL problem statement (required, non-empty)
         starter/
           index.js                  # entrypoint (required for runnable projects)
+          sample.input              # stdin fixture for UI “Run sample” (recommended)
         solution/                   # optional reference implementation
         project-delivery.json       # student delivery history (UI, dev server)
 ```
@@ -69,18 +70,30 @@ Use template: [`templates/project-readme-skeleton.md`](templates/project-readme-
 Template: [`templates/starter-index.js`](templates/starter-index.js)
 
 ```bash
-node starter/index.js
+node starter/index.js < starter/sample.input
 ```
 
-Projects without `starter/index.js` are valid in the catalog but flagged as **not runnable**.
+Projects without `starter/index.js` are valid in the catalog but flagged as **not runnable**.  
+Projects without `starter/sample.input` hide the Delivery tab **Run sample** button.
+
+### Sample input file
+
+Template: [`templates/starter-sample.input`](templates/starter-sample.input)
+
+- Path: `starter/sample.input`
+- Content: realistic stdin from the project README **Example data** section (one or more lines).
+- Multi-line programs need **one value per line** (e.g. receipt printer: item, quantity, price on separate lines).
+- Used by the study UI Delivery tab: **Run sample** pipes this file into `starter/index.js` (or the `starter/index.js` block imported into the delivery draft) and shows stdout/stderr below the button.
+- Requires the Vite dev server (`npm run dev`); the button is disabled when sample input or runnable code is missing.
 
 ## Study UI integration
 
 After `npm run catalog:generate`:
 
 - Projects appear under course tab **Projects** when root `README.md` is non-empty.
-- Reader tabs: **Explanation**, **Folders**, **Files**, **Delivery**.
+- Reader tabs: **Context**, **Delivery** (embedded project drawer).
 - **Delivery** saves versions to `project-delivery.json` (dev server writes to disk).
+- **Delivery → Run sample** executes `node starter/index.js < starter/sample.input` and shows the log under the button (dev server only).
 - **review-course-project** skill grades the last 3 deliveries and writes `review` (score 0–100 + comment) on a delivery; score **> 80** marks project **done**.
 
 Types: `frontend/src/domain/types/catalog.ts`, `frontend/src/domain/types/projectDelivery.ts`
@@ -119,7 +132,7 @@ Warnings: missing `starter/index.js`, sparse module overview, optional sections.
 1. `collect-project-context.mjs <course-id>` — read module + existing projects
 2. List 3 outcomes from the lesson **Predict first** / **What to observe** sections
 3. Fill PBL sections; map each outcome to an acceptance criterion
-4. Ensure `starter/index.js` exists
+4. Ensure `starter/index.js` and `starter/sample.input` exist
 5. Update module `projects/README.md` topic catalog
 6. `validate-project.mjs`
 7. `cd frontend && npm run catalog:generate`

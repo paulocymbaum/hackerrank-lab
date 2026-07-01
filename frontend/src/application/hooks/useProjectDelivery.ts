@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useProjectDeliveryStore } from "../stores/projectDeliveryStore";
 import { loadProjectDeliveries } from "../usecases/projectDeliveries";
 import { lessonIdFromRootPath } from "../../presentation/shared/utils/pathUtils";
+import { projectProgressKey } from "../../domain/types/quizScore";
 
 export function useProjectDelivery(input: {
   courseId: string;
@@ -11,11 +12,20 @@ export function useProjectDelivery(input: {
 }) {
   const { courseId, projectId, rootPath, enabled } = input;
   const lessonId = useMemo(() => lessonIdFromRootPath(rootPath), [rootPath]);
+  const draftKey = projectProgressKey(courseId, projectId, lessonId);
   const deliveries = useProjectDeliveryStore((s) => s.getDeliveries(courseId, projectId, lessonId));
   const meta = useProjectDeliveryStore((s) => s.getMeta(courseId, projectId, lessonId));
+  const draft = useProjectDeliveryStore((s) => s.draftByKey[draftKey] ?? "");
   const submitDelivery = useProjectDeliveryStore((s) => s.submitDelivery);
-  const [draft, setDraft] = useState("");
+  const setDraftInStore = useProjectDeliveryStore((s) => s.setDraft);
   const [saving, setSaving] = useState(false);
+
+  const setDraft = useCallback(
+    (content: string | ((current: string) => string)) => {
+      setDraftInStore(courseId, projectId, content, lessonId);
+    },
+    [courseId, projectId, lessonId, setDraftInStore],
+  );
 
   useEffect(() => {
     if (!enabled || !courseId || !projectId || !rootPath) return;

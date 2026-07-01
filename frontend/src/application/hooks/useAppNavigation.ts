@@ -8,9 +8,9 @@ import { useCourseExperienceStore } from "../stores/legacy/courseExperienceStore
 import { closeReaderBeforeNavigate } from "../usecases/navigateWithCleanup";
 
 const VALID_TABS: CourseTab[] = ["readme", "examples", "projects", "quiz"];
-const VALID_READER_TABS: ReaderTab[] = ["folders", "explanation", "files", "delivery"];
+const VALID_READER_TABS: ReaderTab[] = ["folders", "explanation", "context", "delivery"];
 const VALID_DRAWER_MODES: DrawerMode[] = ["quiz", "project"];
-const VALID_DRAWER_TABS: DrawerTab[] = ["explanation", "files", "delivery"];
+const VALID_DRAWER_TABS: DrawerTab[] = ["explanation", "context", "delivery"];
 
 function parseCourseTab(value: string | null): CourseTab {
   if (value && VALID_TABS.includes(value as CourseTab)) return value as CourseTab;
@@ -18,6 +18,7 @@ function parseCourseTab(value: string | null): CourseTab {
 }
 
 function parseReaderTab(value: string | null): ReaderTab {
+  if (value === "files") return "context";
   if (value && VALID_READER_TABS.includes(value as ReaderTab)) return value as ReaderTab;
   return "explanation";
 }
@@ -28,6 +29,7 @@ function parseDrawerMode(value: string | null): DrawerMode | null {
 }
 
 function parseDrawerTab(value: string | null): DrawerTab {
+  if (value === "files") return "context";
   if (value && VALID_DRAWER_TABS.includes(value as DrawerTab)) return value as DrawerTab;
   return "explanation";
 }
