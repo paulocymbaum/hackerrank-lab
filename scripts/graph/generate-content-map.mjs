@@ -32,7 +32,16 @@ async function readJsonSafe(filePath) {
   }
 }
 
-async function scanDiskLessons(root) {
+function preferDiskEntry(existing, candidate, preferCourseId) {
+  if (!existing) return candidate;
+  if (!preferCourseId) return existing;
+  if (existing.courseId === preferCourseId) return existing;
+  if (candidate.courseId === preferCourseId) return candidate;
+  return existing;
+}
+
+export async function scanDiskLessons(root, options = {}) {
+  const preferCourseId = options.preferCourseId ?? null;
   const byGraphIndex = new Map();
   const orphans = [];
   const scanCourseDir = path.join(root, "course");
@@ -62,7 +71,10 @@ async function scanDiskLessons(root) {
         };
 
         if (graphIndex) {
-          byGraphIndex.set(graphIndex, entry);
+          byGraphIndex.set(
+            graphIndex,
+            preferDiskEntry(byGraphIndex.get(graphIndex), entry, preferCourseId),
+          );
         } else {
           orphans.push({ ...entry, status: "orphan", reason: "missing graphIndex" });
         }
@@ -75,9 +87,13 @@ async function scanDiskLessons(root) {
 
 export async function generateContentMap(options = {}) {
   const root = options.repoRoot ?? repoRoot;
-  const graph = loadGraph({ repoRoot: root });
+  const graph = loadGraph({
+    repoRoot: root,
+    jsonPath: path.join(root, "graph/course.graph.json"),
+    txtPath: path.join(root, "graph/course.graph.txt"),
+  });
   const courseSlug = options.courseSlug ?? defaultCourseSlug(graph);
-  const { byGraphIndex, orphans } = await scanDiskLessons(root);
+  const { byGraphIndex, orphans } = await scanDiskLessons(root, { preferCourseId: courseSlug });
 
   const entries = [];
 

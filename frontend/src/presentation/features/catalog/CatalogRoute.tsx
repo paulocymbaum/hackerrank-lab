@@ -1,21 +1,23 @@
 import { useEffect } from "react";
-import { BookOpenText } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import { useCatalog } from "../../../application/hooks/useCatalog";
 import { useCatalogPoints } from "../../../application/hooks/useCatalogPoints";
 import { useAppNavigation } from "../../../application/hooks/useAppNavigation";
 import { useTranslation } from "../../../application/hooks/useTranslation";
 import { loadAllCourseScores } from "../../../application/usecases/loadAllCourseScores";
 import { migrateProgressKeysFromCatalog } from "../../../application/usecases/migrateProgressKeys";
-import { ErrorPanel, Icon, LoadingState } from "../../design-system";
-import { CatalogScoreSummary } from "../course-experience/components/CourseScoreSummary";
-import { CourseCard } from "./components/CourseCard";
-import { CatalogEmptyState } from "./components/CatalogEmptyState";
+import { ErrorPanel, LoadingState } from "../../design-system";
+import { ContentMapPanel } from "../content-map/ContentMapPanel";
+import { CatalogCoursesPanel } from "./CatalogCoursesPanel";
+import { CatalogTabBar, parseCatalogTab } from "./CatalogTabBar";
 
 export function CatalogRoute() {
   const { status, courses, error, load, reload } = useCatalog();
   const { goCourse } = useAppNavigation();
   const { t } = useTranslation();
   const catalogPoints = useCatalogPoints(courses);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = parseCatalogTab(searchParams.get("tab"));
 
   useEffect(() => {
     void load();
@@ -26,6 +28,14 @@ export function CatalogRoute() {
     migrateProgressKeysFromCatalog({ courses });
     void loadAllCourseScores(courses);
   }, [status, courses]);
+
+  const setTab = (nextTab: "courses" | "content-map") => {
+    if (nextTab === "courses") {
+      setSearchParams({});
+      return;
+    }
+    setSearchParams({ tab: nextTab });
+  };
 
   if (status === "loading" || status === "idle") {
     return <LoadingState message={t("catalog.loading")} />;
@@ -42,37 +52,17 @@ export function CatalogRoute() {
   }
 
   return (
-    <section>
-      <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="m-0 text-body font-semibold text-text0">{t("catalog.title")}</h2>
-        <div className="flex flex-wrap items-center gap-3">
-          <CatalogScoreSummary
-            totalPoints={catalogPoints.totalPoints}
-            totalMax={catalogPoints.totalMax}
-            quizPoints={catalogPoints.quizPoints}
-            quizMax={catalogPoints.quizMax}
-            projectPoints={catalogPoints.projectPoints}
-            projectMax={catalogPoints.projectMax}
-          />
-          <div className="flex items-center gap-2 text-meta text-text1">
-            <Icon icon={BookOpenText} />
-            <span>{courses.length}</span>
-          </div>
-        </div>
-      </div>
-
-      {courses.length === 0 ? <CatalogEmptyState /> : null}
-
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-        {courses.map((course) => (
-          <CourseCard
-            key={course.id}
-            courseId={course.id}
-            course={course}
-            onOpen={() => goCourse(course.id)}
-          />
-        ))}
-      </div>
+    <section className="grid gap-4">
+      <CatalogTabBar value={tab} onValueChange={setTab} />
+      {tab === "courses" ? (
+        <CatalogCoursesPanel
+          courses={courses}
+          catalogPoints={catalogPoints}
+          onOpenCourse={goCourse}
+        />
+      ) : (
+        <ContentMapPanel />
+      )}
     </section>
   );
 }

@@ -6,7 +6,8 @@ Technical reference for routes, layers, and scores. For navigation UX and studen
 
 | Route | Component | Purpose |
 |-------|-----------|---------|
-| `/` | `CatalogRoute` | Course list |
+| `/` | `CatalogRoute` | Course list (default tab) |
+| `/?tab=content-map` | `CatalogRoute` → `ContentMapPanel` | Curriculum mind map with scores and collapsible branches |
 | `/course/:courseId` | `CourseExperienceRoute` | Branches: hierarchy overview or legacy tabs |
 | `/course/:courseId/module/:moduleId` | `ModuleLayoutRoute` | Module shell: drawer + outlet |
 | `/course/:courseId/module/:moduleId` (index) | `ModuleExperienceRoute` | Module README |
@@ -44,6 +45,7 @@ frontend/src/
   infrastructure/
     repositories/
     static/catalog.json
+    static/content-graph.json
   presentation/
     app/                  # AppRouter, AppLayout
     features/             # catalog, course-experience, course-legacy, module-experience, etc.
