@@ -54,11 +54,24 @@ export function MarkdownView(props: { markdown: string }) {
             </blockquote>
           ),
           hr: () => <hr className="my-4 border-0 border-t border-border0" />,
-          code: ({ children }) => (
-            <code className="rounded-panel border border-border0 bg-surfaceControl px-1.5 py-0.5 font-mono text-meta text-text0">
-              {children}
-            </code>
-          ),
+          code: ({ className, children, ...props }) => {
+            const isBlock = Boolean(className?.startsWith("language-"));
+            if (isBlock) {
+              return (
+                <code className={`font-mono text-meta leading-relaxed text-text0 ${className ?? ""}`} {...props}>
+                  {children}
+                </code>
+              );
+            }
+            return (
+              <code
+                className="rounded-panel border border-border0 bg-surfaceControl px-1.5 py-0.5 font-mono text-meta text-text0"
+                {...props}
+              >
+                {children}
+              </code>
+            );
+          },
           pre: ({ children }) => (
             <pre className="m-0 mb-3 overflow-auto rounded-panel border border-border0 bg-surfaceControl p-3 text-meta leading-relaxed text-text0 shadow-glass1">
               {children}

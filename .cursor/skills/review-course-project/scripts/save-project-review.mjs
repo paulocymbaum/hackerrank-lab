@@ -136,7 +136,7 @@ async function main() {
       process.stderr.write(`- ${error}\n`);
     }
     process.stderr.write(
-      '\nUse 2–4 plain sentences. Example: "No starter/index.js yet. Next: read three stdin lines, validate emptiness, parse with Number.isFinite, print JSON or ERROR."\n',
+      '\nUse 2–4 plain sentences. Example: "No solution code in the latest delivery yet. Next: read three stdin lines, validate emptiness, parse with Number.isFinite, print JSON or ERROR."\n',
     );
     process.exit(1);
   }

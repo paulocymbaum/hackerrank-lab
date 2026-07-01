@@ -2,12 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import type { Project } from "../../../domain/types/catalog";
 import type { DrawerTab } from "../../../domain/types/navigation";
 import type { ReaderEntry, ReaderTab } from "../../../domain/types/reader";
+import { useTranslation } from "../../../application/hooks/useTranslation";
 import { useProjectProgressStore } from "../../../application/stores/projectProgressStore";
-import { parentPath } from "../../shared/utils/pathUtils";
 import { ReadmePanel } from "../../shared/ReadmePanel";
 import { Tabs } from "../../design-system";
 import { FolderBrowser } from "./components/FolderBrowser";
-import { FilePreview } from "./components/FilePreview";
 import { ProjectDeliveryPanel } from "./components/ProjectDeliveryPanel";
 import { ProjectStatusBadge } from "../course-experience/components/ProjectStatusBadge";
 
@@ -17,6 +16,12 @@ function getExplanationMarkdown(project: Project, entries: ReaderEntry[], cwd: s
   const currentDir = entries.find((e) => e.kind === "dir" && e.path === cwd);
   if (currentDir?.readmeMarkdown?.trim()) return currentDir.readmeMarkdown;
   return project.readmeMarkdown;
+}
+
+function resolveDrawerTab(tab: DrawerTab, embedded: boolean, hasContext: boolean): DrawerTab {
+  if (embedded && tab === "explanation") return "delivery";
+  if (tab === "context" && !hasContext) return "delivery";
+  return tab;
 }
 
 export function ProjectReader(props: {
@@ -34,6 +39,7 @@ export function ProjectReader(props: {
   onOverlaySelectFile?: (path: string) => void;
   embedded?: boolean;
 }) {
+  const { t } = useTranslation();
   const {
     layout,
     courseId,
@@ -44,7 +50,6 @@ export function ProjectReader(props: {
     overlayTab = "explanation",
     overlayCwd: externalCwd,
     onOverlayCwdChange,
-    overlaySelectedFile,
     onOverlaySelectFile,
     embedded = layout === "drawer",
   } = props;
@@ -55,27 +60,14 @@ export function ProjectReader(props: {
 
   const cwd = externalCwd ?? internalCwd;
   const setCwd = onOverlayCwdChange ?? setInternalCwd;
-  const selectedFilePath = overlaySelectedFile ?? internalSelectedFile;
   const setSelectedFilePath = onOverlaySelectFile ?? setInternalSelectedFile;
 
   const getProjectStatus = useProjectProgressStore((s) => s.getStatus);
   const markProjectDoing = useProjectProgressStore((s) => s.markProjectDoing);
 
-  const children = useMemo(
-    () =>
-      entries
-        .filter((e) => e.path !== cwd && parentPath(e.path) === cwd)
-        .sort((a, b) => {
-          if (a.kind !== b.kind) return a.kind === "dir" ? -1 : 1;
-          return a.path.localeCompare(b.path);
-        }),
-    [entries, cwd],
-  );
-
-  const filesInCwd = children.filter((c) => c.kind === "file");
   const explanationMarkdown = getExplanationMarkdown(project, entries, cwd);
-
-  const activeDrawerTab = embedded && drawerTab === "explanation" ? "delivery" : drawerTab;
+  const hasContext = Boolean(explanationMarkdown.trim());
+  const activeDrawerTab = resolveDrawerTab(drawerTab, embedded, hasContext);
 
   useEffect(() => {
     const onDelivery =
@@ -92,10 +84,12 @@ export function ProjectReader(props: {
     markProjectDoing,
   ]);
 
+  const showContextOverlay = overlayTab === "context" || overlayTab === "explanation";
+
   if (layout === "overlay") {
     return (
       <>
-        {overlayTab === "explanation" ? (
+        {showContextOverlay ? (
           <div style={{ maxHeight: "70vh" }}>
             <ReadmePanel title={project.title} markdown={explanationMarkdown} variant="scroll" />
           </div>
@@ -105,18 +99,6 @@ export function ProjectReader(props: {
           <FolderBrowser
             entries={entries}
             cwd={cwd}
-            onCwdChange={setCwd}
-            onSelectFile={setSelectedFilePath}
-          />
-        ) : null}
-
-        {overlayTab === "files" ? (
-          <FilePreview
-            entries={entries}
-            cwd={cwd}
-            filesInCwd={filesInCwd}
-            selectedFilePath={selectedFilePath}
-            showUp
             onCwdChange={setCwd}
             onSelectFile={setSelectedFilePath}
           />
@@ -137,16 +119,20 @@ export function ProjectReader(props: {
     );
   }
 
-  const tabItems = embedded
-    ? [
-        { value: "files", label: "Files" },
-        { value: "delivery", label: "Delivery" },
-      ]
-    : [
-        { value: "explanation", label: "Brief" },
-        { value: "files", label: "Files" },
-        { value: "delivery", label: "Delivery" },
-      ];
+  const tabItems = useMemo(() => {
+    const items: { value: DrawerTab; label: string }[] = [];
+
+    if (embedded) {
+      if (hasContext) items.push({ value: "context", label: t("tabs.context") });
+      items.push({ value: "delivery", label: t("tabs.delivery") });
+      return items;
+    }
+
+    if (hasContext) items.push({ value: "context", label: t("tabs.context") });
+    else items.push({ value: "explanation", label: t("tabs.brief") });
+    items.push({ value: "delivery", label: t("tabs.delivery") });
+    return items;
+  }, [embedded, hasContext, t]);
 
   return (
     <div className="flex h-full flex-col">
@@ -163,29 +149,15 @@ export function ProjectReader(props: {
         />
       </div>
 
-      {!embedded && activeDrawerTab === "explanation" ? (
+      {activeDrawerTab === "explanation" ? (
         <div className="overflow-auto p-4">
           <ReadmePanel markdown={explanationMarkdown} variant="inline" />
         </div>
       ) : null}
 
-      {activeDrawerTab === "files" ? (
-        <div className="grid min-h-0 flex-1 grid-rows-[auto_1fr]">
-          <FolderBrowser
-            entries={entries}
-            cwd={cwd}
-            onCwdChange={setCwd}
-            onSelectFile={setSelectedFilePath}
-          />
-          <FilePreview
-            entries={entries}
-            cwd={cwd}
-            filesInCwd={filesInCwd}
-            selectedFilePath={selectedFilePath}
-            showUp
-            onCwdChange={setCwd}
-            onSelectFile={setSelectedFilePath}
-          />
+      {activeDrawerTab === "context" ? (
+        <div className="overflow-auto p-4">
+          <ReadmePanel markdown={explanationMarkdown} variant="inline" />
         </div>
       ) : null}
 

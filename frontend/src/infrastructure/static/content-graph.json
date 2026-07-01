@@ -1,0 +1,791 @@
+{
+  "generatedAt": "2026-07-01T00:17:57.262Z",
+  "courseSlug": "javascript",
+  "stats": {
+    "totalLeaves": 57,
+    "exists": 33,
+    "planned": 24,
+    "orphan": 0
+  },
+  "root": {
+    "id": "n_87c0f70ade",
+    "graphIndex": null,
+    "label": "JavaScript",
+    "kind": "root",
+    "children": [
+      {
+        "id": "n_0b51eea265",
+        "graphIndex": "01",
+        "label": "JavaScript Fundamentals",
+        "kind": "module",
+        "children": [
+          {
+            "id": "n_b7a38667e7",
+            "graphIndex": "01.1",
+            "label": "Getting Started",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_65933b074f",
+                "graphIndex": "01.1.1",
+                "label": "Running JavaScript (Node.js)",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.1.1-running-javascript-node-js"
+                }
+              },
+              {
+                "id": "n_8ec2b7862a",
+                "graphIndex": "01.1.2",
+                "label": "console.log and Output",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.1.2-console-log-and-output"
+                }
+              },
+              {
+                "id": "n_fb935b74e0",
+                "graphIndex": "01.1.3",
+                "label": "Comments",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.1.3-comments"
+                }
+              }
+            ]
+          },
+          {
+            "id": "n_7602459929",
+            "graphIndex": "01.2",
+            "label": "Variables",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_9816864ef5",
+                "graphIndex": "01.2.1",
+                "label": "let and const",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.2.1-let-and-const"
+                }
+              },
+              {
+                "id": "n_68873cb095",
+                "graphIndex": "01.2.2",
+                "label": "Assignment and Reassignment",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.2.2-assignment-and-reassignment"
+                }
+              }
+            ]
+          },
+          {
+            "id": "n_ed4137f9a9",
+            "graphIndex": "01.3",
+            "label": "Primitive Types",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_860ad0360b",
+                "graphIndex": "01.3.1",
+                "label": "Strings",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.3.1-strings"
+                }
+              },
+              {
+                "id": "n_02a53c5427",
+                "graphIndex": "01.3.2",
+                "label": "Numbers",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.3.2-numbers"
+                }
+              },
+              {
+                "id": "n_d8eb6a66f2",
+                "graphIndex": "01.3.3",
+                "label": "Booleans",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.3.3-booleans"
+                }
+              },
+              {
+                "id": "n_29a18be0f5",
+                "graphIndex": "01.3.4",
+                "label": "undefined and null",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.3.4-undefined-and-null"
+                }
+              }
+            ]
+          },
+          {
+            "id": "n_52c2073a8e",
+            "graphIndex": "01.4",
+            "label": "Operators",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_c62abf5295",
+                "graphIndex": "01.4.1",
+                "label": "Arithmetic Operators",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.4.1-arithmetic-operators"
+                }
+              },
+              {
+                "id": "n_f53677d251",
+                "graphIndex": "01.4.2",
+                "label": "Comparison Operators",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.4.2-comparison-operators"
+                }
+              },
+              {
+                "id": "n_834c58cba6",
+                "graphIndex": "01.4.3",
+                "label": "Logical Operators (&&, ||, !)",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.4.3-logical-operators"
+                }
+              }
+            ]
+          },
+          {
+            "id": "n_3134dc58a2",
+            "graphIndex": "01.5",
+            "label": "Control Flow",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_8543459868",
+                "graphIndex": "01.5.1",
+                "label": "if and else",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.5.1-if-and-else"
+                }
+              },
+              {
+                "id": "n_0cb7f57ab6",
+                "graphIndex": "01.5.2",
+                "label": "switch",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.5.2-switch"
+                }
+              }
+            ]
+          },
+          {
+            "id": "n_c9a1e02f54",
+            "graphIndex": "01.6",
+            "label": "Loops",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_d9e6ad9d5c",
+                "graphIndex": "01.6.1",
+                "label": "for Loop",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.6.1-for-loop"
+                }
+              },
+              {
+                "id": "n_4f61ea0de3",
+                "graphIndex": "01.6.2",
+                "label": "while Loop",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.6.2-while-loop"
+                }
+              }
+            ]
+          },
+          {
+            "id": "n_acabb80b6b",
+            "graphIndex": "01.7",
+            "label": "Functions",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_059098e9f8",
+                "graphIndex": "01.7.1",
+                "label": "Function Declaration",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.7.1-function-declaration"
+                }
+              },
+              {
+                "id": "n_ca15a4738a",
+                "graphIndex": "01.7.2",
+                "label": "Parameters and Return Values",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.7.2-parameters-and-return-values"
+                }
+              }
+            ]
+          },
+          {
+            "id": "n_5b1cae029b",
+            "graphIndex": "01.8",
+            "label": "Truthiness and Coercion",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_08c92665a5",
+                "graphIndex": "01.8.1",
+                "label": "Truthy vs Falsy",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.8.1-truthy-vs-falsy"
+                }
+              },
+              {
+                "id": "n_8d78a4769c",
+                "graphIndex": "01.8.2",
+                "label": "Strict Equality (===)",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.8.2-strict-equality"
+                }
+              },
+              {
+                "id": "n_152d759257",
+                "graphIndex": "01.8.3",
+                "label": "Type Coercion (==)",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.8.3-type-coercion"
+                }
+              },
+              {
+                "id": "n_b0dc9850d7",
+                "graphIndex": "01.8.4",
+                "label": "typeof and Array.isArray",
+                "kind": "lesson",
+                "children": [],
+                "status": "planned"
+              },
+              {
+                "id": "n_554dd07466",
+                "graphIndex": "01.8.5",
+                "label": "null, undefined, == null, ?., ??",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "01-javascript-fundamentals",
+                  "lessonId": "01.8.5-null-undefined-null"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n_6efb347985",
+        "graphIndex": "02",
+        "label": "Objects, References and Copying",
+        "kind": "module",
+        "children": [
+          {
+            "id": "n_c143ec0f70",
+            "graphIndex": "02.1",
+            "label": "Reference vs Value",
+            "kind": "lesson",
+            "children": [],
+            "status": "exists",
+            "catalogRef": {
+              "courseId": "javascript",
+              "moduleId": "02-objects-references-and-copying",
+              "lessonId": "02.1-reference-vs-value"
+            }
+          },
+          {
+            "id": "n_fd5112ba23",
+            "graphIndex": "02.2",
+            "label": "Shallow vs Deep Copy",
+            "kind": "lesson",
+            "children": [],
+            "status": "exists",
+            "catalogRef": {
+              "courseId": "javascript",
+              "moduleId": "02-objects-references-and-copying",
+              "lessonId": "02.2-shallow-vs-deep-copy"
+            }
+          },
+          {
+            "id": "n_facb83951b",
+            "graphIndex": "02.3",
+            "label": "structuredClone",
+            "kind": "lesson",
+            "children": [],
+            "status": "exists",
+            "catalogRef": {
+              "courseId": "javascript",
+              "moduleId": "02-objects-references-and-copying",
+              "lessonId": "02.3-structuredclone"
+            }
+          },
+          {
+            "id": "n_472f295537",
+            "graphIndex": "02.4",
+            "label": "Object.hasOwn",
+            "kind": "lesson",
+            "children": [],
+            "status": "exists",
+            "catalogRef": {
+              "courseId": "javascript",
+              "moduleId": "02-objects-references-and-copying",
+              "lessonId": "02.4-object-hasown"
+            }
+          }
+        ]
+      },
+      {
+        "id": "n_a377ed445c",
+        "graphIndex": "03",
+        "label": "Asynchronous JavaScript",
+        "kind": "module",
+        "children": [
+          {
+            "id": "n_e6dfcb0d68",
+            "graphIndex": "03.1",
+            "label": "Runtime Model",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_adf530c28e",
+                "graphIndex": "03.1.1",
+                "label": "Single-Threaded Execution",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "03-asynchronous-javascript",
+                  "lessonId": "03.1.1-single-threaded-execution"
+                }
+              },
+              {
+                "id": "n_1b9aa7c0e4",
+                "graphIndex": "03.1.2",
+                "label": "Event Loop",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "03-asynchronous-javascript",
+                  "lessonId": "03.1.2-event-loop"
+                }
+              },
+              {
+                "id": "n_eea8eab80f",
+                "graphIndex": "03.1.3",
+                "label": "Call Stack",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "03-asynchronous-javascript",
+                  "lessonId": "03.1.3-call-stack"
+                }
+              },
+              {
+                "id": "n_60e382f139",
+                "graphIndex": "03.1.4",
+                "label": "Callback and Microtask Queues",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "03-asynchronous-javascript",
+                  "lessonId": "03.1.4-callback-and-microtask-queues"
+                }
+              }
+            ]
+          },
+          {
+            "id": "n_f43751029b",
+            "graphIndex": "03.2",
+            "label": "Async Patterns",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_5402d86d9f",
+                "graphIndex": "03.2.1",
+                "label": "Promises",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "03-asynchronous-javascript",
+                  "lessonId": "03.2.1-promises"
+                }
+              },
+              {
+                "id": "n_4f2c42793d",
+                "graphIndex": "03.2.2",
+                "label": "Async/Await",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "03-asynchronous-javascript",
+                  "lessonId": "03.2.2-async-await"
+                }
+              },
+              {
+                "id": "n_ad7f63b66c",
+                "graphIndex": "03.2.3",
+                "label": "Try/Catch Error Handling",
+                "kind": "lesson",
+                "children": [],
+                "status": "exists",
+                "catalogRef": {
+                  "courseId": "javascript",
+                  "moduleId": "03-asynchronous-javascript",
+                  "lessonId": "03.2.3-try-catch-error-handling"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n_d1b97b3fb8",
+        "graphIndex": "04",
+        "label": "Advanced JavaScript",
+        "kind": "module",
+        "children": [
+          {
+            "id": "n_45533fbf16",
+            "graphIndex": "04.1",
+            "label": "Hoisting and TDZ",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_5db89c4cb7",
+            "graphIndex": "04.2",
+            "label": "Closures",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_185304f1d3",
+            "graphIndex": "04.3",
+            "label": "Higher-Order Functions",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_5b95ee0597",
+            "graphIndex": "04.4",
+            "label": "Prototype Chain",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_8f59e360e7",
+            "graphIndex": "04.5",
+            "label": "ES6 Modules",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          }
+        ]
+      },
+      {
+        "id": "n_8f59c64969",
+        "graphIndex": "05",
+        "label": "Data Structures and Algorithms",
+        "kind": "module",
+        "children": [
+          {
+            "id": "n_156839bd12",
+            "graphIndex": "05.1",
+            "label": "Big-O Complexity",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_9011eabc43",
+            "graphIndex": "05.2",
+            "label": "Two Pointers and Sliding Window",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_bad8748d1a",
+            "graphIndex": "05.3",
+            "label": "BFS and DFS",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_840c63f382",
+            "graphIndex": "05.4",
+            "label": "Cycle Detection",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_e406820748",
+            "graphIndex": "05.5",
+            "label": "Dynamic Programming",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          }
+        ]
+      },
+      {
+        "id": "n_681c741b94",
+        "graphIndex": "06",
+        "label": "HackerRank Profile and Assessments",
+        "kind": "module",
+        "children": [
+          {
+            "id": "n_515484f63f",
+            "graphIndex": "06.1",
+            "label": "Verified Portfolio",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_b3afe5713a",
+                "graphIndex": "06.1.1",
+                "label": "Problem-Solving Score",
+                "kind": "lesson",
+                "children": [],
+                "status": "planned"
+              },
+              {
+                "id": "n_3dfc3adaae",
+                "graphIndex": "06.1.2",
+                "label": "Certifications",
+                "kind": "lesson",
+                "children": [],
+                "status": "planned"
+              },
+              {
+                "id": "n_7270a1fbcb",
+                "graphIndex": "06.1.3",
+                "label": "Badges",
+                "kind": "lesson",
+                "children": [],
+                "status": "planned"
+              },
+              {
+                "id": "n_1b1dfb5f24",
+                "graphIndex": "06.1.4",
+                "label": "Global Ranking",
+                "kind": "lesson",
+                "children": [],
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "id": "n_596a261f1f",
+            "graphIndex": "06.2",
+            "label": "Practice Methodology",
+            "kind": "section",
+            "children": [
+              {
+                "id": "n_98241f4d58",
+                "graphIndex": "06.2.1",
+                "label": "Interview Preparation Kit",
+                "kind": "lesson",
+                "children": [],
+                "status": "planned"
+              },
+              {
+                "id": "n_cbbc5d5f27",
+                "graphIndex": "06.2.2",
+                "label": "Online Assessments (OA)",
+                "kind": "lesson",
+                "children": [],
+                "status": "planned"
+              },
+              {
+                "id": "n_3fe5214384",
+                "graphIndex": "06.2.3",
+                "label": "Implementation Focus",
+                "kind": "lesson",
+                "children": [],
+                "status": "planned"
+              },
+              {
+                "id": "n_a53e3b4c84",
+                "graphIndex": "06.2.4",
+                "label": "Test Case Handling",
+                "kind": "lesson",
+                "children": [],
+                "status": "planned"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n_45c02b7199",
+        "graphIndex": "07",
+        "label": "Technical Interview Preparation",
+        "kind": "module",
+        "children": [
+          {
+            "id": "n_7d91a18a39",
+            "graphIndex": "07.1",
+            "label": "System Design (Scalability, CAP Theorem)",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_1f96df4ba7",
+            "graphIndex": "07.2",
+            "label": "Behavioral (STAR Method)",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_e6cfdfa3e5",
+            "graphIndex": "07.3",
+            "label": "Communication and Clarifying Questions",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_d9916f7481",
+            "graphIndex": "07.4",
+            "label": "Code Quality and Maintainability",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          },
+          {
+            "id": "n_e7cdd0f8f1",
+            "graphIndex": "07.5",
+            "label": "Iterative Optimization",
+            "kind": "lesson",
+            "children": [],
+            "status": "planned"
+          }
+        ]
+      }
+    ]
+  }
+}

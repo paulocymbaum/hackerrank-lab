@@ -6,7 +6,7 @@ import { Icon } from "../../icons/Icon";
 export function Accordion(props: { title: ReactNode; children: ReactNode; defaultOpen?: boolean }) {
   return (
     <Card className="p-3" variant="panel">
-      <details className="group" open={props.defaultOpen}>
+      <details className="group" {...(props.defaultOpen ? { open: true } : {})}>
         <summary className="flex min-h-11 list-none cursor-pointer select-none items-center justify-between gap-3 rounded-panel px-2 py-2">
           <div className="min-w-0">{props.title}</div>
           <Icon

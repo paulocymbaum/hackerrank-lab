@@ -17,8 +17,16 @@ type ProjectDeliveryMeta = {
 type ProjectDeliveryState = {
   deliveriesByKey: Record<string, ProjectDeliveryEntry[]>;
   metaByKey: Record<string, ProjectDeliveryMeta>;
+  draftByKey: Record<string, string>;
   getDeliveries: (courseId: string, projectId: string, lessonId?: string) => ProjectDeliveryEntry[];
   getMeta: (courseId: string, projectId: string, lessonId?: string) => ProjectDeliveryMeta;
+  getDraft: (courseId: string, projectId: string, lessonId?: string) => string;
+  setDraft: (
+    courseId: string,
+    projectId: string,
+    content: string | ((current: string) => string),
+    lessonId?: string,
+  ) => void;
   setLoading: (courseId: string, projectId: string, loading: boolean, lessonId?: string) => void;
   setError: (courseId: string, projectId: string, error: string | null, lessonId?: string) => void;
   hydrate: (
@@ -45,6 +53,7 @@ export const useProjectDeliveryStore = create<ProjectDeliveryState>()(
     (set, get) => ({
       deliveriesByKey: {},
       metaByKey: {},
+      draftByKey: {},
 
       getDeliveries: (courseId, projectId, lessonId) => {
         const key = projectProgressKey(courseId, projectId, lessonId);
@@ -54,6 +63,25 @@ export const useProjectDeliveryStore = create<ProjectDeliveryState>()(
       getMeta: (courseId, projectId, lessonId) => {
         const key = projectProgressKey(courseId, projectId, lessonId);
         return get().metaByKey[key] ?? defaultMeta();
+      },
+
+      getDraft: (courseId, projectId, lessonId) => {
+        const key = projectProgressKey(courseId, projectId, lessonId);
+        return get().draftByKey[key] ?? "";
+      },
+
+      setDraft: (courseId, projectId, content, lessonId) => {
+        const key = projectProgressKey(courseId, projectId, lessonId);
+        set((state) => {
+          const current = state.draftByKey[key] ?? "";
+          const next = typeof content === "function" ? content(current) : content;
+          return {
+            draftByKey: {
+              ...state.draftByKey,
+              [key]: next,
+            },
+          };
+        });
       },
 
       setLoading: (courseId, projectId, loading, lessonId) => {
@@ -123,6 +151,12 @@ export const useProjectDeliveryStore = create<ProjectDeliveryState>()(
         return true;
       },
     }),
-    { name: "hackerrank-study-project-deliveries" },
+    {
+      name: "hackerrank-study-project-deliveries",
+      partialize: (state) => ({
+        deliveriesByKey: state.deliveriesByKey,
+        metaByKey: state.metaByKey,
+      }),
+    },
   ),
 );

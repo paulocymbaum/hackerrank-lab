@@ -62,4 +62,6 @@ Thumbs.db
 # Learner progress (local, not committed)
 ###############################################################################
 course/*/quiz/score.json
+course/*/modules/*/lessons/*/projects/*/project-delivery.json
 
+docs/5W1H-REPORT.md

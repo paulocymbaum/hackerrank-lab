@@ -1,3 +1,4 @@
+import { useLayoutEffect } from "react";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import type { Quiz } from "../../../../domain/types/quiz";
 import { useCoursePoints } from "../../../../application/hooks/useCoursePoints";
@@ -28,10 +29,19 @@ export function QuizSessionPanel(props: {
   const goPrev = useQuizSessionStore((s) => s.goPrev);
   const finish = useQuizSessionStore((s) => s.finish);
   const sessionLessonId = useQuizSessionStore((s) => s.lessonId);
+  const sessionQuizId = useQuizSessionStore((s) => s.quizId);
+  const perguntasEmbaralhadas = useQuizSessionStore((s) => s.perguntasEmbaralhadas);
   const start = useQuizSessionStore((s) => s.start);
+  const garantirPerguntasEmbaralhadas = useQuizSessionStore((s) => s.garantirPerguntasEmbaralhadas);
 
-  const total = props.quiz.questions.length;
-  const question = props.quiz.questions[currentIndex];
+  useLayoutEffect(() => {
+    if (sessionQuizId !== props.quiz.id) return;
+    garantirPerguntasEmbaralhadas(props.quiz.questions);
+  }, [sessionQuizId, props.quiz.id, props.quiz.questions, garantirPerguntasEmbaralhadas]);
+
+  const perguntasDaSessao = perguntasEmbaralhadas ?? props.quiz.questions;
+  const total = perguntasDaSessao.length;
+  const question = perguntasDaSessao[currentIndex];
   const isChecked = question ? Boolean(checkedQuestions[question.id]) : false;
   const hasAnswer = question ? Boolean(answers[question.id]) : false;
   const isLast = currentIndex >= total - 1;
@@ -44,7 +54,11 @@ export function QuizSessionPanel(props: {
         coursePoints={coursePoints}
         quizPointsDelta={lastQuizPointsDelta}
         onRetry={() =>
-          start(props.quiz.id, props.quiz.lessonId ?? sessionLessonId ?? undefined)
+          start(
+            props.quiz.id,
+            props.quiz.lessonId ?? sessionLessonId ?? undefined,
+            props.quiz.questions,
+          )
         }
         onBackToList={props.onBackToList}
       />

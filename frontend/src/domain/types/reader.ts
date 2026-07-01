@@ -1,6 +1,6 @@
 export type ReaderItemKind = "lesson" | "project";
 
-export type ReaderTab = "folders" | "explanation" | "files" | "delivery";
+export type ReaderTab = "folders" | "explanation" | "context" | "delivery";
 
 export type ReaderEntry = {
   path: string;
