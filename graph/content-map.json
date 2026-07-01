@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-24T00:50:20.585Z",
+  "generatedAt": "2026-07-01T00:17:57.096Z",
   "courseSlug": "javascript",
   "total": 57,
   "exists": 33,
@@ -8,18 +8,18 @@
   "entries": [
     {
       "graphIndex": "01.1.1",
-      "courseId": "testlang",
-      "moduleId": "01-test-fundamentals",
-      "lessonId": "01.1.1-running-code",
-      "diskPath": "course/testlang/modules/01-test-fundamentals/lessons/01.1.1-running-code",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.1.1-running-javascript-node-js",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.1.1-running-javascript-node-js",
       "status": "exists"
     },
     {
       "graphIndex": "01.1.2",
-      "courseId": "testlang",
-      "moduleId": "01-test-fundamentals",
-      "lessonId": "01.1.2-output-basics",
-      "diskPath": "course/testlang/modules/01-test-fundamentals/lessons/01.1.2-output-basics",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
+      "lessonId": "01.1.2-console-log-and-output",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.1.2-console-log-and-output",
       "status": "exists"
     },
     {
@@ -32,10 +32,10 @@
     },
     {
       "graphIndex": "01.2.1",
-      "courseId": "testlang",
-      "moduleId": "01-test-fundamentals",
+      "courseId": "javascript",
+      "moduleId": "01-javascript-fundamentals",
       "lessonId": "01.2.1-let-and-const",
-      "diskPath": "course/testlang/modules/01-test-fundamentals/lessons/01.2.1-let-and-const",
+      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.2.1-let-and-const",
       "status": "exists"
     },
     {
@@ -177,10 +177,11 @@
     {
       "graphIndex": "01.8.4",
       "courseId": "javascript",
-      "moduleId": "01-javascript-fundamentals",
-      "lessonId": "01.8.4-typeof-and-array-isarray",
-      "diskPath": "course/javascript/modules/01-javascript-fundamentals/lessons/01.8.4-typeof-and-array-isarray",
-      "status": "exists"
+      "moduleId": null,
+      "lessonId": null,
+      "diskPath": null,
+      "status": "planned",
+      "title": "01.8.4 typeof and Array.isArray"
     },
     {
       "graphIndex": "01.8.5",
@@ -241,11 +242,10 @@
     {
       "graphIndex": "03.1.3",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "03.1.3 Call Stack"
+      "moduleId": "03-asynchronous-javascript",
+      "lessonId": "03.1.3-call-stack",
+      "diskPath": "course/javascript/modules/03-asynchronous-javascript/lessons/03.1.3-call-stack",
+      "status": "exists"
     },
     {
       "graphIndex": "03.1.4",
