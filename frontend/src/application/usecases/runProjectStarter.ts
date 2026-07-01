@@ -6,16 +6,10 @@ export async function runProjectStarter(input: {
   courseId: string;
   rootPath: string;
   draft: string;
-  sampleInput?: string | null;
 }): Promise<ProjectRunOutcome | null> {
   const repository = getProjectRunRepository();
   if (!repository) return null;
 
   const code = resolveRunCodeFromDraft(input.draft);
-  return repository.run(
-    input.courseId,
-    input.rootPath,
-    code,
-    input.sampleInput ?? undefined,
-  );
+  return repository.run(input.courseId, input.rootPath, code);
 }

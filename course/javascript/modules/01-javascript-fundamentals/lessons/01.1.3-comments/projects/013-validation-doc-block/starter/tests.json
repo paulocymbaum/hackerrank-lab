@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Valid name high score",
+      "stdin": "Ana\n200\n",
+      "expectedStdout": "OK\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "empty-name",
+      "name": "Empty name",
+      "stdin": " \n50\n",
+      "expectedStdout": "ERROR: name is required\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

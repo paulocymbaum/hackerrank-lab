@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "id": "main-demo",
+      "name": "Main demo output",
+      "stdin": "",
+      "expectedStdout": "{\"alice\":12,\"bob\":4,\"carol\":8}\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

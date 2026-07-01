@@ -5,20 +5,17 @@ import {
   getProjectsForLesson,
   getQuizzesForLesson,
 } from "../../../../../application/selectors/catalogSelectors";
-import { getModuleLevelQuizzes } from "../../../../../application/selectors/moduleSelectors";
 import {
   getModuleDisplayIndex,
   groupLessonsBySection,
 } from "../../../../../application/selectors/lessonDisplay";
 import { useLessonActivityItems } from "../../../../../application/hooks/useLessonActivityItems";
 import { useTranslation } from "../../../../../application/hooks/useTranslation";
-import { useQuizProgressStore } from "../../../../../application/stores/quizProgressStore";
 import { useModuleLayoutContext } from "../../ModuleLayoutContext";
 import { useModuleContentsNavigation } from "../../hooks/useModuleContentsNavigation";
 import { useModuleUrlState } from "../../../../../application/hooks/useModuleUrlState";
 import { ModulePanelHeader } from "../ModulePanelHeader";
 import { ModuleLessonAccordion } from "./ModuleLessonAccordion";
-import { ModuleQuizzesAccordion } from "./ModuleQuizzesAccordion";
 import { ModuleSectionAccordion } from "./ModuleSectionAccordion";
 
 export function ModuleContentsNav() {
@@ -28,10 +25,7 @@ export function ModuleContentsNav() {
   const { activeLessonId, activeQuizId, activeProjectId, isModuleContextActive } =
     useModuleUrlState();
 
-  const quizByKey = useQuizProgressStore((s) => s.byKey);
-
   const lessonSections = useMemo(() => groupLessonsBySection(mod.lessons), [mod.lessons]);
-  const moduleQuizzes = useMemo(() => getModuleLevelQuizzes(mod), [mod]);
   const moduleIndex = getModuleDisplayIndex(mod);
 
   return (
@@ -75,14 +69,6 @@ export function ModuleContentsNav() {
             ))}
           </ModuleSectionAccordion>
         ))}
-
-        <ModuleQuizzesAccordion
-          courseId={courseId}
-          quizzes={moduleQuizzes}
-          quizByKey={quizByKey}
-          activeQuizId={activeQuizId}
-          onOpenQuiz={navigation.openModuleQuiz}
-        />
       </div>
     </nav>
   );

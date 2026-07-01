@@ -13,7 +13,7 @@ node starter/index.js
 ## Folder conventions
 
 - Projects live directly under `projects/` as `NNN-kebab-name/`
-- Each project has `README.md` (PBL contract), `starter/index.js`, optional `solution/`
+- Each project has `README.md` (PBL contract), `starter/index.js`, `starter/tests.json`, `starter/sample.input`, optional `solution/`
 - Project numbers (`001`, `002`, …) are sequential within this lesson
 
 ## Project catalog

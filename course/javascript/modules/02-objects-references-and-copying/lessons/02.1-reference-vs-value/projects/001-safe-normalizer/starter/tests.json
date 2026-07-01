@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "id": "alias-tracker",
+      "name": "Alias tracker steps",
+      "stdin": "",
+      "expectedStdout": "step 1: original.n=1 unchanged (binding)\nstep 2: original.n=2 changed (mutation)\nstep 3: original.n=2 unchanged (reassignment)\nstep 4: original.n=5 changed (mutation)\nfinal: original.n=5 b.n=99\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

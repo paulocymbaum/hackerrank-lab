@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Quit command",
+      "stdin": "quit\n",
+      "expectedStdout": "Goodbye\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "start",
+      "name": "Start command",
+      "stdin": "start\n",
+      "expectedStdout": "Starting\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "unknown-case",
+      "name": "Case-sensitive unknown",
+      "stdin": "Start\n",
+      "expectedStdout": "Unknown command\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

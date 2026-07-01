@@ -221,6 +221,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "Maria\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Example greeting\",\n      \"stdin\": \"Maria\\n\",\n      \"expectedStdout\": \"Hello, Maria!\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"alice\",\n      \"name\": \"Input Alice\",\n      \"stdin\": \"Alice\\n\",\n      \"expectedStdout\": \"Hello, Alice!\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"trim-bob\",\n      \"name\": \"Trimmed Bob\",\n      \"stdin\": \"  Bob  \\n\",\n      \"expectedStdout\": \"Hello, Bob!\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-line\",\n      \"name\": \"Empty line error\",\n      \"stdin\": \"\\n\",\n      \"expectedStdout\": \"ERROR: name is required\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -257,6 +262,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "Notebook\n3\n4.25\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Notebook receipt\",\n      \"stdin\": \"Notebook\\n3\\n4.25\\n\",\n      \"expectedStdout\": \"Item: Notebook\\nQty: 3\\nUnit: $4.25\\nTotal: $12.75\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"coffee\",\n      \"name\": \"Coffee total $7.00\",\n      \"stdin\": \"Coffee\\n2\\n3.5\\n\",\n      \"expectedStdout\": \"Item: Coffee\\nQty: 2\\nUnit: $3.50\\nTotal: $7.00\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-item\",\n      \"name\": \"Empty item error\",\n      \"stdin\": \"\\n2\\n3.5\\n\",\n      \"expectedStdout\": \"ERROR: item is required\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"bad-quantity\",\n      \"name\": \"Invalid quantity\",\n      \"stdin\": \"Pen\\nabc\\n1.00\\n\",\n      \"expectedStdout\": \"ERROR: quantity must be a positive integer\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -293,6 +303,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "Ana\n200\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Valid name high score\",\n      \"stdin\": \"Ana\\n200\\n\",\n      \"expectedStdout\": \"OK\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-name\",\n      \"name\": \"Empty name\",\n      \"stdin\": \" \\n50\\n\",\n      \"expectedStdout\": \"ERROR: name is required\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -328,6 +343,11 @@
                 {
                   "path": "starter/sample.input",
                   "kind": "file"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"main-demo\",\n      \"name\": \"Main demo output\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"{\\\"alice\\\":12,\\\"bob\\\":4,\\\"carol\\\":8}\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -358,12 +378,17 @@
                 {
                   "path": "starter/index.js",
                   "kind": "file",
-                  "content": "/**\n * Score Accumulator\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  let score = null;\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse initial score, apply += -= *= operations until done\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+                  "content": "/**\n * Score Accumulator\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const operatorsArray = [\"+\", \"-\", \"*\"];\n  let score = null;\n  let finished = false;\n\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    if (finished) {\n      return;\n    }\n\n    if (score === null) {\n      score = Number(line);\n      if (!Number.isFinite(score)) {\n        console.log(\"ERROR: invalid score\");\n        finished = true;\n        rl.close();\n      }\n      return;\n    }\n\n    if (line === \"done\") {\n      console.log(`Total: ${score}`);\n      finished = true;\n      rl.close();\n      return;\n    }\n\n    const operator = line[0];\n    const numerator = Number(line.slice(1));\n\n    if (!operatorsArray.includes(operator) || !Number.isFinite(numerator)) {\n      console.log(\"ERROR: invalid operation\");\n      finished = true;\n      rl.close();\n      return;\n    }\n\n    if (operator === \"+\") {\n      score += numerator;\n    } else if (operator === \"-\") {\n      score -= numerator;\n    } else if (operator === \"*\") {\n      score *= numerator;\n    }\n  });\n}\n\nmain();\n"
                 },
                 {
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "10\n+25\n-10\n*2\ndone\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Example from README\",\n      \"stdin\": \"10\\n+25\\n-10\\n*2\\ndone\\n\",\n      \"expectedStdout\": \"Total: 50\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"acceptance-chain\",\n      \"name\": \"Compound operations\",\n      \"stdin\": \"10\\n+5\\n-3\\n*2\\ndone\\n\",\n      \"expectedStdout\": \"Total: 24\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"only-done\",\n      \"name\": \"Initial score only\",\n      \"stdin\": \"100\\ndone\\n\",\n      \"expectedStdout\": \"Total: 100\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-score\",\n      \"name\": \"Invalid initial score\",\n      \"stdin\": \"abc\\n\",\n      \"expectedStdout\": \"ERROR: invalid score\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-operation\",\n      \"name\": \"Invalid operation\",\n      \"stdin\": \"10\\n+x\\ndone\\n\",\n      \"expectedStdout\": \"ERROR: invalid operation\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -399,6 +424,11 @@
                 {
                   "path": "starter/sample.input",
                   "kind": "file"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"main-demo\",\n      \"name\": \"Main demo badge\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"[L3] Ana Silva (@anas)\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -435,6 +465,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "100\n4\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Even split\",\n      \"stdin\": \"100\\n4\\n\",\n      \"expectedStdout\": \"Share: $25.00\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"rounding\",\n      \"name\": \"Rounded share\",\n      \"stdin\": \"10\\n3\\n\",\n      \"expectedStdout\": \"Share: $3.33\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-total\",\n      \"name\": \"Invalid total\",\n      \"stdin\": \"abc\\n4\\n\",\n      \"expectedStdout\": \"ERROR: invalid number\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -471,6 +506,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "90\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Score 90 flags\",\n      \"stdin\": \"90\\n\",\n      \"expectedStdout\": \"passed: true\\nperfect: false\\ninvalid: false\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"perfect\",\n      \"name\": \"Perfect score\",\n      \"stdin\": \"100\\n\",\n      \"expectedStdout\": \"passed: true\\nperfect: true\\ninvalid: false\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-score\",\n      \"name\": \"Invalid high score\",\n      \"stdin\": \"105\\n\",\n      \"expectedStdout\": \"passed: true\\nperfect: false\\ninvalid: true\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -507,6 +547,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "null\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Null is explicitly empty\",\n      \"stdin\": \"null\\ndone\\n\",\n      \"expectedStdout\": \"explicitly empty\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"undefined\",\n      \"name\": \"Undefined label\",\n      \"stdin\": \"undefined\\ndone\\n\",\n      \"expectedStdout\": \"not provided\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"string-value\",\n      \"name\": \"String value\",\n      \"stdin\": \"\\\"Ana\\\"\\ndone\\n\",\n      \"expectedStdout\": \"has value: Ana\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -543,6 +588,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "10\n+\n5\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Numeric add\",\n      \"stdin\": \"10\\n+\\n5\\n\",\n      \"expectedStdout\": \"Result: 15\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"string-concat\",\n      \"name\": \"String concat add\",\n      \"stdin\": \"\\\"10\\\"\\n+\\n5\\n\",\n      \"expectedStdout\": \"Result: 105\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"modulo\",\n      \"name\": \"Modulo\",\n      \"stdin\": \"10\\n%\\n3\\n\",\n      \"expectedStdout\": \"Result: 1\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"power\",\n      \"name\": \"Exponent\",\n      \"stdin\": \"2\\n**\\n3\\n\",\n      \"expectedStdout\": \"Result: 8\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -579,6 +629,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "89\n0\n100\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"In range example\",\n      \"stdin\": \"89\\n0\\n100\\n\",\n      \"expectedStdout\": \"IN RANGE\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"out-of-range\",\n      \"name\": \"Out of range\",\n      \"stdin\": \"90\\n0\\n89\\n\",\n      \"expectedStdout\": \"OUT OF RANGE\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-range\",\n      \"name\": \"Invalid range\",\n      \"stdin\": \"10\\n20\\n10\\n\",\n      \"expectedStdout\": \"ERROR: invalid range\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -615,6 +670,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "20\ntrue\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Allowed adult\",\n      \"stdin\": \"20\\ntrue\\n\",\n      \"expectedStdout\": \"ALLOWED\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"denied-no-id\",\n      \"name\": \"Denied without ID\",\n      \"stdin\": \"20\\nfalse\\n\",\n      \"expectedStdout\": \"DENIED\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"denied-underage\",\n      \"name\": \"Denied underage\",\n      \"stdin\": \"17\\ntrue\\n\",\n      \"expectedStdout\": \"DENIED\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -651,6 +711,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "84\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Grade B example\",\n      \"stdin\": \"84\\n\",\n      \"expectedStdout\": \"Grade: B\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"grade-a\",\n      \"name\": \"Grade A\",\n      \"stdin\": \"90\\n\",\n      \"expectedStdout\": \"Grade: A\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"grade-f\",\n      \"name\": \"Grade F\",\n      \"stdin\": \"59\\n\",\n      \"expectedStdout\": \"Grade: F\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid\",\n      \"name\": \"Invalid score\",\n      \"stdin\": \"abc\\n\",\n      \"expectedStdout\": \"ERROR: invalid score\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -687,6 +752,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "quit\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Quit command\",\n      \"stdin\": \"quit\\n\",\n      \"expectedStdout\": \"Goodbye\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"start\",\n      \"name\": \"Start command\",\n      \"stdin\": \"start\\n\",\n      \"expectedStdout\": \"Starting\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"unknown-case\",\n      \"name\": \"Case-sensitive unknown\",\n      \"stdin\": \"Start\\n\",\n      \"expectedStdout\": \"Unknown command\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -723,6 +793,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "1\n4\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Sum 1 to 4\",\n      \"stdin\": \"1\\n4\\n\",\n      \"expectedStdout\": \"Sum: 10\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"one-to-five\",\n      \"name\": \"Sum 1 to 5\",\n      \"stdin\": \"1\\n5\\n\",\n      \"expectedStdout\": \"Sum: 15\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"reversed-range\",\n      \"name\": \"Reversed range\",\n      \"stdin\": \"5\\n1\\n\",\n      \"expectedStdout\": \"Sum: 15\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -759,6 +834,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "10\n20\n0\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Sum until zero\",\n      \"stdin\": \"10\\n20\\n0\\n\",\n      \"expectedStdout\": \"Sum: 30\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"immediate-zero\",\n      \"name\": \"Immediate sentinel\",\n      \"stdin\": \"0\\n\",\n      \"expectedStdout\": \"Sum: 0\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"negative-values\",\n      \"name\": \"Negative values\",\n      \"stdin\": \"-3\\n7\\n0\\n\",\n      \"expectedStdout\": \"Sum: 4\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -795,6 +875,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "0\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Freezing point\",\n      \"stdin\": \"0\\n\",\n      \"expectedStdout\": \"F: 32.0\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"body-temp\",\n      \"name\": \"Body temperature\",\n      \"stdin\": \"37.5\\n\",\n      \"expectedStdout\": \"F: 99.5\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid\",\n      \"name\": \"Invalid input\",\n      \"stdin\": \"abc\\n\",\n      \"expectedStdout\": \"ERROR: invalid temperature\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -831,6 +916,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "-3\n0\n10\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Clamp below min\",\n      \"stdin\": \"-3\\n0\\n10\\n\",\n      \"expectedStdout\": \"Result: 0\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"in-range\",\n      \"name\": \"Value in range\",\n      \"stdin\": \"5\\n0\\n10\\n\",\n      \"expectedStdout\": \"Result: 5\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-range\",\n      \"name\": \"Invalid range\",\n      \"stdin\": \"5\\n10\\n0\\n\",\n      \"expectedStdout\": \"ERROR: invalid range\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -867,6 +957,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "0\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"zero\",\n      \"name\": \"0 is falsy with naive gate pitfall\",\n      \"stdin\": \"0\\ndone\\n\",\n      \"expectedStdout\": \"classify: falsy\\nnaiveGate: blocked\\nnote: 0 is valid but falsy\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"string-zero\",\n      \"name\": \"\\\"0\\\" is truthy\",\n      \"stdin\": \"\\\"0\\\"\\ndone\\n\",\n      \"expectedStdout\": \"classify: truthy\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-string\",\n      \"name\": \"Empty string is falsy\",\n      \"stdin\": \"\\\"\\\"\\ndone\\n\",\n      \"expectedStdout\": \"classify: falsy\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"space-string\",\n      \"name\": \"Space string is truthy\",\n      \"stdin\": \"\\\" \\\"\\ndone\\n\",\n      \"expectedStdout\": \"classify: truthy\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-array\",\n      \"name\": \"Empty array is truthy\",\n      \"stdin\": \"[]\\ndone\\n\",\n      \"expectedStdout\": \"classify: truthy\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -903,6 +998,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "[]\n0\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Array vs zero\",\n      \"stdin\": \"[]\\n0\\n\",\n      \"expectedStdout\": \"loose: true\\nstrict: false\\nprefer: ===\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"same-zero\",\n      \"name\": \"Zero strict match\",\n      \"stdin\": \"0\\n0\\n\",\n      \"expectedStdout\": \"loose: true\\nstrict: true\\nprefer: either (same result)\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"null-undefined\",\n      \"name\": \"Null vs undefined\",\n      \"stdin\": \"null\\nundefined\\n\",\n      \"expectedStdout\": \"loose: true\\nstrict: false\\nprefer: ===\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -939,6 +1039,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "\"\"\n==\n0\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Empty string coerces with ==\",\n      \"stdin\": \"\\\"\\\"\\n==\\n0\\n\",\n      \"expectedStdout\": \"result: true\\nrule: empty string coerces to 0 with ==\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"strict-null\",\n      \"name\": \"Strict null vs undefined\",\n      \"stdin\": \"null\\n===\\nundefined\\n\",\n      \"expectedStdout\": \"result: false\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"loose-null\",\n      \"name\": \"Loose null vs undefined\",\n      \"stdin\": \"null\\n==\\nundefined\\n\",\n      \"expectedStdout\": \"result: true\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -974,6 +1079,11 @@
                 {
                   "path": "starter/sample.input",
                   "kind": "file"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"all-defaults\",\n      \"name\": \"All defaults\",\n      \"stdin\": \"\\n\\n\\n\\n\",\n      \"expectedStdout\": \"retries: 3\\ntimeout: 5000\\nlabel: default\\nactive: false\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"custom-values\",\n      \"name\": \"Custom label trim\",\n      \"stdin\": \"5\\nnull\\n  api  \\nfalse\\n\",\n      \"expectedStdout\": \"retries: 5\\ntimeout: 5000\\nlabel: api\\nactive: false\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "01-javascript-fundamentals",
@@ -4033,6 +4143,11 @@
                 {
                   "path": "starter/sample.input",
                   "kind": "file"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"alias-tracker\",\n      \"name\": \"Alias tracker steps\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"step 1: original.n=1 unchanged (binding)\\nstep 2: original.n=2 changed (mutation)\\nstep 3: original.n=2 unchanged (reassignment)\\nstep 4: original.n=5 changed (mutation)\\nfinal: original.n=5 b.n=99\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "02-objects-references-and-copying",
@@ -4073,6 +4188,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "state\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Increment item qty\",\n      \"stdin\": \"{\\\"state\\\":{\\\"items\\\":[{\\\"id\\\":1,\\\"qty\\\":1},{\\\"id\\\":2,\\\"qty\\\":5}]},\\\"itemId\\\":1}\\n\",\n      \"expectedStdout\": \"{\\\"nextState\\\":{\\\"items\\\":[{\\\"id\\\":1,\\\"qty\\\":2},{\\\"id\\\":2,\\\"qty\\\":5}]}}\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "02-objects-references-and-copying",
@@ -4112,6 +4232,11 @@
                 {
                   "path": "starter/sample.input",
                   "kind": "file"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Clone nested object\",\n      \"stdin\": \"{\\\"name\\\":\\\"Ana\\\",\\\"meta\\\":{\\\"score\\\":10}}\\n\",\n      \"expectedStdout\": \"{\\\"name\\\":\\\"Ana\\\",\\\"meta\\\":{\\\"score\\\":10}}\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "02-objects-references-and-copying",
@@ -4151,6 +4276,11 @@
                 {
                   "path": "starter/sample.input",
                   "kind": "file"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Own keys sorted\",\n      \"stdin\": \"{\\\"name\\\":\\\"Ana\\\",\\\"score\\\":10}\\n\",\n      \"expectedStdout\": \"[\\\"name\\\",\\\"score\\\"]\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-object\",\n      \"name\": \"Empty object\",\n      \"stdin\": \"{}\\n\",\n      \"expectedStdout\": \"[]\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"sorted-keys\",\n      \"name\": \"Sorted keys\",\n      \"stdin\": \"{\\\"b\\\":1,\\\"a\\\":2}\\n\",\n      \"expectedStdout\": \"[\\\"a\\\",\\\"b\\\"]\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "02-objects-references-and-copying",
@@ -4900,6 +5030,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "basic\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Basic snippet\",\n      \"stdin\": \"basic\\n\",\n      \"expectedStdout\": \"Sync order: A C\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"nested\",\n      \"name\": \"Nested snippet\",\n      \"stdin\": \"nested\\n\",\n      \"expectedStdout\": \"Sync order: 1 4\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"unknown\",\n      \"name\": \"Unknown snippet\",\n      \"stdin\": \"unknown\\n\",\n      \"expectedStdout\": \"ERROR: unknown snippet\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -4935,6 +5070,11 @@
                 {
                   "path": "starter/sample.input",
                   "kind": "file"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"all-snippets\",\n      \"name\": \"All snippet analyses\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"=== basic ===\\norder: A B micro timer\\n  A:sync\\n  B:sync\\n  micro:microtask\\n  timer:task\\nexplanation: Sync logs run on the call stack first. Promise reactions are microtasks and drain before the setTimeout task runs.\\n\\n=== async-await ===\\norder: A C B\\n  A:sync\\n  C:sync\\n  B:microtask\\nexplanation: main() runs until await, which schedules the rest as a microtask. C prints before B resumes.\\n\\n=== chained-microtasks ===\\norder: m1 m2 t1\\n  m1:microtask\\n  m2:microtask\\n  t1:task\\nexplanation: Microtasks m1 and m2 drain completely before task t1 from setTimeout.\\n\\n=== trick ===\\norder: start end micro timer\\n  start:sync\\n  end:sync\\n  micro:microtask\\n  timer:task\\nexplanation: Microtasks always run before the next task, so micro prints before timer even with setTimeout(0).\\n\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -4970,6 +5110,11 @@
                 {
                   "path": "starter/sample.input",
                   "kind": "file"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"demo-output\",\n      \"name\": \"Microtask before timer demo\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"order: start end micro timer\\nrule: microtasks drain before the next task\\nmicro_before_timer: true\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -5006,6 +5151,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "users.json\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Successful read\",\n      \"stdin\": \"users.json\\n\",\n      \"expectedStdout\": \"data:users.json -> parsed -> done\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"fail-path\",\n      \"name\": \"Missing file error\",\n      \"stdin\": \"fail\\n\",\n      \"expectedStdout\": \"ERROR: not found\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -5042,6 +5192,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "ok\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Successful pipeline\",\n      \"stdin\": \"ok\\n\",\n      \"expectedStdout\": \"fetch:ok | transform:ok | save:ok\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"fail\",\n      \"name\": \"Save failure\",\n      \"stdin\": \"fail\\n\",\n      \"expectedStdout\": \"ERROR: save failed\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -5078,6 +5233,11 @@
                   "path": "starter/sample.input",
                   "kind": "file",
                   "content": "ok\n"
+                },
+                {
+                  "path": "starter/tests.json",
+                  "kind": "file",
+                  "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Ok path\",\n      \"stdin\": \"ok\\n\",\n      \"expectedStdout\": \"ok:42\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"fail\",\n      \"name\": \"Error path\",\n      \"stdin\": \"fail\\n\",\n      \"expectedStdout\": \"err:boom\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
                 }
               ],
               "moduleId": "03-asynchronous-javascript",
@@ -5474,6 +5634,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "Maria\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Example greeting\",\n      \"stdin\": \"Maria\\n\",\n      \"expectedStdout\": \"Hello, Maria!\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"alice\",\n      \"name\": \"Input Alice\",\n      \"stdin\": \"Alice\\n\",\n      \"expectedStdout\": \"Hello, Alice!\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"trim-bob\",\n      \"name\": \"Trimmed Bob\",\n      \"stdin\": \"  Bob  \\n\",\n      \"expectedStdout\": \"Hello, Bob!\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-line\",\n      \"name\": \"Empty line error\",\n      \"stdin\": \"\\n\",\n      \"expectedStdout\": \"ERROR: name is required\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5510,6 +5675,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "Notebook\n3\n4.25\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Notebook receipt\",\n      \"stdin\": \"Notebook\\n3\\n4.25\\n\",\n      \"expectedStdout\": \"Item: Notebook\\nQty: 3\\nUnit: $4.25\\nTotal: $12.75\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"coffee\",\n      \"name\": \"Coffee total $7.00\",\n      \"stdin\": \"Coffee\\n2\\n3.5\\n\",\n      \"expectedStdout\": \"Item: Coffee\\nQty: 2\\nUnit: $3.50\\nTotal: $7.00\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-item\",\n      \"name\": \"Empty item error\",\n      \"stdin\": \"\\n2\\n3.5\\n\",\n      \"expectedStdout\": \"ERROR: item is required\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"bad-quantity\",\n      \"name\": \"Invalid quantity\",\n      \"stdin\": \"Pen\\nabc\\n1.00\\n\",\n      \"expectedStdout\": \"ERROR: quantity must be a positive integer\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5546,6 +5716,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "Ana\n200\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Valid name high score\",\n      \"stdin\": \"Ana\\n200\\n\",\n      \"expectedStdout\": \"OK\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-name\",\n      \"name\": \"Empty name\",\n      \"stdin\": \" \\n50\\n\",\n      \"expectedStdout\": \"ERROR: name is required\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5581,6 +5756,11 @@
             {
               "path": "starter/sample.input",
               "kind": "file"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"main-demo\",\n      \"name\": \"Main demo output\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"{\\\"alice\\\":12,\\\"bob\\\":4,\\\"carol\\\":8}\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5611,12 +5791,17 @@
             {
               "path": "starter/index.js",
               "kind": "file",
-              "content": "/**\n * Score Accumulator\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  let score = null;\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    // TODO: parse initial score, apply += -= *= operations until done\n    process.stdout.write(\"Not implemented yet\\n\");\n    rl.close();\n  });\n}\n\nmain();\n"
+              "content": "/**\n * Score Accumulator\n * node starter/index.js\n */\n\nconst readline = require(\"node:readline\");\n\nfunction main() {\n  const operatorsArray = [\"+\", \"-\", \"*\"];\n  let score = null;\n  let finished = false;\n\n  const rl = readline.createInterface({ input: process.stdin });\n\n  rl.on(\"line\", (line) => {\n    if (finished) {\n      return;\n    }\n\n    if (score === null) {\n      score = Number(line);\n      if (!Number.isFinite(score)) {\n        console.log(\"ERROR: invalid score\");\n        finished = true;\n        rl.close();\n      }\n      return;\n    }\n\n    if (line === \"done\") {\n      console.log(`Total: ${score}`);\n      finished = true;\n      rl.close();\n      return;\n    }\n\n    const operator = line[0];\n    const numerator = Number(line.slice(1));\n\n    if (!operatorsArray.includes(operator) || !Number.isFinite(numerator)) {\n      console.log(\"ERROR: invalid operation\");\n      finished = true;\n      rl.close();\n      return;\n    }\n\n    if (operator === \"+\") {\n      score += numerator;\n    } else if (operator === \"-\") {\n      score -= numerator;\n    } else if (operator === \"*\") {\n      score *= numerator;\n    }\n  });\n}\n\nmain();\n"
             },
             {
               "path": "starter/sample.input",
               "kind": "file",
               "content": "10\n+25\n-10\n*2\ndone\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Example from README\",\n      \"stdin\": \"10\\n+25\\n-10\\n*2\\ndone\\n\",\n      \"expectedStdout\": \"Total: 50\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"acceptance-chain\",\n      \"name\": \"Compound operations\",\n      \"stdin\": \"10\\n+5\\n-3\\n*2\\ndone\\n\",\n      \"expectedStdout\": \"Total: 24\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"only-done\",\n      \"name\": \"Initial score only\",\n      \"stdin\": \"100\\ndone\\n\",\n      \"expectedStdout\": \"Total: 100\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-score\",\n      \"name\": \"Invalid initial score\",\n      \"stdin\": \"abc\\n\",\n      \"expectedStdout\": \"ERROR: invalid score\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-operation\",\n      \"name\": \"Invalid operation\",\n      \"stdin\": \"10\\n+x\\ndone\\n\",\n      \"expectedStdout\": \"ERROR: invalid operation\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5652,6 +5837,11 @@
             {
               "path": "starter/sample.input",
               "kind": "file"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"main-demo\",\n      \"name\": \"Main demo badge\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"[L3] Ana Silva (@anas)\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5688,6 +5878,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "100\n4\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Even split\",\n      \"stdin\": \"100\\n4\\n\",\n      \"expectedStdout\": \"Share: $25.00\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"rounding\",\n      \"name\": \"Rounded share\",\n      \"stdin\": \"10\\n3\\n\",\n      \"expectedStdout\": \"Share: $3.33\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-total\",\n      \"name\": \"Invalid total\",\n      \"stdin\": \"abc\\n4\\n\",\n      \"expectedStdout\": \"ERROR: invalid number\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5724,6 +5919,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "90\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Score 90 flags\",\n      \"stdin\": \"90\\n\",\n      \"expectedStdout\": \"passed: true\\nperfect: false\\ninvalid: false\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"perfect\",\n      \"name\": \"Perfect score\",\n      \"stdin\": \"100\\n\",\n      \"expectedStdout\": \"passed: true\\nperfect: true\\ninvalid: false\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-score\",\n      \"name\": \"Invalid high score\",\n      \"stdin\": \"105\\n\",\n      \"expectedStdout\": \"passed: true\\nperfect: false\\ninvalid: true\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5760,6 +5960,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "null\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Null is explicitly empty\",\n      \"stdin\": \"null\\ndone\\n\",\n      \"expectedStdout\": \"explicitly empty\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"undefined\",\n      \"name\": \"Undefined label\",\n      \"stdin\": \"undefined\\ndone\\n\",\n      \"expectedStdout\": \"not provided\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"string-value\",\n      \"name\": \"String value\",\n      \"stdin\": \"\\\"Ana\\\"\\ndone\\n\",\n      \"expectedStdout\": \"has value: Ana\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5796,6 +6001,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "10\n+\n5\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Numeric add\",\n      \"stdin\": \"10\\n+\\n5\\n\",\n      \"expectedStdout\": \"Result: 15\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"string-concat\",\n      \"name\": \"String concat add\",\n      \"stdin\": \"\\\"10\\\"\\n+\\n5\\n\",\n      \"expectedStdout\": \"Result: 105\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"modulo\",\n      \"name\": \"Modulo\",\n      \"stdin\": \"10\\n%\\n3\\n\",\n      \"expectedStdout\": \"Result: 1\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"power\",\n      \"name\": \"Exponent\",\n      \"stdin\": \"2\\n**\\n3\\n\",\n      \"expectedStdout\": \"Result: 8\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5832,6 +6042,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "89\n0\n100\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"In range example\",\n      \"stdin\": \"89\\n0\\n100\\n\",\n      \"expectedStdout\": \"IN RANGE\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"out-of-range\",\n      \"name\": \"Out of range\",\n      \"stdin\": \"90\\n0\\n89\\n\",\n      \"expectedStdout\": \"OUT OF RANGE\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-range\",\n      \"name\": \"Invalid range\",\n      \"stdin\": \"10\\n20\\n10\\n\",\n      \"expectedStdout\": \"ERROR: invalid range\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5868,6 +6083,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "20\ntrue\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Allowed adult\",\n      \"stdin\": \"20\\ntrue\\n\",\n      \"expectedStdout\": \"ALLOWED\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"denied-no-id\",\n      \"name\": \"Denied without ID\",\n      \"stdin\": \"20\\nfalse\\n\",\n      \"expectedStdout\": \"DENIED\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"denied-underage\",\n      \"name\": \"Denied underage\",\n      \"stdin\": \"17\\ntrue\\n\",\n      \"expectedStdout\": \"DENIED\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5904,6 +6124,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "84\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Grade B example\",\n      \"stdin\": \"84\\n\",\n      \"expectedStdout\": \"Grade: B\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"grade-a\",\n      \"name\": \"Grade A\",\n      \"stdin\": \"90\\n\",\n      \"expectedStdout\": \"Grade: A\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"grade-f\",\n      \"name\": \"Grade F\",\n      \"stdin\": \"59\\n\",\n      \"expectedStdout\": \"Grade: F\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid\",\n      \"name\": \"Invalid score\",\n      \"stdin\": \"abc\\n\",\n      \"expectedStdout\": \"ERROR: invalid score\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5940,6 +6165,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "quit\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Quit command\",\n      \"stdin\": \"quit\\n\",\n      \"expectedStdout\": \"Goodbye\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"start\",\n      \"name\": \"Start command\",\n      \"stdin\": \"start\\n\",\n      \"expectedStdout\": \"Starting\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"unknown-case\",\n      \"name\": \"Case-sensitive unknown\",\n      \"stdin\": \"Start\\n\",\n      \"expectedStdout\": \"Unknown command\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -5976,6 +6206,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "1\n4\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Sum 1 to 4\",\n      \"stdin\": \"1\\n4\\n\",\n      \"expectedStdout\": \"Sum: 10\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"one-to-five\",\n      \"name\": \"Sum 1 to 5\",\n      \"stdin\": \"1\\n5\\n\",\n      \"expectedStdout\": \"Sum: 15\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"reversed-range\",\n      \"name\": \"Reversed range\",\n      \"stdin\": \"5\\n1\\n\",\n      \"expectedStdout\": \"Sum: 15\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -6012,6 +6247,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "10\n20\n0\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Sum until zero\",\n      \"stdin\": \"10\\n20\\n0\\n\",\n      \"expectedStdout\": \"Sum: 30\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"immediate-zero\",\n      \"name\": \"Immediate sentinel\",\n      \"stdin\": \"0\\n\",\n      \"expectedStdout\": \"Sum: 0\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"negative-values\",\n      \"name\": \"Negative values\",\n      \"stdin\": \"-3\\n7\\n0\\n\",\n      \"expectedStdout\": \"Sum: 4\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -6048,6 +6288,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "0\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Freezing point\",\n      \"stdin\": \"0\\n\",\n      \"expectedStdout\": \"F: 32.0\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"body-temp\",\n      \"name\": \"Body temperature\",\n      \"stdin\": \"37.5\\n\",\n      \"expectedStdout\": \"F: 99.5\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid\",\n      \"name\": \"Invalid input\",\n      \"stdin\": \"abc\\n\",\n      \"expectedStdout\": \"ERROR: invalid temperature\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -6084,6 +6329,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "-3\n0\n10\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Clamp below min\",\n      \"stdin\": \"-3\\n0\\n10\\n\",\n      \"expectedStdout\": \"Result: 0\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"in-range\",\n      \"name\": \"Value in range\",\n      \"stdin\": \"5\\n0\\n10\\n\",\n      \"expectedStdout\": \"Result: 5\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"invalid-range\",\n      \"name\": \"Invalid range\",\n      \"stdin\": \"5\\n10\\n0\\n\",\n      \"expectedStdout\": \"ERROR: invalid range\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -6120,6 +6370,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "0\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"zero\",\n      \"name\": \"0 is falsy with naive gate pitfall\",\n      \"stdin\": \"0\\ndone\\n\",\n      \"expectedStdout\": \"classify: falsy\\nnaiveGate: blocked\\nnote: 0 is valid but falsy\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"string-zero\",\n      \"name\": \"\\\"0\\\" is truthy\",\n      \"stdin\": \"\\\"0\\\"\\ndone\\n\",\n      \"expectedStdout\": \"classify: truthy\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-string\",\n      \"name\": \"Empty string is falsy\",\n      \"stdin\": \"\\\"\\\"\\ndone\\n\",\n      \"expectedStdout\": \"classify: falsy\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"space-string\",\n      \"name\": \"Space string is truthy\",\n      \"stdin\": \"\\\" \\\"\\ndone\\n\",\n      \"expectedStdout\": \"classify: truthy\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-array\",\n      \"name\": \"Empty array is truthy\",\n      \"stdin\": \"[]\\ndone\\n\",\n      \"expectedStdout\": \"classify: truthy\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -6156,6 +6411,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "[]\n0\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Array vs zero\",\n      \"stdin\": \"[]\\n0\\n\",\n      \"expectedStdout\": \"loose: true\\nstrict: false\\nprefer: ===\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"same-zero\",\n      \"name\": \"Zero strict match\",\n      \"stdin\": \"0\\n0\\n\",\n      \"expectedStdout\": \"loose: true\\nstrict: true\\nprefer: either (same result)\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"null-undefined\",\n      \"name\": \"Null vs undefined\",\n      \"stdin\": \"null\\nundefined\\n\",\n      \"expectedStdout\": \"loose: true\\nstrict: false\\nprefer: ===\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -6192,6 +6452,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "\"\"\n==\n0\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Empty string coerces with ==\",\n      \"stdin\": \"\\\"\\\"\\n==\\n0\\n\",\n      \"expectedStdout\": \"result: true\\nrule: empty string coerces to 0 with ==\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"strict-null\",\n      \"name\": \"Strict null vs undefined\",\n      \"stdin\": \"null\\n===\\nundefined\\n\",\n      \"expectedStdout\": \"result: false\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"loose-null\",\n      \"name\": \"Loose null vs undefined\",\n      \"stdin\": \"null\\n==\\nundefined\\n\",\n      \"expectedStdout\": \"result: true\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -6227,6 +6492,11 @@
             {
               "path": "starter/sample.input",
               "kind": "file"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"all-defaults\",\n      \"name\": \"All defaults\",\n      \"stdin\": \"\\n\\n\\n\\n\",\n      \"expectedStdout\": \"retries: 3\\ntimeout: 5000\\nlabel: default\\nactive: false\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"custom-values\",\n      \"name\": \"Custom label trim\",\n      \"stdin\": \"5\\nnull\\n  api  \\nfalse\\n\",\n      \"expectedStdout\": \"retries: 5\\ntimeout: 5000\\nlabel: api\\nactive: false\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "01-javascript-fundamentals",
@@ -6271,6 +6541,11 @@
             {
               "path": "starter/sample.input",
               "kind": "file"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"alias-tracker\",\n      \"name\": \"Alias tracker steps\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"step 1: original.n=1 unchanged (binding)\\nstep 2: original.n=2 changed (mutation)\\nstep 3: original.n=2 unchanged (reassignment)\\nstep 4: original.n=5 changed (mutation)\\nfinal: original.n=5 b.n=99\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "02-objects-references-and-copying",
@@ -6311,6 +6586,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "state\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Increment item qty\",\n      \"stdin\": \"{\\\"state\\\":{\\\"items\\\":[{\\\"id\\\":1,\\\"qty\\\":1},{\\\"id\\\":2,\\\"qty\\\":5}]},\\\"itemId\\\":1}\\n\",\n      \"expectedStdout\": \"{\\\"nextState\\\":{\\\"items\\\":[{\\\"id\\\":1,\\\"qty\\\":2},{\\\"id\\\":2,\\\"qty\\\":5}]}}\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "02-objects-references-and-copying",
@@ -6350,6 +6630,11 @@
             {
               "path": "starter/sample.input",
               "kind": "file"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Clone nested object\",\n      \"stdin\": \"{\\\"name\\\":\\\"Ana\\\",\\\"meta\\\":{\\\"score\\\":10}}\\n\",\n      \"expectedStdout\": \"{\\\"name\\\":\\\"Ana\\\",\\\"meta\\\":{\\\"score\\\":10}}\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "02-objects-references-and-copying",
@@ -6389,6 +6674,11 @@
             {
               "path": "starter/sample.input",
               "kind": "file"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Own keys sorted\",\n      \"stdin\": \"{\\\"name\\\":\\\"Ana\\\",\\\"score\\\":10}\\n\",\n      \"expectedStdout\": \"[\\\"name\\\",\\\"score\\\"]\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"empty-object\",\n      \"name\": \"Empty object\",\n      \"stdin\": \"{}\\n\",\n      \"expectedStdout\": \"[]\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"sorted-keys\",\n      \"name\": \"Sorted keys\",\n      \"stdin\": \"{\\\"b\\\":1,\\\"a\\\":2}\\n\",\n      \"expectedStdout\": \"[\\\"a\\\",\\\"b\\\"]\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "02-objects-references-and-copying",
@@ -6425,6 +6715,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "basic\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Basic snippet\",\n      \"stdin\": \"basic\\n\",\n      \"expectedStdout\": \"Sync order: A C\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"nested\",\n      \"name\": \"Nested snippet\",\n      \"stdin\": \"nested\\n\",\n      \"expectedStdout\": \"Sync order: 1 4\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"unknown\",\n      \"name\": \"Unknown snippet\",\n      \"stdin\": \"unknown\\n\",\n      \"expectedStdout\": \"ERROR: unknown snippet\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6460,6 +6755,11 @@
             {
               "path": "starter/sample.input",
               "kind": "file"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"all-snippets\",\n      \"name\": \"All snippet analyses\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"=== basic ===\\norder: A B micro timer\\n  A:sync\\n  B:sync\\n  micro:microtask\\n  timer:task\\nexplanation: Sync logs run on the call stack first. Promise reactions are microtasks and drain before the setTimeout task runs.\\n\\n=== async-await ===\\norder: A C B\\n  A:sync\\n  C:sync\\n  B:microtask\\nexplanation: main() runs until await, which schedules the rest as a microtask. C prints before B resumes.\\n\\n=== chained-microtasks ===\\norder: m1 m2 t1\\n  m1:microtask\\n  m2:microtask\\n  t1:task\\nexplanation: Microtasks m1 and m2 drain completely before task t1 from setTimeout.\\n\\n=== trick ===\\norder: start end micro timer\\n  start:sync\\n  end:sync\\n  micro:microtask\\n  timer:task\\nexplanation: Microtasks always run before the next task, so micro prints before timer even with setTimeout(0).\\n\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6495,6 +6795,11 @@
             {
               "path": "starter/sample.input",
               "kind": "file"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"demo-output\",\n      \"name\": \"Microtask before timer demo\",\n      \"stdin\": \"\",\n      \"expectedStdout\": \"order: start end micro timer\\nrule: microtasks drain before the next task\\nmicro_before_timer: true\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6531,6 +6836,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "users.json\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Successful read\",\n      \"stdin\": \"users.json\\n\",\n      \"expectedStdout\": \"data:users.json -> parsed -> done\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"fail-path\",\n      \"name\": \"Missing file error\",\n      \"stdin\": \"fail\\n\",\n      \"expectedStdout\": \"ERROR: not found\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6567,6 +6877,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "ok\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Successful pipeline\",\n      \"stdin\": \"ok\\n\",\n      \"expectedStdout\": \"fetch:ok | transform:ok | save:ok\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"fail\",\n      \"name\": \"Save failure\",\n      \"stdin\": \"fail\\n\",\n      \"expectedStdout\": \"ERROR: save failed\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",
@@ -6603,6 +6918,11 @@
               "path": "starter/sample.input",
               "kind": "file",
               "content": "ok\n"
+            },
+            {
+              "path": "starter/tests.json",
+              "kind": "file",
+              "content": "{\n  \"cases\": [\n    {\n      \"id\": \"example\",\n      \"name\": \"Ok path\",\n      \"stdin\": \"ok\\n\",\n      \"expectedStdout\": \"ok:42\\n\",\n      \"expectedExitCode\": 0\n    },\n    {\n      \"id\": \"fail\",\n      \"name\": \"Error path\",\n      \"stdin\": \"fail\\n\",\n      \"expectedStdout\": \"err:boom\\n\",\n      \"expectedExitCode\": 0\n    }\n  ]\n}\n"
             }
           ],
           "moduleId": "03-asynchronous-javascript",

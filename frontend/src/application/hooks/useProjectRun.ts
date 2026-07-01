@@ -1,41 +1,59 @@
-import { useCallback, useState } from "react";
-import type { ProjectRunErrorCode, ProjectRunResult } from "../../domain/types/projectRun";
+import { useCallback, useEffect, useState } from "react";
+import type { ProjectRunErrorCode, ProjectTestMatrixResult } from "../../domain/types/projectRun";
 import { runProjectStarter } from "../usecases/runProjectStarter";
+
+function projectRunKey(courseId: string, rootPath: string): string {
+  return `${courseId}:${rootPath}`;
+}
 
 export function useProjectRun(input: {
   courseId: string;
   rootPath: string;
   draft: string;
-  sampleInput?: string | null;
   enabled: boolean;
 }) {
-  const { courseId, rootPath, draft, sampleInput, enabled } = input;
+  const { courseId, rootPath, draft, enabled } = input;
+  const activeProjectKey = projectRunKey(courseId, rootPath);
   const [running, setRunning] = useState(false);
-  const [result, setResult] = useState<ProjectRunResult | null>(null);
+  const [matrix, setMatrix] = useState<ProjectTestMatrixResult | null>(null);
+  const [matrixProjectKey, setMatrixProjectKey] = useState<string | null>(null);
   const [error, setError] = useState<ProjectRunErrorCode | "dev_server" | null>(null);
+
+  useEffect(() => {
+    setRunning(false);
+    setMatrix(null);
+    setMatrixProjectKey(null);
+    setError(null);
+  }, [activeProjectKey]);
 
   const run = useCallback(async () => {
     if (!enabled) return;
     setRunning(true);
     setError(null);
     try {
-      const outcome = await runProjectStarter({ courseId, rootPath, draft, sampleInput });
+      const outcome = await runProjectStarter({ courseId, rootPath, draft });
       if (!outcome) {
         setError("dev_server");
-        setResult(null);
+        setMatrix(null);
+        setMatrixProjectKey(null);
         return;
       }
       if (outcome.status === "error") {
         setError(outcome.code);
-        setResult(null);
+        setMatrix(null);
+        setMatrixProjectKey(null);
         return;
       }
-      setResult(outcome.result);
+      setMatrix(outcome.matrix);
+      setMatrixProjectKey(activeProjectKey);
       setError(null);
     } finally {
       setRunning(false);
     }
-  }, [courseId, rootPath, draft, sampleInput, enabled]);
+  }, [courseId, rootPath, draft, enabled, activeProjectKey]);
 
-  return { running, result, error, run };
-};
+  const matrixForProject =
+    matrix && matrixProjectKey === activeProjectKey ? matrix : null;
+
+  return { running, matrix: matrixForProject, error, run };
+}

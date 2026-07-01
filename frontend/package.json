@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "npm run catalog:generate && tsc -b && vite build",
     "preview": "vite preview",
-    "catalog:generate": "node scripts/backfill-project-sample-input.mjs && node scripts/generate-static-catalog.mjs && npm run graph:generate",
+    "catalog:generate": "node scripts/backfill-project-sample-input.mjs && node scripts/backfill-project-tests-json.mjs && node scripts/generate-static-catalog.mjs && npm run graph:generate",
+    "backfill:project-tests": "node scripts/backfill-project-tests-json.mjs",
+    "verify:project-tests": "node scripts/verify-project-tests.mjs --check-schema",
     "graph:generate": "node ../scripts/graph/generate-content-map.mjs && node ../scripts/graph/generate-content-graph.mjs",
     "test": "vitest run",
     "smoke:routes": "node scripts/smoke-routes.mjs"

@@ -49,7 +49,8 @@ cd frontend && npm run catalog:generate
 - [ ] README has all required PBL sections (English headers)
 - [ ] README has ## Lesson concepts practiced (≥2 items from lesson)
 - [ ] starter/index.js exists (node starter/index.js)
-- [ ] starter/sample.input exists (stdin fixture; powers Delivery **Run sample**)
+- [ ] starter/tests.json exists (validation cases; powers Delivery **Run answer** matrix)
+- [ ] starter/sample.input exists (example stdin for manual CLI)
 - [ ] projects/README.md catalog updated
 - [ ] validate-project.mjs passes
 - [ ] catalog:generate run
@@ -72,7 +73,8 @@ cd frontend && npm run catalog:generate
 | [templates/module-projects-readme.md](templates/module-projects-readme.md) | Legacy module `projects/README.md` |
 | [templates/project-readme-skeleton.md](templates/project-readme-skeleton.md) | New project README |
 | [templates/starter-index.js](templates/starter-index.js) | `starter/index.js` stub |
-| [templates/starter-sample.input](templates/starter-sample.input) | `starter/sample.input` stdin fixture |
+| [templates/starter-tests.json](templates/starter-tests.json) | `starter/tests.json` validation cases |
+| [templates/starter-sample.input](templates/starter-sample.input) | `starter/sample.input` example stdin |
 
 ## Output locations (canonical)
 
@@ -82,7 +84,9 @@ course/<course>/modules/<module>/lessons/<lesson>/projects/
   <NNN-project>/
     README.md
     starter/index.js
-    starter/sample.input   # stdin fixture for Delivery tab “Run sample”
+    starter/index.js
+    starter/tests.json   # validation cases for Delivery “Run answer”
+    starter/sample.input # example stdin (manual CLI; not removed)
     solution/              (optional)
 ```
 

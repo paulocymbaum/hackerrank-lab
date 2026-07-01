@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Array vs zero",
+      "stdin": "[]\n0\n",
+      "expectedStdout": "loose: true\nstrict: false\nprefer: ===\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "same-zero",
+      "name": "Zero strict match",
+      "stdin": "0\n0\n",
+      "expectedStdout": "loose: true\nstrict: true\nprefer: either (same result)\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "null-undefined",
+      "name": "Null vs undefined",
+      "stdin": "null\nundefined\n",
+      "expectedStdout": "loose: true\nstrict: false\nprefer: ===\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

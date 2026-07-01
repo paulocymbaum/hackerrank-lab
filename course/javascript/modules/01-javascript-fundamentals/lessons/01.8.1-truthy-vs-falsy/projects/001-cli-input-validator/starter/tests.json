@@ -1,0 +1,39 @@
+{
+  "cases": [
+    {
+      "id": "zero",
+      "name": "0 is falsy with naive gate pitfall",
+      "stdin": "0\ndone\n",
+      "expectedStdout": "classify: falsy\nnaiveGate: blocked\nnote: 0 is valid but falsy\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "string-zero",
+      "name": "\"0\" is truthy",
+      "stdin": "\"0\"\ndone\n",
+      "expectedStdout": "classify: truthy\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "empty-string",
+      "name": "Empty string is falsy",
+      "stdin": "\"\"\ndone\n",
+      "expectedStdout": "classify: falsy\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "space-string",
+      "name": "Space string is truthy",
+      "stdin": "\" \"\ndone\n",
+      "expectedStdout": "classify: truthy\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "empty-array",
+      "name": "Empty array is truthy",
+      "stdin": "[]\ndone\n",
+      "expectedStdout": "classify: truthy\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Successful read",
+      "stdin": "users.json\n",
+      "expectedStdout": "data:users.json -> parsed -> done\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "fail-path",
+      "name": "Missing file error",
+      "stdin": "fail\n",
+      "expectedStdout": "ERROR: not found\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

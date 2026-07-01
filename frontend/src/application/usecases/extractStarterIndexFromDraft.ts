@@ -1,6 +1,9 @@
 const STARTER_HEADING_BLOCK =
   /###\s+`starter\/index\.js`[\s\S]*?```(?:[\w-]+)?\n([\s\S]*?)```/;
 
+const STARTER_INDEX_SECTION =
+  /\/\/ --- starter\/index\.js ---\s*\n+([\s\S]*?)(?=\n\/\/ --- starter\/|\Z)/;
+
 const CODE_FENCE = /```(?:javascript|js|typescript|ts)?\n([\s\S]*?)```/g;
 
 function looksLikeSourceCode(text: string): boolean {
@@ -29,6 +32,9 @@ export function extractStarterIndexFromDraft(draft: string): string | null {
 
   const headingMatch = trimmed.match(STARTER_HEADING_BLOCK);
   if (headingMatch?.[1]?.trim()) return headingMatch[1].trim();
+
+  const indexSection = trimmed.match(STARTER_INDEX_SECTION);
+  if (indexSection?.[1]?.trim()) return indexSection[1].trim();
 
   const fenced = lastCodeFence(trimmed);
   if (fenced) return fenced;

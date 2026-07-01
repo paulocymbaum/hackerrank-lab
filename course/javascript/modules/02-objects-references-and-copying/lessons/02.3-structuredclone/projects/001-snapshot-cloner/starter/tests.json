@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Clone nested object",
+      "stdin": "{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n",
+      "expectedStdout": "{\"name\":\"Ana\",\"meta\":{\"score\":10}}\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Example greeting",
+      "stdin": "Maria\n",
+      "expectedStdout": "Hello, Maria!\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "alice",
+      "name": "Input Alice",
+      "stdin": "Alice\n",
+      "expectedStdout": "Hello, Alice!\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "trim-bob",
+      "name": "Trimmed Bob",
+      "stdin": "  Bob  \n",
+      "expectedStdout": "Hello, Bob!\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "empty-line",
+      "name": "Empty line error",
+      "stdin": "\n",
+      "expectedStdout": "ERROR: name is required\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

@@ -45,10 +45,15 @@ function starterSampleInputStub() {
   return loadTemplate("starter-sample.input");
 }
 
+function starterTestsJsonStub() {
+  return loadTemplate("starter-tests.json");
+}
+
 module.exports = {
   moduleProjectsReadme,
   lessonProjectsReadme,
   projectReadmeSkeleton,
   starterIndexStub,
   starterSampleInputStub,
+  starterTestsJsonStub,
 };

@@ -14,6 +14,7 @@ import {
   validateLessonProjectAlignment,
   validateModuleProjectsReadme,
   validateProjectReadme,
+  validateProjectTestsJson,
 } from "./project-contract.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
@@ -142,8 +143,26 @@ async function validateSingleProject(projectPath) {
     findings.push({
       level: "warn",
       path: path.relative(repoRoot, sampleInputPath),
-      message: "Missing starter/sample.input (Run sample button unavailable in UI)",
+      message: "Missing starter/sample.input (example stdin for manual CLI)",
     });
+  }
+
+  const testsJsonPath = path.join(projectPath, "starter", "tests.json");
+  const testsRaw = await readTextSafe(testsJsonPath);
+  if (!testsRaw.trim()) {
+    findings.push({
+      level: "warn",
+      path: path.relative(repoRoot, testsJsonPath),
+      message: "Missing starter/tests.json (Run answer matrix unavailable in UI)",
+    });
+  } else {
+    const testsCheck = validateProjectTestsJson(testsRaw);
+    for (const message of testsCheck.errors) {
+      findings.push({ level: "error", path: path.relative(repoRoot, testsJsonPath), message });
+    }
+    for (const message of testsCheck.warnings) {
+      findings.push({ level: "warn", path: path.relative(repoRoot, testsJsonPath), message });
+    }
   }
 
   return findings;

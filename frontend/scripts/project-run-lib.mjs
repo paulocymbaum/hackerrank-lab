@@ -1,92 +1,143 @@
-import { spawn } from "node:child_process";
 import { promises as fs } from "node:fs";
+import { spawn } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import {
+  evaluateTestCase,
+  loadProjectTestCasesFromDisk,
+  normalizeSampleInput,
+  PROJECT_SAMPLE_INPUT_REL,
+  PROJECT_STARTER_ENTRY_REL,
+} from "./project-test-cases-lib.mjs";
 
-export const PROJECT_SAMPLE_INPUT_REL = "starter/sample.input";
-export const PROJECT_STARTER_ENTRY_REL = "starter/index.js";
 export const PROJECT_RUN_TIMEOUT_MS = 5000;
 export const PROJECT_RUN_MAX_OUTPUT = 65_536;
-
-export function normalizeSampleInput(content) {
-  return content
-    .split("\n")
-    .filter((line) => !line.trim().startsWith("#"))
-    .join("\n")
-    .trimEnd();
-}
+export { PROJECT_SAMPLE_INPUT_REL, PROJECT_STARTER_ENTRY_REL, normalizeSampleInput };
 
 function ensureTrailingNewline(text) {
   if (!text) return "\n";
   return text.endsWith("\n") ? text : `${text}\n`;
 }
 
-async function resolveSampleInput({ sampleInputOverride, sampleInputPath }) {
-  if (typeof sampleInputOverride === "string") {
-    const normalized = normalizeSampleInput(sampleInputOverride);
-    if (normalized.length > 0) return normalized;
-  }
-
-  try {
-    const fromDisk = normalizeSampleInput(await fs.readFile(sampleInputPath, "utf8"));
-    if (fromDisk.length > 0) return fromDisk;
-  } catch (err) {
-    if (err && typeof err === "object" && "code" in err && err.code === "ENOENT") {
-      return null;
-    }
-    throw err;
-  }
-
-  return null;
-}
-
-export async function runProjectStarter(input) {
-  const { repoRoot, rootPath, code, sampleInput: sampleInputOverride } = input;
-  const projectDir = path.join(repoRoot, rootPath);
-  const sampleInputPath = path.join(projectDir, PROJECT_SAMPLE_INPUT_REL);
+async function prepareRunnableScript({ projectDir, code }) {
   const starterPath = path.resolve(projectDir, PROJECT_STARTER_ENTRY_REL);
-
-  const sampleInput = await resolveSampleInput({ sampleInputOverride, sampleInputPath });
-  if (sampleInput === null) {
-    return { ok: false, error: "missing_sample_input" };
-  }
-
-  let scriptPath = starterPath;
-  let tempPath = null;
   const usesDraft = typeof code === "string" && code.trim();
 
   if (usesDraft) {
-    tempPath = path.join(os.tmpdir(), `hackerrank-study-run-${randomUUID()}.js`);
+    const tempPath = path.join(os.tmpdir(), `hackerrank-study-run-${randomUUID()}.js`);
     await fs.writeFile(tempPath, code, "utf8");
-    scriptPath = path.resolve(tempPath);
-  } else {
-    try {
-      await fs.access(starterPath);
-    } catch {
-      return { ok: false, error: "missing_starter" };
-    }
+    return {
+      scriptPath: path.resolve(tempPath),
+      tempPath,
+      usesDraft: true,
+    };
   }
 
   try {
-    const result = await spawnNodeWithStdin({
-      scriptPath,
-      cwd: path.join(projectDir, "starter"),
-      stdin: sampleInput,
-    });
-    return { ok: true, ...result, command: buildCommandLabel(usesDraft ? code : null) };
-  } finally {
-    if (tempPath) {
-      await fs.unlink(tempPath).catch(() => {});
-    }
+    await fs.access(starterPath);
+  } catch {
+    return { error: "missing_starter" };
   }
+
+  return {
+    scriptPath: starterPath,
+    tempPath: null,
+    usesDraft: false,
+  };
 }
 
-function buildCommandLabel(code) {
-  if (typeof code === "string" && code.trim()) {
-    return `node <draft> < ${PROJECT_SAMPLE_INPUT_REL}`;
+function buildCommandLabel(usesDraft, stdinLabel) {
+  const inputRef = stdinLabel ?? PROJECT_SAMPLE_INPUT_REL;
+  if (usesDraft) {
+    return `node <draft> < ${inputRef}`;
   }
-  return `node ${PROJECT_STARTER_ENTRY_REL} < ${PROJECT_SAMPLE_INPUT_REL}`;
+  return `node ${PROJECT_STARTER_ENTRY_REL} < ${inputRef}`;
+}
+
+export async function runProjectTestMatrix(input) {
+  const { repoRoot, rootPath, code } = input;
+  const projectDir = path.join(repoRoot, rootPath);
+  const testCases = await loadProjectTestCasesFromDisk(projectDir, fs);
+
+  if (!testCases?.length) {
+    return { ok: false, error: "missing_tests" };
+  }
+
+  const prepared = await prepareRunnableScript({ projectDir, code });
+  if (prepared.error) {
+    return { ok: false, error: prepared.error };
+  }
+
+  const cwd = path.join(projectDir, "starter");
+  const cases = [];
+
+  try {
+    for (const testCase of testCases) {
+      const runResult = await spawnNodeWithStdin({
+        scriptPath: prepared.scriptPath,
+        cwd,
+        stdin: testCase.stdin ?? "",
+      });
+
+      const evaluation = evaluateTestCase(testCase, runResult);
+      cases.push({
+        id: testCase.id,
+        name: testCase.name,
+        status: evaluation.status,
+        command: buildCommandLabel(prepared.usesDraft, testCase.id),
+        stdin: testCase.stdin ?? "",
+        stdout: runResult.stdout,
+        stderr: runResult.stderr,
+        exitCode: runResult.exitCode,
+        timedOut: runResult.timedOut,
+        ...(typeof testCase.expectedStdout === "string"
+          ? { expectedStdout: testCase.expectedStdout }
+          : {}),
+        ...(typeof testCase.expectedExitCode === "number"
+          ? { expectedExitCode: testCase.expectedExitCode }
+          : {}),
+        ...(evaluation.failureReason ? { failureReason: evaluation.failureReason } : {}),
+      });
+    }
+  } finally {
+    if (prepared.tempPath) {
+      await fs.unlink(prepared.tempPath).catch(() => {});
+    }
+  }
+
+  const passedCount = cases.filter((item) => item.status === "passed").length;
+  const failedCount = cases.filter((item) => item.status === "failed").length;
+
+  return {
+    ok: true,
+    matrix: {
+      passedCount,
+      failedCount,
+      totalCount: cases.length,
+      cases,
+    },
+  };
+}
+
+/** @deprecated Use runProjectTestMatrix — kept for compatibility. */
+export async function runProjectStarter(input) {
+  const matrixResult = await runProjectTestMatrix(input);
+  if (!matrixResult.ok) return matrixResult;
+
+  const first = matrixResult.matrix.cases[0];
+  if (!first) {
+    return { ok: false, error: "missing_tests" };
+  }
+
+  return {
+    ok: true,
+    command: first.command,
+    stdout: first.stdout,
+    stderr: first.stderr,
+    exitCode: first.exitCode,
+    timedOut: first.timedOut,
+  };
 }
 
 function spawnNodeWithStdin(input) {

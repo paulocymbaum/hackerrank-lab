@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Numeric add",
+      "stdin": "10\n+\n5\n",
+      "expectedStdout": "Result: 15\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "string-concat",
+      "name": "String concat add",
+      "stdin": "\"10\"\n+\n5\n",
+      "expectedStdout": "Result: 105\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "modulo",
+      "name": "Modulo",
+      "stdin": "10\n%\n3\n",
+      "expectedStdout": "Result: 1\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "power",
+      "name": "Exponent",
+      "stdin": "2\n**\n3\n",
+      "expectedStdout": "Result: 8\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

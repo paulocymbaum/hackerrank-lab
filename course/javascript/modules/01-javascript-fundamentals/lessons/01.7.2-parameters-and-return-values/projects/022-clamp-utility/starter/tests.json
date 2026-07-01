@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Clamp below min",
+      "stdin": "-3\n0\n10\n",
+      "expectedStdout": "Result: 0\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "in-range",
+      "name": "Value in range",
+      "stdin": "5\n0\n10\n",
+      "expectedStdout": "Result: 5\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "invalid-range",
+      "name": "Invalid range",
+      "stdin": "5\n10\n0\n",
+      "expectedStdout": "ERROR: invalid range\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

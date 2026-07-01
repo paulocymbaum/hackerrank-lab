@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Successful pipeline",
+      "stdin": "ok\n",
+      "expectedStdout": "fetch:ok | transform:ok | save:ok\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "fail",
+      "name": "Save failure",
+      "stdin": "fail\n",
+      "expectedStdout": "ERROR: save failed\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

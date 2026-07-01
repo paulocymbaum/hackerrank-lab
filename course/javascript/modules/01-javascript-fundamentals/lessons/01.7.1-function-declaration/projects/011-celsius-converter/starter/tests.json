@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Freezing point",
+      "stdin": "0\n",
+      "expectedStdout": "F: 32.0\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "body-temp",
+      "name": "Body temperature",
+      "stdin": "37.5\n",
+      "expectedStdout": "F: 99.5\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "invalid",
+      "name": "Invalid input",
+      "stdin": "abc\n",
+      "expectedStdout": "ERROR: invalid temperature\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

@@ -90,7 +90,7 @@ flowchart TB
 
 1. **Read** a predict-first lesson in [`course/`](course/)
 2. **Quiz** — interactive check with explanations on wrong answers
-3. **Build** in `starter/index.js`, test with Node.js, save a delivery write-up in the **Delivery** tab
+3. **Build** in the delivery draft (import `starter/index.js` as a starting point), validate with Delivery **Run answer** (`starter/tests.json`), save a delivery write-up in the **Delivery** tab
 4. **Correct** — request AI review (`@review-course-project` or the Delivery tab **Project correction** button); iterate until score **> 80**
 
 Use the **25-minute Pomodoro** in the app header to bound sessions (runs in the background while you navigate).

@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Increment item qty",
+      "stdin": "{\"state\":{\"items\":[{\"id\":1,\"qty\":1},{\"id\":2,\"qty\":5}]},\"itemId\":1}\n",
+      "expectedStdout": "{\"nextState\":{\"items\":[{\"id\":1,\"qty\":2},{\"id\":2,\"qty\":5}]}}\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

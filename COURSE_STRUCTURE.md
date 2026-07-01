@@ -72,6 +72,16 @@ O `README.md` de cada projeto segue o contrato canônico em inglês: [`.cursor/s
 
 Numeração de projetos (`NNN`) é **sequencial dentro da lesson** (`001`, `002`, …).
 
+### Arquivos em `starter/`
+
+| Arquivo | Papel |
+|---------|-------|
+| `index.js` | Scaffold incompleto — importar na entrega; o aluno completa a solução |
+| `tests.json` | Casos de validação — aba Delivery **Executar resposta** (matriz Pass/Fail) |
+| `sample.input` | Exemplo de stdin para `node starter/index.js < starter/sample.input` |
+
+O starter **não** resolve o problema; `tests.json` define a saída esperada. Contrato completo: [`.cursor/skills/create-course-project/reference.md`](.cursor/skills/create-course-project/reference.md).
+
 ### Visão da lesson (`projects/README.md`)
 
 Template: [`.cursor/skills/create-course-project/templates/lesson-projects-readme.md`](.cursor/skills/create-course-project/templates/lesson-projects-readme.md)

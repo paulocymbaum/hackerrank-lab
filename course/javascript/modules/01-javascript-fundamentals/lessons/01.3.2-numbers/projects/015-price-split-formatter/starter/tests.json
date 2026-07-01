@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Even split",
+      "stdin": "100\n4\n",
+      "expectedStdout": "Share: $25.00\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "rounding",
+      "name": "Rounded share",
+      "stdin": "10\n3\n",
+      "expectedStdout": "Share: $3.33\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "invalid-total",
+      "name": "Invalid total",
+      "stdin": "abc\n4\n",
+      "expectedStdout": "ERROR: invalid number\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

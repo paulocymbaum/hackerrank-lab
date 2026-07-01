@@ -42,6 +42,8 @@ export const PROJECT_TREE = {
   project: "projects/<NN-topic-slug>/<NNN-project-slug>/",
   readme: "README.md",
   starter: "starter/index.js",
+  tests: "starter/tests.json",
+  sampleInput: "starter/sample.input",
   solution: "solution/",
   delivery: PROJECT_DELIVERY_FILENAME,
 };
@@ -182,6 +184,60 @@ export function validateProjectReadme(markdown) {
 
   if (!/\bstarter\//i.test(markdown)) {
     warnings.push("Deliverables should mention starter/");
+  }
+
+  if (!/\btests\.json\b/i.test(markdown) && !/test cases/i.test(markdown)) {
+    warnings.push("Deliverables should mention starter/tests.json validation cases");
+  }
+
+  return { errors, warnings };
+}
+
+/**
+ * @param {string} raw
+ */
+export function validateProjectTestsJson(raw) {
+  const errors = [];
+  const warnings = [];
+
+  if (!raw.trim()) {
+    errors.push("starter/tests.json is empty");
+    return { errors, warnings };
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    errors.push("starter/tests.json is not valid JSON");
+    return { errors, warnings };
+  }
+
+  const cases = Array.isArray(parsed) ? parsed : parsed?.cases;
+  if (!Array.isArray(cases) || cases.length === 0) {
+    errors.push("starter/tests.json must define a non-empty cases array");
+    return { errors, warnings };
+  }
+
+  let scoredCount = 0;
+  for (let index = 0; index < cases.length; index += 1) {
+    const item = cases[index];
+    if (!item || typeof item !== "object") {
+      errors.push(`starter/tests.json cases[${index}] must be an object`);
+      continue;
+    }
+    if (typeof item.stdin !== "string") {
+      errors.push(`starter/tests.json cases[${index}] missing string stdin`);
+    }
+    if (typeof item.expectedStdout === "string" || typeof item.expectedExitCode === "number") {
+      scoredCount += 1;
+    }
+  }
+
+  if (scoredCount === 0) {
+    warnings.push(
+      "starter/tests.json has no scored cases (add expectedStdout or expectedExitCode for Pass/Fail)",
+    );
   }
 
   return { errors, warnings };
