@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-01T00:12:18.278Z",
+  "generatedAt": "2026-07-01T00:17:57.096Z",
   "courseSlug": "javascript",
   "total": 57,
-  "exists": 32,
-  "planned": 25,
+  "exists": 33,
+  "planned": 24,
   "orphan": 0,
   "entries": [
     {
@@ -242,11 +242,10 @@
     {
       "graphIndex": "03.1.3",
       "courseId": "javascript",
-      "moduleId": null,
-      "lessonId": null,
-      "diskPath": null,
-      "status": "planned",
-      "title": "03.1.3 Call Stack"
+      "moduleId": "03-asynchronous-javascript",
+      "lessonId": "03.1.3-call-stack",
+      "diskPath": "course/javascript/modules/03-asynchronous-javascript/lessons/03.1.3-call-stack",
+      "status": "exists"
     },
     {
       "graphIndex": "03.1.4",
