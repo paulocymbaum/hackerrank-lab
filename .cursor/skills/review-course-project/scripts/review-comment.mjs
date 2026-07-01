@@ -16,6 +16,8 @@ export const BANNED_COMMENT_PATTERNS = [
   /\brepo architecture\b/i,
   /\bsubmit(ted|ting)? deliveries?\b/i,
   /\bdelivery workflow\b/i,
+  /\b(copy|sync|move).*(into|to) starter\b/i,
+  /\bstarter\/.*\b(still|not updated|todo|stub|not implemented)\b/i,
   /\*\*module focus:\*\*/i,
   /\*\*gaps vs acceptance criteria:\*\*/i,
   /\*\*next step:\*\*/i,
@@ -27,7 +29,7 @@ export const COMMENT_EXAMPLES = {
   pass:
     "Empty strings rejected with clear errors; age/score use Number() and Number.isFinite. isActive accepts any casing. Solid match to acceptance criteria.",
   failNoCode:
-    "No starter/index.js to evaluate. Next: read three stdin lines, reject empty input explicitly, parse numbers with Number.isFinite, normalize isActive, print JSON or ERROR.",
+    "No solution code in the latest delivery to evaluate. Next: read three stdin lines, reject empty input explicitly, parse numbers with Number.isFinite, normalize isActive, print JSON or ERROR.",
   failPartial:
     "Reads stdin but treats age=0 as missing (truthiness bug). Next: check line.length === 0 and use Number.isFinite instead of if (age).",
 };

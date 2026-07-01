@@ -15,8 +15,12 @@ const entries: ReaderEntry[] = [
 ];
 
 describe("importProjectStarter", () => {
-  it("collects starter files only", () => {
-    expect(getStarterFiles(entries).map((f) => f.path)).toEqual([
+  it("collects starter code files but not sample.input", () => {
+    const withSample: ReaderEntry[] = [
+      ...entries,
+      { path: "starter/sample.input", kind: "file", content: "Alice\n" },
+    ];
+    expect(getStarterFiles(withSample).map((f) => f.path)).toEqual([
       "starter/index.js",
       "starter/utils.js",
     ]);

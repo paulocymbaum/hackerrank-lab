@@ -27,7 +27,7 @@
 1.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` + `sample.input` for the Delivery **Run sample** button)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

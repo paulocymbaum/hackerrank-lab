@@ -1,15 +1,21 @@
+import { useState } from "react";
 import type { ProjectDeliveryEntry, ProjectDeliveryReview } from "../../../../domain/types/projectDelivery";
 import type { ReaderEntry } from "../../../../domain/types/reader";
 import { PROJECT_DELIVERY_PASS_SCORE, passesDeliveryReview } from "../../../../domain/types/projectDelivery";
 import { useProjectDelivery } from "../../../../application/hooks/useProjectDelivery";
 import { useTranslation } from "../../../../application/hooks/useTranslation";
+import { formatDeliveryMarkdownForDisplay } from "../../../../application/usecases/formatDeliveryMarkdown";
 import {
   appendStarterToDraft,
   hasProjectStarter,
 } from "../../../../application/usecases/importProjectStarter";
-import { Accordion, Button, EmptyState, ErrorPanel, LoadingState, Textarea } from "../../../design-system";
+import { canRunProjectDraft } from "../../../../application/usecases/extractStarterIndexFromDraft";
+import { useProjectRun } from "../../../../application/hooks/useProjectRun";
+import { getProjectSampleInput } from "../../../../application/usecases/projectSampleInput";
+import { Accordion, Button, Dialog, EmptyState, ErrorPanel, LoadingState, Textarea } from "../../../design-system";
 import { MarkdownView } from "../../../shared/MarkdownView";
 import { DeliveryPromptToolbar } from "./DeliveryPromptToolbar";
+import { ProjectRunAnswerPanel } from "./ProjectRunAnswerPanel";
 
 function humanizeSlug(slug: string): string {
   return slug
@@ -83,12 +89,19 @@ function DeliveryReviewBlock(props: { review: ProjectDeliveryReview }) {
   );
 }
 
-function DeliveryHistoryItem(props: { entry: ProjectDeliveryEntry; index: number; total: number }) {
-  const { entry, index, total } = props;
+function DeliveryHistoryItem(props: {
+  entry: ProjectDeliveryEntry;
+  index: number;
+  total: number;
+  defaultOpen?: boolean;
+}) {
+  const { entry, index, total, defaultOpen } = props;
   const order = total - index;
+  const displayMarkdown = formatDeliveryMarkdownForDisplay(entry.content);
 
   return (
     <Accordion
+      defaultOpen={defaultOpen}
       title={
         <div className="min-w-0">
           <p className="truncate text-body font-medium text-text0">
@@ -106,7 +119,7 @@ function DeliveryHistoryItem(props: { entry: ProjectDeliveryEntry; index: number
     >
       <div className="grid gap-3">
         {entry.review ? <DeliveryReviewBlock review={entry.review} /> : null}
-        <MarkdownView markdown={entry.content} />
+        <MarkdownView markdown={displayMarkdown} />
       </div>
     </Accordion>
   );
@@ -127,7 +140,22 @@ export function ProjectDeliveryPanel(props: {
   const { draft, setDraft, deliveries, loading, error, saving, save, canSave } =
     useProjectDelivery({ courseId, projectId, rootPath, enabled });
 
+  const [pasteConfirmOpen, setPasteConfirmOpen] = useState(false);
+  const latestDelivery = deliveries.at(-1);
+  const canPasteLatest = deliveries.length > 0;
+
   const canImportStarter = hasProjectStarter(entries);
+  const sampleInput = getProjectSampleInput(entries);
+  const showRunAnswer = hasProjectStarter(entries);
+  const canRunAnswer =
+    Boolean(sampleInput !== null) && canRunProjectDraft(draft, hasProjectStarter(entries));
+  const { running, result, error: runError, run } = useProjectRun({
+    courseId,
+    rootPath,
+    draft,
+    sampleInput,
+    enabled: enabled && canRunAnswer,
+  });
 
   const promptContext = {
     courseId,
@@ -147,6 +175,12 @@ export function ProjectDeliveryPanel(props: {
   }
 
   const reversed = [...deliveries].reverse();
+
+  const handlePasteLatest = () => {
+    if (!latestDelivery) return;
+    setDraft(latestDelivery.content);
+    setPasteConfirmOpen(false);
+  };
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-auto p-4">
@@ -169,6 +203,15 @@ export function ProjectDeliveryPanel(props: {
             onChange={(event) => setDraft(event.target.value)}
             placeholder="Describe what you built, decisions you made, trade-offs, and how to run your solution…"
           />
+          {showRunAnswer ? (
+            <ProjectRunAnswerPanel
+              canRun={canRunAnswer}
+              running={running}
+              result={result}
+              error={runError}
+              onRun={() => void run()}
+            />
+          ) : null}
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -186,8 +229,46 @@ export function ProjectDeliveryPanel(props: {
           >
             {t("delivery.importStarter")}
           </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={!canPasteLatest}
+            title={
+              canPasteLatest ? t("delivery.pasteLatestTooltip") : t("delivery.noDeliveriesToPaste")
+            }
+            onClick={() => setPasteConfirmOpen(true)}
+          >
+            {t("delivery.pasteLatest")}
+          </Button>
           {error ? <p className="text-meta text-text1">{error}</p> : null}
         </div>
+
+        <Dialog
+          open={pasteConfirmOpen}
+          onOpenChange={setPasteConfirmOpen}
+          title={t("delivery.pasteLatestConfirmTitle")}
+          description={t("delivery.pasteLatestConfirmDescription")}
+          className="max-w-md"
+          header={
+            <div className="border-b border-border0 px-4 py-4">
+              <h2 className="text-body font-semibold text-text0">
+                {t("delivery.pasteLatestConfirmTitle")}
+              </h2>
+              <p className="mt-2 text-meta text-text1">
+                {t("delivery.pasteLatestConfirmDescription")}
+              </p>
+            </div>
+          }
+        >
+          <div className="flex justify-end gap-2 px-4 py-4">
+            <Button type="button" variant="ghost" onClick={() => setPasteConfirmOpen(false)}>
+              {t("common.cancel")}
+            </Button>
+            <Button type="button" variant="primary" onClick={handlePasteLatest}>
+              {t("delivery.pasteLatestConfirmAction")}
+            </Button>
+          </div>
+        </Dialog>
 
         {error && error !== "Saved locally; dev server unavailable for disk sync" ? (
           <ErrorPanel title="Could not load deliveries" message={error} />
@@ -210,6 +291,7 @@ export function ProjectDeliveryPanel(props: {
                   entry={entry}
                   index={index}
                   total={deliveries.length}
+                  defaultOpen={index === 0}
                 />
               ))}
             </div>

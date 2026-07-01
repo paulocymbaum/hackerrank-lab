@@ -4,12 +4,20 @@ const STARTER_PREFIX = "starter/";
 
 export function getStarterFiles(entries: ReaderEntry[]): ReaderEntry[] {
   return entries
-    .filter((entry) => entry.kind === "file" && entry.path.startsWith(STARTER_PREFIX) && entry.content)
+    .filter(
+      (entry) =>
+        entry.kind === "file" &&
+        entry.path.startsWith(STARTER_PREFIX) &&
+        entry.path !== "starter/sample.input" &&
+        entry.content,
+    )
     .sort((a, b) => a.path.localeCompare(b.path));
 }
 
 export function hasProjectStarter(entries: ReaderEntry[]): boolean {
-  return getStarterFiles(entries).length > 0;
+  return entries.some(
+    (entry) => entry.kind === "file" && entry.path === "starter/index.js" && entry.content,
+  );
 }
 
 function fenceLanguage(path: string): string {

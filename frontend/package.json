@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "npm run catalog:generate && tsc -b && vite build",
     "preview": "vite preview",
-    "catalog:generate": "node scripts/generate-static-catalog.mjs",
+    "catalog:generate": "node scripts/backfill-project-sample-input.mjs && node scripts/generate-static-catalog.mjs && npm run graph:generate",
+    "graph:generate": "node ../scripts/graph/generate-content-map.mjs && node ../scripts/graph/generate-content-graph.mjs",
     "test": "vitest run",
     "smoke:routes": "node scripts/smoke-routes.mjs"
   },
@@ -15,6 +16,7 @@
     "@radix-ui/react-dialog": "^1.1.16",
     "@radix-ui/react-tabs": "^1.1.14",
     "clsx": "^2.1.1",
+    "d3": "^7.9.0",
     "lucide-react": "^0.474.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -24,6 +26,7 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@types/d3": "^7.4.3",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",

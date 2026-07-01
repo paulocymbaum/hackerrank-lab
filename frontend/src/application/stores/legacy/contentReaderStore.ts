@@ -38,5 +38,5 @@ export const useContentReaderStore = create<ContentReaderState>((set) => ({
     }),
   setTab: (tab) => set({ tab }),
   setCwd: (cwd) => set({ cwd, selectedFilePath: null }),
-  selectFile: (filePath) => set({ selectedFilePath: filePath, tab: "files" }),
+  selectFile: (filePath) => set({ selectedFilePath: filePath, tab: "context" }),
 }));

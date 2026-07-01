@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Collect project README, last 3 deliveries (ordered), and starter code for review.
+ * Collect project README, last 3 deliveries (ordered), and starter template for review.
  *
  * Usage:
  *   node collect-project-review-context.mjs <project-path>
@@ -159,16 +159,24 @@ async function collectContext(projectPathInput) {
       passCondition: "score > 80 sets project status to done",
       reviewTarget: "Attach review to the latest delivery in the window (or --delivery-id)",
       inScope: [
-        "Module lesson context (module README concepts)",
-        "Project README acceptance criteria and requirements",
-        "Student code in starter/",
-        "Delivery text only as technical explanation of the solution",
+        "Module lesson context (lesson README concepts)",
+        "Project README acceptance criteria and functional requirements",
+        "Solution code in the latest delivery (the student deliverable)",
+        "Last 3 deliveries for progression",
       ],
       outOfScope: [
         "Study app UI, Delivery tab, project-delivery.json mechanics",
         "score.json, catalog, frontend/repo architecture",
         "Using the delivery feature correctly",
         "Repo tooling and skills (never mention in student comment)",
+        "starter/ TODO stub on disk — template only, must not affect score",
+        "Code style or formatting when all acceptance criteria pass",
+        "Telling the student to copy or sync code into starter/",
+      ],
+      scoringNotes: [
+        "When all acceptance criteria pass, score 100",
+        "Do not deduct for starter/ still showing TODO",
+        "Do not deduct for style, indentation, or extra validation beyond README",
       ],
       commentRules: {
         maxChars: MAX_REVIEW_COMMENT_LENGTH,
@@ -192,9 +200,13 @@ function formatMarkdown(ctx) {
     "",
     "## Review scope (STRICT)",
     "",
-    "**Grade only:** module lesson concepts, project README criteria, `starter/` code, and delivery text that explains the **exercise solution**.",
+    "**Grade only:** module lesson concepts, project README criteria, and **solution code in the latest delivery**.",
     "",
-    "**Do not mention in the comment:** study app UI, Delivery tab, `project-delivery.json`, delivery workflow, catalog/frontend architecture, or repo tooling.",
+    "**Deliverable:** delivery `content` is the submission. `starter/` is the project template — a TODO stub there is expected and must **not** lower the score.",
+    "",
+    "**Scoring:** tie score to README acceptance criteria. When all criteria pass, score **100** (no style or starter/ deductions).",
+    "",
+    "**Do not mention in the comment:** study app UI, Delivery tab, `project-delivery.json`, delivery workflow, catalog/frontend architecture, repo tooling, or copying code into `starter/`.",
     "",
     "## Grading rules",
     "",
@@ -202,6 +214,8 @@ function formatMarkdown(ctx) {
     "- Pass: **score > 80** → project marked done in course progress",
     "- Compare work against **Acceptance criteria** and **Functional requirements** in the project README",
     "- Tie feedback to **module concepts** below when relevant",
+    "- When all acceptance criteria pass → score **100**",
+    "- Do **not** penalize for `starter/` TODO stub or code style",
     "",
     "## Comment format (STRICT — shown in Delivery tab)",
     "",
@@ -230,7 +244,7 @@ function formatMarkdown(ctx) {
   ];
 
   if (ctx.orderedDeliveries.length === 0) {
-    lines.push("_No delivery write-ups yet — grade from `starter/` code and README only._", "");
+    lines.push("_No deliveries yet — cannot grade solution code._", "");
   } else {
     for (const delivery of ctx.orderedDeliveries) {
       lines.push(`### ${delivery.orderLabel}`);
@@ -246,15 +260,16 @@ function formatMarkdown(ctx) {
       lines.push(delivery.content);
       lines.push("```");
       lines.push("");
-      lines.push("_Use delivery text only if it explains the solution; ignore non-technical placeholders._");
+      lines.push("_Delivery content is the student deliverable (code plus optional notes). Ignore non-technical placeholders._");
       lines.push("");
     }
   }
 
-  lines.push("## Starter code", "");
+  lines.push("## Starter template (scaffold — not the deliverable)", "");
   if (ctx.starterFiles.length === 0) {
     lines.push("_No starter files found._", "");
   } else {
+    lines.push("_For context only. TODO stubs here are expected; grade the latest delivery, not this folder._", "");
     for (const file of ctx.starterFiles) {
       lines.push(`### \`${file.path}\``, "", "```javascript", file.content, "```", "");
     }
