@@ -34,6 +34,7 @@ Read `a`, operator, and `b` from stdin and evaluate the expression, demonstratin
 - [ ] `10`, `%`, `3` → `Result: 1`
 - [ ] `2`, `**`, `3` → `Result: 8`
 - [ ] Expression line `2 + 3 * 4` → `Result: 14`
+- [ ] Respects operator precedence: multiplication and division before addition and subtraction
 
 ## Example data
 
@@ -51,7 +52,7 @@ Output:
 3. Implement simple two-op precedence for the challenge expression.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

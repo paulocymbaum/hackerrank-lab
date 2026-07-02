@@ -47,7 +47,7 @@ micro_before_timer: true
 2. Print order, rule, and confirmation flag in `main`.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

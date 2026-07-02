@@ -91,18 +91,18 @@ export function isLessonSkeleton(markdown) {
  * @param {string} markdown
  */
 export function countLessonConceptItems(markdown) {
-  const section = markdown.match(/^##\s+Lesson concepts practiced\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im);
+  const section = extractSectionBody(markdown, LESSON_CONCEPTS_SECTION);
   if (!section) return 0;
-  return (section[1].match(/^-\s+\[\s*\]\s+/gm) || []).length;
+  return (section.match(/^-\s+\[\s*\]\s+/gm) || []).length;
 }
 
 /**
  * @param {string} lessonMarkdown
  */
 export function extractObserveLines(lessonMarkdown) {
-  const block = lessonMarkdown.match(/^##\s+What to observe\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im);
+  const block = extractSectionBody(lessonMarkdown, "What to observe");
   if (!block) return [];
-  return block[1]
+  return block
     .split("\n")
     .map((line) => line.replace(/^[-*]\s+/, "").trim())
     .filter((line) => line.length > 10);
@@ -132,7 +132,7 @@ export function validateLessonProjectAlignment(lessonMarkdown, projectMarkdown) 
   }
 
   const lessonTitle = (lessonMarkdown.match(/^#\s+(.+)/m) || [])[1] || "";
-  const constraints = projectMarkdown.match(/^##\s+Constraints\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im)?.[1] || "";
+  const constraints = extractSectionBody(projectMarkdown, "Constraints");
   if (/truthy/i.test(lessonTitle) && /no truthiness|forbid.*truthiness|avoid truthiness/i.test(constraints)) {
     errors.push("Project constraints forbid truthiness on a truthy/falsy lesson");
   }
@@ -141,7 +141,7 @@ export function validateLessonProjectAlignment(lessonMarkdown, projectMarkdown) 
   }
 
   const observe = extractObserveLines(lessonMarkdown);
-  const acceptance = projectMarkdown.match(/^##\s+Acceptance criteria\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im)?.[1] || "";
+  const acceptance = extractSectionBody(projectMarkdown, "Acceptance criteria");
   if (observe.length > 0 && acceptance.trim()) {
     const overlap = observe.some((line) => {
       const words = line.toLowerCase().split(/\W+/).filter((w) => w.length > 4);
@@ -284,4 +284,20 @@ export function validateModuleProjectsReadme(markdown) {
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * @param {string} markdown
+ * @param {string} heading
+ */
+function extractSectionBody(markdown, heading) {
+  const pattern = new RegExp(
+    `(^|\\r?\\n)##\\s+${escapeRegExp(heading)}\\s*\\r?\\n([\\s\\S]*)`,
+    "i",
+  );
+  const match = markdown.match(pattern);
+  if (!match) return "";
+  const body = match[2];
+  const nextHeading = body.search(/\r?\n##\s/);
+  return nextHeading >= 0 ? body.slice(0, nextHeading) : body;
 }

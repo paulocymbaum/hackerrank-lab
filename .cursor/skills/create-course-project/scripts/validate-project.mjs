@@ -187,6 +187,14 @@ async function validateProjectsInRoot(projectsRoot) {
   return findings;
 }
 
+async function dirExists(p) {
+  try {
+    return (await fs.stat(p)).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
 async function validateModule(moduleRef) {
   const modulePath = typeof moduleRef === "string" ? path.join(courseDir, moduleRef) : moduleRef.path;
   const moduleId = typeof moduleRef === "string" ? moduleRef : moduleRef.id;
@@ -201,7 +209,7 @@ async function validateModule(moduleRef) {
   const lessonsPath = path.join(modulePath, "lessons");
   for (const lessonEnt of (await listDirSafe(lessonsPath)).filter((e) => e.isDirectory())) {
     const lessonProjects = path.join(lessonsPath, lessonEnt.name, "projects");
-    if (await fileExists(lessonProjects)) {
+    if (await dirExists(lessonProjects)) {
       findings.push(...(await validateProjectsInRoot(lessonProjects)));
     }
   }
@@ -216,12 +224,15 @@ async function resolveTarget(target) {
   if (relFromCourse.startsWith("..")) return null;
 
   const parts = relFromCourse.split(path.sep).filter(Boolean);
-  if (parts.length === 1) return { kind: "module", moduleId: parts[0] };
+  if (parts.length === 1) return { kind: "module", moduleRef: parts[0] };
+  if (parts.length === 3 && parts[1] === "modules") {
+    return { kind: "module", moduleRef: { id: parts[2], path: abs } };
+  }
   if (parts.length >= 3 && parts[1] === "projects") {
     return { kind: "project", projectPath: abs };
   }
   if (parts.length === 2 && parts[1] === "projects") {
-    return { kind: "module", moduleId: parts[0] };
+    return { kind: "module", moduleRef: parts[0] };
   }
   if (parts.includes("lessons") && parts.includes("projects")) {
     const projectsIdx = parts.lastIndexOf("projects");
@@ -254,7 +265,7 @@ async function main() {
         continue;
       }
       if (resolved.kind === "module") {
-        findings.push(...(await validateModule(resolved.moduleId)));
+        findings.push(...(await validateModule(resolved.moduleRef)));
       } else if (resolved.kind === "lesson-projects") {
         findings.push(...(await validateProjectsInRoot(resolved.projectPath)));
       } else {

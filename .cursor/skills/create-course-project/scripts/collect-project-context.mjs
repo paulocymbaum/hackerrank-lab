@@ -16,6 +16,7 @@ import {
   extractObserveLines,
   validateModuleProjectsReadme,
   validateProjectReadme,
+  validateProjectTestsJson,
 } from "./project-contract.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
@@ -93,6 +94,21 @@ async function listCourses() {
   return [...new Set([...legacy, ...hierarchy])].sort((a, b) => a.localeCompare(b, "en"));
 }
 
+async function starterBundleStatus(projectPath) {
+  const starterPath = path.join(projectPath, "starter", "index.js");
+  const sampleInputPath = path.join(projectPath, "starter", "sample.input");
+  const testsJsonPath = path.join(projectPath, "starter", "tests.json");
+  const testsRaw = await readTextSafe(testsJsonPath);
+  const testsValidation = testsRaw.trim() ? validateProjectTestsJson(testsRaw) : { errors: [], warnings: [] };
+
+  return {
+    hasStarter: await fileExists(starterPath),
+    hasSampleInput: await fileExists(sampleInputPath),
+    hasTestsJson: Boolean(testsRaw.trim()),
+    testsValidation,
+  };
+}
+
 async function discoverLessonProjects(lessonPath, relBase) {
   const projectsRoot = path.join(lessonPath, "projects");
   const projects = [];
@@ -100,7 +116,8 @@ async function discoverLessonProjects(lessonPath, relBase) {
     const projectPath = path.join(projectsRoot, project.name);
     const readmePath = path.join(projectPath, "README.md");
     const readme = await readTextSafe(readmePath);
-    if (!readme.trim() && !(await fileExists(path.join(projectPath, "starter", "index.js")))) continue;
+    const starter = await starterBundleStatus(projectPath);
+    if (!readme.trim() && !starter.hasStarter) continue;
     projects.push({
       id: project.name,
       title: humanizeTitle(project.name),
@@ -108,6 +125,7 @@ async function discoverLessonProjects(lessonPath, relBase) {
       rootPath: path.posix.join(relBase, "projects", project.name),
       readmePath: path.relative(repoRoot, readmePath),
       hasReadme: Boolean(readme.trim()),
+      ...starter,
       validation: validateProjectReadme(readme),
     });
   }
@@ -127,9 +145,9 @@ async function discoverProjects(modulePath, courseId) {
     for (const project of projectEntries.sort((a, b) => a.name.localeCompare(b.name))) {
       const projectPath = path.join(topicPath, project.name);
       const readmePath = path.join(projectPath, "README.md");
-      const starterPath = path.join(projectPath, "starter", "index.js");
       const readme = await readTextSafe(readmePath);
       const validation = validateProjectReadme(readme);
+      const starter = await starterBundleStatus(projectPath);
 
       projects.push({
         id: project.name,
@@ -138,8 +156,8 @@ async function discoverProjects(modulePath, courseId) {
         rootPath: path.posix.join("course", courseId, "projects", topic.name, project.name),
         readmePath: path.relative(repoRoot, readmePath),
         hasReadme: Boolean(readme.trim()),
-        hasStarter: await fileExists(starterPath),
         hasSolutionDir: await dirExists(path.join(projectPath, "solution")),
+        ...starter,
         validation,
       });
     }
@@ -217,6 +235,8 @@ function formatMarkdown(ctx) {
     "    <NNN-project>/",
     "      README.md",
     "      starter/index.js",
+    "      starter/tests.json",
+    "      starter/sample.input",
     "      solution/          (optional)",
     "      project-delivery.json  (student writes via UI)",
     "```",
@@ -240,7 +260,7 @@ function formatMarkdown(ctx) {
     "",
     "## Existing projects",
     "",
-  ];
+  );
 
   for (const topic of ctx.topics) {
     lines.push(`### ${topic.topicDir}/ — ${topic.title}`);
@@ -254,11 +274,15 @@ function formatMarkdown(ctx) {
       const flags = [
         project.hasReadme ? "readme" : "NO-readme",
         project.hasStarter ? "starter" : "NO-starter",
+        project.hasTestsJson ? "tests.json" : "NO-tests.json",
+        project.hasSampleInput ? "sample.input" : "NO-sample.input",
         project.hasSolutionDir ? "solution/" : "no-solution",
       ].join(", ");
       const issues = [
         ...project.validation.errors.map((e) => `ERROR: ${e}`),
         ...project.validation.warnings.map((w) => `WARN: ${w}`),
+        ...(project.testsValidation?.errors ?? []).map((e) => `ERROR tests.json: ${e}`),
+        ...(project.testsValidation?.warnings ?? []).map((w) => `WARN tests.json: ${w}`),
       ];
       lines.push(`- **${project.id}** (${flags}) — \`${project.rootPath}\``);
       if (issues.length) lines.push(`  - ${issues.join("; ")}`);
@@ -272,7 +296,7 @@ function formatMarkdown(ctx) {
     "- Project README: `course/02-objects-references-and-copying/projects/01-data-shaping-and-safety/001-safe-normalizer/README.md`",
   );
   lines.push(
-    "- Runnable starter: same folder `starter/index.js`",
+    "- Runnable starter bundle: same folder `starter/index.js`, `starter/tests.json`, `starter/sample.input`",
   );
   lines.push("");
 

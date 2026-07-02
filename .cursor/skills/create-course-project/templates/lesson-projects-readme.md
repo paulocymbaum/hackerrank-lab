@@ -3,8 +3,10 @@
 Practice exercises for this lesson. Run each project with:
 
 ```bash
-node starter/index.js
+node starter/index.js < starter/sample.input
 ```
+
+Validate in the UI with **Delivery → Run answer** (`starter/tests.json`).
 
 ## What you should practice
 

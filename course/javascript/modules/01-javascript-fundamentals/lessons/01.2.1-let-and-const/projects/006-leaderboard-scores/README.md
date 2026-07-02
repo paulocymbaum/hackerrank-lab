@@ -34,6 +34,7 @@ Implement `updateLeaderboard(initialScores, events)` that applies a list of scor
 - [ ] `{ bob: 3 }` + `[{ playerId: "carol", delta: 7 }]` → `{ bob: 3, carol: 7 }`
 - [ ] Input object is unchanged after the call
 - [ ] Multiple events for the same player accumulate correctly
+- [ ] Uses `const` for bindings that are never reassigned; input object is not mutated (immutable return)
 
 ## Example data
 
@@ -63,7 +64,7 @@ Output:
 4. Return the new object.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

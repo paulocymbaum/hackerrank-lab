@@ -34,6 +34,7 @@ Read an initial score and a list of operations, apply each with compound assignm
 - [ ] `100`, `done` → `Total: 100`
 - [ ] `abc` as first line → error
 - [ ] `+x` → error
+- [ ] Applies compound assignment (`+=`, `-=`, `*=`) for score updates in the loop
 
 ## Example data
 
@@ -54,7 +55,7 @@ Output:
 4. On `done`, print the labeled total.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

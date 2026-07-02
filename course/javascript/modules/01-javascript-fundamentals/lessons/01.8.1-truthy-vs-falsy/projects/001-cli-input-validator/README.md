@@ -50,7 +50,7 @@ Output:
 3. Parse JSON lines; special-case `0` for the note.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

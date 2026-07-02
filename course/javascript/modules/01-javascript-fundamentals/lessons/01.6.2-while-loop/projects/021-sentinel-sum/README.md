@@ -31,6 +31,7 @@ Read integers one per line until `0`, sum all prior values, and print the total.
 - [ ] `0` → `Sum: 0`
 - [ ] `5`, `abc` → error
 - [ ] `-3`, `7`, `0` → `Sum: 4`
+- [ ] Reads values in a `while` loop until sentinel `0`; updates loop variables each iteration
 
 ## Example data
 
@@ -48,7 +49,7 @@ Output:
 3. Stop when `0` is read; print labeled sum.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)
