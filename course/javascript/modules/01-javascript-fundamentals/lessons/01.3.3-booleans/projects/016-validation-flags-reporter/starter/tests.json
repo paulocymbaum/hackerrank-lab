@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Score 90 flags",
+      "stdin": "90\n",
+      "expectedStdout": "passed: true\nperfect: false\ninvalid: false\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "perfect",
+      "name": "Perfect score",
+      "stdin": "100\n",
+      "expectedStdout": "passed: true\nperfect: true\ninvalid: false\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "invalid-score",
+      "name": "Invalid high score",
+      "stdin": "105\n",
+      "expectedStdout": "passed: true\nperfect: false\ninvalid: true\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

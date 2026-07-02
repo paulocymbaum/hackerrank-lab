@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Sum until zero",
+      "stdin": "10\n20\n0\n",
+      "expectedStdout": "Sum: 30\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "immediate-zero",
+      "name": "Immediate sentinel",
+      "stdin": "0\n",
+      "expectedStdout": "Sum: 0\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "negative-values",
+      "name": "Negative values",
+      "stdin": "-3\n7\n0\n",
+      "expectedStdout": "Sum: 4\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

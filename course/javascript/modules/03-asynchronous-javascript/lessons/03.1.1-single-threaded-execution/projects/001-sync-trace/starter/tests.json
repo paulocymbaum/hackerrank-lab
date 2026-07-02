@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Basic snippet",
+      "stdin": "basic\n",
+      "expectedStdout": "Sync order: A C\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "nested",
+      "name": "Nested snippet",
+      "stdin": "nested\n",
+      "expectedStdout": "Sync order: 1 4\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "unknown",
+      "name": "Unknown snippet",
+      "stdin": "unknown\n",
+      "expectedStdout": "ERROR: unknown snippet\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

@@ -3,8 +3,10 @@
 Practice exercises for this lesson. Run each project with:
 
 ```bash
-node starter/index.js
+node starter/index.js < starter/sample.input
 ```
+
+Validate in the UI with **Delivery → Run answer** (`starter/tests.json`).
 
 ## What you should practice
 
@@ -13,7 +15,7 @@ node starter/index.js
 ## Folder conventions
 
 - Projects live directly under `projects/` as `NNN-kebab-name/`
-- Each project has `README.md` (PBL contract), `starter/index.js`, optional `solution/`
+- Each project has `README.md` (PBL contract), `starter/index.js`, `starter/tests.json`, `starter/sample.input`, optional `solution/`
 - Project numbers (`001`, `002`, …) are sequential within this lesson
 
 ## Project catalog

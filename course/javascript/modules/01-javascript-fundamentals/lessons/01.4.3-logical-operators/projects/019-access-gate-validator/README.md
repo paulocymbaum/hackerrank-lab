@@ -31,6 +31,7 @@ Read `age` and `hasId`, then print `ALLOWED` or `DENIED`.
 - [ ] `20` and `false` → `DENIED`
 - [ ] `17` and `true` → `DENIED`
 - [ ] `25` and `yes` → error
+- [ ] Gate uses logical `&&` so every condition must be true (short-circuit evaluation)
 
 ## Example data
 
@@ -48,7 +49,7 @@ Output:
 4. Print access label.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

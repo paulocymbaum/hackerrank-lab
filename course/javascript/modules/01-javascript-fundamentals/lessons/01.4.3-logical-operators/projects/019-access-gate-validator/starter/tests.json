@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Allowed adult",
+      "stdin": "20\ntrue\n",
+      "expectedStdout": "ALLOWED\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "denied-no-id",
+      "name": "Denied without ID",
+      "stdin": "20\nfalse\n",
+      "expectedStdout": "DENIED\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "denied-underage",
+      "name": "Denied underage",
+      "stdin": "17\ntrue\n",
+      "expectedStdout": "DENIED\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

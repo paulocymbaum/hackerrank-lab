@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Own keys sorted",
+      "stdin": "{\"name\":\"Ana\",\"score\":10}\n",
+      "expectedStdout": "[\"name\",\"score\"]\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "empty-object",
+      "name": "Empty object",
+      "stdin": "{}\n",
+      "expectedStdout": "[]\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "sorted-keys",
+      "name": "Sorted keys",
+      "stdin": "{\"b\":1,\"a\":2}\n",
+      "expectedStdout": "[\"a\",\"b\"]\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

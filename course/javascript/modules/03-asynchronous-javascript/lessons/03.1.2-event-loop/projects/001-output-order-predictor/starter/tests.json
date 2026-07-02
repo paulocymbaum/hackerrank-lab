@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "id": "all-snippets",
+      "name": "All snippet analyses",
+      "stdin": "",
+      "expectedStdout": "=== basic ===\norder: A B micro timer\n  A:sync\n  B:sync\n  micro:microtask\n  timer:task\nexplanation: Sync logs run on the call stack first. Promise reactions are microtasks and drain before the setTimeout task runs.\n\n=== async-await ===\norder: A C B\n  A:sync\n  C:sync\n  B:microtask\nexplanation: main() runs until await, which schedules the rest as a microtask. C prints before B resumes.\n\n=== chained-microtasks ===\norder: m1 m2 t1\n  m1:microtask\n  m2:microtask\n  t1:task\nexplanation: Microtasks m1 and m2 drain completely before task t1 from setTimeout.\n\n=== trick ===\norder: start end micro timer\n  start:sync\n  end:sync\n  micro:microtask\n  timer:task\nexplanation: Microtasks always run before the next task, so micro prints before timer even with setTimeout(0).\n\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

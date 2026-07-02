@@ -68,7 +68,7 @@ const next = incrementItemQty(state, 1);
 5. Wire the CLI to parse stdin, call the function, and print JSON.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

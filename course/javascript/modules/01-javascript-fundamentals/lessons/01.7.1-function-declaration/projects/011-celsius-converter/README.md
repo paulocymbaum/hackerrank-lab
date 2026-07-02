@@ -30,6 +30,7 @@ Implement `toFahrenheit(celsius)` and a small CLI that reads one number and prin
 - [ ] `toFahrenheit(100)` → `212`
 - [ ] Input `37.5` → `F: 99.5`
 - [ ] Input `abc` → error
+- [ ] Exposes `toFahrenheit` as a function declaration that returns the computed value (caller prints)
 
 ## Example data
 
@@ -45,7 +46,7 @@ Output:
 3. Call function and format output.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

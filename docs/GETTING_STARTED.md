@@ -51,7 +51,9 @@ Recommended flow for each lesson:
 2. **Module** → read the module README and review the lesson map
 3. **Lesson** → read the explanation; complete the *predict-first* mini-exercise before running the code
 4. **Quiz** → open the lesson quiz, answer questions, read explanations on wrong choices
-5. **Project (PBL)** → implement in `starter/index.js`, test with Node.js, record your delivery in the **Delivery** tab
+5. **Project (PBL)** → import `starter/index.js` into the delivery draft, validate with Delivery **Run answer** (`starter/tests.json`), save your delivery in the **Delivery** tab
+
+**Starter vs tests:** `starter/index.js` is an incomplete scaffold (Import starter). `starter/tests.json` drives the Pass/Fail test matrix when you click **Run answer**. `starter/sample.input` is only an example stdin for manual `node` runs.
 
 Progress for quizzes and projects is saved in the browser. Aggregated scores are written to `course/<course>/quiz/score.json` during local development.
 

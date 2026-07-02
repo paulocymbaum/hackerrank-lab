@@ -10,6 +10,11 @@ describe("extractStarterIndexFromDraft", () => {
     expect(extractStarterIndexFromDraft(draft)).toBe("const x = 1;\nconsole.log(x);");
   });
 
+  it("extracts starter/index.js from plain import separator blocks", () => {
+    const draft = `// --- starter/index.js ---\n\nconst x = 1;\nconsole.log(x);\n\n// --- starter/utils.js ---\n\nexport const y = 2;`;
+    expect(extractStarterIndexFromDraft(draft)).toBe("const x = 1;\nconsole.log(x);");
+  });
+
   it("prefers the last code fence when multiple blocks exist", () => {
     const draft = "```javascript\nold();\n```\n\nNotes\n\n```javascript\nnewCode();\n```";
     expect(extractStarterIndexFromDraft(draft)).toBe("newCode();");

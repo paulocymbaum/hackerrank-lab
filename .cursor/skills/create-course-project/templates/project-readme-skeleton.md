@@ -27,7 +27,7 @@
 1.
 
 ## Deliverables
-- [ ] Code in `starter/` (`index.js` + `sample.input` for the Delivery **Run sample** button)
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

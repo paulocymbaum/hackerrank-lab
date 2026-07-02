@@ -31,6 +31,7 @@ Parse two numeric lines and print `Share: $<amount>` with exactly two decimal pl
 - [ ] `10` and `3` → `Share: $3.33`
 - [ ] `abc` and `4` → error
 - [ ] `100` and `0` → error
+- [ ] Parses total and count with `Number()`; rejects non-finite values with `Number.isFinite` before formatting with `toFixed`
 
 ## Example data
 
@@ -48,7 +49,7 @@ Output:
 4. Print the labeled share string.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

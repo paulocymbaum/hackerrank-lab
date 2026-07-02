@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Ok path",
+      "stdin": "ok\n",
+      "expectedStdout": "ok:42\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "fail",
+      "name": "Error path",
+      "stdin": "fail\n",
+      "expectedStdout": "err:boom\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

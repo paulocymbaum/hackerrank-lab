@@ -34,6 +34,7 @@ Read one command string and print the matching action message using `switch`.
 - [ ] `help` → `Help available`
 - [ ] `pause` → `Unknown command`
 - [ ] `Start` → `Unknown command` (case-sensitive)
+- [ ] Routes commands with `switch`; each case uses `break` and unknown commands hit `default`
 
 ## Example data
 
@@ -50,7 +51,7 @@ Output:
 4. `default` prints unknown message.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

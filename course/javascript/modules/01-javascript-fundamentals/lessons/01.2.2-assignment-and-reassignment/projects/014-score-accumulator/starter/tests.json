@@ -1,0 +1,39 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Example from README",
+      "stdin": "10\n+25\n-10\n*2\ndone\n",
+      "expectedStdout": "Total: 50\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "acceptance-chain",
+      "name": "Compound operations",
+      "stdin": "10\n+5\n-3\n*2\ndone\n",
+      "expectedStdout": "Total: 24\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "only-done",
+      "name": "Initial score only",
+      "stdin": "100\ndone\n",
+      "expectedStdout": "Total: 100\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "invalid-score",
+      "name": "Invalid initial score",
+      "stdin": "abc\n",
+      "expectedStdout": "ERROR: invalid score\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "invalid-operation",
+      "name": "Invalid operation",
+      "stdin": "10\n+x\ndone\n",
+      "expectedStdout": "ERROR: invalid operation\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

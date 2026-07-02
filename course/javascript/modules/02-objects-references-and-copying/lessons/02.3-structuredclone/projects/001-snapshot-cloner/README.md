@@ -38,6 +38,7 @@ Implement `cloneForSafety(value)` and a CLI that reads one JSON line from stdin,
 - [ ] `{ when: "2020-01-01T00:00:00.000Z" }` clones successfully via JSON path
 - [ ] Input with `BigInt` fails gracefully when `structuredClone` is unavailable (or succeeds with `structuredClone` in modern Node)
 - [ ] Original input unchanged after clone
+- [ ] Uses `structuredClone` (or JSON fallback) for a deep immutable snapshot boundary
 
 ## Example data
 
@@ -64,7 +65,7 @@ Output:
 6. Print cloned value as one JSON line.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

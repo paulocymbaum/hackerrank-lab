@@ -35,6 +35,7 @@ Read one score from `stdin` and print the letter grade using `if` / `else if` / 
 - [ ] `89` → `Grade: B`
 - [ ] `59` → `Grade: F`
 - [ ] `-1` or `101` or `abc` → error
+- [ ] Checks grade thresholds in order with `else if`; validates input in an early branch before grading
 
 ## Example data
 
@@ -50,7 +51,7 @@ Output:
 3. Print labeled result.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

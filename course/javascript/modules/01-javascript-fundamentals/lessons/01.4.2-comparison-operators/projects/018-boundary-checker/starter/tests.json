@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "In range example",
+      "stdin": "89\n0\n100\n",
+      "expectedStdout": "IN RANGE\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "out-of-range",
+      "name": "Out of range",
+      "stdin": "90\n0\n89\n",
+      "expectedStdout": "OUT OF RANGE\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "invalid-range",
+      "name": "Invalid range",
+      "stdin": "10\n20\n10\n",
+      "expectedStdout": "ERROR: invalid range\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

@@ -11,7 +11,7 @@ import {
 } from "../../../../application/usecases/importProjectStarter";
 import { canRunProjectDraft } from "../../../../application/usecases/extractStarterIndexFromDraft";
 import { useProjectRun } from "../../../../application/hooks/useProjectRun";
-import { getProjectSampleInput } from "../../../../application/usecases/projectSampleInput";
+import { getProjectTestCases, hasProjectTestCases } from "../../../../application/usecases/projectTestCases";
 import { Accordion, Button, Dialog, EmptyState, ErrorPanel, LoadingState, Textarea } from "../../../design-system";
 import { MarkdownView } from "../../../shared/MarkdownView";
 import { DeliveryPromptToolbar } from "./DeliveryPromptToolbar";
@@ -145,15 +145,14 @@ export function ProjectDeliveryPanel(props: {
   const canPasteLatest = deliveries.length > 0;
 
   const canImportStarter = hasProjectStarter(entries);
-  const sampleInput = getProjectSampleInput(entries);
   const showRunAnswer = hasProjectStarter(entries);
+  const projectTestCases = getProjectTestCases(entries);
   const canRunAnswer =
-    Boolean(sampleInput !== null) && canRunProjectDraft(draft, hasProjectStarter(entries));
-  const { running, result, error: runError, run } = useProjectRun({
+    hasProjectTestCases(entries) && canRunProjectDraft(draft, hasProjectStarter(entries));
+  const { running, matrix, error: runError, run } = useProjectRun({
     courseId,
     rootPath,
     draft,
-    sampleInput,
     enabled: enabled && canRunAnswer,
   });
 
@@ -207,7 +206,8 @@ export function ProjectDeliveryPanel(props: {
             <ProjectRunAnswerPanel
               canRun={canRunAnswer}
               running={running}
-              result={result}
+              matrix={matrix}
+              testCases={projectTestCases}
               error={runError}
               onRun={() => void run()}
             />

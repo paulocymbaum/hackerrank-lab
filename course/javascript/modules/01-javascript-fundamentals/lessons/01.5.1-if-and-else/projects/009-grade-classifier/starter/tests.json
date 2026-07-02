@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Grade B example",
+      "stdin": "84\n",
+      "expectedStdout": "Grade: B\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "grade-a",
+      "name": "Grade A",
+      "stdin": "90\n",
+      "expectedStdout": "Grade: A\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "grade-f",
+      "name": "Grade F",
+      "stdin": "59\n",
+      "expectedStdout": "Grade: F\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "invalid",
+      "name": "Invalid score",
+      "stdin": "abc\n",
+      "expectedStdout": "ERROR: invalid score\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

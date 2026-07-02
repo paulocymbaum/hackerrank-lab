@@ -42,6 +42,8 @@ export const PROJECT_TREE = {
   project: "projects/<NN-topic-slug>/<NNN-project-slug>/",
   readme: "README.md",
   starter: "starter/index.js",
+  tests: "starter/tests.json",
+  sampleInput: "starter/sample.input",
   solution: "solution/",
   delivery: PROJECT_DELIVERY_FILENAME,
 };
@@ -89,18 +91,18 @@ export function isLessonSkeleton(markdown) {
  * @param {string} markdown
  */
 export function countLessonConceptItems(markdown) {
-  const section = markdown.match(/^##\s+Lesson concepts practiced\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im);
+  const section = extractSectionBody(markdown, LESSON_CONCEPTS_SECTION);
   if (!section) return 0;
-  return (section[1].match(/^-\s+\[\s*\]\s+/gm) || []).length;
+  return (section.match(/^-\s+\[\s*\]\s+/gm) || []).length;
 }
 
 /**
  * @param {string} lessonMarkdown
  */
 export function extractObserveLines(lessonMarkdown) {
-  const block = lessonMarkdown.match(/^##\s+What to observe\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im);
+  const block = extractSectionBody(lessonMarkdown, "What to observe");
   if (!block) return [];
-  return block[1]
+  return block
     .split("\n")
     .map((line) => line.replace(/^[-*]\s+/, "").trim())
     .filter((line) => line.length > 10);
@@ -130,7 +132,7 @@ export function validateLessonProjectAlignment(lessonMarkdown, projectMarkdown) 
   }
 
   const lessonTitle = (lessonMarkdown.match(/^#\s+(.+)/m) || [])[1] || "";
-  const constraints = projectMarkdown.match(/^##\s+Constraints\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im)?.[1] || "";
+  const constraints = extractSectionBody(projectMarkdown, "Constraints");
   if (/truthy/i.test(lessonTitle) && /no truthiness|forbid.*truthiness|avoid truthiness/i.test(constraints)) {
     errors.push("Project constraints forbid truthiness on a truthy/falsy lesson");
   }
@@ -139,7 +141,7 @@ export function validateLessonProjectAlignment(lessonMarkdown, projectMarkdown) 
   }
 
   const observe = extractObserveLines(lessonMarkdown);
-  const acceptance = projectMarkdown.match(/^##\s+Acceptance criteria\s*[\r\n]+([\s\S]*?)(?=^##\s|\Z)/im)?.[1] || "";
+  const acceptance = extractSectionBody(projectMarkdown, "Acceptance criteria");
   if (observe.length > 0 && acceptance.trim()) {
     const overlap = observe.some((line) => {
       const words = line.toLowerCase().split(/\W+/).filter((w) => w.length > 4);
@@ -182,6 +184,60 @@ export function validateProjectReadme(markdown) {
 
   if (!/\bstarter\//i.test(markdown)) {
     warnings.push("Deliverables should mention starter/");
+  }
+
+  if (!/\btests\.json\b/i.test(markdown) && !/test cases/i.test(markdown)) {
+    warnings.push("Deliverables should mention starter/tests.json validation cases");
+  }
+
+  return { errors, warnings };
+}
+
+/**
+ * @param {string} raw
+ */
+export function validateProjectTestsJson(raw) {
+  const errors = [];
+  const warnings = [];
+
+  if (!raw.trim()) {
+    errors.push("starter/tests.json is empty");
+    return { errors, warnings };
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    errors.push("starter/tests.json is not valid JSON");
+    return { errors, warnings };
+  }
+
+  const cases = Array.isArray(parsed) ? parsed : parsed?.cases;
+  if (!Array.isArray(cases) || cases.length === 0) {
+    errors.push("starter/tests.json must define a non-empty cases array");
+    return { errors, warnings };
+  }
+
+  let scoredCount = 0;
+  for (let index = 0; index < cases.length; index += 1) {
+    const item = cases[index];
+    if (!item || typeof item !== "object") {
+      errors.push(`starter/tests.json cases[${index}] must be an object`);
+      continue;
+    }
+    if (typeof item.stdin !== "string") {
+      errors.push(`starter/tests.json cases[${index}] missing string stdin`);
+    }
+    if (typeof item.expectedStdout === "string" || typeof item.expectedExitCode === "number") {
+      scoredCount += 1;
+    }
+  }
+
+  if (scoredCount === 0) {
+    warnings.push(
+      "starter/tests.json has no scored cases (add expectedStdout or expectedExitCode for Pass/Fail)",
+    );
   }
 
   return { errors, warnings };
@@ -228,4 +284,20 @@ export function validateModuleProjectsReadme(markdown) {
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * @param {string} markdown
+ * @param {string} heading
+ */
+function extractSectionBody(markdown, heading) {
+  const pattern = new RegExp(
+    `(^|\\r?\\n)##\\s+${escapeRegExp(heading)}\\s*\\r?\\n([\\s\\S]*)`,
+    "i",
+  );
+  const match = markdown.match(pattern);
+  if (!match) return "";
+  const body = match[2];
+  const nextHeading = body.search(/\r?\n##\s/);
+  return nextHeading >= 0 ? body.slice(0, nextHeading) : body;
 }

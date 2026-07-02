@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Sum 1 to 4",
+      "stdin": "1\n4\n",
+      "expectedStdout": "Sum: 10\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "one-to-five",
+      "name": "Sum 1 to 5",
+      "stdin": "1\n5\n",
+      "expectedStdout": "Sum: 15\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "reversed-range",
+      "name": "Reversed range",
+      "stdin": "5\n1\n",
+      "expectedStdout": "Sum: 15\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "id": "main-demo",
+      "name": "Main demo badge",
+      "stdin": "",
+      "expectedStdout": "[L3] Ana Silva (@anas)\n",
+      "expectedExitCode": 0
+    }
+  ]
+}
