@@ -34,6 +34,7 @@ Implement `formatUserBadge(user)` that returns a single-line badge string built 
 - [ ] `{ displayName: "Bob", handle: "bob", level: 1 }` → `[L1] Bob (@bob)`
 - [ ] `{ displayName: "   ", handle: "x", level: 2 }` throws `displayName is required`
 - [ ] `{ displayName: "Eve", handle: "eve", level: 0 }` throws `invalid level`
+- [ ] Formats badge with template literals; normalized display name uses `trim()` (strings are immutable)
 
 ## Example data
 
@@ -56,7 +57,7 @@ Output:
 4. Return template literal `[L${level}] ${displayName} (@${handle})`.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

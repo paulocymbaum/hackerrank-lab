@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Empty string coerces with ==",
+      "stdin": "\"\"\n==\n0\n",
+      "expectedStdout": "result: true\nrule: empty string coerces to 0 with ==\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "strict-null",
+      "name": "Strict null vs undefined",
+      "stdin": "null\n===\nundefined\n",
+      "expectedStdout": "result: false\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "loose-null",
+      "name": "Loose null vs undefined",
+      "stdin": "null\n==\nundefined\n",
+      "expectedStdout": "result: true\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

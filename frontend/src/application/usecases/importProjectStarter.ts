@@ -1,6 +1,10 @@
 import type { ReaderEntry } from "../../domain/types/reader";
 
 const STARTER_PREFIX = "starter/";
+const STARTER_EXCLUDED_FILES = new Set([
+  "starter/sample.input",
+  "starter/tests.json",
+]);
 
 export function getStarterFiles(entries: ReaderEntry[]): ReaderEntry[] {
   return entries
@@ -8,7 +12,7 @@ export function getStarterFiles(entries: ReaderEntry[]): ReaderEntry[] {
       (entry) =>
         entry.kind === "file" &&
         entry.path.startsWith(STARTER_PREFIX) &&
-        entry.path !== "starter/sample.input" &&
+        !STARTER_EXCLUDED_FILES.has(entry.path) &&
         entry.content,
     )
     .sort((a, b) => a.path.localeCompare(b.path));
@@ -20,29 +24,21 @@ export function hasProjectStarter(entries: ReaderEntry[]): boolean {
   );
 }
 
-function fenceLanguage(path: string): string {
-  const ext = path.split(".").pop() ?? "";
-  const byExt: Record<string, string> = {
-    js: "javascript",
-    mjs: "javascript",
-    cjs: "javascript",
-    ts: "typescript",
-    json: "json",
-    md: "markdown",
-  };
-  return byExt[ext] ?? ext;
+function starterFileSeparator(path: string): string {
+  return `// --- ${path} ---`;
 }
 
-/** Builds markdown delivery content from project starter/ files. */
+/** Builds plain-text delivery content from project starter/ code files (no markdown fences). */
 export function buildStarterDeliveryContent(entries: ReaderEntry[]): string | null {
   const files = getStarterFiles(entries);
   if (files.length === 0) return null;
 
+  if (files.length === 1) {
+    return files[0]!.content!.trimEnd();
+  }
+
   return files
-    .map((file) => {
-      const lang = fenceLanguage(file.path);
-      return `### \`${file.path}\`\n\n\`\`\`${lang}\n${file.content!.trimEnd()}\n\`\`\``;
-    })
+    .map((file) => `${starterFileSeparator(file.path)}\n\n${file.content!.trimEnd()}`)
     .join("\n\n");
 }
 

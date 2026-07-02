@@ -30,6 +30,7 @@ Read `start` and `end` from `stdin` and print the inclusive sum.
 - [ ] `5` and `1` → `Sum: 15` (same inclusive range)
 - [ ] `3` and `3` → `Sum: 3`
 - [ ] Non-integer input → error
+- [ ] Initializes accumulators before the `for` loop with correct off-by-one bounds
 
 ## Example data
 
@@ -46,7 +47,7 @@ Output:
 3. `let sum = 0`; loop `i` from `low` to `high`; add each `i`.
 
 ## Deliverables
-- [ ] Code in `starter/`
+- [ ] Code in `starter/` (`index.js` scaffold + `tests.json` validation cases + `sample.input` example stdin)
 - [ ] (Optional) reference in `solution/`
 
 ## Extensions (optional)

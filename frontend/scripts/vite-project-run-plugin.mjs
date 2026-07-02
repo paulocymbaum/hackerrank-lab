@@ -1,8 +1,8 @@
 import { isValidCourseId, isValidProjectRootPath } from "./api-validation.mjs";
-import { runProjectStarter } from "./project-run-lib.mjs";
+import { runProjectTestMatrix } from "./project-run-lib.mjs";
 
 /**
- * Dev-only Vite plugin: runs starter/index.js with starter/sample.input on stdin.
+ * Dev-only Vite plugin: runs delivery code against starter/tests.json (or sample.input fallback).
  */
 export function projectRunPlugin(repoRoot) {
   return {
@@ -22,7 +22,6 @@ export function projectRunPlugin(repoRoot) {
           const courseId = body?.courseId;
           const rootPath = body?.rootPath;
           const code = body?.code;
-          const sampleInput = body?.sampleInput;
 
           if (!isValidRunRequest(courseId, rootPath)) {
             res.statusCode = 400;
@@ -36,17 +35,10 @@ export function projectRunPlugin(repoRoot) {
             return;
           }
 
-          if (sampleInput !== undefined && typeof sampleInput !== "string") {
-            res.statusCode = 400;
-            res.end("Invalid sample input payload");
-            return;
-          }
-
-          const result = await runProjectStarter({
+          const result = await runProjectTestMatrix({
             repoRoot,
             rootPath,
             code: typeof code === "string" && code.trim() ? code : undefined,
-            sampleInput: typeof sampleInput === "string" ? sampleInput : undefined,
           });
 
           if (!result.ok) {
@@ -57,15 +49,7 @@ export function projectRunPlugin(repoRoot) {
           }
 
           res.setHeader("Content-Type", "application/json");
-          res.end(
-            JSON.stringify({
-              command: result.command,
-              stdout: result.stdout,
-              stderr: result.stderr,
-              exitCode: result.exitCode,
-              timedOut: result.timedOut,
-            }),
-          );
+          res.end(JSON.stringify(result.matrix));
         } catch {
           res.statusCode = 500;
           res.end("Failed to run project starter");

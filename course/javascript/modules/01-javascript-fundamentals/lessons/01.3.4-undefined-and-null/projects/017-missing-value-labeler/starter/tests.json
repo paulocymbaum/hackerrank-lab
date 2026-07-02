@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Null is explicitly empty",
+      "stdin": "null\ndone\n",
+      "expectedStdout": "explicitly empty\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "undefined",
+      "name": "Undefined label",
+      "stdin": "undefined\ndone\n",
+      "expectedStdout": "not provided\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "string-value",
+      "name": "String value",
+      "stdin": "\"Ana\"\ndone\n",
+      "expectedStdout": "has value: Ana\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

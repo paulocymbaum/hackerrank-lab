@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Example from README Example data",
+      "stdin": "",
+      "expectedStdout": "",
+      "expectedExitCode": 0
+    }
+  ]
+}

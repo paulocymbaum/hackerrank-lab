@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const { execFileSync } = require("child_process");
-const { projectReadmeSkeleton, starterIndexStub, starterSampleInputStub, lessonProjectsReadme } = require("./project-templates");
+const { projectReadmeSkeleton, starterIndexStub, starterSampleInputStub, starterTestsJsonStub, lessonProjectsReadme } = require("./project-templates");
 
 function kebabCase(s) {
   return String(s ?? "")
@@ -157,6 +157,11 @@ function main() {
   const sampleInputPath = path.join(projectPath, "starter", "sample.input");
   if (!fs.existsSync(sampleInputPath)) {
     fs.writeFileSync(sampleInputPath, starterSampleInputStub(), "utf8");
+  }
+
+  const testsJsonPath = path.join(projectPath, "starter", "tests.json");
+  if (!fs.existsSync(testsJsonPath)) {
+    fs.writeFileSync(testsJsonPath, starterTestsJsonStub(), "utf8");
   }
 
   process.stdout.write(

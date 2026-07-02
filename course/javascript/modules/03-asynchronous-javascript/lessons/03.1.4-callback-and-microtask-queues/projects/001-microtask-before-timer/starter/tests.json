@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {
+      "id": "demo-output",
+      "name": "Microtask before timer demo",
+      "stdin": "",
+      "expectedStdout": "order: start end micro timer\nrule: microtasks drain before the next task\nmicro_before_timer: true\n",
+      "expectedExitCode": 0
+    }
+  ]
+}

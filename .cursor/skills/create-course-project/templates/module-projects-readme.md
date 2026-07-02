@@ -11,12 +11,13 @@
 3. Run locally:
 
 ```bash
-node starter/index.js
+node starter/index.js < starter/sample.input
 ```
 
-4. When done, use the **Delivery** tab to save your write-up (persisted as `project-delivery.json` in the project folder).
+4. Use **Delivery → Run answer** to validate against `starter/tests.json` (requires dev server).
+5. When done, use the **Delivery** tab to save your write-up (persisted as `project-delivery.json` in the project folder).
 
-If `starter/index.js` doesn't exist yet, create it as your entrypoint.
+Each runnable project includes `starter/index.js`, `starter/tests.json`, and `starter/sample.input`.
 
 ## What you should practice in this module
 - Applying the concepts from the module `README.md` in small, testable problems.

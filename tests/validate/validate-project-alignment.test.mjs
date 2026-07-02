@@ -6,6 +6,7 @@ import {
   isLessonSkeleton,
   validateLessonProjectAlignment,
   validateProjectReadme,
+  validateProjectTestsJson,
 } from "../../.cursor/skills/create-course-project/scripts/project-contract.mjs";
 
 const strongLesson = `# Truthy vs Falsy
@@ -123,4 +124,38 @@ test("validateLessonProjectAlignment fails inverted truthiness project", () => {
 
 test("countLessonConceptItems counts checkboxes", () => {
   assert.equal(countLessonConceptItems(strongProject), 2);
+});
+
+test("validateProjectTestsJson requires scored cases for Pass/Fail", () => {
+  const smokeOnly = validateProjectTestsJson(
+    JSON.stringify({ cases: [{ id: "a", name: "A", stdin: "" }] }),
+  );
+  assert.equal(smokeOnly.errors.length, 0);
+  assert.ok(smokeOnly.warnings.some((w) => w.includes("no scored cases")));
+
+  const scored = validateProjectTestsJson(
+    JSON.stringify({
+      cases: [{ id: "a", name: "A", stdin: "1\n", expectedStdout: "1\n" }],
+    }),
+  );
+  assert.equal(scored.errors.length, 0);
+  assert.equal(scored.warnings.length, 0);
+});
+
+test("acceptance criteria with ISO Z timestamp are not truncated", () => {
+  const project = `# Project
+
+## Acceptance criteria
+- [ ] \`{ when: "2020-01-01T00:00:00.000Z" }\` clones successfully
+- [ ] Uses structuredClone for immutable snapshot boundary
+
+## Example data
+`;
+  const lesson = `# Lesson
+
+## What to observe
+- Deep copy when you need an immutable snapshot boundary.
+`;
+  const result = validateLessonProjectAlignment(lesson, project);
+  assert.equal(result.warnings.some((w) => w.includes("overlap")), false);
 });

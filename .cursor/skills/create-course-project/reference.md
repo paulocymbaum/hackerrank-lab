@@ -17,7 +17,8 @@ course/<NN-module-slug>/
         README.md                   # PBL problem statement (required, non-empty)
         starter/
           index.js                  # entrypoint (required for runnable projects)
-          sample.input              # stdin fixture for UI “Run sample” (recommended)
+          tests.json                # validation cases for Delivery “Run answer” (recommended)
+          sample.input              # example stdin for manual CLI / context (recommended)
         solution/                   # optional reference implementation
         project-delivery.json       # student delivery history (UI, dev server)
 ```
@@ -74,7 +75,51 @@ node starter/index.js < starter/sample.input
 ```
 
 Projects without `starter/index.js` are valid in the catalog but flagged as **not runnable**.  
-Projects without `starter/sample.input` hide the Delivery tab **Run sample** button.
+Projects without `starter/tests.json` (and without `starter/sample.input`) cannot use Delivery **Run answer**.
+
+### Starter vs tests (roles)
+
+| File | Role |
+|------|------|
+| `starter/index.js` | Incomplete scaffold — import into the delivery draft; student completes the solution |
+| `starter/sample.input` | Example stdin for manual `node starter/index.js < starter/sample.input` |
+| `starter/tests.json` | Automated validation — Delivery **Run answer** runs every case and shows Pass/Fail |
+
+The starter does **not** solve the problem; `tests.json` defines what a correct solution must output.
+
+### Test cases file
+
+Template: [`templates/starter-tests.json`](templates/starter-tests.json)
+
+Path: `starter/tests.json`
+
+```json
+{
+  "cases": [
+    {
+      "id": "example",
+      "name": "Example from README",
+      "stdin": "line1\nline2\n",
+      "expectedStdout": "expected output\n",
+      "expectedExitCode": 0
+    }
+  ]
+}
+```
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| `id` | yes | Stable kebab-case slug |
+| `name` | yes | Label in the test matrix UI |
+| `stdin` | yes | Piped to `process.stdin` (may be `""`) |
+| `expectedStdout` | recommended | Compared with `trimEnd`; drives **Pass/Fail** |
+| `expectedExitCode` | optional | Compared when present |
+
+Rules:
+
+- Include only **I/O-testable** acceptance criteria (stdin/stdout/exit). Non-IO checks (immutability, API usage) stay in README for AI review.
+- Cases without `expectedStdout` or `expectedExitCode` run as **smoke** (status **Ran**, not scored).
+- `tests.json` takes priority over `sample.input` for **Run answer**; keep both files.
 
 ### Sample input file
 
@@ -83,8 +128,8 @@ Template: [`templates/starter-sample.input`](templates/starter-sample.input)
 - Path: `starter/sample.input`
 - Content: realistic stdin from the project README **Example data** section (one or more lines).
 - Multi-line programs need **one value per line** (e.g. receipt printer: item, quantity, price on separate lines).
-- Used by the study UI Delivery tab: **Run sample** pipes this file into `starter/index.js` (or the `starter/index.js` block imported into the delivery draft) and shows stdout/stderr below the button.
-- Requires the Vite dev server (`npm run dev`); the button is disabled when sample input or runnable code is missing.
+- Used for manual CLI runs and as fallback when `tests.json` is missing.
+- **Not** imported into the delivery draft (unlike `starter/index.js`).
 
 ## Study UI integration
 
@@ -93,7 +138,8 @@ After `npm run catalog:generate`:
 - Projects appear under course tab **Projects** when root `README.md` is non-empty.
 - Reader tabs: **Context**, **Delivery** (embedded project drawer).
 - **Delivery** saves versions to `project-delivery.json` (dev server writes to disk).
-- **Delivery → Run sample** executes `node starter/index.js < starter/sample.input` and shows the log under the button (dev server only).
+- **Delivery → Run answer** runs all `tests.json` cases (or `sample.input` as a single smoke case) against code in the delivery draft and shows a **test matrix** (Pass/Fail per case).
+- Requires the Vite dev server (`npm run dev`).
 - **review-course-project** skill grades the last 3 deliveries and writes `review` (score 0–100 + comment) on a delivery; score **> 80** marks project **done**.
 
 Types: `frontend/src/domain/types/catalog.ts`, `frontend/src/domain/types/projectDelivery.ts`
@@ -125,14 +171,14 @@ node .cursor/skills/create-course-project/scripts/validate-project.mjs --all
 
 Exit code `1` when any **error** (missing required README sections, empty project README).
 
-Warnings: missing `starter/index.js`, sparse module overview, optional sections.
+Warnings: missing `starter/index.js`, missing or unscored `starter/tests.json`, sparse module overview, optional sections.
 
 ## Authoring workflow
 
 1. `collect-project-context.mjs <course-id>` — read module + existing projects
 2. List 3 outcomes from the lesson **Predict first** / **What to observe** sections
-3. Fill PBL sections; map each outcome to an acceptance criterion
-4. Ensure `starter/index.js` and `starter/sample.input` exist
+3. Fill PBL sections; map each I/O outcome to a `tests.json` case
+4. Ensure `starter/index.js`, `starter/tests.json`, and `starter/sample.input` exist
 5. Update module `projects/README.md` topic catalog
 6. `validate-project.mjs`
 7. `cd frontend && npm run catalog:generate`

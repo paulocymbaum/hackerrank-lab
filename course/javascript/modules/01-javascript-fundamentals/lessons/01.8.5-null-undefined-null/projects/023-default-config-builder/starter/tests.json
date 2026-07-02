@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "id": "all-defaults",
+      "name": "All defaults",
+      "stdin": "\n\n\n\n",
+      "expectedStdout": "retries: 3\ntimeout: 5000\nlabel: default\nactive: false\n",
+      "expectedExitCode": 0
+    },
+    {
+      "id": "custom-values",
+      "name": "Custom label trim",
+      "stdin": "5\nnull\n  api  \nfalse\n",
+      "expectedStdout": "retries: 5\ntimeout: 5000\nlabel: api\nactive: false\n",
+      "expectedExitCode": 0
+    }
+  ]
+}
